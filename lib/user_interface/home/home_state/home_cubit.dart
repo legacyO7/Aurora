@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:aurora/user_interface/home/home_state/home_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,6 +14,9 @@ class HomeCubit extends Cubit<HomeState>{
   List<TerminalText> terminalOut = [];
   late Process process;
   bool inProgress=false;
+  bool hasRootAccess=false;
+
+  Color _selectedColor=Colors.green;
 
   commando(String command) async {
     List<String> arguments=[];
@@ -22,7 +26,7 @@ class HomeCubit extends Cubit<HomeState>{
     if (command == "clear") {
 
       terminalOut.clear();
-      emit(AccessGranted(terminalOp: terminalOut,inProgress: false));
+      _writeOut(op: terminalOut, inProgress: false);
 
       return;
     }else if(command.isNotEmpty) {
@@ -36,8 +40,7 @@ class HomeCubit extends Cubit<HomeState>{
         if(inProgress){
           process.stdin.writeln(command);
         }else {
-
-          emit(AccessGranted(terminalOp: terminalOut,inProgress: true));
+          _writeOut(op: terminalOut, inProgress: true);
           process = await Process.start(exec, arguments);
         }
 
@@ -49,7 +52,7 @@ class HomeCubit extends Cubit<HomeState>{
           _convertToList(line: utf8.decode(line),commandStatus: CommandStatus.STDERR);
         }
 
-        emit(AccessGranted(terminalOp: terminalOut,inProgress: false));
+        _writeOut(op: terminalOut, inProgress: false);
 
       } catch (e) {}
     }
@@ -63,7 +66,19 @@ class HomeCubit extends Cubit<HomeState>{
     }else if(commandStatus == CommandStatus.STDIN){
       terminalOut.add(TerminalText(text: line, color: Colors.blue ));
     }
-    emit(AccessGranted(terminalOp: terminalOut,inProgress: true));
+
+    if(line.contains('run as root')){
+      hasRootAccess=false;
+      terminalOut.clear();
+    }else {
+      hasRootAccess=true;
+    }
+
+    if (kDebugMode) {
+      print("--- $line");
+    }
+
+    _writeOut(op: terminalOut, inProgress: true);
   }
 
   void killProcess(){
@@ -74,12 +89,27 @@ class HomeCubit extends Cubit<HomeState>{
     }
     finally{
       _convertToList(line: "process terminated",commandStatus: CommandStatus.STDERR);
-      emit(AccessGranted(terminalOp: terminalOut,inProgress: false));
+      _writeOut(op: terminalOut, inProgress: false);
     }
   }
+
+  void _writeOut({required List<TerminalText> op, required bool inProgress}){
+    emit(AccessGranted(terminalOp: op,inProgress: inProgress,hasRoot: hasRootAccess));
+  }
+
+  checkRootAccess(){
+    commando("${Directory.current.path}/assets/scripts/faustus_controller.sh");
+  }
+
 
   void requestAccess(){
     commando("sudo su");
   }
 
+  setColor(color){
+    _selectedColor= color;
+    commando("${Directory.current.path}/assets/scripts/faustus_controller.sh color ${color.red.toRadixString(16)} ${color.green.toRadixString(16)} ${color.blue.toRadixString(16)} 0 ");
+  }
+
+  Color get selectedColor => _selectedColor;
 }

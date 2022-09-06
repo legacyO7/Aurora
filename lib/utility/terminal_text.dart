@@ -6,7 +6,7 @@ enum CommandStatus { STDERR, STDOUT, STDIN }
 
 class TerminalText{
   String text;
-  Color color;
+  Color? color;
 
-  TerminalText({required this.text,required this.color});
+  TerminalText({required this.text,this.color});
 }
