@@ -22,10 +22,10 @@ class _MyHomePageState extends State<HomeScreen> {
           children: <Widget>[
             BlocBuilder<HomeCubit,HomeState>
               (builder: (context,state){
-              if(state is HomeStateAccessGranted) {
+              if(state is HomeStateAccessGranted && state.inProgress) {
                 return const Text("access granted");
               } else {
-                return grantAccess();
+                return grantAccess(context);
               }
             })
           ],
