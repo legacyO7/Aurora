@@ -97,11 +97,6 @@ class HomeCubit extends Cubit<HomeState>{
     emit(AccessGranted(terminalOp: op,inProgress: inProgress,hasRoot: hasRootAccess));
   }
 
-  checkRootAccess(){
-    commando("${Directory.current.path}/assets/scripts/faustus_controller.sh");
-  }
-
-
   void requestAccess(){
     commando("sudo su");
   }
@@ -109,6 +104,10 @@ class HomeCubit extends Cubit<HomeState>{
   setColor(color){
     _selectedColor= color;
     commando("${Directory.current.path}/assets/scripts/faustus_controller.sh color ${color.red.toRadixString(16)} ${color.green.toRadixString(16)} ${color.blue.toRadixString(16)} 0 ");
+  }
+
+  setBrightness(value){
+    commando("${Directory.current.path}/assets/scripts/faustus_controller.sh brightness $value ");
   }
 
   Color get selectedColor => _selectedColor;

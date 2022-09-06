@@ -17,6 +17,10 @@ setspeed(){
     echo $1 > /sys/devices/platform/faustus/kbbl/kbbl_speed
 }
 
+setbrightness(){
+    echo $1 > '/sys/devices/platform/faustus/leds/asus::kbd_backlight/brightness'
+}
+
 if [ $# -ne 0 ]
   then
 
@@ -29,6 +33,9 @@ if [ $# -ne 0 ]
     ;;
     speed)
     setspeed $2
+    ;;
+    brightness)
+    setbrightness $2
     ;;
     esac
 

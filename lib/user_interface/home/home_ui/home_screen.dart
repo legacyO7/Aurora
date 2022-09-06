@@ -1,6 +1,6 @@
 import 'package:aurora/user_interface/home/home_state/home_cubit.dart';
 import 'package:aurora/user_interface/home/home_state/home_state.dart';
-import 'package:aurora/user_interface/home/home_ui/widgets/control_panel.dart';
+import 'package:aurora/user_interface/home/home_ui/widgets/lighing_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,7 +26,7 @@ class _MyHomePageState extends State<HomeScreen> {
                /* if(state is AccessGranted && (state.hasRoot || state.inProgress)) {
                   return const ControlPanel();
                 } else {*/
-                return ControlPanel();
+                return brightnessController(context);
                // return grantAccess(context);
              //   }
               }),
