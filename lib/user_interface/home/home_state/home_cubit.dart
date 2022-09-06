@@ -1,22 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:aurora/user_interface/home/home_state/home_state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../utility/terminal_text.dart';
-import '../../terminal/presentation/cubit/terminal_state.dart';
 
 class HomeCubit extends Cubit<HomeState>{
   HomeCubit() : super(HomeStateInit());
 
   List<TerminalText> terminalOut = [];
-  late FocusNode tvFocus;
   late Process process;
   bool inProgress=false;
 
-  streamer(String command) async {
+  commando(String command) async {
     List<String> arguments=[];
 
     command=command.replaceAll("sudo", "pkexec");
@@ -24,7 +22,7 @@ class HomeCubit extends Cubit<HomeState>{
     if (command == "clear") {
 
       terminalOut.clear();
-      emit(HomeStateAccessGranted(terminalOp: terminalOut,inProgress: false));
+      emit(AccessGranted(terminalOp: terminalOut,inProgress: false));
 
       return;
     }else if(command.isNotEmpty) {
@@ -39,7 +37,7 @@ class HomeCubit extends Cubit<HomeState>{
           process.stdin.writeln(command);
         }else {
 
-          emit(HomeStateAccessGranted(terminalOp: terminalOut,inProgress: true));
+          emit(AccessGranted(terminalOp: terminalOut,inProgress: true));
           process = await Process.start(exec, arguments);
         }
 
@@ -51,7 +49,7 @@ class HomeCubit extends Cubit<HomeState>{
           _convertToList(line: utf8.decode(line),commandStatus: CommandStatus.STDERR);
         }
 
-        emit(HomeStateAccessGranted(terminalOp: terminalOut,inProgress: false));
+        emit(AccessGranted(terminalOp: terminalOut,inProgress: false));
 
       } catch (e) {}
     }
@@ -65,7 +63,7 @@ class HomeCubit extends Cubit<HomeState>{
     }else if(commandStatus == CommandStatus.STDIN){
       terminalOut.add(TerminalText(text: line, color: Colors.blue ));
     }
-    emit(HomeStateAccessGranted(terminalOp: terminalOut,inProgress: true));
+    emit(AccessGranted(terminalOp: terminalOut,inProgress: true));
   }
 
   void killProcess(){
@@ -76,12 +74,12 @@ class HomeCubit extends Cubit<HomeState>{
     }
     finally{
       _convertToList(line: "process terminated",commandStatus: CommandStatus.STDERR);
-      emit(HomeStateAccessGranted(terminalOp: terminalOut,inProgress: false));
+      emit(AccessGranted(terminalOp: terminalOut,inProgress: false));
     }
   }
 
   void requestAccess(){
-    streamer("sudo su");
+    commando("sudo su");
   }
 
 }

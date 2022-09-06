@@ -44,7 +44,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
       backgroundColor: Colors.black,
       body: BlocBuilder<HomeCubit,HomeState>(
         builder: (BuildContext context, state) {
-          if(state is HomeStateAccessGranted ) {
+          if(state is AccessGranted ) {
             var c = state.terminalOp.reversed.toList(growable: false);
             return Column(
               children: [
@@ -67,7 +67,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
                           focusNode: tvFocus,
                           controller: _command,
                           onFieldSubmitted: (value) {
-                            context.read<HomeCubit>().streamer(value);
+                            context.read<HomeCubit>().commando(value);
                             _command.clear();
                             tvFocus.requestFocus();
                           },
@@ -82,7 +82,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
             );
           }
           else {
-            context.read<HomeCubit>().streamer("echo hello world");
+            context.read<HomeCubit>().commando("echo hello world");
             return Container();
           }
         },
