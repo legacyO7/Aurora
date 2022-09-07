@@ -16,3 +16,10 @@ Widget button({
     ),
   );
 }
+
+class ButtonAttribute<T>{
+  String title;
+  T? value;
+
+  ButtonAttribute({required this.title, this.value});
+}

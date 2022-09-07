@@ -1,8 +1,8 @@
 import 'package:aurora/user_interface/home/home_state/home_cubit.dart';
 import 'package:aurora/user_interface/home/home_state/home_state.dart';
-import 'package:aurora/user_interface/home/home_ui/widgets/color_panel.dart';
+import 'package:aurora/user_interface/control_panel/control_panel_ui/widgets/color_panel.dart';
 import 'package:aurora/user_interface/home/home_ui/widgets/grant_access.dart';
-import 'package:aurora/user_interface/home/home_ui/widgets/lighing_panel.dart';
+import 'package:aurora/user_interface/control_panel/control_panel_ui/widgets/brightness_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
