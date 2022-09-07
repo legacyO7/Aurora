@@ -33,6 +33,16 @@ class HomeCubit extends Cubit<HomeState>{
     return _terminalRepo.checkRootAccess();
   }
 
+  Future<bool> setMode(value) async{
+    await execute("${Directory.current.path}/assets/scripts/faustus_controller.sh mode $value ");
+    return _terminalRepo.checkRootAccess();
+  }
+
+  Future<bool> setSpeed(value) async{
+    await execute("${Directory.current.path}/assets/scripts/faustus_controller.sh speed $value ");
+    return _terminalRepo.checkRootAccess();
+  }
+
   void killProcess(){
     _terminalRepo.killProcess();
   }
