@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 Widget button({
   required String title,
-  required VoidCallback action
+  required VoidCallback action,
+  bool isSelected=false
 }){
   return InkWell(
     onTap: (){
@@ -10,6 +11,7 @@ Widget button({
     },
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+      color: isSelected?Colors.blue:Colors.transparent,
       child: Text(title),
     ),
   );

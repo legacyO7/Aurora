@@ -67,7 +67,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
                           focusNode: tvFocus,
                           controller: _command,
                           onFieldSubmitted: (value) {
-                            context.read<HomeCubit>().commando(value);
+                            context.read<HomeCubit>().execute(value);
                             _command.clear();
                             tvFocus.requestFocus();
                           },
@@ -82,7 +82,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
             );
           }
           else {
-            context.read<HomeCubit>().commando("echo hello world");
+            context.read<HomeCubit>().execute("echo hello world");
             return Container();
           }
         },

@@ -7,8 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 Widget grantAccess(BuildContext context){
   return Center(
-    child: button(title: "Grant Access", action: (){
-      context.read<HomeCubit>().requestAccess();
+    child: button(title: "Grant Access",
+        isSelected: true,
+        action: (){
+          context.read<HomeCubit>().requestAccess();
     }),
   );
 }

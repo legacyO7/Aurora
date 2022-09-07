@@ -1,5 +1,7 @@
 import 'package:aurora/user_interface/home/home_state/home_cubit.dart';
 import 'package:aurora/user_interface/home/home_state/home_state.dart';
+import 'package:aurora/user_interface/home/home_ui/widgets/color_panel.dart';
+import 'package:aurora/user_interface/home/home_ui/widgets/grant_access.dart';
 import 'package:aurora/user_interface/home/home_ui/widgets/lighing_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +16,12 @@ class HomeScreen extends StatefulWidget {
 class _MyHomePageState extends State<HomeScreen> {
 
   @override
+  void initState() {
+    context.read<HomeCubit>().requestAccess();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -23,12 +31,16 @@ class _MyHomePageState extends State<HomeScreen> {
             Expanded(
               child: BlocBuilder<HomeCubit,HomeState>
                 (builder: (context,state){
-               /* if(state is AccessGranted && (state.hasRoot || state.inProgress)) {
-                  return const ControlPanel();
-                } else {*/
-                return brightnessController(context);
-               // return grantAccess(context);
-             //   }
+                if(state is AccessGranted && (state.hasRootAccess)) {
+                  return Column(
+                    children: [
+                      const Expanded(child: ColorPanel()),
+                      Expanded(child: brightnessController(context))
+                    ],
+                  );
+                } else {
+                  return grantAccess(context);
+                }
               }),
             )
           ],

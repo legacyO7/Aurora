@@ -18,10 +18,8 @@ class HomeCubit extends Cubit<HomeState>{
 
   Color _selectedColor=Colors.green;
 
-  commando(String command) async {
+  execute(String command) async {
     List<String> arguments=[];
-
-    command=command.replaceAll("sudo", "pkexec");
 
     if (command == "clear") {
 
@@ -41,7 +39,10 @@ class HomeCubit extends Cubit<HomeState>{
           process.stdin.writeln(command);
         }else {
           _writeOut(op: terminalOut, inProgress: true);
-          process = await Process.start(exec, arguments);
+          process = await Process.start(
+              exec,
+              arguments
+          );
         }
 
         await for (var line in process.stdout) {
@@ -67,7 +68,7 @@ class HomeCubit extends Cubit<HomeState>{
       terminalOut.add(TerminalText(text: line, color: Colors.blue ));
     }
 
-    if(line.contains('run as root')){
+    if(line.contains('Permission denied')){
       hasRootAccess=false;
       terminalOut.clear();
     }else {
@@ -94,20 +95,20 @@ class HomeCubit extends Cubit<HomeState>{
   }
 
   void _writeOut({required List<TerminalText> op, required bool inProgress}){
-    emit(AccessGranted(terminalOp: op,inProgress: inProgress,hasRoot: hasRootAccess));
+    emit(AccessGranted(terminalOp: op,inProgress: inProgress,hasRootAccess: hasRootAccess));
   }
 
   void requestAccess(){
-    commando("sudo su");
+    execute("pkexec ${Directory.current.path}/assets/scripts/faustus_controller.sh");
   }
 
   setColor(color){
     _selectedColor= color;
-    commando("${Directory.current.path}/assets/scripts/faustus_controller.sh color ${color.red.toRadixString(16)} ${color.green.toRadixString(16)} ${color.blue.toRadixString(16)} 0 ");
+    execute("${Directory.current.path}/assets/scripts/faustus_controller.sh color ${color.red.toRadixString(16)} ${color.green.toRadixString(16)} ${color.blue.toRadixString(16)} 0");
   }
 
   setBrightness(value){
-    commando("${Directory.current.path}/assets/scripts/faustus_controller.sh brightness $value ");
+    execute("${Directory.current.path}/assets/scripts/faustus_controller.sh brightness $value ");
   }
 
   Color get selectedColor => _selectedColor;

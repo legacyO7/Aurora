@@ -4,16 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'grant_access.dart';
-
-class ControlPanel extends StatefulWidget {
-  const ControlPanel({Key? key}) : super(key: key);
+class ColorPanel extends StatefulWidget {
+  const ColorPanel({Key? key}) : super(key: key);
 
   @override
-  State<ControlPanel> createState() => _ControlPanelState();
+  State<ColorPanel> createState() => _ColorPanelState();
 }
 
-class _ControlPanelState extends State<ControlPanel> {
+class _ColorPanelState extends State<ColorPanel> {
   
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,6 @@ class _ControlPanelState extends State<ControlPanel> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children:  <Widget>[
-            grantAccess(context),
             ColorPicker(
                 wheelDiameter: 210,
                 wheelWidth: 20,
