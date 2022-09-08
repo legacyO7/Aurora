@@ -33,6 +33,7 @@ dependencies:
   flutter_bloc: ^8.1.1
   flex_color_picker: ^2.6.0
   get_it: ^7.2.0
+  path_provider: ^2.0.11
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -61,7 +62,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/scripts/
+    - assets/scripts/faustus_controller.sh
 
   # To add assets to your application, add an assets section, like this:
   # assets:

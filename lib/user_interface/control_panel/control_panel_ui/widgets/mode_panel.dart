@@ -19,6 +19,7 @@ Widget modeController(BuildContext context) {
         button(
             title: e.title,
             isSelected: context.watch<ControlPanelCubit>().mode==e.value,
+            context: context,
             action: () {
       context.read<HomeCubit>().setMode(e.value).then((value) {
         if(value) {

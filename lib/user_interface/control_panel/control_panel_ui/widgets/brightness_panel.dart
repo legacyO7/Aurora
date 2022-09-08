@@ -19,6 +19,7 @@ Widget brightnessController(BuildContext context) {
         button(
             title: e.title,
             isSelected: context.watch<ControlPanelCubit>().brightness==e.value,
+            context: context,
             action: () {
       context.read<HomeCubit>().setBrightness(e.value).then((value) {
         if(value) {

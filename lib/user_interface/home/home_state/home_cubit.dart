@@ -2,50 +2,62 @@ import 'dart:io';
 
 import 'package:aurora/user_interface/home/home_state/home_state.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
 class HomeCubit extends Cubit<HomeState>{
-  TerminalRepo _terminalRepo;
+  final TerminalRepo _terminalRepo;
 
   HomeCubit(this._terminalRepo) : super(HomeStateInit());
 
-  Color _selectedColor=Colors.green;
+  final String _filename="faustus_controller.sh";
+  final String _assetPath="assets/scripts/";
+
+  String _executionFile='';
 
   Future execute(String command) async {
     await for (var line in _terminalRepo.execute(command)) {
-      emit(AccessGranted(terminalOp: line, inProgress: _terminalRepo.isInProgress(), hasRootAccess: _terminalRepo.checkRootAccess()));
+      emit(AccessGranted(terminalOp: line, inProgress: _terminalRepo.isInProgress(), hasRootAccess:true));
     }
   }
 
-  void requestAccess(){
-    execute("pkexec ${Directory.current.path}/assets/scripts/faustus_controller.sh");
+  Future initScript() async{
+    final byteData = await rootBundle.load('$_assetPath/$_filename');
+    ;
+    _executionFile = "${(await Directory('${(await getTemporaryDirectory()).path}/legacy07.aurora').create()).path}/$_filename";
+     print(_executionFile);
+
+     await File(_executionFile).writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+  }
+
+  void requestAccess() async{
+    await initScript();
+    await execute("chmod +x $_executionFile");
+    execute("pkexec $_executionFile");
   }
 
   Future<bool> setColor(color) async{
-    _selectedColor= color;
-    await execute("${Directory.current.path}/assets/scripts/faustus_controller.sh color ${color.red.toRadixString(16)} ${color.green.toRadixString(16)} ${color.blue.toRadixString(16)} 0");
+    await execute("$_executionFile color ${color.red.toRadixString(16)} ${color.green.toRadixString(16)} ${color.blue.toRadixString(16)} 0");
     return _terminalRepo.checkRootAccess();
   }
 
   Future<bool> setBrightness(value) async{
-    await execute("${Directory.current.path}/assets/scripts/faustus_controller.sh brightness $value ");
+    await execute("$_executionFile brightness $value ");
     return _terminalRepo.checkRootAccess();
   }
 
   Future<bool> setMode(value) async{
-    await execute("${Directory.current.path}/assets/scripts/faustus_controller.sh mode $value ");
+    await execute("$_executionFile mode $value ");
     return _terminalRepo.checkRootAccess();
   }
 
   Future<bool> setSpeed(value) async{
-    await execute("${Directory.current.path}/assets/scripts/faustus_controller.sh speed $value ");
+    await execute("$_executionFile speed $value ");
     return _terminalRepo.checkRootAccess();
   }
 
   void killProcess(){
     _terminalRepo.killProcess();
   }
-
-  Color get selectedColor => _selectedColor;
 }

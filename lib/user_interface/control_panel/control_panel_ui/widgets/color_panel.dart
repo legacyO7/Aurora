@@ -1,3 +1,4 @@
+import 'package:aurora/user_interface/control_panel/control_panel_state/control_panel_cubit.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,8 +10,7 @@ Widget colorController(BuildContext context) {
       wheelDiameter: 210,
       wheelWidth: 20,
       wheelHasBorder: true,
-      color: context.read<HomeCubit>().selectedColor,
-      title: const Center(child: Text("Keyboard Color Picker")),
+      color: context.read<ControlPanelCubit>().selectedColor,
       wheelSquareBorderRadius: 10,
       pickersEnabled: const <ColorPickerType, bool>{
         ColorPickerType.both: false,
@@ -22,6 +22,10 @@ Widget colorController(BuildContext context) {
       },
       colorCodeHasColor: false,
       onColorChanged: (color) async{
-        context.read<HomeCubit>().setColor(color);
+        await context.read<HomeCubit>().setColor(color).then((value) => {
+        if(value) {
+            context.read<ControlPanelCubit>().setColor(color)
+          }
+        });
       });
 }

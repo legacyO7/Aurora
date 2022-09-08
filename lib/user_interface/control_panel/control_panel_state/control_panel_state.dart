@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 abstract class ControlPanelState{}
 
 class ControlPanelInit extends ControlPanelState{}
@@ -15,4 +17,9 @@ class CPModePanel extends ControlPanelState{
 class CPSpeedPanel extends ControlPanelState{
   int speed;
   CPSpeedPanel({required this.speed});
+}
+
+class CPColorPanel extends ControlPanelState{
+  Color color;
+  CPColorPanel({required this.color});
 }

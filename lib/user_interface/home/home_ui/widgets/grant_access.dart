@@ -9,6 +9,7 @@ Widget grantAccess(BuildContext context){
   return Center(
     child: button(title: "Grant Access",
         isSelected: true,
+        context: context,
         action: (){
           context.read<HomeCubit>().requestAccess();
     }),
