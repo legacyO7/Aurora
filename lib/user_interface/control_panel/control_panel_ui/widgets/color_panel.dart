@@ -24,7 +24,9 @@ Widget colorController(BuildContext context) {
       onColorChanged: (color) async{
         await context.read<HomeCubit>().setColor(color).then((value) => {
         if(value) {
-            context.read<ControlPanelCubit>().setColor(color)
+            context.read<ControlPanelCubit>()
+              ..setColor(color)
+              ..setMode(0)
           }
         });
       });

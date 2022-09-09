@@ -1,4 +1,4 @@
-import 'package:aurora/di/di.dart';
+import 'package:aurora/data/di/di.dart';
 import 'package:aurora/user_interface/control_panel/control_panel_state/control_panel_cubit.dart';
 import 'package:aurora/user_interface/home/home_state/home_cubit.dart';
 import 'package:aurora/user_interface/home/home_ui/home_screen.dart';
@@ -18,7 +18,7 @@ class Aurora extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
        BlocProvider.value(value: serviceLocator<HomeCubit>()),
-       BlocProvider(create: (context)=>ControlPanelCubit()),
+       BlocProvider.value(value: serviceLocator<ControlPanelCubit>()),
       ],
       child: MaterialApp(
         title: 'Aurora',

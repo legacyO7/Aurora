@@ -20,7 +20,9 @@ Widget button({
         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
         color: isSelected?context.read<ControlPanelCubit>().selectedColor:Colors.grey[800],
         duration: const Duration(milliseconds: 500),
-        child: Center(child: Text(title,style: TextStyle(fontWeight: !isSelected?FontWeight.bold:FontWeight.normal),)),
+        child: Center(child: Text(title,style: TextStyle(fontWeight: !isSelected?FontWeight.bold:FontWeight.normal,
+        color: isSelected?context.read<ControlPanelCubit>().invertedSelectedColor:Colors.white
+        ),)),
       ),
     ),
   );

@@ -18,7 +18,7 @@ class HomeCubit extends Cubit<HomeState>{
 
   Future execute(String command) async {
     await for (var line in _terminalRepo.execute(command)) {
-      emit(AccessGranted(terminalOp: line, inProgress: _terminalRepo.isInProgress(), hasRootAccess:true));
+      emit(AccessGranted(terminalOp: line, inProgress: _terminalRepo.isInProgress(), hasRootAccess:_terminalRepo.checkRootAccess()));
     }
   }
 

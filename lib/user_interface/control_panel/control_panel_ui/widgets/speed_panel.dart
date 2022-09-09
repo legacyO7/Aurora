@@ -28,7 +28,7 @@ Widget speedController({
               action: () {
         context.read<HomeCubit>().setSpeed(e.value).then((value) {
           if(value) {
-            context.read<ControlPanelCubit>().setSpeed(e.value);
+            context.read<ControlPanelCubit>().setSpeed(e.value??0);
           }
         });
       } )).toList()

@@ -23,7 +23,7 @@ Widget brightnessController(BuildContext context) {
             action: () {
       context.read<HomeCubit>().setBrightness(e.value).then((value) {
         if(value) {
-          context.read<ControlPanelCubit>().setBrightness(e.value);
+          context.read<ControlPanelCubit>().setBrightness(e.value??0);
         }
       });
     } )).toList()

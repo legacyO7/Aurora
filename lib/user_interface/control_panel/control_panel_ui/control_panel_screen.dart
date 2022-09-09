@@ -14,26 +14,33 @@ class ControlPanelScreen extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<ControlPanelScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ControlPanelCubit>().initPanel();
+  }
+
   @override
   Widget build(BuildContext context) {
    return Column(
-
 
      children: [
        Padding(
          padding: const EdgeInsets.symmetric(horizontal: 20),
          child: Row(
+           mainAxisAlignment: MainAxisAlignment.start,
+           crossAxisAlignment: CrossAxisAlignment.start,
            children: [
              Flexible(
-               child: SizedBox(
-                 height: MediaQuery.of(context).size.height/2,
-                 child: Column(
-                   children: [
-                     brightnessController(context),
-                     modeController(context),
-                     speedController(context: context,isVisible: context.watch<ControlPanelCubit>().isSpeedBarVisible)
-                   ],
-                 ),
+               child: Column(
+                 mainAxisAlignment: MainAxisAlignment.start,
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 children: [
+                   brightnessController(context),
+                   modeController(context: context,isVisible: context.watch<ControlPanelCubit>().isModeBarVisible),
+                   speedController(context: context,isVisible: context.watch<ControlPanelCubit>().isSpeedBarVisible)
+                 ],
                ),
              ),
              Flexible(child: colorController(context)),
