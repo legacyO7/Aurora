@@ -1,5 +1,4 @@
 import 'package:aurora/user_interface/home/home_state/home_cubit.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -45,7 +44,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
       body: BlocBuilder<HomeCubit,HomeState>(
         builder: (BuildContext context, state) {
           if(state is AccessGranted ) {
-            var c = state.terminalOp.reversed.toList(growable: false);
+            var c = state.terminalOut.reversed.toList(growable: false);
             return Column(
               children: [
                 Expanded(
@@ -56,7 +55,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
                         return Text(c[i].text,style: TextStyle(color: c[i].color));
                       },
                       separatorBuilder: (_, __) => const Divider(),
-                      itemCount: state.terminalOp.length),
+                      itemCount: state.terminalOut.length),
                 ),
                 const Divider(color: Colors.red,),
                 Row(

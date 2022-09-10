@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
-enum CommandStatus { STDERR, STDOUT, STDIN }
+enum CommandStatus { stderr, stdout, stdin }
 
 class TerminalText{
   String text;

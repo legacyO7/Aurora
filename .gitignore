@@ -45,3 +45,4 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/legacy07-latest-x86_64.AppImage

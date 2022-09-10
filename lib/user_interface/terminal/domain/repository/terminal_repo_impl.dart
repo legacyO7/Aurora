@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../../utility/terminal_text.dart';
 
@@ -15,9 +16,13 @@ class TerminalRepoImpl extends TerminalRepo{
   bool _inProgress=false;
   bool _hasRootAccess=false;
 
+  final _tStreamController = BehaviorSubject<List<TerminalText>>();
+
+  late Sink<List<TerminalText>>  _terminalSink;
+
   @override
-  Stream<List<TerminalText>> execute(String command) async* {
-    print(command);
+  Future execute(String command) async {
+    _terminalSink = _tStreamController.sink;
     List<String> arguments=[];
 
     if (command == "clear") {
@@ -25,22 +30,21 @@ class TerminalRepoImpl extends TerminalRepo{
       terminalOut.clear();
       _inProgress=false;
 
-      yield terminalOut;
+      _terminalSink.add(terminalOut);
 
       return;
     }else if(command.isNotEmpty) {
       arguments = command.split(' ');
       var exec=arguments[0];
       arguments.removeAt(0);
-      _convertToList(line:  "\$ $command",commandStatus: CommandStatus.STDIN);
+      _convertToList(line:  "\$ $command",commandStatus: CommandStatus.stdin);
 
-      try {
+       try{
 
         if(_inProgress){
-          process.stdin.writeln(command);
+          return;
         }else {
          _inProgress=true;
-         yield terminalOut;
           process = await Process.start(
               exec,
               arguments
@@ -48,29 +52,30 @@ class TerminalRepoImpl extends TerminalRepo{
         }
 
         await for (var line in process.stdout) {
-          _convertToList(line: utf8.decode(line),commandStatus: CommandStatus.STDOUT);
+          _convertToList(line: utf8.decode(line),commandStatus: CommandStatus.stdout);
         }
 
         await for (var line in process.stderr) {
-          _convertToList(line: utf8.decode(line),commandStatus: CommandStatus.STDERR);
+          _convertToList(line: utf8.decode(line),commandStatus: CommandStatus.stderr);
         }
 
         _inProgress=false;
-        yield terminalOut;
-
-      } catch (e) {}
+      } catch (e) {
+        if (kDebugMode) {
+          print("STDERR: ${e.toString()}");
+        }
+      }
     }
   }
 
    _convertToList({required String line, CommandStatus? commandStatus}){
-    if(commandStatus == CommandStatus.STDOUT){
+    if(commandStatus == CommandStatus.stdout){
       terminalOut.add(TerminalText(text: line, color: Colors.green ));
-    }else if(commandStatus == CommandStatus.STDERR){
+    }else if(commandStatus == CommandStatus.stderr){
       terminalOut.add(TerminalText(text: line, color: Colors.red ));
-    }else if(commandStatus == CommandStatus.STDIN){
+    }else if(commandStatus == CommandStatus.stdin){
       terminalOut.add(TerminalText(text: line, color: Colors.blue ));
     }
-
     if (kDebugMode) {
       print("--- $line");
     }
@@ -81,17 +86,18 @@ class TerminalRepoImpl extends TerminalRepo{
     }else {
       _hasRootAccess=true;
     }
-  }
+    _terminalSink.add(terminalOut);
+   }
 
   @override
    killProcess(){
     try {
       process.kill();
     }catch(e){
-      _convertToList(line: e.toString(),commandStatus: CommandStatus.STDERR);
+      _convertToList(line: e.toString(),commandStatus: CommandStatus.stderr);
     }
     finally{
-      _convertToList(line: "process terminated",commandStatus: CommandStatus.STDERR);
+      _convertToList(line: "process terminated",commandStatus: CommandStatus.stderr);
       _inProgress=false;
     }
   }
@@ -101,5 +107,9 @@ class TerminalRepoImpl extends TerminalRepo{
 
   @override
   bool isInProgress()=> _inProgress;
+
+  @override
+  Stream<List<TerminalText>> get terminalOutStream => _tStreamController.stream;
+
   
 }

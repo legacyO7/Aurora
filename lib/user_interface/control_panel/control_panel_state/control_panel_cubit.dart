@@ -1,5 +1,5 @@
-import 'dart:ui';
 
+import 'package:aurora/data/di/shared_preference/pref_constants.dart';
 import 'package:aurora/data/di/shared_preference/pref_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,19 +14,26 @@ class ControlPanelCubit extends Cubit<ControlPanelState>{
   int? _brightness;
   int? _mode;
   int? _speed;
-  Color _selectedColor=Colors.green;
+  Color _color=Colors.green;
 
-  initPanel()async{
+  Future<Map<String,dynamic>> initPanel()async{
     setColor(await _prefRepo.getColor());
     setBrightness(await _prefRepo.getBrightness());
     setMode(await _prefRepo.getMode());
     setSpeed(await _prefRepo.getSpeed());
+    
+    return{
+      PrefConstants.brightness:_brightness,
+      PrefConstants.color:_color,
+      PrefConstants.speed:_speed,
+      PrefConstants.mode:_mode,
+    };
   }
 
   setColor(Color color){
-    _selectedColor= color;
+    _color= color;
     _prefRepo.setColor(color.toString());
-    emit(CPColorPanel(color: _selectedColor));
+    emit(CPColorPanel(color: _color));
   }
 
   setBrightness(int value){
@@ -53,8 +60,7 @@ class ControlPanelCubit extends Cubit<ControlPanelState>{
   int? get brightness => _brightness;
   int? get speed => _speed;
   int? get mode => _mode;
-  Color get selectedColor => _selectedColor;
-  Color get invertedSelectedColor => Color.fromARGB((_selectedColor.opacity * 255).round(), 255-_selectedColor.red, 255-_selectedColor.green, 255-_selectedColor.blue);
-
+  Color get selectedColor => _color;
+  Color get invertedSelectedColor => Color.fromARGB((_color.opacity * 255).round(), 255-_color.red, 255-_color.green, 255-_color.blue);
 
 }
