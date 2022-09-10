@@ -13,7 +13,7 @@ final serviceLocator = GetIt.I;
 Future initDI() async{
   serviceLocator.allowReassignment=true;
   serviceLocator.registerLazySingleton(() => HomeCubit(serviceLocator()));
-  serviceLocator.registerLazySingleton(() => ControlPanelCubit(serviceLocator()));
+  serviceLocator.registerLazySingleton(() => ControlPanelCubit(serviceLocator(),serviceLocator()));
 
   serviceLocator.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl());
   serviceLocator.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(serviceLocator()));

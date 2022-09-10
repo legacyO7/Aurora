@@ -1,5 +1,4 @@
 import 'package:aurora/user_interface/control_panel/control_panel_state/control_panel_cubit.dart';
-import 'package:aurora/user_interface/home/home_state/home_cubit.dart';
 import 'package:aurora/utility/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,12 +25,8 @@ Widget speedController({
               isSelected: context.watch<ControlPanelCubit>().speed==e.value,
               context: context,
               action: () {
-        context.read<HomeCubit>().setSpeed(e.value).then((value) {
-          if(value) {
-            context.read<ControlPanelCubit>().setSpeed(e.value??0);
-          }
-        });
-      } )).toList()
+                context.read<ControlPanelCubit>().setSpeed(e.value??0);
+              } )).toList()
     ),
  );
 

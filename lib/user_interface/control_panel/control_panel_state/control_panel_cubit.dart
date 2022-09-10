@@ -1,55 +1,55 @@
 
-import 'package:aurora/data/di/shared_preference/pref_constants.dart';
 import 'package:aurora/data/di/shared_preference/pref_repo.dart';
+import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
+import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'control_panel_state.dart';
 
 class ControlPanelCubit extends Cubit<ControlPanelState>{
-  ControlPanelCubit(this._prefRepo):super(ControlPanelInit());
+  ControlPanelCubit(this._prefRepo,this._terminalRepo):super(ControlPanelInit());
 
   final PrefRepo _prefRepo;
+  final TerminalRepo _terminalRepo;
 
   int? _brightness;
   int? _mode;
   int? _speed;
   Color _color=Colors.green;
 
-  Future<Map<String,dynamic>> initPanel()async{
+  Future initPanel()async{
     setColor(await _prefRepo.getColor());
     setBrightness(await _prefRepo.getBrightness());
     setMode(await _prefRepo.getMode());
     setSpeed(await _prefRepo.getSpeed());
-    
-    return{
-      PrefConstants.brightness:_brightness,
-      PrefConstants.color:_color,
-      PrefConstants.speed:_speed,
-      PrefConstants.mode:_mode,
-    };
   }
 
-  setColor(Color color){
+  setColor(Color color) async {
     _color= color;
-    _prefRepo.setColor(color.toString());
+    await _terminalRepo.execute("${Constants.kExecFile} color ${_color.red.toRadixString(16)} ${_color.green.toRadixString(16)} ${_color.blue.toRadixString(16)} 0");
+    _prefRepo.setColor(_color.toString());
     emit(CPColorPanel(color: _color));
+
   }
 
-  setBrightness(int value){
+  setBrightness(int value) async {
     _brightness=value;
+    await _terminalRepo.execute("${Constants.kExecFile} brightness $_brightness ");
     _prefRepo.setBrightness(value);
     emit(CPBrightnessPanel(brightness: _brightness??0));
   }
 
-  setMode(int value){
+  setMode(int value)async{
     _mode=value;
+    await _terminalRepo.execute("${Constants.kExecFile} mode $_mode ");
     _prefRepo.setMode(value);
     emit(CPModePanel(mode: _mode??0));
   }
 
-  setSpeed(int value){
+  setSpeed(int value) async{
     _speed=value;
+    await _terminalRepo.execute("${Constants.kExecFile} speed $_speed ");
     _prefRepo.setSpeed(value);
     emit(CPSpeedPanel(speed: _speed??0));
   }

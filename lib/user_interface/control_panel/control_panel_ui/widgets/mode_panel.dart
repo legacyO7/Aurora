@@ -1,5 +1,4 @@
 import 'package:aurora/user_interface/control_panel/control_panel_state/control_panel_cubit.dart';
-import 'package:aurora/user_interface/home/home_state/home_cubit.dart';
 import 'package:aurora/utility/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,11 +25,7 @@ Widget modeController({
               isSelected: context.watch<ControlPanelCubit>().mode==e.value,
               context: context,
               action: () {
-        context.read<HomeCubit>().setMode(e.value).then((value) {
-          if(value) {
-            context.read<ControlPanelCubit>().setMode(e.value??0);
-          }
-        });
+                context.read<ControlPanelCubit>().setMode(e.value??0);
       } )).toList()
     ),
  );

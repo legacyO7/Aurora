@@ -3,7 +3,6 @@ import 'package:aurora/user_interface/control_panel/control_panel_ui/widgets/bri
 import 'package:aurora/user_interface/control_panel/control_panel_ui/widgets/color_panel.dart';
 import 'package:aurora/user_interface/control_panel/control_panel_ui/widgets/mode_panel.dart';
 import 'package:aurora/user_interface/control_panel/control_panel_ui/widgets/speed_panel.dart';
-import 'package:aurora/user_interface/home/home_state/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,10 +18,7 @@ class _MyHomePageState extends State<ControlPanelScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<ControlPanelCubit>().initPanel().then((value){
-      context.read<HomeCubit>().initTerminal(value);
-    }
-    );
+    context.read<ControlPanelCubit>().initPanel();
   }
 
   @override
