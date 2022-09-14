@@ -1,23 +1,26 @@
 
 
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/battery_manager/battery_manager_state/batter_manager_state.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BatteryManagerCubit extends Cubit<BatteryManagerState>{
-  BatteryManagerCubit(this._terminalRepo,this._prefRepo):super(BatteryManagerInit(batteryLevel: 50));
+  BatteryManagerCubit(this._terminalRepo,this._prefRepo):super(BatteryManagerInit(batteryLevel: Constants.kMinimumChargeLevel));
 
   final TerminalRepo _terminalRepo;
-  PrefRepo _prefRepo;
+  final PrefRepo _prefRepo;
 
-  int _batteryLevel=50;
+  int _batteryLevel=Constants.kMinimumChargeLevel;
 
   Future getBatteryLevel() async {
-    _batteryLevel= int.parse((await File("/sys/class/power_supply/BAT1/charge_control_end_threshold").readAsString()).toString().trim());
+    _batteryLevel= int.parse((await File(Constants.kBatteryThresholdPath).readAsString()).toString().trim());
     emit(BatteryManagerInit(batteryLevel: _batteryLevel));
   }
 
@@ -26,11 +29,15 @@ class BatteryManagerCubit extends Cubit<BatteryManagerState>{
     emit(BatteryManagerInit(batteryLevel: _batteryLevel));
   }
 
-  finalizeBatteryLevel(int level){
+  finalizeBatteryLevel(int level) async{
     _batteryLevel=level;
-    _terminalRepo.execute("${Constants.kExecBatteryManagerPath} $level");
-    _prefRepo.setThreshold(level);
+    await _terminalRepo.execute("${Constants.kExecBatteryManagerPath} $level");
+    await _prefRepo.setThreshold(level);
     emit(BatteryManagerInit(batteryLevel: _batteryLevel));
+  }
+
+  Color getSliderColor(Color color){
+    return HSLColor.fromColor(color).withHue(100-((_batteryLevel-Constants.kMinimumChargeLevel)/Constants.kMinimumChargeLevel)*100).toColor();
   }
 
   int get batteryLevel => _batteryLevel;

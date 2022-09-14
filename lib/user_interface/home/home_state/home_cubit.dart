@@ -38,7 +38,7 @@ class HomeCubit extends Cubit<HomeState> {
     Constants.kExecBatteryManagerPath=await initScript(sourceFileName:Constants.kBatteryManager);
     Constants.kExecFaustusPath=await initScript(sourceFileName:Constants.kFaustus);
 
-    await execute("pkexec --disable-internal-agent ${Constants.kExecFaustusPath} init ${Constants.kWorkingDirectory} ${await _prefRepo.getThreshold()}");
+    await execute("${Constants.kPolkit} ${Constants.kExecFaustusPath} init ${Constants.kWorkingDirectory} ${await _prefRepo.getThreshold()}");
 
   }
 

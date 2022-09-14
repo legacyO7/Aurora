@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-ScaffoldFeatureController<SnackBar, SnackBarClosedReason> kSnackBar({
+ScaffoldFeatureController<SnackBar, SnackBarClosedReason> arSnackBar({
   required BuildContext context,
   required String text,
   bool isPositive = true,

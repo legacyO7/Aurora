@@ -38,7 +38,7 @@ class PrefRepoImpl extends PrefRepo{
 
   @override
   Future<int> getThreshold() async{
-    return (_sharedPreferences.getInt(PrefConstants.speed))??Constants.kMinimumChargeLevel;
+    return (_sharedPreferences.getInt(PrefConstants.threshold))??Constants.kMinimumChargeLevel;
   }
 
   @override
