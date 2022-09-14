@@ -1,5 +1,7 @@
 class Constants {
 
+
+  static String arVersion='-';
   static String kWorkingDirectory = '/';
 
   static const String kFaustus = 'faustus_controller.sh';

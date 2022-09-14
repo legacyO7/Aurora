@@ -6,6 +6,7 @@ import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.d
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -19,6 +20,11 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   final String _assetPath = "assets/scripts/";
+
+
+  Future getVersion() async{
+    Constants.arVersion= (await PackageInfo.fromPlatform()).version;
+  }
 
   Future execute(String command) async {
     await _terminalRepo.execute(command);
@@ -34,6 +40,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   void requestAccess() async {
 
+    await getVersion();
     Constants.kWorkingDirectory=(await Directory('${(await getTemporaryDirectory()).path}/legacy07.aurora').create()).path;
     Constants.kExecBatteryManagerPath=await initScript(sourceFileName:Constants.kBatteryManager);
     Constants.kExecFaustusPath=await initScript(sourceFileName:Constants.kFaustus);

@@ -28,7 +28,9 @@ class _ControlPanelState extends State<ControlPanelScreen> {
             Expanded(
               child:BatteryManagerScreen()
             ),
-            Expanded(child: KeyboardSettingsScreen())
+            Expanded(
+                flex: 2,
+                child: KeyboardSettingsScreen())
           ],
         ),
       );

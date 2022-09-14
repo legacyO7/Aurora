@@ -72,11 +72,11 @@ class _BatteryManagerScreenState extends State<BatteryManagerScreen> {
              tooltip: FlutterSliderTooltip(
                disabled: true,
              ),
-             onDragging:  (handlerIndex, lowerValue, upperValue) {
+             onDragging:  (_, lowerValue, __) {
                context.read<BatteryManagerCubit>().setBatteryLevel(int.parse(lowerValue.toString().split('.')[0]));
              },
-             onDragCompleted: (handlerIndex, lowerValue, upperValue) {
-             //  context.read<BatteryManagerCubit>().finalizeBatteryLevel(int.parse(lowerValue.toString().split('.')[0]));
+             onDragCompleted: (_, lowerValue, __) {
+               context.read<BatteryManagerCubit>().finalizeBatteryLevel(int.parse(lowerValue.toString().split('.')[0]));
              },
            )
          ],
