@@ -6,14 +6,16 @@ import 'package:aurora/user_interface/control_panel/control_panel_ui/widgets/spe
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../battery_manager/battery_manager_ui/battery_manager_screen.dart';
+
 class ControlPanelScreen extends StatefulWidget {
   const ControlPanelScreen({Key? key}) : super(key: key);
 
   @override
-  State<ControlPanelScreen> createState() => _MyHomePageState();
+  State<ControlPanelScreen> createState() => _ControlPanelScreenState();
 }
 
-class _MyHomePageState extends State<ControlPanelScreen> {
+class _ControlPanelScreenState extends State<ControlPanelScreen> {
 
   @override
   void initState() {
@@ -37,6 +39,7 @@ class _MyHomePageState extends State<ControlPanelScreen> {
                  mainAxisAlignment: MainAxisAlignment.start,
                  crossAxisAlignment: CrossAxisAlignment.start,
                  children: [
+                   const BatteryManagerScreen(),
                    brightnessController(context),
                    modeController(context: context,isVisible: context.watch<ControlPanelCubit>().isModeBarVisible),
                    speedController(context: context,isVisible: context.watch<ControlPanelCubit>().isSpeedBarVisible)

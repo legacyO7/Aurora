@@ -1,5 +1,5 @@
 
-import 'package:aurora/data/di/shared_preference/pref_repo.dart';
+import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,7 @@ class ControlPanelCubit extends Cubit<ControlPanelState>{
 
   setColor(Color color) async {
     _color= color;
-    await _terminalRepo.execute("${Constants.kExecFile} color ${_color.red.toRadixString(16)} ${_color.green.toRadixString(16)} ${_color.blue.toRadixString(16)} 0");
+    await _terminalRepo.execute("${Constants.kExecFaustusPath} color ${_color.red.toRadixString(16)} ${_color.green.toRadixString(16)} ${_color.blue.toRadixString(16)} 0");
     _prefRepo.setColor(_color.toString());
     emit(CPColorPanel(color: _color));
 
@@ -35,21 +35,21 @@ class ControlPanelCubit extends Cubit<ControlPanelState>{
 
   setBrightness(int value) async {
     _brightness=value;
-    await _terminalRepo.execute("${Constants.kExecFile} brightness $_brightness ");
+    await _terminalRepo.execute("${Constants.kExecFaustusPath} brightness $_brightness ");
     _prefRepo.setBrightness(value);
     emit(CPBrightnessPanel(brightness: _brightness??0));
   }
 
   setMode(int value)async{
     _mode=value;
-    await _terminalRepo.execute("${Constants.kExecFile} mode $_mode ");
+    await _terminalRepo.execute("${Constants.kExecFaustusPath} mode $_mode ");
     _prefRepo.setMode(value);
     emit(CPModePanel(mode: _mode??0));
   }
 
   setSpeed(int value) async{
     _speed=value;
-    await _terminalRepo.execute("${Constants.kExecFile} speed $_speed ");
+    await _terminalRepo.execute("${Constants.kExecFaustusPath} speed $_speed ");
     _prefRepo.setSpeed(value);
     emit(CPSpeedPanel(speed: _speed??0));
   }

@@ -48,8 +48,12 @@ setaccess(){
 
 if [ $# -ne 0 ]
   then
-
     case "$1" in
+    init)
+    setaccess
+    chmod -R o+rwx $2/battery_manager.sh
+    sudo $2/battery_manager.sh $3
+    ;;
     color)
     setcolor $2 $3 $4 $5
     savesettings
@@ -66,9 +70,6 @@ if [ $# -ne 0 ]
     setbrightness $2
     ;;
     esac
-
-else
-  setaccess
 
 fi
 

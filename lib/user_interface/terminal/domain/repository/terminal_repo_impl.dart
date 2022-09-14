@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
+import 'package:aurora/utility/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
@@ -47,7 +48,8 @@ class TerminalRepoImpl extends TerminalRepo{
          _inProgress=true;
           process = await Process.start(
               exec,
-              arguments
+              arguments,
+            workingDirectory: Constants.kWorkingDirectory
           );
         }
 

@@ -1,8 +1,10 @@
 
-import 'package:aurora/data/di/shared_preference/pref_constants.dart';
-import 'package:aurora/data/di/shared_preference/pref_repo.dart';
+import 'package:aurora/data/shared_preference/pref_constants.dart';
+import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'pref_repo.dart';
 
 class PrefRepoImpl extends PrefRepo{
   PrefRepoImpl(this._sharedPreferences);
@@ -35,6 +37,11 @@ class PrefRepoImpl extends PrefRepo{
   }
 
   @override
+  Future<int> getThreshold() async{
+    return (_sharedPreferences.getInt(PrefConstants.speed))??Constants.kMinimumChargeLevel;
+  }
+
+  @override
   Future setVersion(String version) async {
     await _sharedPreferences.setString(PrefConstants.version, version);
   }
@@ -57,5 +64,10 @@ class PrefRepoImpl extends PrefRepo{
   @override
   Future setSpeed(int speed) async {
     await _sharedPreferences.setInt(PrefConstants.speed, speed);
+  }
+
+  @override
+  Future setThreshold(int threshold) async {
+    await _sharedPreferences.setInt(PrefConstants.threshold, threshold);
   }
 }

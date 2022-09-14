@@ -1,4 +1,5 @@
 import 'package:aurora/data/di/di.dart';
+import 'package:aurora/user_interface/battery_manager/battery_manager_state/batter_manager_cubit.dart';
 import 'package:aurora/user_interface/control_panel/control_panel_state/control_panel_cubit.dart';
 import 'package:aurora/user_interface/home/home_state/home_cubit.dart';
 import 'package:aurora/user_interface/home/home_ui/home_screen.dart';
@@ -19,6 +20,7 @@ class Aurora extends StatelessWidget {
       providers: [
        BlocProvider.value(value: serviceLocator<HomeCubit>()),
        BlocProvider.value(value: serviceLocator<ControlPanelCubit>()),
+       BlocProvider.value(value: serviceLocator<BatteryManagerCubit>()),
       ],
       child: MaterialApp(
         title: 'Aurora',

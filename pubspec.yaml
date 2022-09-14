@@ -36,6 +36,7 @@ dependencies:
   path_provider: ^2.0.11
   shared_preferences: ^2.0.15
   rxdart: ^0.27.5
+  another_xlider: ^1.1.2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -65,7 +66,8 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/scripts/faustus_controller.sh
+    - assets/scripts/
+    - assets/images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
