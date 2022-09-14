@@ -9,13 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:aurora/user_interface/keyboard_settings/keyboard_settings_state/keyboard_settings_cubit.dart';
 import 'package:window_size/window_size.dart';
 
-void main() {
+void main() async{
+  await initDI();
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isLinux) {
     setWindowMaxSize(const Size(1000, 600));
     setWindowMinSize(const Size(1000, 600));
   }
-  initDI();
   runApp(const Aurora());
 }
 
