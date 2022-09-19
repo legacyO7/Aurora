@@ -3,6 +3,8 @@ class Constants {
 
   static String arVersion='-';
   static String kWorkingDirectory = '/';
+  static const String kAssetsPath = "assets/scripts/";
+
 
   static const String kFaustus = 'faustus_controller.sh';
   static const String kBatteryManager = 'battery_manager.sh';

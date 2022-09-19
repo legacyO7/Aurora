@@ -1,7 +1,7 @@
+import 'package:aurora/user_interface/keyboard_settings/presentation/state/keyboard_settings_cubit.dart';
 import 'package:aurora/utility/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:aurora/user_interface/keyboard_settings/keyboard_settings_state/keyboard_settings_cubit.dart';
 
 Widget brightnessController({required BuildContext context, required String title}) {
 

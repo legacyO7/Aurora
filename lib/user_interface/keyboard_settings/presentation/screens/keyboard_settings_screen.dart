@@ -1,12 +1,13 @@
 
-import 'package:aurora/user_interface/keyboard_settings/keyboard_settings_state/keyboard_settings_cubit.dart';
-import 'package:aurora/user_interface/keyboard_settings/keyboard_settings_ui/widgets/color_panel.dart';
-import 'package:aurora/user_interface/keyboard_settings/keyboard_settings_ui/widgets/speed_panel.dart';
+import 'package:aurora/user_interface/keyboard_settings/presentation/state/keyboard_settings_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'widgets/brightness_panel.dart';
+import 'widgets/color_panel.dart';
 import 'widgets/mode_panel.dart';
+import 'widgets/speed_panel.dart';
+
 
 class KeyboardSettingsScreen extends StatefulWidget {
   const KeyboardSettingsScreen({Key? key}) : super(key: key);

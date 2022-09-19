@@ -1,4 +1,5 @@
-import '../../../utility/terminal_text.dart';
+
+import 'package:aurora/utility/terminal_text.dart';
 
 abstract class HomeState{}
 

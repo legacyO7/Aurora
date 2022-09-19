@@ -1,9 +1,9 @@
+
 import 'package:aurora/user_interface/home/presentation/state/home_cubit.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_state.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 class TerminalScreen extends StatefulWidget {
   const TerminalScreen({Key? key, required this.title}) : super(key: key);

@@ -1,4 +1,4 @@
-import 'package:aurora/user_interface/home/home_state/home_cubit.dart';
+import 'package:aurora/user_interface/home/presentation/state/home_cubit.dart';
 import 'package:aurora/utility/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
