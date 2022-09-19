@@ -28,12 +28,22 @@ checkos(){
 
 
 installpackages(){
+  checkos
   if [ package_manager == "unknown" ]
   then
     echo "unsupported Operating System"
   else
     echo "Installing packages"
-    sudo ${package_manager} $packages_to_install
+
+    for terminal in "$TERMINAL" x-terminal-emulator mate-terminal gnome-terminal terminator xfce4-terminal urxvt rxvt termit Eterm aterm uxterm xterm roxterm termite lxterminal terminology st qterminal lilyterm tilix terminix konsole kitty guake tilda alacritty hyper wezterm; do
+        if command -v "$terminal" > /dev/null 2>&1; then
+            exec `$terminal -e "sudo ${package_manager} $packages_to_install"`
+            echo "success"
+            break;
+        fi
+    done
+
+
   fi
 }
 
@@ -105,4 +115,19 @@ installfaustus(){
         fi
 
 }
+
+if [ $# -ne 0 ]
+  then
+    case "$1" in
+    checkos)
+    checkos
+    ;;
+    installpackages)
+    installpackages
+    ;;
+    installfaustus)
+    installfaustus
+    ;;
+    esac
+fi
 

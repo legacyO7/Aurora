@@ -8,6 +8,7 @@ class Constants {
 
   static const String kFaustus = 'faustus_controller.sh';
   static const String kBatteryManager = 'battery_manager.sh';
+  static const String kSetup = 'ar_setup.sh';
 
   static String kExecFaustusPath = '';
   static String kExecBatteryManagerPath = '';

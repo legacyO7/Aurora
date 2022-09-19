@@ -23,7 +23,7 @@ Future initDI() async{
   serviceLocator.registerLazySingleton(() => TerminalCubit(serviceLocator()));
   serviceLocator.registerLazySingleton(() => KeyboardSettingsCubit(serviceLocator(),serviceLocator()));
   serviceLocator.registerLazySingleton(() => BatteryManagerCubit(serviceLocator(),serviceLocator()));
-  serviceLocator.registerLazySingleton(() => SetupWizardCubit());
+  serviceLocator.registerLazySingleton(() => SetupWizardCubit(serviceLocator(),serviceLocator()));
 
   serviceLocator.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl());
   serviceLocator.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(serviceLocator()));
