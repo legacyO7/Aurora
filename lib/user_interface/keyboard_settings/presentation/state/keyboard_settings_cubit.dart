@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'keyboard_settings_state.dart';
 
 class KeyboardSettingsCubit extends Cubit<KeyboardSettingsState>{
-  KeyboardSettingsCubit(this._prefRepo,this._terminalRepo):super(KeyboardSettingsInit());
+  KeyboardSettingsCubit(this._prefRepo,this._terminalRepo):super(KeyboardSettingsInitState());
 
   final PrefRepo _prefRepo;
   final TerminalRepo _terminalRepo;
@@ -19,39 +19,42 @@ class KeyboardSettingsCubit extends Cubit<KeyboardSettingsState>{
   Color _color=Colors.green;
 
   Future initPanel()async{
-    setColor(await _prefRepo.getColor());
-    setBrightness(await _prefRepo.getBrightness());
-    setMode(await _prefRepo.getMode());
-    setSpeed(await _prefRepo.getSpeed());
+    await setColor(await _prefRepo.getColor());
+    await setBrightness(await _prefRepo.getBrightness());
+    await setMode(await _prefRepo.getMode());
+    await setSpeed(await _prefRepo.getSpeed());
   }
 
   setColor(Color color) async {
     _color= color;
     await _terminalRepo.execute("${Constants.kExecFaustusPath} color ${_color.red.toRadixString(16)} ${_color.green.toRadixString(16)} ${_color.blue.toRadixString(16)} 0");
     _prefRepo.setColor(_color.toString());
-    emit(KeyboardSettingsColorPanel(color: _color));
-
+    _setState();
   }
 
   setBrightness(int value) async {
     _brightness=value;
     await _terminalRepo.execute("${Constants.kExecFaustusPath} brightness $_brightness ");
     _prefRepo.setBrightness(value);
-    emit(KeyboardSettingsBrightnessPanel(brightness: _brightness??0));
+    _setState();
   }
 
   setMode(int value)async{
     _mode=value;
     await _terminalRepo.execute("${Constants.kExecFaustusPath} mode $_mode ");
     _prefRepo.setMode(value);
-    emit(KeyboardSettingsModePanel(mode: _mode??0));
+    _setState();
   }
 
   setSpeed(int value) async{
     _speed=value;
     await _terminalRepo.execute("${Constants.kExecFaustusPath} speed $_speed ");
     _prefRepo.setSpeed(value);
-    emit(KeyboardSettingsSpeedPanel(speed: _speed??0));
+    _setState();
+  }
+
+  _setState(){
+    emit(KeyboardSettingsLoadedState(brightness: _brightness??0, mode: _mode??0, speed: _speed??0, color: _color));
   }
 
   bool get isSpeedBarVisible => (_mode??0)>0&&(mode??0)<3&&isModeBarVisible;

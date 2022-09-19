@@ -2,24 +2,11 @@ import 'dart:ui';
 
 abstract class KeyboardSettingsState{}
 
-class KeyboardSettingsInit extends KeyboardSettingsState{}
-
-class KeyboardSettingsBrightnessPanel extends KeyboardSettingsState{
+class KeyboardSettingsInitState extends KeyboardSettingsState{}
+class KeyboardSettingsLoadedState extends KeyboardSettingsState{
   int brightness;
-  KeyboardSettingsBrightnessPanel({required this.brightness});
-}
-
-class KeyboardSettingsModePanel extends KeyboardSettingsState{
   int mode;
-  KeyboardSettingsModePanel({required this.mode});
-}
-
-class KeyboardSettingsSpeedPanel extends KeyboardSettingsState{
   int speed;
-  KeyboardSettingsSpeedPanel({required this.speed});
-}
-
-class KeyboardSettingsColorPanel extends KeyboardSettingsState{
   Color color;
-  KeyboardSettingsColorPanel({required this.color});
+  KeyboardSettingsLoadedState({required this.brightness, required this.mode, required this.speed, required this.color});
 }
