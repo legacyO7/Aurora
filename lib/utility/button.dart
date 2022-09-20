@@ -6,19 +6,33 @@ Widget button({
   required String title,
   required VoidCallback action,
   bool isSelected=false,
+  bool isLoading=false,
+  bool isEnabled=true,
   required BuildContext context
 }){
+  double height= isSelected?50:40;
+  double width= isSelected?120:100;
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 1),
-    child: InkWell(
+    child:
+    isLoading && isSelected?
+    SizedBox(
+        height: height,
+        width: width,
+        child: LinearProgressIndicator(
+          color: context.read<KeyboardSettingsCubit>().selectedColor,
+        )):
+    InkWell(
       onTap: (){
-        action();
+        if(isEnabled) {
+          action();
+        }print(isEnabled);
       },
       child: AnimatedContainer(
         height: isSelected?50:40,
         width: isSelected?120:100,
         padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-        color: isSelected?context.read<KeyboardSettingsCubit>().selectedColor:Colors.grey[800],
+        color: isEnabled? isSelected?context.read<KeyboardSettingsCubit>().selectedColor:Colors.grey[800]:Colors.grey,
         duration: const Duration(milliseconds: 500),
         child: Center(child: Text(title,style: TextStyle(fontWeight: !isSelected?FontWeight.bold:FontWeight.normal,
         color: Colors.white,

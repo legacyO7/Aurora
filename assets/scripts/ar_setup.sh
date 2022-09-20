@@ -5,7 +5,7 @@ signingfileloc="/lib/modules/$(uname -r)/build/certs"
 faustusDir="/sys/devices/platform/faustus/"
 packages_to_install="dkms openssl mokutil xterm wget git pkexec make cmake"
 filename_key="signing_key"
-tmpdir="/tmp"
+tmpdir="$1"
 require_reboot=false
 
 
@@ -35,10 +35,10 @@ installpackages(){
   else
     echo "Installing packages"
 
-    for terminal in "$TERMINAL" x-terminal-emulator mate-terminal gnome-terminal terminator xfce4-terminal urxvt rxvt termit Eterm aterm uxterm xterm roxterm termite lxterminal terminology st qterminal lilyterm tilix terminix konsole kitty guake tilda alacritty hyper wezterm; do
+    for terminal in "$TERMINAL" $1; do
         if command -v "$terminal" > /dev/null 2>&1; then
-            exec `$terminal -e "sudo ${package_manager} $packages_to_install"`
-            echo "success"
+            exec `$terminal -e "exec 2>/tmp/legacy07.aurora/log && sudo ${package_manager} $packages_to_install"`
+            echo success
             break;
         fi
     done
@@ -118,12 +118,12 @@ installfaustus(){
 
 if [ $# -ne 0 ]
   then
-    case "$1" in
+    case "$2" in
     checkos)
     checkos
     ;;
     installpackages)
-    installpackages
+    installpackages $3
     ;;
     installfaustus)
     installfaustus

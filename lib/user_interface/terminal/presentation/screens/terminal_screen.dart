@@ -6,9 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class TerminalScreen extends StatefulWidget {
-  const TerminalScreen({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const TerminalScreen({Key? key}) : super(key: key);
 
   @override
   State<TerminalScreen> createState() => _TerminalScreenState();

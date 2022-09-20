@@ -45,13 +45,14 @@ class _SetupScreenState extends State<SetupScreen> {
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext ctx) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: BlocBuilder<SetupWizardCubit,SetupWizardState>(
         builder: (BuildContext context, state) {
           if(state is SetupWizardIncompatibleState){
             return  Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: AnotherStepper(
@@ -78,19 +79,22 @@ class _SetupScreenState extends State<SetupScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       button(
+                          isEnabled: state.isValid??false,
+                          isLoading: state.inProgress??false,
                           isSelected: true,
                           title: "Install", action: (){
-                        context.read<SetupWizardCubit>().installer();
+                        context.read<SetupWizardCubit>().installer(ctx);
                       }, context: context),
 
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: button(title: "Cancel", action: (){
-
+                        child: button(
+                            isEnabled: state.isValid??false,
+                            title: "Cancel", action: (){
                         }, context: context),
                       ),
                     ],
-                  )
+                  ),
                 ]);
           }else{
             return placeholder();

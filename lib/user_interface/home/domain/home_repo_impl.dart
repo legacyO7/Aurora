@@ -21,4 +21,9 @@ class HomeRepoImpl extends HomeRepo{
     return destinationFileName;
   }
 
+  @override
+  List<String> readFile({required String path}){
+    return (File(path).readAsLinesSync());
+  }
+
 }

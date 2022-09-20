@@ -3,6 +3,7 @@ import 'package:aurora/user_interface/home/presentation/screens/home_screen.dart
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_screen.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_state.dart';
+import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,6 +32,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: Constants.kScaffoldKey,
       body: Center(
         child: BlocBuilder<SetupWizardCubit,SetupWizardState>(
           builder: (BuildContext context, state) {

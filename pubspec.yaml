@@ -40,6 +40,7 @@ dependencies:
   another_stepper: ^1.0.4
   flutter_svg: ^1.1.5
   package_info_plus: ^1.4.3+1
+  dio: ^4.0.6
   window_size:
     git:
       url: https://github.com/google/flutter-desktop-embedding
