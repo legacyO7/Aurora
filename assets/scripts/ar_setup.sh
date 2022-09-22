@@ -112,6 +112,12 @@ installfaustus(){
 
             cd ..
             rm -rf faustus
+
+             if [ -d "$faustusDir" ]; then
+                echo "faustus module found"
+             else
+               echo "error"
+             fi
         fi
 
 }

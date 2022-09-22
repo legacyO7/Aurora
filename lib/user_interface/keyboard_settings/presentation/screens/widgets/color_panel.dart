@@ -8,7 +8,7 @@ Widget colorController(BuildContext context) {
       wheelDiameter: 210,
       wheelWidth: 20,
       wheelHasBorder: true,
-      color: context.read<KeyboardSettingsCubit>().selectedColor,
+      color: context.watch<KeyboardSettingsCubit>().selectedColor,
       wheelSquareBorderRadius: 10,
       pickersEnabled: const <ColorPickerType, bool>{
         ColorPickerType.both: false,

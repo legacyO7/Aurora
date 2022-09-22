@@ -17,6 +17,8 @@ class TerminalRepoImpl extends TerminalRepo{
   bool _inProgress=false;
   bool _hasRootAccess=false;
 
+  final LineSplitter _lineSplitter=const LineSplitter();
+
   final _tStreamController = BehaviorSubject<List<TerminalText>>();
 
   late Sink<List<TerminalText>>  _terminalSink;
@@ -38,7 +40,7 @@ class TerminalRepoImpl extends TerminalRepo{
       arguments = command.split(' ');
       var exec=arguments[0];
       arguments.removeAt(0);
-      _convertToList(line:  "\$ $command",commandStatus: CommandStatus.stdin);
+      _convertToList(lines:  "\$ $command",commandStatus: CommandStatus.stdin);
 
        try{
 
@@ -54,11 +56,11 @@ class TerminalRepoImpl extends TerminalRepo{
         }
 
         await for (var line in process.stdout) {
-          _convertToList(line: utf8.decode(line),commandStatus: CommandStatus.stdout);
+          _convertToList(lines: utf8.decode(line),commandStatus: CommandStatus.stdout);
         }
 
         await for (var line in process.stderr) {
-          _convertToList(line: utf8.decode(line),commandStatus: CommandStatus.stderr);
+          _convertToList(lines: utf8.decode(line),commandStatus: CommandStatus.stderr);
         }
 
         _inProgress=false;
@@ -70,42 +72,53 @@ class TerminalRepoImpl extends TerminalRepo{
     }
   }
 
-   _convertToList({required String line, CommandStatus? commandStatus}){
-    if(commandStatus == CommandStatus.stdout){
-      terminalOut.add(TerminalText(text: line, color: Colors.green ));
-    }else if(commandStatus == CommandStatus.stderr){
-      terminalOut.add(TerminalText(text: line, color: Colors.red ));
-    }else if(commandStatus == CommandStatus.stdin){
-      terminalOut.add(TerminalText(text: line, color: Colors.blue ));
-    }
-    if (kDebugMode) {
-      print("--- $line");
-    }
+   _convertToList({required String lines, CommandStatus? commandStatus}){
+    _lineSplitter.convert(lines).forEach((line) {
+      if(commandStatus == CommandStatus.stdout){
+        terminalOut.add(TerminalText(text: line, color: Colors.green ));
+      }else if(commandStatus == CommandStatus.stderr){
+        terminalOut.add(TerminalText(text: line, color: Colors.red ));
+      }else if(commandStatus == CommandStatus.stdin){
+        terminalOut.add(TerminalText(text: line, color: Colors.blue ));
+      }
 
-    if(line.contains('Permission denied')){
-      _hasRootAccess=false;
-      terminalOut.clear();
-    }else {
-      _hasRootAccess=true;
-    }
+      if (kDebugMode) {
+        print("--- $line");
+      }
+
+    });
     _terminalSink.add(terminalOut);
    }
+
+  @override
+  Future<bool> checkAccess() async{
+    terminalOut.clear();
+    await execute("${Constants.kExecFaustusPath} save");
+    _hasRootAccess=false;
+    for (int i =0;i<terminalOut.length;i++) {
+      if(terminalOut[i].text.contains('faustus_controller.sh save')&&i+1<terminalOut.length){
+        if(!terminalOut[i+1].text.contains('Permission denied')){
+          _hasRootAccess=true;
+          terminalOut.clear();
+        }
+      }
+    }
+
+    return _hasRootAccess;
+  }
 
   @override
    killProcess(){
     try {
       process.kill();
     }catch(e){
-      _convertToList(line: e.toString(),commandStatus: CommandStatus.stderr);
+      _convertToList(lines: e.toString(),commandStatus: CommandStatus.stderr);
     }
     finally{
-      _convertToList(line: "process terminated",commandStatus: CommandStatus.stderr);
+      _convertToList(lines: "process terminated",commandStatus: CommandStatus.stderr);
       _inProgress=false;
     }
   }
-  
-  @override
-  bool checkRootAccess()=> _hasRootAccess;
 
   @override
   bool isInProgress()=> _inProgress;
@@ -113,5 +126,9 @@ class TerminalRepoImpl extends TerminalRepo{
   @override
   Stream<List<TerminalText>> get terminalOutStream => _tStreamController.stream;
 
+  @override
+  void disposeStream(){
+    _tStreamController.close();
+  }
   
 }

@@ -71,9 +71,7 @@ class _SetupScreenState extends State<SetupScreen> {
                   ),
                   Expanded(
                     flex: 4,
-                    child:SingleChildScrollView(
-                      child: state.child,
-                    ),
+                    child:state.child??placeholder(),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,

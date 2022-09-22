@@ -4,6 +4,7 @@ import 'package:aurora/data/di/di.dart';
 import 'package:aurora/user_interface/battery_manager/presentation/state/batter_manager_cubit.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_wizard_screen.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:window_size/window_size.dart';
@@ -32,6 +33,7 @@ class Aurora extends StatelessWidget {
        BlocProvider.value(value: serviceLocator<HomeCubit>()),
        BlocProvider.value(value: serviceLocator<KeyboardSettingsCubit>()),
        BlocProvider.value(value: serviceLocator<BatteryManagerCubit>()),
+       BlocProvider.value(value: serviceLocator<TerminalCubit>()),
       ],
       child: MaterialApp(
         title: 'Aurora',

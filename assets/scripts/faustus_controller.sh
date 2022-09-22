@@ -33,6 +33,7 @@ setbrightness(){
 savesettings(){
   echo 2a > $kbbl_flags_path
   echo 1 > $kbbl_set_path
+  echo
 }
 
 setaccess(){
@@ -68,6 +69,9 @@ if [ $# -ne 0 ]
     ;;
     brightness)
     setbrightness $2
+    ;;
+    save)
+    savesettings
     ;;
     esac
 

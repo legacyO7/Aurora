@@ -4,7 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'terminal_state.dart';
 
 class TerminalCubit extends Cubit<TerminalState>{
-  TerminalCubit(this._terminalRepo):super(TerminalStateInit());
+  TerminalCubit(this._terminalRepo):super(TerminalStateInit()){
+    _terminalRepo.terminalOutStream.listen((event) {
+      emit(TerminalStateLoaded(terminalOut: event));
+    });
+  }
 
   final TerminalRepo _terminalRepo;
 

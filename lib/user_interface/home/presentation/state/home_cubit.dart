@@ -12,13 +12,7 @@ class HomeCubit extends Cubit<HomeState> {
   final HomeRepo _homeRepo;
   final PrefRepo _prefRepo;
 
-  HomeCubit(this._terminalRepo,this._prefRepo,this._homeRepo) : super(HomeStateInit()) {
-    _terminalRepo.terminalOutStream.listen((event) {
-      emit(AccessGranted(terminalOut: event, inProgress: _terminalRepo.isInProgress(), hasRootAccess: _terminalRepo.checkRootAccess()));
-    });
-  }
-
-
+  HomeCubit(this._terminalRepo,this._prefRepo,this._homeRepo) : super(HomeStateInit());
 
   Future getVersion() async{
     Constants.arVersion= (await PackageInfo.fromPlatform()).version;
@@ -29,14 +23,24 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
 
-  void requestAccess() async {
+  Future requestAccess() async {
 
     await getVersion();
     Constants.kExecBatteryManagerPath=await _homeRepo.extractAsset(sourceFileName:Constants.kBatteryManager);
     Constants.kExecFaustusPath=await _homeRepo.extractAsset(sourceFileName:Constants.kFaustus);
 
-    await execute("${Constants.kPolkit} ${Constants.kExecFaustusPath} init ${Constants.kWorkingDirectory} ${await _prefRepo.getThreshold()}");
 
+    var checkAccess=await _terminalRepo.checkAccess();
+    if(!checkAccess) {
+      await execute("${Constants.kPolkit} ${Constants.kExecFaustusPath} init ${Constants.kWorkingDirectory} ${await _prefRepo.getThreshold()}");
+    }
+    emit(AccessGranted(hasAccess: checkAccess));
+
+  }
+
+
+  void dispose(){
+    emit(HomeStateInit());
   }
 
 }

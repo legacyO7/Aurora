@@ -25,6 +25,11 @@ class _MyHomePageState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -61,7 +66,7 @@ class _MyHomePageState extends State<HomeScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: BlocBuilder<HomeCubit,HomeState>
                   (builder: (context,state){
-                  if(state is AccessGranted && (state.hasRootAccess)) {
+                  if(state is AccessGranted && (state.hasAccess)) {
                     return const ControlPanelScreen();
                   } else {
                     return grantAccess(context);
