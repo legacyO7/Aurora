@@ -31,8 +31,8 @@ setbrightness(){
 }
 
 savesettings(){
-  echo 2a > $kbbl_flags_path
-  echo 1 > $kbbl_set_path
+  echo 2a > $kbbl_flags_path &&
+  echo 1 > $kbbl_set_path &&
   echo
 }
 

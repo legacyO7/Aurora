@@ -10,4 +10,6 @@ class SetupWizardRepoImpl extends SetupWizardRepo{
   Future<String> getTerminalList()async{
     return (await _setupWizardSource.getTerminalList()).split('"\$TERMINAL" ')[1].split(';')[0];
   }
+
+
 }

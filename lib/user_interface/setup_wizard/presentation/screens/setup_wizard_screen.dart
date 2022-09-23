@@ -1,7 +1,6 @@
 
 import 'package:aurora/user_interface/home/presentation/screens/home_screen.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_screen.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/screens/widgets/success_screen.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_state.dart';
 import 'package:aurora/utility/constants.dart';
@@ -41,7 +40,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
               return const Text("Checking Compatibility...");
             }
             else if(state is SetupWizardIncompatibleState) {
-            return state.stepValue<3 ? const SetupScreen():const SuccessScreen();
+            return const SetupScreen();
             }
             else{
               Future.delayed(const Duration(milliseconds: 500)).then((value) =>

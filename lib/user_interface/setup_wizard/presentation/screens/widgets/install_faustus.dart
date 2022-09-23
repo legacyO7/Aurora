@@ -1,5 +1,6 @@
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_state.dart';
+import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/placeholder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
   @override
   void initState() {
     _controller=TextEditingController();
-    _controller.text="https://github.com/legacyO7/faustus.git";
+    _controller.text=Constants.kFaustusGitUrl;
     context.read<SetupWizardCubit>().validateRepo(_controller.text);
     super.initState();
   }

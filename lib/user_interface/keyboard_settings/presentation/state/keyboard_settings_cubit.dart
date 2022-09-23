@@ -27,8 +27,6 @@ class KeyboardSettingsCubit extends Cubit<KeyboardSettingsState>{
 
   setColor(Color color) async {
     _color= color;
-    print("!!!!");
-    print(color);
     await _terminalRepo.execute("${Constants.kExecFaustusPath} color ${_color.red.toRadixString(16)} ${_color.green.toRadixString(16)} ${_color.blue.toRadixString(16)} 0");
     _prefRepo.setColor(_color.toString());
     _setState();

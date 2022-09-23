@@ -45,7 +45,11 @@ class TerminalRepoImpl extends TerminalRepo{
        try{
 
         if(_inProgress){
-          return;
+          if(command.startsWith("stdin")) {
+            process.stdin.writeln(command.split('stdin ')[1]);
+          }else {
+            return;
+          }
         }else {
          _inProgress=true;
           process = await Process.start(
@@ -118,6 +122,18 @@ class TerminalRepoImpl extends TerminalRepo{
       _convertToList(lines: "process terminated",commandStatus: CommandStatus.stderr);
       _inProgress=false;
     }
+  }
+
+  @override
+  Future<String> getOutput({required String input}) async{
+
+    try{
+      process.kill();
+    }catch(e){}
+    terminalOut.clear();
+    await execute(input);
+    return terminalOut.last.text;
+
   }
 
   @override

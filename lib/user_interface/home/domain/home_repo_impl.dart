@@ -25,5 +25,10 @@ class HomeRepoImpl extends HomeRepo{
   List<String> readFile({required String path}){
     return (File(path).readAsLinesSync());
   }
+  
+  @override
+  Future<bool> isSecureBootEnabled() async{
+    return (await _terminalRepo.getOutput(input: "mokutil --sb-state")).contains("enabled");
+  }
 
 }

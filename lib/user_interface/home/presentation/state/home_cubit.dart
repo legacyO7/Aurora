@@ -29,10 +29,10 @@ class HomeCubit extends Cubit<HomeState> {
     Constants.kExecBatteryManagerPath=await _homeRepo.extractAsset(sourceFileName:Constants.kBatteryManager);
     Constants.kExecFaustusPath=await _homeRepo.extractAsset(sourceFileName:Constants.kFaustus);
 
-
     var checkAccess=await _terminalRepo.checkAccess();
     if(!checkAccess) {
       await execute("${Constants.kPolkit} ${Constants.kExecFaustusPath} init ${Constants.kWorkingDirectory} ${await _prefRepo.getThreshold()}");
+      checkAccess=await _terminalRepo.checkAccess();
     }
     emit(AccessGranted(hasAccess: checkAccess));
 

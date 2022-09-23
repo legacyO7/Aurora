@@ -34,7 +34,6 @@ class _SetupScreenState extends State<SetupScreen> {
 
   @override
   initState() {
-    context.read<SetupWizardCubit>().initSetup();
     super.initState();
   }
 

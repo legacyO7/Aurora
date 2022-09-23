@@ -7,4 +7,5 @@ abstract class TerminalRepo{
   bool isInProgress();
   Stream<List<TerminalText>> get terminalOutStream;
   void disposeStream();
+  Future<String> getOutput({required String input});
 }

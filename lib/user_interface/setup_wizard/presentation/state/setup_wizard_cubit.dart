@@ -8,7 +8,6 @@ import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.d
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
 import 'package:aurora/utility/arsnackbar.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:aurora/utility/placeholder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -23,6 +22,7 @@ class SetupWizardCubit extends Cubit<SetupWizardState>{
   
   bool _isSuccess=false;
   String? _setupPath;
+  String terminalList='';
 
   late var _subscription;
 
@@ -30,6 +30,7 @@ class SetupWizardCubit extends Cubit<SetupWizardState>{
   
   initSetup()async{
     Constants.kWorkingDirectory=(await Directory('${(await getTemporaryDirectory()).path}/legacy07.aurora').create()).path;
+    Constants.kSecureBootEnabled=await _homeRepo.isSecureBootEnabled();
     if(compatibilityChecker()) {
       emit(SetupWizardCompatibleState());
     }else{
@@ -43,38 +44,42 @@ class SetupWizardCubit extends Cubit<SetupWizardState>{
       emit(SetupWizardIncompatibleState(stepValue: _state.stepValue,child: _state.child,inProgress: true));
       if(_state.stepValue==0){
         _listenToTerminal();
-        _setupPath="${await _homeRepo.extractAsset(sourceFileName: Constants.kSetup)} ${Constants.kWorkingDirectory}";
-        var terminalList=await _setupWizardRepo.getTerminalList();
+        await _homeRepo.extractAsset(sourceFileName: Constants.kFaustusInstaller);
+        _setupPath="${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.kWorkingDirectory}";
+        terminalList='" ${(await _setupWizardRepo.getTerminalList())} "';
         if(terminalList.isNotEmpty){
-         _setupPath="${await _homeRepo.extractAsset(sourceFileName: Constants.kSetup)} ${Constants.kWorkingDirectory}";
           await _terminalRepo.execute("$_setupPath installpackages $terminalList");
         }else{
           arSnackBar( text: "Fetching Data Failed",isPositive: false);
         }
-      }else if(_state.stepValue==1){
-        emit(SetupWizardIncompatibleState(stepValue: 2,child: const TerminalScreen(),inProgress: true,isValid: true));
+      }else{
         _state.stepValue=2;
-        await _terminalRepo.execute("${Constants.kPolkit} $_setupPath installfaustus");
+        _state.child=const TerminalScreen();
+        emit(SetupWizardIncompatibleState(stepValue: _state.stepValue, child: _state.child,inProgress: true,isValid: true));
+        await _terminalRepo.execute("${Constants.kSecureBootEnabled?'':Constants.kPolkit} $_setupPath installfaustus ${Constants.kFaustusGitUrl} $terminalList");
       }
       processOutput(_state);
     }
   }
 
   processOutput(SetupWizardIncompatibleState state){
-
     if(_isSuccess && state.stepValue==0) {
       emit(SetupWizardIncompatibleState(stepValue: 1,child: const FaustusInstaller()));
     }else if(_isSuccess && state.stepValue==2){
       _subscription.cancel();
-      emit(SetupWizardIncompatibleState(stepValue: 3,child: placeholder(),isValid: true));
+      emit(SetupWizardCompatibleState());
     }else{
-      emit(SetupWizardIncompatibleState(stepValue: state.stepValue,child: state.child));
+      emit(SetupWizardIncompatibleState(stepValue: state.stepValue,child: state.child,isValid: state.isValid));
       arSnackBar( text: "That didn't go as planned!",isPositive: false);
     }
   }
 
   validateRepo(String value){
-    emit(SetupWizardIncompatibleState(stepValue: 1,child: const FaustusInstaller(),isValid: value.isNotEmpty&&value.startsWith('https')&&value.endsWith('.git')));
+    bool isValid= value.isNotEmpty&&value.startsWith('https')&&value.endsWith('.git');
+    if(isValid){
+      Constants.kFaustusGitUrl=value;
+    }
+    emit(SetupWizardIncompatibleState(stepValue: 1,child: const FaustusInstaller(),isValid:isValid));
   }
 
   _listenToTerminal(){
@@ -87,7 +92,6 @@ class SetupWizardCubit extends Cubit<SetupWizardState>{
       }
 
       if(_state is SetupWizardIncompatibleState){
-        print("state in listener ${_state.stepValue}");
         if (_state.stepValue==0) {
           _isSuccess = extractedText.contains("success") && _homeRepo.readFile(path: '${Constants.kWorkingDirectory}/log').isEmpty;
         } else if (_state.stepValue==2) {
