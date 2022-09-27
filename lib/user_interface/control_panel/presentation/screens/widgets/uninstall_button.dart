@@ -1,5 +1,7 @@
 import 'package:aurora/user_interface/control_panel/state/control_panel_cubit.dart';
 import 'package:aurora/user_interface/control_panel/state/control_panel_state.dart';
+import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_wizard_screen.dart';
+import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
 import 'package:aurora/utility/ar_widgets/ardialog.dart';
 import 'package:aurora/utility/placeholder.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +19,7 @@ class UninstallButton extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CheckboxListTile(
-              title:  Text("Disable charging threshold"),
+              title:  const Text("Disable charging threshold"),
               value: state.disableThreshold,
               onChanged: (_){
                 context.read<ControlPanelCubit>().setDisableService(disableThreshold: !state.disableThreshold);
@@ -31,9 +33,11 @@ class UninstallButton extends StatelessWidget{
           ],
         );
 
-      }else{
-        return placeholder();
+      }else if(state is ControlPanelTerminalState){
+        return const TerminalScreen();
       }
+
+      return placeholder();
 
         });
   }
@@ -42,15 +46,16 @@ class UninstallButton extends StatelessWidget{
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: () async{
-          arDialog(
+         await arDialog(
               context: context,
               title: "Disable Services",
               subject: "Select the services to be disabled",
               optionalWidget: _selecterWindow(),
               onConfirm: ()async {
                 await context.read<ControlPanelCubit>().disableServices();
-              }
+              },
           );
+         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const SetupWizardScreen()));
         },
         icon: const Icon(Icons.delete_outline)
     );

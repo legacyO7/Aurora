@@ -6,3 +6,7 @@ class ControlPanelStateInit extends ControlPanelState{
 
   ControlPanelStateInit({required this.disableThreshold, required this.disableFaustusModule});
 }
+
+class ControlPanelTerminalState extends ControlPanelState{
+  ControlPanelTerminalState();
+}

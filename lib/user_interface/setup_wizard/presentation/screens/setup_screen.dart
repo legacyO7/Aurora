@@ -77,6 +77,7 @@ class _SetupScreenState extends State<SetupScreen> {
                     children: [
                       ArButton(
                           isEnabled: state.isValid??false,
+                          isLoading: state.inProgress??false,
                           isSelected: true,
                           title: "Install", action: (){
                         context.read<SetupWizardCubit>().installer(ctx);

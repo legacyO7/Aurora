@@ -52,9 +52,26 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
     return Card(
       margin: EdgeInsets.symmetric(vertical: size.height / 7, horizontal: size.width / 4),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.symmetric(vertical: 5),
         child: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                IconButton(onPressed: () async {
+                    try {
+                      await widget.onCancel!();
+                    } catch (_) {
+                    } finally {
+                      context.read<ArButtonCubit>().setUnLoad();
+                      Navigator.pop(context);
+                    }
+                },
+                    icon: const Icon(Icons.close))
+              ],),
+            ),
             Text(
               "${widget.title}\n",
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -64,39 +81,19 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
             Center(
               child: BlocBuilder<ArButtonCubit,bool>(
                 builder: (BuildContext context, state) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      if (!widget.isWarning!)
-                        ArButton(
-                          title: "Confirm",
-                          isLoading: state,
-                          action: () async {
-                            context.read<ArButtonCubit>().setLoad();
-                            try {
-                              await widget.onConfirm();
-                            } catch (_) {}
-                            finally{
-                              context.read<ArButtonCubit>().setUnLoad();
-                              Navigator.pop(context);
-                            }
-                          },
-                        ),
-                      ArButton(
-                        title: "Cancel",
-                        isSelected: true,
-                        isLoading: state,
-                        action: () async {
-                          try {
-                            await widget.onCancel!();
-                          } catch (_) {
-                          } finally {
-                            context.read<ArButtonCubit>().setUnLoad();
-                            Navigator.pop(context);
-                          }
-                        },
-                      )
-                    ],
+                  return ArButton(
+                    title: "Okay",
+                    isLoading: state,
+                    isSelected: true,
+                    action: () async {
+                      context.read<ArButtonCubit>().setLoad();
+                      try {
+                        await widget.onConfirm();
+                      } catch (_) {}
+                      finally{
+                        context.read<ArButtonCubit>().setUnLoad();
+                      }
+                    },
                   );
                 }
               ),

@@ -98,7 +98,7 @@ if [ $# -ne 0 ]
       disablefaustus
     ;;
     disablethresholdfaustus)
-      sudo $2/battery_manager.sh disablethreshold
+      sudo $1/battery_manager.sh disablethreshold
       disablefaustus
     ;;
     esac

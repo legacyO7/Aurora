@@ -19,7 +19,7 @@ class ControlPanelCubit extends TerminalBaseCubit<ControlPanelState> {
   
   Future disableServices() async{
     final _state = state;
-    if(_state is ControlPanelStateInit){
+    if(_state is ControlPanelStateInit && (_state.disableThreshold || _state.disableFaustusModule)){
 
       var command="${Constants.kPolkit} ${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.kWorkingDirectory} ";
 
@@ -32,7 +32,9 @@ class ControlPanelCubit extends TerminalBaseCubit<ControlPanelState> {
         command+='disablethreshold';
         _prefRepo.setThreshold(100);
       }
+      emit(ControlPanelTerminalState());
       await super.execute(command);
+      emit(ControlPanelStateInit(disableFaustusModule: _state.disableFaustusModule, disableThreshold: _state.disableThreshold));
     }
   }
 
