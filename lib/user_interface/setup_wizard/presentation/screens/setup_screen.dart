@@ -3,7 +3,7 @@ import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:another_stepper/widgets/another_stepper.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_state.dart';
-import 'package:aurora/utility/arbutton.dart';
+import 'package:aurora/utility/ar_widgets/arbutton.dart';
 import 'package:aurora/utility/placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

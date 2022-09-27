@@ -1,6 +1,6 @@
 import 'package:aurora/user_interface/control_panel/state/control_panel_cubit.dart';
 import 'package:aurora/user_interface/control_panel/state/control_panel_state.dart';
-import 'package:aurora/utility/ardialog.dart';
+import 'package:aurora/utility/ar_widgets/ardialog.dart';
 import 'package:aurora/utility/placeholder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

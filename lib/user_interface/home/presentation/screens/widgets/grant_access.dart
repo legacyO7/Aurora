@@ -1,5 +1,5 @@
 import 'package:aurora/user_interface/home/presentation/state/home_cubit.dart';
-import 'package:aurora/utility/arbutton.dart';
+import 'package:aurora/utility/ar_widgets/arbutton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
