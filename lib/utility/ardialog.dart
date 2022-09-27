@@ -1,0 +1,109 @@
+import 'package:aurora/utility/arbutton.dart';
+import 'package:aurora/utility/arbutton_cubit.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+Future<dynamic> arDialog({required String title, required String subject, bool? isWarning = false, required VoidCallback onConfirm, Widget? optionalWidget, VoidCallback? onCancel, required BuildContext context}) {
+  return showDialog(
+      barrierDismissible: !false,
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (BuildContext context, void Function(void Function()) setState) {
+          return  _ArDialogBody(
+            title: title,
+            subject: subject,
+            isWarning: isWarning,
+            onConfirm: onConfirm,
+            optionalWidget: optionalWidget,
+            onCancel: onCancel,
+          );
+        },
+      ));
+}
+
+class _ArDialogBody extends StatefulWidget {
+   _ArDialogBody({
+    required this.title,
+    required this.subject,
+    this.isWarning = false,
+    required this.onConfirm,
+    this.optionalWidget,
+    this.onCancel,
+  });
+
+  String title;
+  String subject;
+  bool? isWarning;
+  Function onConfirm;
+  Widget? optionalWidget;
+  Function? onCancel;
+
+  @override
+  State<_ArDialogBody> createState() {
+    return _ArDialogBodyState();
+  }
+}
+
+class _ArDialogBodyState extends State<_ArDialogBody> {
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: size.height / 7, horizontal: size.width / 4),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          children: [
+            Text(
+              "${widget.title}\n",
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            Text(widget.subject),
+            Expanded(child: Center(child: widget.optionalWidget ?? Container())),
+            Center(
+              child: BlocBuilder<ArButtonCubit,bool>(
+                builder: (BuildContext context, state) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      if (!widget.isWarning!)
+                        ArButton(
+                          title: "Confirm",
+                          isLoading: state,
+                          action: () async {
+                            context.read<ArButtonCubit>().setLoad();
+                            try {
+                              await widget.onConfirm();
+                            } catch (_) {}
+                            finally{
+                              context.read<ArButtonCubit>().setUnLoad();
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
+                      ArButton(
+                        title: "Cancel",
+                        isSelected: true,
+                        isLoading: state,
+                        action: () async {
+                          try {
+                            await widget.onCancel!();
+                          } catch (_) {
+                          } finally {
+                            context.read<ArButtonCubit>().setUnLoad();
+                            Navigator.pop(context);
+                          }
+                        },
+                      )
+                    ],
+                  );
+                }
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

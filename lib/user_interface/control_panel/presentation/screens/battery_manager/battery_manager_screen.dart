@@ -1,7 +1,7 @@
 import 'package:another_xlider/another_xlider.dart';
-import 'package:aurora/user_interface/battery_manager/presentation/state/batter_manager_cubit.dart';
-import 'package:aurora/user_interface/battery_manager/presentation/state/batter_manager_state.dart';
-import 'package:aurora/user_interface/keyboard_settings/presentation/state/keyboard_settings_cubit.dart';
+import 'package:aurora/user_interface/control_panel/state/batter_manager_cubit.dart';
+import 'package:aurora/user_interface/control_panel/state/batter_manager_state.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_cubit.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

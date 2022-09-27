@@ -1,4 +1,4 @@
-import 'package:aurora/user_interface/home/presentation/state/home_cubit.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_cubit.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_cubit.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_state.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +55,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
               );
             }
             else {
-              context.read<HomeCubit>().execute("clear");
+              context.read<TerminalBaseCubit>().execute("clear");
               return Container();
             }
           },

@@ -1,16 +1,18 @@
 import 'dart:io';
 
 import 'package:aurora/data/di/di.dart';
-import 'package:aurora/user_interface/battery_manager/presentation/state/batter_manager_cubit.dart';
+import 'package:aurora/user_interface/control_panel/state/batter_manager_cubit.dart';
+import 'package:aurora/user_interface/control_panel/state/control_panel_cubit.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_cubit.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_wizard_screen.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_cubit.dart';
+import 'package:aurora/utility/arbutton_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:window_size/window_size.dart';
 
 import 'user_interface/home/presentation/state/home_cubit.dart';
-import 'user_interface/keyboard_settings/presentation/state/keyboard_settings_cubit.dart';
 
 void main() async{
   await initDI();
@@ -29,11 +31,13 @@ class Aurora extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-       BlocProvider.value(value: serviceLocator<SetupWizardCubit>()),
-       BlocProvider.value(value: serviceLocator<HomeCubit>()),
-       BlocProvider.value(value: serviceLocator<KeyboardSettingsCubit>()),
-       BlocProvider.value(value: serviceLocator<BatteryManagerCubit>()),
-       BlocProvider.value(value: serviceLocator<TerminalCubit>()),
+       BlocProvider.value(value: sl<SetupWizardCubit>()),
+       BlocProvider.value(value: sl<HomeCubit>()),
+       BlocProvider.value(value: sl<ControlPanelCubit>()),
+       BlocProvider.value(value: sl<KeyboardSettingsCubit>()),
+       BlocProvider.value(value: sl<BatteryManagerCubit>()),
+       BlocProvider.value(value: sl<TerminalCubit>()),
+       BlocProvider.value(value: sl<ArButtonCubit>()),
       ],
       child: MaterialApp(
         title: 'Aurora',

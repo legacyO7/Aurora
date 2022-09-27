@@ -4,19 +4,17 @@ import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/setup_wizard/domain/repository/setup_wizard_repo.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/widgets/install_faustus.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/widgets/install_packages.dart';
-import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_cubit.dart';
 import 'package:aurora/utility/arsnackbar.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'setup_wizard_state.dart';
 
-class SetupWizardCubit extends Cubit<SetupWizardState>{
-  SetupWizardCubit(this._terminalRepo,this._homeRepo,this._setupWizardRepo):super(SetupWizardInitState());
+class SetupWizardCubit extends TerminalBaseCubit<SetupWizardState>{
+  SetupWizardCubit(this._homeRepo,this._setupWizardRepo):super(SetupWizardInitState());
 
-  final TerminalRepo _terminalRepo;
   final HomeRepo _homeRepo;
   final SetupWizardRepo _setupWizardRepo;
   
@@ -48,7 +46,7 @@ class SetupWizardCubit extends Cubit<SetupWizardState>{
         _setupPath="${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.kWorkingDirectory}";
         terminalList='" ${(await _setupWizardRepo.getTerminalList())} "';
         if(terminalList.isNotEmpty){
-          await _terminalRepo.execute("$_setupPath installpackages $terminalList");
+          await super.execute("$_setupPath installpackages $terminalList");
         }else{
           arSnackBar( text: "Fetching Data Failed",isPositive: false);
         }
@@ -56,7 +54,7 @@ class SetupWizardCubit extends Cubit<SetupWizardState>{
         _state.stepValue=2;
         _state.child=const TerminalScreen();
         emit(SetupWizardIncompatibleState(stepValue: _state.stepValue, child: _state.child,inProgress: true,isValid: true));
-        await _terminalRepo.execute("${Constants.kSecureBootEnabled?'':Constants.kPolkit} $_setupPath installfaustus ${Constants.kFaustusGitUrl} $terminalList");
+        await super.execute("${Constants.kSecureBootEnabled?'':Constants.kPolkit} $_setupPath installfaustus ${Constants.kFaustusGitUrl} $terminalList");
       }
       processOutput(_state);
     }
@@ -85,7 +83,7 @@ class SetupWizardCubit extends Cubit<SetupWizardState>{
   _listenToTerminal(){
 
     var extractedText=[];
-    _subscription= _terminalRepo.terminalOutStream.listen((event) async{
+    _subscription= super.terminalOutput.listen((event) async{
       final _state = state;
       for (var element in event) {
        extractedText.add(element.text.trim());

@@ -1,6 +1,6 @@
 import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_screen.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_cubit.dart';
 import 'package:aurora/user_interface/home/presentation/screens/widgets/grant_access.dart';
-import 'package:aurora/user_interface/keyboard_settings/presentation/state/keyboard_settings_cubit.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

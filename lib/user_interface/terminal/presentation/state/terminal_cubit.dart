@@ -1,19 +1,17 @@
-import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_cubit.dart';
 
 import 'terminal_state.dart';
 
-class TerminalCubit extends Cubit<TerminalState>{
-  TerminalCubit(this._terminalRepo):super(TerminalStateInit()){
-    _terminalRepo.terminalOutStream.listen((event) {
+class TerminalCubit extends TerminalBaseCubit<TerminalState>{
+  TerminalCubit():super(TerminalStateInit()){
+
+    super.terminalOutput.listen((event) {
       emit(TerminalStateLoaded(terminalOut: event));
     });
   }
 
-  final TerminalRepo _terminalRepo;
-
-  void killProcess(){
-    _terminalRepo.killProcess();
+  void killCurrentProcess(){
+    super.killProcess();
   }
 
 }

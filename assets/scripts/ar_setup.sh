@@ -41,9 +41,6 @@ executeinterminal(){
    else
         $@
    fi
-
-
-
 }
 
 
@@ -69,20 +66,40 @@ setterminallist(){
   clear
 }
 
+disablefaustus(){
+    #disable faustus
+    echo -e "\033[1;34m Halting faustus\033[0m"
+    sudo modprobe -r faustus
+    printf "blacklist faustus\n" | sudo tee /etc/modprobe.d/faustus.conf
+    sudo modprobe asus_nb_wmi
+    sudo modprobe asus_wmi
+}
+
+
 if [ $# -ne 0 ]
   then
     case "$2" in
     checkos)
-    checkos
+      checkos
     ;;
     installpackages)
-    setterminallist $@
-    installpackages
+      setterminallist $@
+      installpackages
     ;;
     installfaustus)
-    shift
-    setterminallist $@
-    executeinterminal "sudo $tmpdir/install_faustus.sh $tmpdir $git_faustus"
+      shift
+      setterminallist $@
+      executeinterminal "sudo $tmpdir/install_faustus.sh $tmpdir $git_faustus"
+    ;;
+    disablethreshold)
+      sudo $1/battery_manager.sh disablethreshold
+    ;;
+    disablefaustus)
+      disablefaustus
+    ;;
+    disablethresholdfaustus)
+      sudo $2/battery_manager.sh disablethreshold
+      disablefaustus
     ;;
     esac
 fi

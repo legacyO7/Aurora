@@ -3,7 +3,7 @@ import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:another_stepper/widgets/another_stepper.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_state.dart';
-import 'package:aurora/utility/button.dart';
+import 'package:aurora/utility/arbutton.dart';
 import 'package:aurora/utility/placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -75,20 +75,19 @@ class _SetupScreenState extends State<SetupScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      button(
+                      ArButton(
                           isEnabled: state.isValid??false,
-                          isLoading: state.inProgress??false,
                           isSelected: true,
                           title: "Install", action: (){
                         context.read<SetupWizardCubit>().installer(ctx);
-                      }, context: context),
+                      }),
 
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: button(
+                        child: ArButton(
                             isEnabled: state.isValid??false,
                             title: "Cancel", action: (){
-                        }, context: context),
+                        }),
                       ),
                     ],
                   ),
