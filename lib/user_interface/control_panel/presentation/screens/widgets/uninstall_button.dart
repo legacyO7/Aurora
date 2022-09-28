@@ -1,10 +1,10 @@
 import 'package:aurora/user_interface/control_panel/state/control_panel_cubit.dart';
 import 'package:aurora/user_interface/control_panel/state/control_panel_state.dart';
+import 'package:aurora/user_interface/home/presentation/state/home_cubit.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_wizard_screen.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
 import 'package:aurora/utility/ar_widgets/ardialog.dart';
 import 'package:aurora/utility/placeholder.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -54,8 +54,12 @@ class UninstallButton extends StatelessWidget{
               onConfirm: ()async {
                 await context.read<ControlPanelCubit>().disableServices();
               },
+              onCancel: (){
+                Navigator.pop(context);
+                context.read<HomeCubit>().dispose();
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const SetupWizardScreen()));
+              }
           );
-         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const SetupWizardScreen()));
         },
         icon: const Icon(Icons.delete_outline)
     );

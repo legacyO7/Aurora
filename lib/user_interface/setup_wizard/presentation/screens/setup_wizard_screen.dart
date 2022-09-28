@@ -34,21 +34,27 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     return Scaffold(
       key: Constants.kScaffoldKey,
       body: Center(
-        child: BlocBuilder<SetupWizardCubit,SetupWizardState>(
-          builder: (BuildContext context, state) {
-            if(state is SetupWizardInitState ) {
-              return const Text("Checking Compatibility...");
-            }
-            else if(state is SetupWizardIncompatibleState) {
-            return const SetupScreen();
-            }
-            else{
+        child: BlocListener <SetupWizardCubit,SetupWizardState>(
+          listener: (BuildContext context, state) {
+            if(state is SetupWizardCompatibleState){
               Future.delayed(const Duration(milliseconds: 500)).then((value) =>
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomeScreen()))
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomeScreen()))
               );
-              return const Text("Lets do this!");
             }
           },
+          child: BlocBuilder<SetupWizardCubit,SetupWizardState>(
+            builder: (BuildContext context, state) {
+              if(state is SetupWizardInitState ) {
+                return const Text("Checking Compatibility...");
+              }
+              else if(state is SetupWizardIncompatibleState) {
+              return const SetupScreen();
+              }
+              else{
+                return const Text("Lets do this!");
+              }
+            },
+          ),
         ),
       ),
     );

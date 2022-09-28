@@ -21,6 +21,10 @@ abstract class TerminalBaseCubit<State> extends BlocBase<State> {
     _terminalRepo.killProcess();
   }
 
+  void clearTerminalOutput(){
+    _terminalRepo.clearTerminalOut();
+  }
+
   Stream<List<TerminalText>> get terminalOutput => _terminalRepo.terminalOutStream;
 
 

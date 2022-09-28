@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<dynamic> arDialog({required String title, required String subject, bool? isWarning = false, required VoidCallback onConfirm, Widget? optionalWidget, VoidCallback? onCancel, required BuildContext context}) {
   return showDialog(
-      barrierDismissible: !false,
+      barrierDismissible: false,
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (BuildContext context, void Function(void Function()) setState) {
@@ -66,7 +66,6 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
                     } catch (_) {
                     } finally {
                       context.read<ArButtonCubit>().setUnLoad();
-                      Navigator.pop(context);
                     }
                 },
                     icon: const Icon(Icons.close))

@@ -18,7 +18,6 @@ class TerminalRepoImpl extends TerminalRepo{
   bool _hasRootAccess=false;
 
   final LineSplitter _lineSplitter=const LineSplitter();
-
   final _tStreamController = BehaviorSubject<List<TerminalText>>();
 
   late Sink<List<TerminalText>>  _terminalSink;
@@ -28,15 +27,7 @@ class TerminalRepoImpl extends TerminalRepo{
     _terminalSink = _tStreamController.sink;
     List<String> arguments=[];
 
-    if (command == "clear") {
-
-      terminalOut.clear();
-      _inProgress=false;
-
-      _terminalSink.add(terminalOut);
-
-      return;
-    }else if(command.isNotEmpty) {
+ if(command.isNotEmpty) {
       arguments = command.split(' ');
       var exec=arguments[0];
       arguments.removeAt(0);
@@ -45,11 +36,7 @@ class TerminalRepoImpl extends TerminalRepo{
        try{
 
         if(_inProgress){
-          if(command.startsWith("stdin")) {
-            process.stdin.writeln(command.split('stdin ')[1]);
-          }else {
             return;
-          }
         }else {
          _inProgress=true;
           process = await Process.start(
@@ -107,8 +94,14 @@ class TerminalRepoImpl extends TerminalRepo{
         }
       }
     }
-
     return _hasRootAccess;
+  }
+
+  @override
+  clearTerminalOut(){
+      terminalOut.clear();
+      _inProgress=false;
+      _terminalSink.add(terminalOut);
   }
 
   @override
@@ -146,5 +139,5 @@ class TerminalRepoImpl extends TerminalRepo{
   void disposeStream(){
     _tStreamController.close();
   }
-  
+
 }
