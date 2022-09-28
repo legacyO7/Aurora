@@ -6,7 +6,7 @@ import 'package:aurora/user_interface/setup_wizard/presentation/screens/widgets/
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/widgets/install_packages.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_cubit.dart';
-import 'package:aurora/utility/arsnackbar.dart';
+import 'package:aurora/utility/ar_widgets/arsnackbar.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -39,7 +39,7 @@ class SetupWizardCubit extends TerminalBaseCubit<SetupWizardState>{
  installer(context) async{
     final _state = state;
     if(_state is SetupWizardIncompatibleState){
-      emit(SetupWizardIncompatibleState(stepValue: _state.stepValue,child: _state.child,inProgress: true));
+      emit(SetupWizardIncompatibleState(stepValue: _state.stepValue,child: _state.child));
       if(_state.stepValue==0){
         _listenToTerminal();
         await _homeRepo.extractAsset(sourceFileName: Constants.kFaustusInstaller);
@@ -53,7 +53,7 @@ class SetupWizardCubit extends TerminalBaseCubit<SetupWizardState>{
       }else{
         _state.stepValue=2;
         _state.child=const TerminalScreen();
-        emit(SetupWizardIncompatibleState(stepValue: _state.stepValue, child: _state.child,inProgress: true,isValid: true));
+        emit(SetupWizardIncompatibleState(stepValue: _state.stepValue, child: _state.child,isValid: true));
         await super.execute("${Constants.kSecureBootEnabled?'':Constants.kPolkit} $_setupPath installfaustus ${Constants.kFaustusGitUrl} $terminalList");
       }
       processOutput(_state);

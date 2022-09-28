@@ -18,7 +18,6 @@ class SetupWizardLoadingState extends SetupWizardState{
 class SetupWizardIncompatibleState extends SetupWizardState{
   int stepValue;
   Widget? child=placeholder();
-  bool? inProgress=false;
   bool? isValid=true;
-  SetupWizardIncompatibleState({required this.stepValue,this.child,this.inProgress,this.isValid});
+  SetupWizardIncompatibleState({required this.stepValue,this.child,this.isValid});
 }

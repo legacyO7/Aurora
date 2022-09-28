@@ -4,6 +4,7 @@ import 'package:another_stepper/widgets/another_stepper.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_state.dart';
 import 'package:aurora/utility/ar_widgets/arbutton.dart';
+import 'package:aurora/utility/ar_widgets/arbutton_cubit.dart';
 import 'package:aurora/utility/placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,25 +73,34 @@ class _SetupScreenState extends State<SetupScreen> {
                     flex: 4,
                     child:state.child??placeholder(),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ArButton(
-                          isEnabled: state.isValid??false,
-                          isLoading: state.inProgress??false,
-                          isSelected: true,
-                          title: "Install", action: (){
-                        context.read<SetupWizardCubit>().installer(ctx);
-                      }),
+                  BlocBuilder<ArButtonCubit,bool>(
+                    builder: (BuildContext context, isLoading) {
+                      var loader=context.read<ArButtonCubit>();
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ArButton(
+                              isEnabled: state.isValid??false,
+                              isLoading: isLoading,
+                              isSelected: true,
+                              title: "Install", action: ()async{
+                               loader.setLoad();
+                               await context.read<SetupWizardCubit>().installer(ctx);
+                               loader.setUnLoad();
 
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ArButton(
-                            isEnabled: state.isValid??false,
-                            title: "Cancel", action: (){
-                        }),
-                      ),
-                    ],
+                          }),
+
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: ArButton(
+                                isEnabled: state.isValid??false,
+                                title: "Cancel", action: (){
+                            }),
+                          ),
+                        ],
+                      );
+                    },
+
                   ),
                 ]);
           }else{
