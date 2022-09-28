@@ -38,10 +38,10 @@ dependencies:
   rxdart: ^0.27.5
   another_xlider: ^1.1.2
   another_stepper: ^1.0.4
-  flutter_svg: ^1.1.5
   package_info_plus: ^1.4.3+1
   dio: ^4.0.6
   url_launcher: ^6.1.5
+  animated_text_kit: ^4.2.2
   window_size:
     git:
       url: https://github.com/google/flutter-desktop-embedding

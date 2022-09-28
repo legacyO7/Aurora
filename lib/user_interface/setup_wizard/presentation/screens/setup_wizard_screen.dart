@@ -1,6 +1,7 @@
 
 import 'package:aurora/user_interface/home/presentation/screens/home_screen.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_screen.dart';
+import 'package:aurora/user_interface/setup_wizard/presentation/screens/widgets/setup_splash.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_state.dart';
 import 'package:aurora/utility/constants.dart';
@@ -33,29 +34,35 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: Constants.kScaffoldKey,
-      body: Center(
-        child: BlocListener <SetupWizardCubit,SetupWizardState>(
-          listener: (BuildContext context, state) {
-            if(state is SetupWizardCompatibleState){
-              Future.delayed(const Duration(milliseconds: 500)).then((value) =>
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomeScreen()))
-              );
-            }
-          },
-          child: BlocBuilder<SetupWizardCubit,SetupWizardState>(
-            builder: (BuildContext context, state) {
-              if(state is SetupWizardInitState ) {
-                return const Text("Checking Compatibility...");
-              }
-              else if(state is SetupWizardIncompatibleState) {
-              return const SetupScreen();
-              }
-              else{
-                return const Text("Lets do this!");
-              }
-            },
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          setupSplash(),
+          Flexible(
+            child: BlocListener <SetupWizardCubit,SetupWizardState>(
+              listener: (BuildContext context, state) {
+                if(state is SetupWizardCompatibleState){
+                  Future.delayed(const Duration(milliseconds: 1000)).then((value) =>
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomeScreen()))
+                  );
+                }
+              },
+              child: BlocBuilder<SetupWizardCubit,SetupWizardState>(
+                builder: (BuildContext context, state) {
+                  if(state is SetupWizardInitState ) {
+                    return const Text("checking compatibility...");
+                  }
+                  else if(state is SetupWizardIncompatibleState) {
+                  return const SetupScreen();
+                  }
+                  else{
+                    return const Text("initializing...");
+                  }
+                },
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
