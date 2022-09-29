@@ -1,8 +1,12 @@
+import 'package:aurora/utility/constants.dart';
+import 'package:equatable/equatable.dart';
 
+class BatteryManagerInit extends Equatable{
+  final int batteryLevel;
+  const BatteryManagerInit({
+    this.batteryLevel=Constants.kMinimumChargeLevel
+  });
 
-abstract class BatteryManagerState{}
-
-class BatteryManagerInit extends BatteryManagerState{
-  int batteryLevel;
-  BatteryManagerInit({required this.batteryLevel});
+  @override
+  List<Object?> get props => [batteryLevel];
 }

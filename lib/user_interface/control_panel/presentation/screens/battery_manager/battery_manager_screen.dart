@@ -23,9 +23,8 @@ class _BatteryManagerScreenState extends State<BatteryManagerScreen> {
 
   @override
   Widget build(BuildContext context) {
-   return BlocBuilder<BatteryManagerCubit,BatteryManagerState>(
+   return BlocBuilder<BatteryManagerCubit,BatteryManagerInit>(
      builder: (BuildContext context, state) {
-       if(state is BatteryManagerInit) {
          return Column(
          mainAxisAlignment: MainAxisAlignment.center,
          crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,9 +80,6 @@ class _BatteryManagerScreenState extends State<BatteryManagerScreen> {
            )
          ],
        );
-       }else {
-         return Container();
-       }
      },
    );
   }

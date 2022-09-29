@@ -39,7 +39,7 @@ class SetupWizardCubit extends TerminalBaseCubit<SetupWizardState>{
  installer(context) async{
     final _state = state;
     if(_state is SetupWizardIncompatibleState){
-      emit(SetupWizardIncompatibleState(stepValue: _state.stepValue,child: _state.child));
+      emit(SetupWizardIncompatibleState());
       if(_state.stepValue==0){
         _listenToTerminal();
         await _homeRepo.extractAsset(sourceFileName: Constants.kFaustusInstaller);
@@ -51,24 +51,29 @@ class SetupWizardCubit extends TerminalBaseCubit<SetupWizardState>{
           arSnackBar( text: "Fetching Data Failed",isPositive: false);
         }
       }else{
-        _state.stepValue=2;
-        _state.child=const TerminalScreen();
-        emit(SetupWizardIncompatibleState(stepValue: _state.stepValue, child: _state.child,isValid: true));
+        emit(_state.copyState(
+          child: const TerminalScreen(),
+          stepValue: 2,
+          isValid: true
+        ));
+
         await super.execute("${Constants.kSecureBootEnabled?'':Constants.kPolkit} $_setupPath installfaustus ${Constants.kFaustusGitUrl} $terminalList");
       }
-      processOutput(_state);
+      processOutput(state);
     }
   }
 
-  processOutput(SetupWizardIncompatibleState state){
-    if(_isSuccess && state.stepValue==0) {
-      emit(SetupWizardIncompatibleState(stepValue: 1,child: const FaustusInstaller()));
-    }else if(_isSuccess && state.stepValue==2){
-      _subscription.cancel();
-      emit(SetupWizardCompatibleState());
-    }else{
-      emit(SetupWizardIncompatibleState(stepValue: state.stepValue,child: state.child,isValid: state.isValid));
-      arSnackBar( text: "That didn't go as planned!",isPositive: false);
+  processOutput(SetupWizardState state){
+    if(state is SetupWizardIncompatibleState) {
+      if (_isSuccess && state.stepValue == 0) {
+        emit(SetupWizardIncompatibleState(stepValue: 1, child: const FaustusInstaller()));
+      } else if (_isSuccess && state.stepValue == 2) {
+        _subscription.cancel();
+        emit(SetupWizardCompatibleState());
+      } else {
+        emit(state);
+        arSnackBar(text: "That didn't go as planned!", isPositive: false);
+      }
     }
   }
 

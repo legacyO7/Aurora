@@ -3,8 +3,9 @@ import 'package:aurora/user_interface/control_panel/state/control_panel_state.da
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_cubit.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:equatable/equatable.dart';
 
-class ControlPanelCubit extends TerminalBaseCubit<ControlPanelState> {
+class ControlPanelCubit extends TerminalBaseCubit<Equatable> {
   ControlPanelCubit(this._homeRepo,this._prefRepo) : super(ControlPanelStateInit(disableFaustusModule: false, disableThreshold: false));
 
   final HomeRepo _homeRepo;

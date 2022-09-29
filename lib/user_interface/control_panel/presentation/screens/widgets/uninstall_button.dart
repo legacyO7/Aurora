@@ -5,6 +5,7 @@ import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_wi
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
 import 'package:aurora/utility/ar_widgets/ardialog.dart';
 import 'package:aurora/utility/placeholder.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,7 +13,7 @@ class UninstallButton extends StatelessWidget{
   const UninstallButton({super.key});
 
   Widget _selecterWindow(){
-   return BlocBuilder<ControlPanelCubit,ControlPanelState>(
+   return BlocBuilder<ControlPanelCubit,Equatable>(
         builder: (BuildContext context, state) {
       if(state is ControlPanelStateInit){
         return Column(

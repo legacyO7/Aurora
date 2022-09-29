@@ -1,7 +1,6 @@
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_cubit.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_state.dart';
 import 'package:aurora/utility/ar_widgets/arbutton.dart';
-import 'package:aurora/utility/placeholder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,9 +14,8 @@ Widget brightnessController({required BuildContext context, required String titl
 
   return SizedBox(
     height: 100,
-    child: BlocBuilder<KeyboardSettingsCubit, KeyboardSettingsState>(
+    child: BlocBuilder<KeyboardSettingsCubit, KeyboardSettingsLoadedState>(
       builder: (BuildContext context, state) {
-        if (state is KeyboardSettingsLoadedState) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -33,9 +31,6 @@ Widget brightnessController({required BuildContext context, required String titl
                       .toList()),
             ],
           );
-        } else {
-          return placeholder();
-        }
       },
     ),
   );

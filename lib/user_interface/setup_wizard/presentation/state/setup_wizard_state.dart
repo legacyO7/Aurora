@@ -1,4 +1,3 @@
-import 'package:aurora/utility/placeholder.dart';
 import 'package:flutter/cupertino.dart';
 
 abstract class SetupWizardState{}
@@ -16,8 +15,27 @@ class SetupWizardLoadingState extends SetupWizardState{
 }
 
 class SetupWizardIncompatibleState extends SetupWizardState{
-  int stepValue;
-  Widget? child=placeholder();
-  bool? isValid=true;
-  SetupWizardIncompatibleState({required this.stepValue,this.child,this.isValid});
+  final int stepValue;
+  final Widget? child;
+  final bool isValid;
+
+  SetupWizardIncompatibleState({
+    this.stepValue=0,
+    this.child,
+    this.isValid=false
+  });
+
+  SetupWizardIncompatibleState copyState({
+    int? stepValue,
+    Widget? child,
+    bool? isValid,
+  }){
+    print(stepValue);
+    return SetupWizardIncompatibleState(
+      stepValue: stepValue??this.stepValue,
+      isValid: isValid??this.isValid,
+      child: child??this.child
+    );
+  }
+
 }

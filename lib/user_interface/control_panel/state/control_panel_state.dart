@@ -1,12 +1,18 @@
-abstract class ControlPanelState{}
+import 'package:equatable/equatable.dart';
 
-class ControlPanelStateInit extends ControlPanelState{
-  bool disableThreshold=false;
-  bool disableFaustusModule=false;
+class ControlPanelStateInit extends Equatable{
+  final bool disableThreshold;
+  final bool disableFaustusModule;
 
-  ControlPanelStateInit({required this.disableThreshold, required this.disableFaustusModule});
+  const ControlPanelStateInit({this.disableThreshold=false,  this.disableFaustusModule=false});
+
+  @override
+  List<Object?> get props => [disableFaustusModule,disableThreshold];
 }
 
-class ControlPanelTerminalState extends ControlPanelState{
-  ControlPanelTerminalState();
+class ControlPanelTerminalState extends Equatable{
+  const ControlPanelTerminalState();
+
+  @override
+  List<Object?> get props => [];
 }

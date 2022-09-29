@@ -4,7 +4,6 @@ import 'package:aurora/user_interface/control_panel/presentation/screens/keyboar
 import 'package:aurora/user_interface/control_panel/presentation/screens/keyboard_settings/widgets/speed_panel.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_cubit.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_state.dart';
-import 'package:aurora/utility/placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,9 +30,8 @@ class _KeyboardSettingsScreenState extends State<KeyboardSettingsScreen> {
   Widget build(BuildContext context) {
    return Column(
      children: [
-       BlocBuilder<KeyboardSettingsCubit, KeyboardSettingsState>(
+       BlocBuilder<KeyboardSettingsCubit, KeyboardSettingsLoadedState>(
          builder: (BuildContext context, state) {
-     if (state is KeyboardSettingsLoadedState) {
        return Row(
              mainAxisAlignment: MainAxisAlignment.start,
              crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,9 +50,6 @@ class _KeyboardSettingsScreenState extends State<KeyboardSettingsScreen> {
                Flexible(child: colorController(context)),
              ],
            );
-     }else{
-       return placeholder();
-     }
          }
        )
      ],

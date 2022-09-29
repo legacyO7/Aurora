@@ -6,14 +6,11 @@ import 'package:flutter/material.dart';
 
 import 'keyboard_settings_state.dart';
 
-class KeyboardSettingsCubit extends TerminalBaseCubit<KeyboardSettingsState>{
-  KeyboardSettingsCubit(this._prefRepo):super(KeyboardSettingsInitState());
+class KeyboardSettingsCubit extends TerminalBaseCubit<KeyboardSettingsLoadedState>{
+  KeyboardSettingsCubit(this._prefRepo):super(const KeyboardSettingsLoadedState());
 
   final PrefRepo _prefRepo;
 
-  int? _brightness;
-  int? _mode;
-  int? _speed;
   Color _color=Colors.green;
 
   Future initPanel() async{
@@ -27,40 +24,30 @@ class KeyboardSettingsCubit extends TerminalBaseCubit<KeyboardSettingsState>{
     _color= color;
     await super.execute("${Constants.kExecFaustusPath} color ${_color.red.toRadixString(16)} ${_color.green.toRadixString(16)} ${_color.blue.toRadixString(16)} 0");
     _prefRepo.setColor(_color.toString());
-    _setState();
+    emit(state.copyState(color: _color));
   }
 
   setBrightness(int value) async {
-    _brightness=value;
-    await super.execute("${Constants.kExecFaustusPath} brightness $_brightness ");
+    await super.execute("${Constants.kExecFaustusPath} brightness $value ");
     _prefRepo.setBrightness(value);
-    _setState();
+    emit(state.copyState(brightness: value));
   }
 
   setMode(int value)async{
-    _mode=value;
-    await super.execute("${Constants.kExecFaustusPath} mode $_mode ");
+    await super.execute("${Constants.kExecFaustusPath} mode $value ");
     _prefRepo.setMode(value);
-    _setState();
+    emit(state.copyState(mode: value));
   }
 
   setSpeed(int value) async{
-    _speed=value;
-    await super.execute("${Constants.kExecFaustusPath} speed $_speed ");
+    await super.execute("${Constants.kExecFaustusPath} speed $value ");
     _prefRepo.setSpeed(value);
-    _setState();
+    emit(state.copyState(speed: value));
   }
 
-  _setState(){
-    emit(KeyboardSettingsLoadedState(brightness: _brightness??0, mode: _mode??0, speed: _speed??0, color: _color));
-  }
+  bool get isSpeedBarVisible => (state.mode)>0&&(state.mode)<3&&isModeBarVisible;
+  bool get isModeBarVisible => (state.brightness)>0;
 
-  bool get isSpeedBarVisible => (_mode??0)>0&&(mode??0)<3&&isModeBarVisible;
-  bool get isModeBarVisible => (_brightness??0)>0;
-
-  int? get brightness => _brightness;
-  int? get speed => _speed;
-  int? get mode => _mode;
   Color get selectedColor => _color;
   Color get invertedSelectedColor => Color.fromARGB((_color.opacity * 255).round(), 255-_color.red, 255-_color.green, 255-_color.blue);
 

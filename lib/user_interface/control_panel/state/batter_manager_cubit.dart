@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 
 import 'batter_manager_state.dart';
 
-class BatteryManagerCubit extends TerminalBaseCubit<BatteryManagerState>{
-  BatteryManagerCubit(this._prefRepo):super(BatteryManagerInit(batteryLevel: Constants.kMinimumChargeLevel));
+class BatteryManagerCubit extends TerminalBaseCubit<BatteryManagerInit>{
+  BatteryManagerCubit(this._prefRepo):super(const BatteryManagerInit());
 
   final PrefRepo _prefRepo;
 

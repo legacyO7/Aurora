@@ -1,4 +1,5 @@
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_cubit.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_state.dart';
 import 'package:aurora/utility/ar_widgets/arbutton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,20 +21,24 @@ Widget modeController({
    duration: const Duration(milliseconds: 300),
    height: isVisible?100:0,
    child: SingleChildScrollView(
-     child: Column(
-       crossAxisAlignment: CrossAxisAlignment.start,
-       children: [
-         Text(title),
-         Row(
-            children: a.map((e) =>
-                ArButton(
-                    title: e.title,
-                    isSelected: context.watch<KeyboardSettingsCubit>().mode==e.value,
-                    action: () {
-                      context.read<KeyboardSettingsCubit>().setMode(e.value??0);
-            } )).toList()
-          ),
-       ],
+     child: BlocBuilder<KeyboardSettingsCubit,KeyboardSettingsLoadedState>(
+       builder: (BuildContext context, state) {
+           return Column(
+             crossAxisAlignment: CrossAxisAlignment.start,
+             children: [
+               Text(title),
+               Row(
+                   children: a.map((e) =>
+                       ArButton(
+                           title: e.title,
+                           isSelected: state.mode==e.value,
+                           action: () {
+                             context.read<KeyboardSettingsCubit>().setMode(e.value??0);
+                           } )).toList()
+               ),
+             ],
+           );
+       },
      ),
    ),
  );
