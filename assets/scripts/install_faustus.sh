@@ -50,7 +50,7 @@ echo "Installing faustus"
                 make
                 sudo modprobe sparse-keymap wmi video
 
-                if [ "$require_reboot" = false ]
+                if [ "$require_reboot" = true ]
                 then
                     sudo /usr/src/linux-headers-`uname -r`/scripts/sign-file sha256 ./${filename_key}.pem ./${filename_key}.x509 src/faustus.ko
                     echo "=== MOK ENROLLMENT PASSWORD ==="
