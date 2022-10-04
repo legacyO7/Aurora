@@ -1,6 +1,7 @@
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_cubit.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_cubit.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_state.dart';
+import 'package:aurora/utility/ar_widgets/arterminal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -44,11 +45,10 @@ class _TerminalScreenState extends State<TerminalScreen> {
               return Column(
                 children: [
                   Expanded(
-                    child: ListView.separated(
+                    child: ListView.builder(
                         controller: terminalViewController,
                         reverse: true,
-                        itemBuilder: (ctx, i) => Text(c[i].text,style: TextStyle(color: c[i].color)),
-                        separatorBuilder: (_, __) => const Divider(),
+                        itemBuilder: (ctx, i) => arTerminal(context.read<TerminalCubit>().convertToTerminalText(line: c[i])),
                         itemCount: state.terminalOut.length),
                   ),
                 ],

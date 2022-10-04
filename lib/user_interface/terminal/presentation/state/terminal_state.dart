@@ -1,4 +1,4 @@
-import 'package:aurora/utility/terminal_text.dart';
+
 
 abstract class TerminalState{}
 
@@ -7,6 +7,6 @@ class TerminalStateInit extends TerminalState{
 }
 
 class TerminalStateLoaded extends TerminalState{
-  List<TerminalText> terminalOut;
+  List<String> terminalOut;
   TerminalStateLoaded({required this.terminalOut});
 }

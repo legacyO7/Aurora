@@ -10,6 +10,8 @@ import 'package:aurora/user_interface/setup_wizard/data/source/setup_wizard_sour
 import 'package:aurora/user_interface/setup_wizard/domain/repository/setup_wizard_repo.dart';
 import 'package:aurora/user_interface/setup_wizard/domain/repository/setup_wizard_repo_impl.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
+import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
+import 'package:aurora/user_interface/terminal/data/source/terminal_source_impl.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo_impl.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_cubit.dart';
@@ -33,12 +35,13 @@ Future initDI() async{
   sl.registerLazySingleton(() => SetupWizardCubit(sl(),sl()));
   sl.registerLazySingleton(() => ArButtonCubit());
 
-  sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl());
+  sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
   sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl()));
   sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
   sl.registerLazySingleton<SetupWizardRepo>(() => SetupWizardRepoImpl(sl()));
 
   sl.registerLazySingleton<SetupWizardSource>(() => SetupWizardSourceImpl());
+  sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl());
 
 
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();

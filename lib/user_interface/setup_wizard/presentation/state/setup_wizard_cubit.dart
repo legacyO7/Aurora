@@ -12,7 +12,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'setup_wizard_state.dart';
 
-class SetupWizardCubit extends TerminalBaseCubit<SetupWizardState>{
+class SetupWizardCubit extends TerminalBaseCubit<SetupWizardState> {
   SetupWizardCubit(this._homeRepo,this._setupWizardRepo):super(SetupWizardInitState());
 
   final HomeRepo _homeRepo;
@@ -87,18 +87,14 @@ class SetupWizardCubit extends TerminalBaseCubit<SetupWizardState>{
 
   _listenToTerminal(){
 
-    var extractedText=[];
     _subscription= super.terminalOutput.listen((event) async{
-      final _state = state;
-      for (var element in event) {
-       extractedText.add(element.text.trim());
-      }
 
+      final _state = state;
       if(_state is SetupWizardIncompatibleState){
         if (_state.stepValue==0) {
-          _isSuccess = extractedText.contains("success") && _homeRepo.readFile(path: '${Constants.kWorkingDirectory}/log').isEmpty;
+          _isSuccess = event.any((element) => element.contains("success")) && _homeRepo.readFile(path: '${Constants.kWorkingDirectory}/log').isEmpty;
         } else if (_state.stepValue==2) {
-          _isSuccess = extractedText.contains("faustus module found");
+          _isSuccess = event.any((element) => element.contains("faustus module found"));
         }
       }
     });
