@@ -6,6 +6,14 @@ class SetupWizardInitState extends SetupWizardState{
   SetupWizardInitState();
 }
 
+class SetupWizardConnectedState extends SetupWizardState{
+  SetupWizardConnectedState();
+}
+
+class SetupWizardUpdateAvailableState extends SetupWizardState{
+  SetupWizardUpdateAvailableState();
+}
+
 class SetupWizardCompatibleState extends SetupWizardState{
   SetupWizardCompatibleState();
 }
@@ -30,7 +38,6 @@ class SetupWizardIncompatibleState extends SetupWizardState{
     Widget? child,
     bool? isValid,
   }){
-    print(stepValue);
     return SetupWizardIncompatibleState(
       stepValue: stepValue??this.stepValue,
       isValid: isValid??this.isValid,

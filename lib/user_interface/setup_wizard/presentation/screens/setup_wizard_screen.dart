@@ -8,6 +8,8 @@ import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'widgets/update_window.dart';
+
 class SetupWizardScreen extends StatefulWidget {
   const SetupWizardScreen({Key? key}) : super(key: key);
 
@@ -49,15 +51,29 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
               },
               child: BlocBuilder<SetupWizardCubit,SetupWizardState>(
                 builder: (BuildContext context, state) {
+
                   if(state is SetupWizardInitState ) {
                     return const Text("checking compatibility...");
                   }
-                  else if(state is SetupWizardIncompatibleState) {
-                  return const SetupScreen();
+
+                  if(state is SetupWizardConnectedState ) {
+                    return const Text("checking for updates...");
                   }
-                  else{
+
+                  if(state is SetupWizardIncompatibleState) {
+                    return const SetupScreen();
+                  }
+
+                  if(state is SetupWizardUpdateAvailableState ) {
+                    return const UpdateWidget();
+                  }
+
+                  if(state is SetupWizardCompatibleState) {
                     return const Text("initializing...");
                   }
+
+                    return const Text("something is really wrong ;(");
+
                 },
               ),
             ),
