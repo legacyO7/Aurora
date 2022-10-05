@@ -4,6 +4,7 @@ import 'package:aurora/user_interface/home/domain/home_mixin.dart';
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'home_repo.dart';
 
@@ -25,6 +26,26 @@ class HomeRepoImpl extends HomeRepo with HomeMixin{
   @override
   List<String> readFile({required String path}){
     return (File(path).readAsLinesSync());
+  }
+
+  @override
+  Future<bool> checkInternetAccess() async{
+    try {
+      final result = await InternetAddress.lookup('www.google.com');
+        return (result.isNotEmpty && result[0].rawAddress.isNotEmpty) ;
+    } on SocketException catch (_) {
+      return false;
+    }
+  }
+
+  @override
+  Future launchArUrl({String? subPath}) async {
+    var url = Uri.parse(Constants.kAuroraGitUrl+(subPath??''));
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw "Could not launch $url";
+    }
   }
 
 }

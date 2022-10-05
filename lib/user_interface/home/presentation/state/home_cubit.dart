@@ -31,6 +31,9 @@ class HomeCubit extends TerminalBaseCubit<HomeState> {
 
   }
 
+  void launchUrl({String? subPath}){
+    _homeRepo.launchArUrl(subPath: subPath);
+  }
 
   void dispose(){
     emit(HomeStateInit());
