@@ -6,7 +6,7 @@ import 'package:aurora/utility/constants.dart';
 import 'package:equatable/equatable.dart';
 
 class ControlPanelCubit extends TerminalBaseCubit<Equatable> {
-  ControlPanelCubit(this._homeRepo,this._prefRepo) : super(ControlPanelStateInit(disableFaustusModule: false, disableThreshold: false));
+  ControlPanelCubit(this._homeRepo,this._prefRepo) : super(const ControlPanelStateInit(disableFaustusModule: false, disableThreshold: false));
 
   final HomeRepo _homeRepo;
   final PrefRepo _prefRepo;
@@ -33,7 +33,7 @@ class ControlPanelCubit extends TerminalBaseCubit<Equatable> {
         command+='disablethreshold';
         _prefRepo.setThreshold(100);
       }
-      emit(ControlPanelTerminalState());
+      emit(const ControlPanelTerminalState());
       await super.execute(command);
       emit(ControlPanelStateInit(disableFaustusModule: _state.disableFaustusModule, disableThreshold: _state.disableThreshold));
     }

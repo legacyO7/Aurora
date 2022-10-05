@@ -68,12 +68,14 @@ class _ArButtonState extends State<ArButton> {
                               ..strokeWidth = 3
                               ..color = Colors.deepPurple,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                         Text(
                           widget.title,
                           style: const TextStyle(
                             color: Colors.white,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ],
                     )),
