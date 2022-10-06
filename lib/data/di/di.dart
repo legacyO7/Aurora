@@ -1,7 +1,7 @@
 
 import 'package:aurora/user_interface/control_panel/state/batter_manager_cubit.dart';
 import 'package:aurora/user_interface/control_panel/state/control_panel_cubit.dart';
-import 'package:aurora/user_interface/control_panel/state/keyboard_settings_cubit.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo_impl.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_cubit.dart';
@@ -30,7 +30,7 @@ Future initDI() async{
   sl.registerLazySingleton(() => HomeCubit(sl(),sl()));
   sl.registerLazySingleton(() => ControlPanelCubit(sl(),sl()));
   sl.registerLazySingleton(() => TerminalCubit());
-  sl.registerLazySingleton(() => KeyboardSettingsCubit(sl()));
+  sl.registerLazySingleton(() => KeyboardSettingsBloc(sl()));
   sl.registerLazySingleton(() => BatteryManagerCubit(sl()));
   sl.registerLazySingleton(() => SetupWizardCubit(sl(),sl()));
   sl.registerLazySingleton(() => ArButtonCubit());

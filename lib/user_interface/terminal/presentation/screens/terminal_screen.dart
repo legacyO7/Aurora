@@ -55,7 +55,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
               );
             }
             else {
-              context.read<TerminalBaseCubit>().execute("clear");
+              context.read<TerminalBaseBloc>().execute("clear");
               return Container();
             }
           },

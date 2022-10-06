@@ -1,11 +1,12 @@
 import 'package:aurora/data/shared_preference/pref_repo.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/control_panel/state/control_panel_state.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_cubit.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:equatable/equatable.dart';
 
-class ControlPanelCubit extends TerminalBaseCubit<Equatable> {
+class ControlPanelCubit extends TerminalBaseBloc<KeyboardSettingsEvent,Equatable> {
   ControlPanelCubit(this._homeRepo,this._prefRepo) : super(const ControlPanelStateInit(disableFaustusModule: false, disableThreshold: false));
 
   final HomeRepo _homeRepo;

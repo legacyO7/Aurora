@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/setup_wizard/domain/repository/setup_wizard_repo.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/widgets/install_faustus.dart';
@@ -12,7 +13,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'setup_wizard_state.dart';
 
-class SetupWizardCubit extends TerminalBaseCubit<SetupWizardState> {
+class SetupWizardCubit extends TerminalBaseBloc<KeyboardSettingsEvent, SetupWizardState> {
   SetupWizardCubit(this._homeRepo, this._setupWizardRepo) : super(SetupWizardInitState());
 
   final HomeRepo _homeRepo;

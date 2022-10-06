@@ -1,4 +1,4 @@
-import 'package:aurora/user_interface/control_panel/state/keyboard_settings_cubit.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,7 +38,7 @@ class _ArButtonState extends State<ArButton> {
               height: height,
               width: width,
               child: LinearProgressIndicator(
-                color: context.read<KeyboardSettingsCubit>().selectedColor,
+                color: context.read<KeyboardSettingsBloc>().selectedColor,
               ))
           : InkWell(
               onTap: () async {
@@ -52,7 +52,7 @@ class _ArButtonState extends State<ArButton> {
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 color: widget.isEnabled
                     ? widget.isSelected
-                        ? context.read<KeyboardSettingsCubit>().selectedColor
+                        ? context.read<KeyboardSettingsBloc>().selectedColor
                         : Colors.grey[800]
                     : Colors.grey,
                 duration: const Duration(milliseconds: 500),

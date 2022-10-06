@@ -1,4 +1,5 @@
-import 'package:aurora/user_interface/control_panel/state/keyboard_settings_cubit.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_event.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,7 @@ Widget colorController(BuildContext context) {
       wheelDiameter: 210,
       wheelWidth: 20,
       wheelHasBorder: true,
-      color: context.watch<KeyboardSettingsCubit>().selectedColor,
+      color: context.watch<KeyboardSettingsBloc>().selectedColor,
       wheelSquareBorderRadius: 10,
       pickersEnabled: const <ColorPickerType, bool>{
         ColorPickerType.both: false,
@@ -20,8 +21,8 @@ Widget colorController(BuildContext context) {
       },
       colorCodeHasColor: false,
       onColorChanged: (color) async{
-        context.read<KeyboardSettingsCubit>()
-          ..setColor(color)
-          ..setMode(0);
+        context.read<KeyboardSettingsBloc>()
+            ..add(EventKSColor(color: color))
+            ..add(EventKSMode());
       });
 }

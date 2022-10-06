@@ -6,9 +6,10 @@ import 'package:aurora/utility/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'keyboard_settings_event.dart';
 import 'batter_manager_state.dart';
 
-class BatteryManagerCubit extends TerminalBaseCubit<BatteryManagerInit>{
+class BatteryManagerCubit extends TerminalBaseBloc<KeyboardSettingsEvent,BatteryManagerInit>{
   BatteryManagerCubit(this._prefRepo):super(const BatteryManagerInit());
 
   final PrefRepo _prefRepo;

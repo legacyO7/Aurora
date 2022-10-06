@@ -1,4 +1,5 @@
-import 'package:aurora/user_interface/control_panel/state/keyboard_settings_cubit.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_state.dart';
 import 'package:aurora/utility/ar_widgets/arbutton.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +22,7 @@ Widget speedController({
    duration: const Duration(milliseconds: 300),
    height: isVisible?100:0,
    child: SingleChildScrollView(
-     child: BlocBuilder<KeyboardSettingsCubit,KeyboardSettingsLoadedState>(
+     child: BlocBuilder<KeyboardSettingsBloc,KeyboardSettingsState>(
        builder: (BuildContext context, state) {
            return Column(
            crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,7 +34,7 @@ Widget speedController({
                          title: e.title,
                          isSelected: state.speed==e.value,
                          action: () {
-                           context.read<KeyboardSettingsCubit>().setSpeed(e.value??0);
+                           context.read<KeyboardSettingsBloc>().add(EventKSSpeed(speed: e.value??0));
                          } )).toList()
              ),
            ],

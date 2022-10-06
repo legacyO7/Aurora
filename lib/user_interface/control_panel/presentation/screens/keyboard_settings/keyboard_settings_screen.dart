@@ -2,7 +2,8 @@
 import 'package:aurora/user_interface/control_panel/presentation/screens/keyboard_settings/widgets/color_panel.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/keyboard_settings/widgets/mode_panel.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/keyboard_settings/widgets/speed_panel.dart';
-import 'package:aurora/user_interface/control_panel/state/keyboard_settings_cubit.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,14 +24,14 @@ class _KeyboardSettingsScreenState extends State<KeyboardSettingsScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<KeyboardSettingsCubit>().initPanel();
+    context.read<KeyboardSettingsBloc>().add(EventKSInit());
   }
 
   @override
   Widget build(BuildContext context) {
    return Column(
      children: [
-       BlocBuilder<KeyboardSettingsCubit, KeyboardSettingsLoadedState>(
+       BlocBuilder<KeyboardSettingsBloc, KeyboardSettingsState>(
          builder: (BuildContext context, state) {
        return Row(
              mainAxisAlignment: MainAxisAlignment.start,
@@ -42,8 +43,8 @@ class _KeyboardSettingsScreenState extends State<KeyboardSettingsScreen> {
                    crossAxisAlignment: CrossAxisAlignment.start,
                    children: [
                      brightnessController(title: "Brightness", context: context),
-                     modeController(title: "Mode", context: context,isVisible: context.watch<KeyboardSettingsCubit>().isModeBarVisible),
-                     speedController(title: "Speed", context: context,isVisible: context.watch<KeyboardSettingsCubit>().isSpeedBarVisible)
+                     modeController(title: "Mode", context: context,isVisible: context.watch<KeyboardSettingsBloc>().isModeBarVisible),
+                     speedController(title: "Speed", context: context,isVisible: context.watch<KeyboardSettingsBloc>().isSpeedBarVisible)
                    ],
                  )
                ),

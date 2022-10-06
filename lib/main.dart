@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:aurora/data/di/di.dart';
 import 'package:aurora/user_interface/control_panel/state/batter_manager_cubit.dart';
 import 'package:aurora/user_interface/control_panel/state/control_panel_cubit.dart';
-import 'package:aurora/user_interface/control_panel/state/keyboard_settings_cubit.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_wizard_screen.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_cubit.dart';
@@ -34,7 +34,7 @@ class Aurora extends StatelessWidget {
        BlocProvider.value(value: sl<SetupWizardCubit>()),
        BlocProvider.value(value: sl<HomeCubit>()),
        BlocProvider.value(value: sl<ControlPanelCubit>()),
-       BlocProvider.value(value: sl<KeyboardSettingsCubit>()),
+       BlocProvider.value(value: sl<KeyboardSettingsBloc>()),
        BlocProvider.value(value: sl<BatteryManagerCubit>()),
        BlocProvider.value(value: sl<TerminalCubit>()),
        BlocProvider.value(value: sl<ArButtonCubit>()),

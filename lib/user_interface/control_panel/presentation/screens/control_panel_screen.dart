@@ -28,9 +28,9 @@ class _ControlPanelState extends State<ControlPanelScreen> {
           children:  <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children:[
+              children:const [
                 GitButton(),
-                const UninstallButton()
+                UninstallButton()
               ],
             ),
             const Expanded(

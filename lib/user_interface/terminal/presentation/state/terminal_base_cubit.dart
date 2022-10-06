@@ -2,9 +2,9 @@ import 'package:aurora/data/di/di.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-abstract class TerminalBaseCubit<State> extends BlocBase<State> {
+abstract class TerminalBaseBloc<Event,State> extends Bloc<Event,State> {
 
-  TerminalBaseCubit(State initialState) : super(initialState);
+  TerminalBaseBloc(State initialState) : super(initialState);
 
   final TerminalRepo _terminalRepo = sl<TerminalRepo>();
 
@@ -40,6 +40,7 @@ abstract class TerminalBaseCubit<State> extends BlocBase<State> {
   }
 
   Stream<List<String>> get terminalOutput => _terminalRepo.terminalOutStream;
+
 
 
 }
