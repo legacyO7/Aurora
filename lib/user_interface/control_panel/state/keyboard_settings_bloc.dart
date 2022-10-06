@@ -4,56 +4,54 @@ import 'package:aurora/user_interface/control_panel/state/keyboard_settings_even
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_cubit.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'keyboard_settings_state.dart';
 
 class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,KeyboardSettingsState>{
   KeyboardSettingsBloc(this._prefRepo):super(const KeyboardSettingsState()){
-   on<EventKSBrightness>(setBrightnessEvent);
-   on<EventKSSpeed>(setSpeedEvent);
-   on<EventKSMode>(setModeEvent);
-   on<EventKSColor>(setColorEvent);
-   on<EventKSInit>(initPanel);
+   on<EventKSBrightness>((event, emit)=> _setBrightness(event.brightness,emit));
+   on<EventKSSpeed>((event, emit)=> _setSpeed(event.speed,emit));
+   on<EventKSMode>((event, emit)=> _setMode(event.mode,emit));
+   on<EventKSColor>((event, emit)=> _setColor(event.color??Constants.arColor,emit));
+   on<EventKSInit>((event, emit) => _initPanel(emit));
   }
 
   final PrefRepo _prefRepo;
-
   Color _color=Constants.arColor;
 
-  initPanel(KeyboardSettingsEvent event,Emitter<KeyboardSettingsState> emit) async{
-    await setBrightnessEvent(EventKSBrightness(brightness: await _prefRepo.getBrightness()), emit);
-    await setModeEvent(EventKSMode(mode: await _prefRepo.getMode()), emit);
-    await setSpeedEvent(EventKSSpeed(speed: await _prefRepo.getSpeed()), emit);
-    await setColorEvent(EventKSColor(color: await _prefRepo.getColor()), emit);
+  _initPanel(emit) async{
+   await _setColor(await _prefRepo.getColor(), emit);
+   await _setBrightness(await _prefRepo.getBrightness(), emit);
+   await _setMode(await _prefRepo.getMode(), emit);
+   await _setSpeed(await _prefRepo.getSpeed(), emit);
   }
 
 
-  setColorEvent(EventKSColor event, Emitter<KeyboardSettingsState> emit) async {
-    _color= event.color??Constants.arColor;
+  _setColor(Color color ,emit) async {
+    _color= color;
     await super.execute("${Constants.kExecFaustusPath} color ${_color.red.toRadixString(16)} ${_color.green.toRadixString(16)} ${_color.blue.toRadixString(16)} 0");
     _prefRepo.setColor(_color.toString());
     Constants.arColor=_color;
     emit(state.copyState(color: _color));
   }
 
-  setBrightnessEvent(EventKSBrightness event, Emitter<KeyboardSettingsState> emit) async {
-    await super.execute("${Constants.kExecFaustusPath} brightness ${event.brightness} ");
-    _prefRepo.setBrightness(event.brightness);
-    emit(state.copyState(brightness: event.brightness));
+  _setBrightness(int brightness, emit) async {
+    await super.execute("${Constants.kExecFaustusPath} brightness $brightness ");
+    _prefRepo.setBrightness(brightness);
+    emit(state.copyState(brightness: brightness));
   }
 
 
-  setModeEvent(EventKSMode event, Emitter<KeyboardSettingsState> emit)async{
-    await super.execute("${Constants.kExecFaustusPath} mode ${event.mode} ");
-    _prefRepo.setMode(event.mode);
-    emit(state.copyState(mode: event.mode));
+  _setMode(int mode, emit)async{
+    await super.execute("${Constants.kExecFaustusPath} mode $mode ");
+    _prefRepo.setMode(mode);
+    emit(state.copyState(mode: mode));
   }
 
-  setSpeedEvent(EventKSSpeed event, Emitter<KeyboardSettingsState> emit) async{
-    await super.execute("${Constants.kExecFaustusPath} speed ${event.speed} ");
-    _prefRepo.setSpeed(event.speed);
-    emit(state.copyState(speed: event.speed));
+  _setSpeed(int speed, emit) async{
+    await super.execute("${Constants.kExecFaustusPath} speed $speed ");
+    _prefRepo.setSpeed(speed);
+    emit(state.copyState(speed: speed));
   }
 
   bool get isSpeedBarVisible => (state.mode)>0&&(state.mode)<3&&isModeBarVisible;

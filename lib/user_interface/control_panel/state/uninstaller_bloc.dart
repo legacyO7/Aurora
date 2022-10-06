@@ -1,25 +1,31 @@
 import 'package:aurora/data/shared_preference/pref_repo.dart';
-import 'package:aurora/user_interface/control_panel/state/keyboard_settings_event.dart';
-import 'package:aurora/user_interface/control_panel/state/control_panel_state.dart';
+import 'package:aurora/user_interface/control_panel/state/uninstaller_event.dart';
+import 'package:aurora/user_interface/control_panel/state/uninstaller_state.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_cubit.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:equatable/equatable.dart';
 
-class ControlPanelCubit extends TerminalBaseBloc<KeyboardSettingsEvent,Equatable> {
-  ControlPanelCubit(this._homeRepo,this._prefRepo) : super(const ControlPanelStateInit(disableFaustusModule: false, disableThreshold: false));
+class UninstallerBloc extends TerminalBaseBloc<UninstallEvent,ControlPanelState> {
+  UninstallerBloc(this._homeRepo,this._prefRepo) :
+        super(const ControlPanelStateInit(disableFaustusModule: false, disableThreshold: false)){
+    on<EventUInCheckDisableServices>((event, emit) => _setDisableService(event,emit));
+    on<EventUInSubmitDisableServices>((_, emit) => _disableServices(emit));
+  }
 
   final HomeRepo _homeRepo;
   final PrefRepo _prefRepo;
 
-  void setDisableService({bool? disableThreshold, bool? disableFaustusModule}) {
-    final _state = state;
-    if (_state is ControlPanelStateInit) {
-      emit(ControlPanelStateInit(disableThreshold: disableThreshold??_state.disableThreshold, disableFaustusModule: disableFaustusModule?? _state.disableFaustusModule));
+  void _setDisableService(EventUInCheckDisableServices event, emit) {
+    final _state =state;
+    if(_state is ControlPanelStateInit) {
+      emit(_state.copyState(
+        disableThreshold: event.disableThreshold,
+        disableFaustusModule: event.disableFaustusModule
+      ));
     }
   }
   
-  Future disableServices() async{
+  Future _disableServices(emit) async{
     final _state = state;
     if(_state is ControlPanelStateInit && (_state.disableThreshold || _state.disableFaustusModule)){
 
