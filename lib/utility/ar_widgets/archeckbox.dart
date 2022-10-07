@@ -31,7 +31,7 @@ class ArCheckbox extends StatelessWidget{
           )
       ),
       child: CheckboxListTile(
-        title: const Text("Disable faustus module"),
+        title: Text(text),
         value: isSelected,
         onChanged: (value)=> onChange(value),
       ),

@@ -28,7 +28,7 @@ class UninstallButton extends StatelessWidget {
             ),
 
             ArCheckbox(
-                text: "Disable charging threshold",
+                text: "Disable faustus module",
                 isSelected: state.disableFaustusModule,
                 onChange: (_)=>context.read<UninstallerBloc>().add(EventUInCheckDisableServices(disableFaustusModule: !state.disableFaustusModule))
             ),

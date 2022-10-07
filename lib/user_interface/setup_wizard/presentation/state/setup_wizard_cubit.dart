@@ -19,13 +19,8 @@ class SetupWizardCubit extends TerminalBaseBloc<KeyboardSettingsEvent, SetupWiza
   final HomeRepo _homeRepo;
   final SetupWizardRepo _setupWizardRepo;
 
-  bool _isSuccess = false;
   String? _setupPath;
   String terminalList = '';
-
-  late var _subscription;
-
-  bool compatibilityChecker() => Directory('/sys/devices/platform/faustus/').existsSync();
 
   initSetup() async {
     Constants.kWorkingDirectory = (await Directory('${(await getTemporaryDirectory()).path}/legacy07.aurora').create()).path;
@@ -36,7 +31,7 @@ class SetupWizardCubit extends TerminalBaseBloc<KeyboardSettingsEvent, SetupWiza
   Future checkForUpdates({bool ignoreUpdate=false}) async {
 
     _navigate(){
-      if (compatibilityChecker()) {
+      if (_homeRepo.compatibilityChecker()) {
         emit(SetupWizardCompatibleState());
       } else {
         emit(SetupWizardPermissionState());
@@ -55,42 +50,63 @@ class SetupWizardCubit extends TerminalBaseBloc<KeyboardSettingsEvent, SetupWiza
     }
   }
 
-  allowConfigure(){
-    emit(SetupWizardIncompatibleState(stepValue: 0, child: packageInstaller(), isValid: true));
+  allowConfigure(bool allow){
+    if(allow) {
+      _emitInstallPackage();
+    } else {
+      emit(SetupWizardPermissionState());
+    }
+  }
+  
+  _emitInstallPackage()=> emit(SetupWizardIncompatibleState(stepValue: 0, child: packageInstaller(), isValid: true));
+  
+  _emitInstallFaustus()=>  emit(SetupWizardIncompatibleState(stepValue: 1, child: const FaustusInstaller(),isValid: true));
+  
+  _emitInstallFaustusTerminal()=> emit(SetupWizardIncompatibleState(stepValue: 2, child: const TerminalScreen(), isValid: true));
+
+  void handleCancel({required int stepValue}){
+    if(stepValue==0) {
+      allowConfigure(false);
+    } else if(stepValue==1){
+      _emitInstallPackage();
+    }else if(stepValue==2){
+      _emitInstallFaustus();
+    }
   }
 
   installer(context) async {
     final _state = state;
     if (_state is SetupWizardIncompatibleState) {
       emit(SetupWizardIncompatibleState());
+      var _isSuccess=false;
       if (_state.stepValue == 0) {
-        _listenToTerminal();
         await _homeRepo.extractAsset(sourceFileName: Constants.kFaustusInstaller);
         _setupPath = "${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.kWorkingDirectory}";
         terminalList = '" ${(await _setupWizardRepo.getTerminalList())} "';
         if (terminalList.isNotEmpty) {
-          await super.execute("$_setupPath installpackages $terminalList");
+
+          _isSuccess=(await super.getOutput(command: "$_setupPath installpackages $terminalList")).toString().contains("success")&&_homeRepo.readFile(path: '${Constants.kWorkingDirectory}/log').isEmpty;
+
         } else {
           arSnackBar(text: "Fetching Data Failed", isPositive: false);
         }
-      } else {
-        emit(_state.copyState(child: const TerminalScreen(), stepValue: 2, isValid: true));
-
+      } else {        
+        _emitInstallFaustusTerminal();
         await super.execute("${Constants.kSecureBootEnabled ? '' : Constants.kPolkit} $_setupPath installfaustus ${Constants.kFaustusGitUrl} $terminalList");
+        _isSuccess=_homeRepo.compatibilityChecker();
       }
-      processOutput(state);
+      processOutput(state: state,isSuccess: _isSuccess);
     }
   }
 
-  processOutput(SetupWizardState state) {
+  processOutput({required SetupWizardState state, required bool isSuccess}) {
     if (state is SetupWizardIncompatibleState) {
-      if (_isSuccess && state.stepValue == 0) {
-        emit(SetupWizardIncompatibleState(stepValue: 1, child: const FaustusInstaller()));
-      } else if (_isSuccess && state.stepValue == 2) {
-        _subscription.cancel();
+      if (isSuccess && state.stepValue == 0) {
+       _emitInstallFaustus();
+      } else if (isSuccess && state.stepValue == 2) {
         emit(SetupWizardCompatibleState());
       } else {
-        emit(state);
+        emit(state.copyState(isValid: true));
         arSnackBar(text: "That didn't go as planned!", isPositive: false);
       }
     }
@@ -104,18 +120,4 @@ class SetupWizardCubit extends TerminalBaseBloc<KeyboardSettingsEvent, SetupWiza
     emit(SetupWizardIncompatibleState(stepValue: 1, child: const FaustusInstaller(), isValid: isValid));
   }
 
-  _listenToTerminal() {
-    _subscription = super.terminalOutput.listen((event) async {
-      final _state = state;
-      if (_state is SetupWizardIncompatibleState) {
-        if (_state.stepValue == 0) {
-          _isSuccess = event.any((element) => element.contains("success")) && _homeRepo.readFile(path: '${Constants.kWorkingDirectory}/log').isEmpty;
-        } else if (_state.stepValue == 2) {
-          _isSuccess = event.any((element) => element.contains("faustus module found"));
-        }
-      }
-    });
-  }
-
-  bool get isSuccess => _isSuccess;
 }

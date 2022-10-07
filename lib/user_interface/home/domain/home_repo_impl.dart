@@ -48,4 +48,7 @@ class HomeRepoImpl extends HomeRepo with HomeMixin{
     }
   }
 
+  @override
+  bool compatibilityChecker() => Directory(Constants.kFaustusModulePath).existsSync();
+
 }

@@ -8,6 +8,8 @@ class SetupWizardRepoImpl extends SetupWizardRepo{
 
   @override
   Future<String> getTerminalList()async{
+    var output=await _setupWizardSource.getTerminalList();
+    if(output.isEmpty) return '';
     return (await _setupWizardSource.getTerminalList()).split('"\$TERMINAL" ')[1].split(';')[0];
   }
 

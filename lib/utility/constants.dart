@@ -17,6 +17,7 @@ class Constants {
   static String kExecBatteryManagerPath = '';
   static const String kAuroraGitUrl = "https://github.com/legacyO7/Aurora";
   static String kFaustusGitUrl = "https://github.com/legacyO7/faustus.git";
+  static const String kFaustusModulePath = "/sys/devices/platform/faustus/";
   static const String kTerminalListUrl = "https://raw.githubusercontent.com/i3/i3/next/i3-sensible-terminal";
   static String kWorkingDirectory = '/';
   static const String kAssetsPath = "assets/scripts/";

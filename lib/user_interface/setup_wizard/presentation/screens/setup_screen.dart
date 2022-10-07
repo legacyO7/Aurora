@@ -58,7 +58,7 @@ class _SetupScreenState extends State<SetupScreen> {
                 const Text("Aurora wants to configure your system"),
                 ArButton(title: "Allow",
                     action: (){
-                  context.read<SetupWizardCubit>().allowConfigure();
+                  context.read<SetupWizardCubit>().allowConfigure(true);
                 })
               ],
             );
@@ -107,8 +107,9 @@ class _SetupScreenState extends State<SetupScreen> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: ArButton(
-                                isEnabled: state.isValid,
-                                title: "Cancel", action: (){
+                                isEnabled: state.isValid&&!isLoading,
+                                title: state.stepValue>0?"Back":"Cancel", action: (){
+                                  context.read<SetupWizardCubit>().handleCancel(stepValue: state.stepValue);
                             }),
                           ),
                         ],
