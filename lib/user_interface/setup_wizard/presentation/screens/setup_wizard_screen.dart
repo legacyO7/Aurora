@@ -60,7 +60,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                     return const Text("checking for updates...");
                   }
 
-                  if(state is SetupWizardIncompatibleState) {
+                  if(state is SetupWizardIncompatibleState || state is SetupWizardPermissionState) {
                     return const SetupScreen();
                   }
 

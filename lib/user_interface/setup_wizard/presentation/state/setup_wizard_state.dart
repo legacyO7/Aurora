@@ -22,6 +22,10 @@ class SetupWizardLoadingState extends SetupWizardState{
   SetupWizardLoadingState();
 }
 
+class SetupWizardPermissionState extends SetupWizardState{
+  SetupWizardPermissionState();
+}
+
 class SetupWizardIncompatibleState extends SetupWizardState{
   final int stepValue;
   final Widget? child;

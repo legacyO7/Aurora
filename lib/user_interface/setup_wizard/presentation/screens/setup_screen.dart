@@ -28,7 +28,7 @@ class _SetupScreenState extends State<SetupScreen> {
       subtitle: '',
     ),
     StepperData(
-      title: "I conquer",
+      title: "I conquered",
       subtitle: '',
     ),
   ];
@@ -50,6 +50,20 @@ class _SetupScreenState extends State<SetupScreen> {
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: BlocBuilder<SetupWizardCubit,SetupWizardState>(
         builder: (BuildContext context, state) {
+
+          if(state is SetupWizardPermissionState){
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text("Aurora wants to configure your system"),
+                ArButton(title: "Allow",
+                    action: (){
+                  context.read<SetupWizardCubit>().allowConfigure();
+                })
+              ],
+            );
+          }
+
           if(state is SetupWizardIncompatibleState){
             return  Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,7 +94,7 @@ class _SetupScreenState extends State<SetupScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ArButton(
-                              isEnabled: state.isValid??false,
+                              isEnabled: state.isValid,
                               isLoading: isLoading,
                               isSelected: true,
                               title: "Install", action: ()async{
@@ -93,7 +107,7 @@ class _SetupScreenState extends State<SetupScreen> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: ArButton(
-                                isEnabled: state.isValid??false,
+                                isEnabled: state.isValid,
                                 title: "Cancel", action: (){
                             }),
                           ),

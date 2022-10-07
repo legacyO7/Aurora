@@ -4,6 +4,7 @@ import 'package:aurora/user_interface/control_panel/state/uninstaller_state.dart
 import 'package:aurora/user_interface/home/presentation/state/home_cubit.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_wizard_screen.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
+import 'package:aurora/utility/ar_widgets/archeckbox.dart';
 import 'package:aurora/utility/ar_widgets/ardialog.dart';
 import 'package:aurora/utility/placeholder.dart';
 import 'package:equatable/equatable.dart';
@@ -19,20 +20,18 @@ class UninstallButton extends StatelessWidget {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CheckboxListTile(
-              title: const Text("Disable charging threshold"),
-              value: state.disableThreshold,
-              onChanged: (_) {
-                context.read<UninstallerBloc>().add(EventUInCheckDisableServices(disableThreshold: !state.disableThreshold));
-              },
+
+            ArCheckbox(
+                text: "Disable charging threshold",
+                isSelected: state.disableThreshold,
+                onChange: (_)=>context.read<UninstallerBloc>().add(EventUInCheckDisableServices(disableThreshold: !state.disableThreshold))
             ),
-            CheckboxListTile(
-              title: const Text("Disable faustus module"),
-              value: state.disableFaustusModule,
-              onChanged: (_) {
-                context.read<UninstallerBloc>().add(EventUInCheckDisableServices(disableFaustusModule: !state.disableFaustusModule));
-              },
-            )
+
+            ArCheckbox(
+                text: "Disable charging threshold",
+                isSelected: state.disableFaustusModule,
+                onChange: (_)=>context.read<UninstallerBloc>().add(EventUInCheckDisableServices(disableFaustusModule: !state.disableFaustusModule))
+            ),
           ],
         );
       } else if (state is ControlPanelTerminalState) {

@@ -39,7 +39,7 @@ class SetupWizardCubit extends TerminalBaseBloc<KeyboardSettingsEvent, SetupWiza
       if (compatibilityChecker()) {
         emit(SetupWizardCompatibleState());
       } else {
-        emit(SetupWizardIncompatibleState(stepValue: 0, child: packageInstaller(), isValid: true));
+        emit(SetupWizardPermissionState());
       }
     }
 
@@ -53,6 +53,10 @@ class SetupWizardCubit extends TerminalBaseBloc<KeyboardSettingsEvent, SetupWiza
     }else{
       _navigate();
     }
+  }
+
+  allowConfigure(){
+    emit(SetupWizardIncompatibleState(stepValue: 0, child: packageInstaller(), isValid: true));
   }
 
   installer(context) async {

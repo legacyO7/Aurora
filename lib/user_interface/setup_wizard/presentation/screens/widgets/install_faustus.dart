@@ -35,7 +35,7 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
      builder: (BuildContext context, state) {
        if(state is SetupWizardIncompatibleState){
          print(state.isValid);
-         Color setColor()=> state.isValid??false? Colors.green:Colors.red;
+         Color setColor()=> state.isValid? Colors.green:Colors.red;
          return Column(
            children: [
              const Text("install Faustus"),
@@ -82,7 +82,7 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
                        onChanged: (value)=>context.read<SetupWizardCubit>().validateRepo(value),
                      ),
                    ),
-                   Icon((state.isValid??false)?Icons.check:Icons.close,color:setColor())
+                   Icon((state.isValid)?Icons.check:Icons.close,color:setColor())
                  ],
                ),
              )

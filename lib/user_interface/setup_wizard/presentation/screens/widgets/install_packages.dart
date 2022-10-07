@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 
 Widget packageInstaller(){
   return const Text("""
-            Aurora wants to configure your system
             
             The following packages need to be installed
             
