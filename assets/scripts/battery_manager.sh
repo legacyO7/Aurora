@@ -5,12 +5,12 @@ service_path=/etc/systemd/system/
 
 setthreshold() {
 
-  echo Setting battery charge threshold to $1 %...
+  echo Setting charge threshold limit to $1 %...
   echo $1 | tee $battery_threshold_path >/dev/null
   cd $service_path
 
   echo "[Unit]
-Description=To set battery charge threshold
+Description=To set charge threshold limit
 After=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
 StartLimitBurst=0
 

@@ -23,7 +23,6 @@ class _ArButtonState extends State<ArButton> {
 
   @override
   void initState() {
-
     super.initState();
   }
 
