@@ -1,5 +1,6 @@
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_state.dart';
 import 'package:aurora/utility/ar_widgets/arterminal.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
   @override
   initState() {
     super.initState();
+    context.read<TerminalBloc>().add(EventTRListen());
     terminalViewController = ScrollController();
   }
 
@@ -38,7 +40,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
       height: MediaQuery.of(context).size.height,
       color: Colors.black,
       child: SizedBox(
-        child: BlocBuilder<TerminalCubit,TerminalState>(
+        child: BlocBuilder<TerminalBloc,TerminalState>(
           builder: (BuildContext context, state) {
             if(state is TerminalStateLoaded ) {
               var c = state.terminalOut.reversed.toList(growable: false);
@@ -48,7 +50,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
                     child: ListView.builder(
                         controller: terminalViewController,
                         reverse: true,
-                        itemBuilder: (ctx, i) => arTerminal(context.read<TerminalCubit>().convertToTerminalText(line: c[i])),
+                        itemBuilder: (ctx, i) => arTerminal(context.read<TerminalBloc>().convertToTerminalText(line: c[i])),
                         itemCount: state.terminalOut.length),
                   ),
                 ],

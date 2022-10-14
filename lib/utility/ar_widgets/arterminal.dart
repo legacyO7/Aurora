@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 Widget arTerminal(TerminalText terminalText){
 
   Color _commandColor(CommandStatus commandStatus) {
-    if (commandStatus == CommandStatus.stdin) {
+    if (commandStatus == CommandStatus.stdinp) {
       return Colors.blue;
     } else if (commandStatus == CommandStatus.stdout) {
       return Colors.green;

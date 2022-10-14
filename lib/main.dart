@@ -36,7 +36,7 @@ class Aurora extends StatelessWidget {
        BlocProvider.value(value: sl<UninstallerBloc>()),
        BlocProvider.value(value: sl<KeyboardSettingsBloc>()),
        BlocProvider.value(value: sl<BatteryManagerBloc>()),
-       BlocProvider.value(value: sl<TerminalCubit>()),
+       BlocProvider.value(value: sl<TerminalBloc>()),
        BlocProvider.value(value: sl<ArButtonCubit>()),
       ],
       child: MaterialApp(

@@ -27,7 +27,7 @@ class TerminalSourceImpl extends TerminalSource{
       arguments = command.split(' ');
       var exec=arguments[0];
       arguments.removeAt(0);
-      _convertToList(lines:  "\$ $command",commandStatus: CommandStatus.stdin);
+      _convertToList(lines:  "\$ $command",commandStatus: CommandStatus.stdinp);
 
       try{
 

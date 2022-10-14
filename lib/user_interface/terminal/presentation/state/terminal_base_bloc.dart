@@ -41,6 +41,4 @@ abstract class TerminalBaseBloc<Event,State> extends Bloc<Event,State> {
 
   Stream<List<String>> get terminalOutput => _terminalRepo.terminalOutStream;
 
-
-
 }

@@ -1,7 +1,7 @@
 
 
 
-enum CommandStatus { stderr, stdout, stdin }
+enum CommandStatus { stderr, stdout, stdinp }
 
 class TerminalText{
   String text;
