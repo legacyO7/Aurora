@@ -32,7 +32,7 @@ Future initDI() async{
   sl.registerLazySingleton(() => TerminalCubit());
   sl.registerLazySingleton(() => KeyboardSettingsBloc(sl()));
   sl.registerLazySingleton(() => BatteryManagerBloc(sl()));
-  sl.registerLazySingleton(() => SetupWizardCubit(sl(),sl()));
+  sl.registerLazySingleton(() => SetupWizardCubit(sl(),sl(),sl()));
   sl.registerLazySingleton(() => ArButtonCubit());
 
   sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));

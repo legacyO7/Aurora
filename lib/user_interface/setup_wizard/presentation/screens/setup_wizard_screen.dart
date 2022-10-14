@@ -3,6 +3,7 @@ import 'package:aurora/user_interface/home/presentation/screens/home_screen.dart
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_screen.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/widgets/setup_splash.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
+import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_event.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_state.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
   @override
   initState() {
-    context.read<SetupWizardCubit>().initSetup();
+    context.read<SetupWizardCubit>().add(EventSWInit());
     super.initState();
   }
 
