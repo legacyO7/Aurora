@@ -6,16 +6,17 @@ import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo_impl.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_cubit.dart';
 import 'package:aurora/user_interface/setup_wizard/data/repository/setup_wizard_source_impl.dart';
-import 'package:aurora/user_interface/setup_wizard/data/source/setup_wizard_source.dart';
+import 'package:aurora/user_interface/setup_wizard/data/repository/setup_wizard_source.dart';
 import 'package:aurora/user_interface/setup_wizard/domain/repository/setup_wizard_repo.dart';
 import 'package:aurora/user_interface/setup_wizard/domain/repository/setup_wizard_repo_impl.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
+import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_bloc.dart';
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/user_interface/terminal/data/source/terminal_source_impl.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo_impl.dart';
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_cubit.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/utility/ar_widgets/arbutton_cubit.dart';
+import 'package:aurora/user_interface/setup_wizard/data/source/dio_client.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,7 +33,7 @@ Future initDI() async{
   sl.registerLazySingleton(() => TerminalCubit());
   sl.registerLazySingleton(() => KeyboardSettingsBloc(sl()));
   sl.registerLazySingleton(() => BatteryManagerBloc(sl()));
-  sl.registerLazySingleton(() => SetupWizardCubit(sl(),sl(),sl()));
+  sl.registerLazySingleton(() => SetupWizardBloc(sl(),sl(),sl()));
   sl.registerLazySingleton(() => ArButtonCubit());
 
   sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
@@ -40,9 +41,10 @@ Future initDI() async{
   sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
   sl.registerLazySingleton<SetupWizardRepo>(() => SetupWizardRepoImpl(sl()));
 
-  sl.registerLazySingleton<SetupWizardSource>(() => SetupWizardSourceImpl());
+  sl.registerLazySingleton<SetupWizardSource>(() => SetupWizardSourceImpl(sl()));
   sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl());
 
+  sl.registerLazySingleton<DioClient>(() => DioClientImpl());
 
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);

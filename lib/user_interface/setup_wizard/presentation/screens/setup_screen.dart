@@ -1,7 +1,7 @@
 
 import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:another_stepper/widgets/another_stepper.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
+import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_bloc.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_event.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_state.dart';
 import 'package:aurora/utility/ar_widgets/arbutton.dart';
@@ -49,7 +49,7 @@ class _SetupScreenState extends State<SetupScreen> {
   Widget build(BuildContext ctx) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
-      child: BlocBuilder<SetupWizardCubit,SetupWizardState>(
+      child: BlocBuilder<SetupWizardBloc,SetupWizardState>(
         builder: (BuildContext context, state) {
 
           if(state is SetupWizardPermissionState){
@@ -59,7 +59,7 @@ class _SetupScreenState extends State<SetupScreen> {
                 const Text("Aurora wants to configure your system"),
                 ArButton(title: "Allow",
                     action: (){
-                  context.read<SetupWizardCubit>().add(EventSWAllowConfigure(allow: true));
+                  context.read<SetupWizardBloc>().add(EventSWAllowConfigure(allow: true));
                 })
               ],
             );
@@ -98,7 +98,7 @@ class _SetupScreenState extends State<SetupScreen> {
                               isLoading: isLoading,
                               isSelected: true,
                               title: "Install", action: ()async{
-                               context.read<SetupWizardCubit>().add(EventSWOnInstall(stepValue: state.stepValue));
+                               context.read<SetupWizardBloc>().add(EventSWOnInstall(stepValue: state.stepValue));
                           }),
 
                           Padding(
@@ -106,7 +106,7 @@ class _SetupScreenState extends State<SetupScreen> {
                             child: ArButton(
                                 isEnabled: state.isValid&&!isLoading,
                                 title: state.stepValue>0?"Back":"Cancel", action: (){
-                                  context.read<SetupWizardCubit>().add(EventSWOnCancel(stepValue: state.stepValue));
+                                  context.read<SetupWizardBloc>().add(EventSWOnCancel(stepValue: state.stepValue));
                             }),
                           ),
                         ],

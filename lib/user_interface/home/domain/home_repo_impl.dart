@@ -4,6 +4,7 @@ import 'package:aurora/user_interface/home/domain/home_mixin.dart';
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/services.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'home_repo.dart';
@@ -46,6 +47,11 @@ class HomeRepoImpl extends HomeRepo with HomeMixin{
     } else {
       throw "Could not launch $url";
     }
+  }
+
+  @override
+  Future<String> getVersion() async{
+    return (await PackageInfo.fromPlatform()).version;
   }
 
   @override

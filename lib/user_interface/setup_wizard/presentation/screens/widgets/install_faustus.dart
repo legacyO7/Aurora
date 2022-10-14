@@ -1,4 +1,4 @@
-import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
+import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_bloc.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_event.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_state.dart';
 import 'package:aurora/utility/constants.dart';
@@ -19,7 +19,7 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
   void initState() {
     _controller=TextEditingController();
     _controller.text=Constants.kFaustusGitUrl;
-    context.read<SetupWizardCubit>().add(EventSWValidateRepo(url: _controller.text));
+    context.read<SetupWizardBloc>().add(EventSWValidateRepo(url: _controller.text));
     super.initState();
   }
 
@@ -31,7 +31,7 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
 
   @override
   Widget build(BuildContext context) {
-   return BlocBuilder<SetupWizardCubit,SetupWizardState>(
+   return BlocBuilder<SetupWizardBloc,SetupWizardState>(
      builder: (BuildContext context, state) {
        if(state is SetupWizardIncompatibleState){
          Color setColor()=> state.isValid? Colors.green:Colors.red;
@@ -78,7 +78,7 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
                        decoration: const InputDecoration(
                          border: InputBorder.none,
                        ),
-                       onChanged: (value)=>context.read<SetupWizardCubit>().add(EventSWValidateRepo(url: value)),
+                       onChanged: (value)=>context.read<SetupWizardBloc>().add(EventSWValidateRepo(url: value)),
                      ),
                    ),
                    Icon((state.isValid)?Icons.check:Icons.close,color:setColor())

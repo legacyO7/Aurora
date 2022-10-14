@@ -6,5 +6,7 @@ abstract class HomeRepo{
   Future<bool> isSecureBootEnabled();
   Future<bool> checkInternetAccess();
   Future launchArUrl({String? subPath});
+  Future<String> getVersion();
   bool compatibilityChecker();
+  int convertVersionToInt(String version);
 }

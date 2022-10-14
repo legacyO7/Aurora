@@ -6,7 +6,7 @@ import 'package:aurora/user_interface/setup_wizard/presentation/screens/widgets/
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/widgets/install_packages.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_cubit.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/arbutton_cubit.dart';
 import 'package:aurora/utility/ar_widgets/arsnackbar.dart';
 import 'package:aurora/utility/constants.dart';
@@ -14,13 +14,14 @@ import 'package:path_provider/path_provider.dart';
 
 import 'setup_wizard_state.dart';
 
-class SetupWizardCubit extends TerminalBaseBloc<SetupWizardEvent, SetupWizardState> {
-  SetupWizardCubit(this._homeRepo, this._setupWizardRepo,this._arButtonCubit) : super(SetupWizardInitState()){
+class SetupWizardBloc extends TerminalBaseBloc<SetupWizardEvent, SetupWizardState> {
+  SetupWizardBloc(this._homeRepo, this._setupWizardRepo,this._arButtonCubit) : super(SetupWizardInitState()){
     on<EventSWInit>((_, emit) => _initSetup(emit));
     on<EventSWAllowConfigure>((event, emit) => _allowConfigure(event.allow, emit));
     on<EventSWOnCancel>((event, emit) => _onCancel(stepValue: event.stepValue,emit));
     on<EventSWOnInstall>((event, emit) => _onInstall(stepValue: event.stepValue,emit));
     on<EventSWValidateRepo>((event, emit) => _validateRepo(value: event.url,emit));
+    on<EventSWIgnoreUpdate>((_, emit) => _ignoreUpdate(emit));
   }
 
   final HomeRepo _homeRepo;
@@ -31,9 +32,14 @@ class SetupWizardCubit extends TerminalBaseBloc<SetupWizardEvent, SetupWizardSta
   String _terminalList = '';
 
   _initSetup(emit) async {
+    Constants.arVersion= await _homeRepo.getVersion();
     Constants.kWorkingDirectory = (await Directory('${(await getTemporaryDirectory()).path}/legacy07.aurora').create()).path;
     Constants.kSecureBootEnabled = await _homeRepo.isSecureBootEnabled();
     await _checkForUpdates(emit);
+  }
+
+  Future _ignoreUpdate(emit)async{
+    await _checkForUpdates(emit,ignoreUpdate: true);
   }
 
   Future _checkForUpdates(emit,{bool ignoreUpdate=false}) async {
@@ -46,9 +52,9 @@ class SetupWizardCubit extends TerminalBaseBloc<SetupWizardEvent, SetupWizardSta
       }
     }
 
-    if (await _homeRepo.checkInternetAccess()) {
+    if (await _homeRepo.checkInternetAccess() && !ignoreUpdate) {
       emit(SetupWizardConnectedState());
-      if (false) {
+      if (_homeRepo.convertVersionToInt(await _setupWizardRepo.getAuroraLiveVersion())!=_homeRepo.convertVersionToInt(await _homeRepo.getVersion())) {
         emit(SetupWizardUpdateAvailableState());
       } else {
         navigate();

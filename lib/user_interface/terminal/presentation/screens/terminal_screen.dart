@@ -1,5 +1,5 @@
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_cubit.dart';
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_cubit.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_state.dart';
 import 'package:aurora/utility/ar_widgets/arterminal.dart';
 import 'package:flutter/material.dart';

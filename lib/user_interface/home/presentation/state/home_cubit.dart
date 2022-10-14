@@ -1,9 +1,8 @@
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_cubit.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 import 'home_state.dart';
 
@@ -13,13 +12,10 @@ class HomeCubit extends TerminalBaseBloc<KeyboardSettingsEvent,HomeState> {
 
   HomeCubit(this._prefRepo, this._homeRepo) : super(HomeStateInit());
 
-  Future getVersion() async{
-    Constants.arVersion= (await PackageInfo.fromPlatform()).version;
-  }
+
 
   Future requestAccess() async {
 
-    await getVersion();
     Constants.kExecBatteryManagerPath=await _homeRepo.extractAsset(sourceFileName:Constants.kBatteryManager);
     Constants.kExecFaustusPath=await _homeRepo.extractAsset(sourceFileName:Constants.kFaustus);
 

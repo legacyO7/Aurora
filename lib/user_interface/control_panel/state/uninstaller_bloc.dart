@@ -2,7 +2,7 @@ import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/control_panel/state/uninstaller_event.dart';
 import 'package:aurora/user_interface/control_panel/state/uninstaller_state.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_cubit.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/constants.dart';
 
 class UninstallerBloc extends TerminalBaseBloc<UninstallEvent,ControlPanelState> {

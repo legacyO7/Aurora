@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/control_panel/state/battery_manager_event.dart';
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_cubit.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

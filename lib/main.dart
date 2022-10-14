@@ -5,8 +5,8 @@ import 'package:aurora/user_interface/control_panel/state/batter_manager_bloc.da
 import 'package:aurora/user_interface/control_panel/state/uninstaller_bloc.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_wizard_screen.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_cubit.dart';
+import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_bloc.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/utility/ar_widgets/arbutton_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +31,7 @@ class Aurora extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-       BlocProvider.value(value: sl<SetupWizardCubit>()),
+       BlocProvider.value(value: sl<SetupWizardBloc>()),
        BlocProvider.value(value: sl<HomeCubit>()),
        BlocProvider.value(value: sl<UninstallerBloc>()),
        BlocProvider.value(value: sl<KeyboardSettingsBloc>()),

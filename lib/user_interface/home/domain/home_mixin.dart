@@ -4,10 +4,14 @@ import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.d
 
 mixin HomeMixin on HomeRepo{
 
-
   @override
   Future<bool> isSecureBootEnabled() async{
     return (await sl<TerminalRepo>().getOutput(command: "mokutil --sb-state")).toString().contains("enabled");
+  }
+
+  @override
+  int convertVersionToInt(String version) {
+   return int.tryParse(version.replaceAll('.', '').replaceAll('+', ''))??0;
   }
   
 }

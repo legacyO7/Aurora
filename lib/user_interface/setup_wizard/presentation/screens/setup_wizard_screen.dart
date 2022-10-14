@@ -2,7 +2,7 @@
 import 'package:aurora/user_interface/home/presentation/screens/home_screen.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_screen.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/screens/widgets/setup_splash.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
+import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_bloc.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_event.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_state.dart';
 import 'package:aurora/utility/constants.dart';
@@ -23,7 +23,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
   @override
   initState() {
-    context.read<SetupWizardCubit>().add(EventSWInit());
+    context.read<SetupWizardBloc>().add(EventSWInit());
     super.initState();
   }
 
@@ -42,7 +42,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
         children: [
           setupSplash(),
           Flexible(
-            child: BlocListener <SetupWizardCubit,SetupWizardState>(
+            child: BlocListener <SetupWizardBloc,SetupWizardState>(
               listener: (BuildContext context, state) {
                 if(state is SetupWizardCompatibleState){
                   Future.delayed(const Duration(milliseconds: 1000)).then((value) =>
@@ -50,7 +50,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                   );
                 }
               },
-              child: BlocBuilder<SetupWizardCubit,SetupWizardState>(
+              child: BlocBuilder<SetupWizardBloc,SetupWizardState>(
                 builder: (BuildContext context, state) {
 
                   if(state is SetupWizardInitState ) {

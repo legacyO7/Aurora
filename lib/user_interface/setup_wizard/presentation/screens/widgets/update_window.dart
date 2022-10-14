@@ -1,4 +1,6 @@
 import 'package:aurora/user_interface/home/presentation/state/home_cubit.dart';
+import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_bloc.dart';
+import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_event.dart';
 import 'package:aurora/utility/ar_widgets/arbutton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +29,7 @@ class UpdateWidget extends StatelessWidget{
             Container(
               margin: const EdgeInsets.only(left: 10),
               child: ArButton(title: "Ignore", action: (){
-
+                context.read<SetupWizardBloc>().add(EventSWIgnoreUpdate());
               }),
             ),
           ],

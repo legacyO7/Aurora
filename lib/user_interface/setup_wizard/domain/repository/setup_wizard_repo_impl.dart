@@ -1,4 +1,4 @@
-import 'package:aurora/user_interface/setup_wizard/data/source/setup_wizard_source.dart';
+import 'package:aurora/user_interface/setup_wizard/data/repository/setup_wizard_source.dart';
 import 'package:aurora/user_interface/setup_wizard/domain/repository/setup_wizard_repo.dart';
 
 class SetupWizardRepoImpl extends SetupWizardRepo{
@@ -10,7 +10,14 @@ class SetupWizardRepoImpl extends SetupWizardRepo{
   Future<String> getTerminalList()async{
     var output=await _setupWizardSource.getTerminalList();
     if(output.isEmpty) return '';
-    return (await _setupWizardSource.getTerminalList()).split('"\$TERMINAL" ')[1].split(';')[0];
+    return output.split('"\$TERMINAL" ')[1].split(';')[0];
+  }
+
+  @override
+  Future<String> getAuroraLiveVersion() async{
+    var output=await _setupWizardSource.getAuroraLiveVersion();
+    if(output.isEmpty) return '0';
+    return output.split('version: ')[1].split('+')[0];
   }
 
 
