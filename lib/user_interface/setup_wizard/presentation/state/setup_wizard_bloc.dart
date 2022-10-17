@@ -54,7 +54,7 @@ class SetupWizardBloc extends TerminalBaseBloc<SetupWizardEvent, SetupWizardStat
 
     if (await _homeRepo.checkInternetAccess() && !ignoreUpdate) {
       emit(SetupWizardConnectedState());
-      if (_homeRepo.convertVersionToInt(await _setupWizardRepo.getAuroraLiveVersion())!=_homeRepo.convertVersionToInt(await _homeRepo.getVersion())) {
+      if (await _isUpdateAvailable()) {
         emit(SetupWizardUpdateAvailableState());
       } else {
         navigate();
@@ -62,6 +62,17 @@ class SetupWizardBloc extends TerminalBaseBloc<SetupWizardEvent, SetupWizardStat
     }else{
       navigate();
     }
+  }
+
+  Future<bool> _isUpdateAvailable()async{
+    var liveVersion=  _homeRepo.convertVersionToInt(await _setupWizardRepo.getAuroraLiveVersion());
+    var currentVersion= _homeRepo.convertVersionToInt(await _homeRepo.getVersion());
+
+    if(liveVersion==0||currentVersion==0) {
+      return false;
+    }
+
+    return liveVersion!=currentVersion;
   }
 
   _allowConfigure(bool allow,emit){
