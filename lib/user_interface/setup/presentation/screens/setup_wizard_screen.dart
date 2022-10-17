@@ -1,6 +1,7 @@
 
 import 'package:aurora/user_interface/home/presentation/screens/home_screen.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_screen.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/widgets/ask_network_access.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/widgets/setup_splash.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
@@ -59,6 +60,10 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
                   if(state is SetupConnectedState ) {
                     return const Text("checking for updates...");
+                  }
+
+                  if(state is SetupAskNetworkAccessState ) {
+                    return const AskNetworkAccess();
                   }
 
                   if(state is SetupIncompatibleState || state is SetupPermissionState) {

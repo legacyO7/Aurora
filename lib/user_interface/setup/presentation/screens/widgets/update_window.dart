@@ -38,7 +38,7 @@ class UpdateWidget extends StatelessWidget{
             Container(
               margin: const EdgeInsets.only(left: 10),
               child: ArButton(title: "Ignore", action: (){
-                context.read<SetupBloc>().add(SetupEventIgnoreUpdate());
+                context.read<SetupBloc>().add(SetupEventOnUpdate(ignoreUpdate: true));
               }),
             ),
           ],

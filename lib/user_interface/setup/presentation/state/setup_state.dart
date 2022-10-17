@@ -27,6 +27,10 @@ class SetupPermissionState extends SetupState{
   SetupPermissionState();
 }
 
+class SetupAskNetworkAccessState extends SetupState{
+  SetupAskNetworkAccessState();
+}
+
 class SetupIncompatibleState extends SetupState{
   final int stepValue;
   final Widget? child;

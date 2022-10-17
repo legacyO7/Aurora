@@ -15,17 +15,17 @@ import 'package:path_provider/path_provider.dart';
 import 'setup_state.dart';
 
 class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
-  SetupBloc(this._homeRepo, this._setupRepo,this._arButtonCubit) : super(SetupInitState()){
+  SetupBloc(this._homeRepo, this._setupWizardRepo,this._arButtonCubit) : super(SetupInitState()){
     on<EventSWInit>((_, emit) => _initSetup(emit));
     on<SetupEventConfigure>((event, emit) => _allowConfigure(event.allow, emit));
     on<SetupEventOnCancel>((event, emit) => _onCancel(stepValue: event.stepValue,emit));
     on<SetupEventOnInstall>((event, emit) => _onInstall(stepValue: event.stepValue,emit));
     on<SetupEventValidateRepo>((event, emit) => _validateRepo(value: event.url,emit));
-    on<SetupEventIgnoreUpdate>((_, emit) => _ignoreUpdate(emit));
+    on<SetupEventOnUpdate>((event, emit) => _onUpdate(emit,ignoreUpdate: event.ignoreUpdate));
   }
 
   final HomeRepo _homeRepo;
-  final SetupRepo _setupRepo;
+  final SetupRepo _setupWizardRepo;
   final ArButtonCubit _arButtonCubit;
 
   String? _setupPath;
@@ -38,21 +38,27 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     await _checkForUpdates(emit);
   }
 
-  Future _ignoreUpdate(emit)async{
-    await _checkForUpdates(emit,ignoreUpdate: true);
+  Future _onUpdate(emit,{bool ignoreUpdate=false})async{
+    await _checkForUpdates(emit,ignoreUpdate: ignoreUpdate);
   }
 
   Future _checkForUpdates(emit,{bool ignoreUpdate=false}) async {
+
+    bool isConnected=await _homeRepo.checkInternetAccess();
 
     navigate(){
       if (_homeRepo.compatibilityChecker()) {
         emit(SetupCompatibleState());
       } else {
-        emit(SetupPermissionState());
+        if(isConnected) {
+          emit(SetupPermissionState());
+        } else {
+          emit(SetupAskNetworkAccessState());
+        }
       }
     }
 
-    if (await _homeRepo.checkInternetAccess() && !ignoreUpdate) {
+    if (isConnected && !ignoreUpdate) {
       emit(SetupConnectedState());
       if (await _isUpdateAvailable()) {
         emit(SetupUpdateAvailableState(await _fetchChangelog()));
@@ -65,7 +71,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   }
 
   Future<bool> _isUpdateAvailable()async{
-    var liveVersion=  _homeRepo.convertVersionToInt(await _setupRepo.getAuroraLiveVersion());
+    var liveVersion=  _homeRepo.convertVersionToInt(await _setupWizardRepo.getAuroraLiveVersion());
     var currentVersion= _homeRepo.convertVersionToInt(await _homeRepo.getVersion());
 
     if(liveVersion==0||currentVersion==0) {
@@ -76,7 +82,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   }
 
   Future<String> _fetchChangelog() async{
-    return await _setupRepo.getChangelog();
+    return await _setupWizardRepo.getChangelog();
   }
 
 
@@ -105,7 +111,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
       if (stepValue == 0) {
         await _homeRepo.extractAsset(sourceFileName: Constants.kFaustusInstaller);
         _setupPath = "${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.kWorkingDirectory}";
-        _terminalList = '" ${(await _setupRepo.getTerminalList())} "';
+        _terminalList = '" ${(await _setupWizardRepo.getTerminalList())} "';
         if (_terminalList.isNotEmpty) {
 
           isSuccess=(await super.getOutput(command: "$_setupPath installpackages $_terminalList")).toString().contains("success")&&_homeRepo.readFile(path: '${Constants.kWorkingDirectory}/log').isEmpty;

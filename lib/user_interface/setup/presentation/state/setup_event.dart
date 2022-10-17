@@ -7,7 +7,10 @@ class SetupEventConfigure implements SetupEvent {
   SetupEventConfigure({required this.allow});
 }
 
-class SetupEventIgnoreUpdate implements SetupEvent {}
+class SetupEventOnUpdate implements SetupEvent {
+  final bool ignoreUpdate;
+  SetupEventOnUpdate({required this.ignoreUpdate});
+}
 
 class SetupEventOnCancel implements SetupEvent {
   final int stepValue;
