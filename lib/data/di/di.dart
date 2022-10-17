@@ -4,7 +4,7 @@ import 'package:aurora/user_interface/control_panel/state/uninstaller_bloc.dart'
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo_impl.dart';
-import 'package:aurora/user_interface/home/presentation/state/home_cubit.dart';
+import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
 import 'package:aurora/user_interface/setup_wizard/data/repository/setup_wizard_source_impl.dart';
 import 'package:aurora/user_interface/setup_wizard/data/repository/setup_wizard_source.dart';
 import 'package:aurora/user_interface/setup_wizard/domain/repository/setup_wizard_repo.dart';
@@ -29,7 +29,7 @@ final sl = GetIt.I;
 Future initDI() async{
   sl.allowReassignment=true;
 
-  sl.registerLazySingleton(() => HomeCubit(sl(),sl()));
+  sl.registerLazySingleton(() => HomeBloc(sl(),sl()));
   sl.registerLazySingleton(() => UninstallerBloc(sl(),sl()));
   sl.registerLazySingleton(() => TerminalBloc());
   sl.registerLazySingleton(() => KeyboardSettingsBloc(sl()));

@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:window_size/window_size.dart';
 
-import 'user_interface/home/presentation/state/home_cubit.dart';
+import 'user_interface/home/presentation/state/home_bloc.dart';
 
 void main() async{
   await initDI();
@@ -32,7 +32,7 @@ class Aurora extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
        BlocProvider.value(value: sl<SetupWizardBloc>()),
-       BlocProvider.value(value: sl<HomeCubit>()),
+       BlocProvider.value(value: sl<HomeBloc>()),
        BlocProvider.value(value: sl<UninstallerBloc>()),
        BlocProvider.value(value: sl<KeyboardSettingsBloc>()),
        BlocProvider.value(value: sl<BatteryManagerBloc>()),

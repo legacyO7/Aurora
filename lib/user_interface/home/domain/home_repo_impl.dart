@@ -45,7 +45,7 @@ class HomeRepoImpl extends HomeRepo with HomeMixin{
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
-      throw "Could not launch $url";
+      throw "error launching $url";
     }
   }
 

@@ -1,4 +1,5 @@
-import 'package:aurora/user_interface/home/presentation/state/home_cubit.dart';
+import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
+import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_bloc.dart';
 import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_event.dart';
 import 'package:aurora/utility/ar_widgets/arbutton.dart';
@@ -33,9 +34,7 @@ class UpdateWidget extends StatelessWidget{
           children: [
             ArButton(
                 isSelected: true,
-                title: "Download\nupdate", action: (){
-              context.read<HomeCubit>().launchUrl();
-            }),
+                title: "Download\nupdate", action:() => context.read<HomeBloc>().add(EventHLaunchUrl())),
             Container(
               margin: const EdgeInsets.only(left: 10),
               child: ArButton(title: "Ignore", action: (){

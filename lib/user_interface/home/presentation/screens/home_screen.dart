@@ -1,11 +1,12 @@
 import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_screen.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/home/presentation/screens/widgets/grant_access.dart';
+import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../state/home_cubit.dart';
+import '../state/home_bloc.dart';
 import '../state/home_state.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class _MyHomePageState extends State<HomeScreen> {
 
   @override
   void initState() {
-    context.read<HomeCubit>().requestAccess();
+    context.read<HomeBloc>().add(EventHRequestAccess());
     super.initState();
   }
 
@@ -50,7 +51,7 @@ class _MyHomePageState extends State<HomeScreen> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: BlocBuilder<HomeCubit,HomeState>
+                child: BlocBuilder<HomeBloc,HomeState>
                   (builder: (context,state){
                   if(state is AccessGranted && (state.hasAccess)) {
                     return const ControlPanelScreen();

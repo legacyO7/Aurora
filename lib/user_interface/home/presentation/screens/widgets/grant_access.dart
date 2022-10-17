@@ -1,4 +1,5 @@
-import 'package:aurora/user_interface/home/presentation/state/home_cubit.dart';
+import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
+import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/utility/ar_widgets/arbutton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,7 @@ Widget grantAccess(BuildContext context){
   return Center(
     child: ArButton(title: "Grant Access",
         isSelected: true,
-        action: (){
-          context.read<HomeCubit>().requestAccess();
-    }),
+        action: ()=> context.read<HomeBloc>().add(EventHRequestAccess())
+    ),
   );
 }
