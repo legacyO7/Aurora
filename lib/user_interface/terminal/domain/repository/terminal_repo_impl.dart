@@ -1,117 +1,80 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
+import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../../../utility/terminal_text.dart';
 import 'terminal_repo.dart';
 
 class TerminalRepoImpl extends TerminalRepo{
 
-  List<TerminalText> terminalOut = [];
-  late Process process;
-  bool _inProgress=false;
+  TerminalRepoImpl(this._terminalSource){
+    _terminalSink = _tStreamController.sink;
+    _terminalSource.terminalOutStream.listen((event) {
+      _terminalOut.add(event);
+      _terminalSink.add(_terminalOut);
+    },onDone: ()=>disposeStream());
+  }
+
+  final _tStreamController = BehaviorSubject<List<String>>();
+  late Sink<List<String>>  _terminalSink;
+
+  final List<String> _terminalOut=[];
   bool _hasRootAccess=false;
 
-  final _tStreamController = BehaviorSubject<List<TerminalText>>();
+  final TerminalSource _terminalSource;
 
-  late Sink<List<TerminalText>>  _terminalSink;
 
   @override
   Future execute(String command) async {
-    _terminalSink = _tStreamController.sink;
-    List<String> arguments=[];
+    return await _terminalSource.execute(command);
+  }
 
-    if (command == "clear") {
-
-      terminalOut.clear();
-      _inProgress=false;
-
-      _terminalSink.add(terminalOut);
-
-      return;
-    }else if(command.isNotEmpty) {
-      arguments = command.split(' ');
-      var exec=arguments[0];
-      arguments.removeAt(0);
-      _convertToList(line:  "\$ $command",commandStatus: CommandStatus.stdin);
-
-       try{
-
-        if(_inProgress){
-          return;
-        }else {
-         _inProgress=true;
-          process = await Process.start(
-              exec,
-              arguments,
-            workingDirectory: Constants.kWorkingDirectory
-          );
-        }
-
-        await for (var line in process.stdout) {
-          _convertToList(line: utf8.decode(line),commandStatus: CommandStatus.stdout);
-        }
-
-        await for (var line in process.stderr) {
-          _convertToList(line: utf8.decode(line),commandStatus: CommandStatus.stderr);
-        }
-
-        _inProgress=false;
-      } catch (e) {
-        if (kDebugMode) {
-          print("STDERR: ${e.toString()}");
+  @override
+  Future<bool> checkAccess() async{
+    _hasRootAccess=false;
+    await getOutput(command: "${Constants.kExecFaustusPath} save").then((value) {
+      for (int i =0;i<value.length;i++) {
+        if(value[i].contains('faustus_controller.sh save')&&i+1<value.length){
+          _hasRootAccess=!value[i+1].contains('Permission denied');
         }
       }
-    }
+    });
+
+    return _hasRootAccess;
   }
 
-   _convertToList({required String line, CommandStatus? commandStatus}){
-    if(commandStatus == CommandStatus.stdout){
-      terminalOut.add(TerminalText(text: line, color: Colors.green ));
-    }else if(commandStatus == CommandStatus.stderr){
-      terminalOut.add(TerminalText(text: line, color: Colors.red ));
-    }else if(commandStatus == CommandStatus.stdin){
-      terminalOut.add(TerminalText(text: line, color: Colors.blue ));
-    }
-    if (kDebugMode) {
-      print("--- $line");
-    }
-
-    if(line.contains('Permission denied')){
-      _hasRootAccess=false;
-      terminalOut.clear();
-    }else {
-      _hasRootAccess=true;
-    }
-    _terminalSink.add(terminalOut);
-   }
-
   @override
-   killProcess(){
-    try {
-      process.kill();
-    }catch(e){
-      _convertToList(line: e.toString(),commandStatus: CommandStatus.stderr);
-    }
-    finally{
-      _convertToList(line: "process terminated",commandStatus: CommandStatus.stderr);
-      _inProgress=false;
-    }
+  clearTerminalOut(){
+    _terminalOut.clear();
   }
-  
-  @override
-  bool checkRootAccess()=> _hasRootAccess;
 
   @override
-  bool isInProgress()=> _inProgress;
+  void disposeStream() {
+    _terminalSource.disposeStream();
+    _tStreamController.close();
+    _terminalSink.close();
+    _terminalOut.clear();
+  }
 
   @override
-  Stream<List<TerminalText>> get terminalOutStream => _tStreamController.stream;
+  Future<List<String>> getOutput({required String command}) async{
 
-  
+    _terminalOut.clear();
+    await execute(command);
+
+    return _terminalOut.sublist(_terminalOut.indexWhere((element) => element.contains(command)));
+
+  }
+
+  @override
+  bool isInProgress() =>_terminalSource.isInProgress();
+
+  @override
+  void killProcess() {
+    _terminalSource.killProcess();
+  }
+
+  @override
+  Stream<List<String>> get terminalOutStream => _tStreamController.stream;
 }

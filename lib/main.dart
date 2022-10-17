@@ -1,14 +1,18 @@
 import 'dart:io';
 
 import 'package:aurora/data/di/di.dart';
-import 'package:aurora/user_interface/battery_manager/presentation/state/batter_manager_cubit.dart';
+import 'package:aurora/user_interface/control_panel/state/batter_manager_bloc.dart';
+import 'package:aurora/user_interface/control_panel/state/uninstaller_bloc.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/setup_wizard_screen.dart';
+import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
+import 'package:aurora/utility/ar_widgets/arbutton_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:window_size/window_size.dart';
 
-import 'user_interface/home/presentation/screens/home_screen.dart';
-import 'user_interface/home/presentation/state/home_cubit.dart';
-import 'user_interface/keyboard_settings/presentation/state/keyboard_settings_cubit.dart';
+import 'user_interface/home/presentation/state/home_bloc.dart';
 
 void main() async{
   await initDI();
@@ -27,9 +31,13 @@ class Aurora extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-       BlocProvider.value(value: serviceLocator<HomeCubit>()),
-       BlocProvider.value(value: serviceLocator<KeyboardSettingsCubit>()),
-       BlocProvider.value(value: serviceLocator<BatteryManagerCubit>()),
+       BlocProvider.value(value: sl<SetupBloc>()),
+       BlocProvider.value(value: sl<HomeBloc>()),
+       BlocProvider.value(value: sl<UninstallerBloc>()),
+       BlocProvider.value(value: sl<KeyboardSettingsBloc>()),
+       BlocProvider.value(value: sl<BatteryManagerBloc>()),
+       BlocProvider.value(value: sl<TerminalBloc>()),
+       BlocProvider.value(value: sl<ArButtonCubit>()),
       ],
       child: MaterialApp(
         title: 'Aurora',
@@ -37,7 +45,7 @@ class Aurora extends StatelessWidget {
           brightness: Brightness.dark,
         ),
         themeMode: ThemeMode.dark,
-        home: const HomeScreen(),
+        home: const SetupWizardScreen(),
       ),
     );
   }

@@ -1,34 +1,53 @@
 
-import 'package:aurora/user_interface/battery_manager/presentation/state/batter_manager_cubit.dart';
+import 'package:aurora/user_interface/control_panel/state/batter_manager_bloc.dart';
+import 'package:aurora/user_interface/control_panel/state/uninstaller_bloc.dart';
+import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo_impl.dart';
-import 'package:aurora/user_interface/home/presentation/state/home_cubit.dart';
-import 'package:aurora/user_interface/keyboard_settings/presentation/state/keyboard_settings_cubit.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_cubit.dart';
+import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
+import 'package:aurora/user_interface/setup/data/repository/setup_source_impl.dart';
+import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
+import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
+import 'package:aurora/user_interface/setup/domain/repository/setup_repo_impl.dart';
+import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
+import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
+import 'package:aurora/user_interface/terminal/data/source/terminal_source_impl.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo_impl.dart';
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_cubit.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
+import 'package:aurora/utility/ar_widgets/arbutton_cubit.dart';
+import 'package:aurora/user_interface/setup/data/source/dio_client.dart';
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../shared_preference/pref_repo.dart';
 import '../shared_preference/pref_repo_impl.dart';
 
-final serviceLocator = GetIt.I;
+final sl = GetIt.I;
 
 Future initDI() async{
-  serviceLocator.allowReassignment=true;
+  sl.allowReassignment=true;
 
-  serviceLocator.registerLazySingleton(() => HomeCubit(serviceLocator(),serviceLocator(),serviceLocator()));
-  serviceLocator.registerLazySingleton(() => TerminalCubit(serviceLocator()));
-  serviceLocator.registerLazySingleton(() => KeyboardSettingsCubit(serviceLocator(),serviceLocator()));
-  serviceLocator.registerLazySingleton(() => BatteryManagerCubit(serviceLocator(),serviceLocator()));
-  serviceLocator.registerLazySingleton(() => SetupWizardCubit());
+  sl.registerLazySingleton(() => HomeBloc(sl(),sl()));
+  sl.registerLazySingleton(() => UninstallerBloc(sl(),sl()));
+  sl.registerLazySingleton(() => TerminalBloc());
+  sl.registerLazySingleton(() => KeyboardSettingsBloc(sl()));
+  sl.registerLazySingleton(() => BatteryManagerBloc(sl(),sl()));
+  sl.registerLazySingleton(() => SetupBloc(sl(),sl(),sl()));
+  sl.registerLazySingleton(() => ArButtonCubit());
 
-  serviceLocator.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl());
-  serviceLocator.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(serviceLocator()));
-  serviceLocator.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(serviceLocator()));
+  sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
+  sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl()));
+  sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
+  sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl()));
+
+  sl.registerLazySingleton<SetupSource>(() => SetupSourceImpl(sl()));
+  sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl());
+
+  sl.registerLazySingleton<DioClient>(() => DioClientImpl(sl()));
 
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  serviceLocator.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+  sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+  sl.registerLazySingleton<Dio>(() => Dio());
 }
