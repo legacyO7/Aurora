@@ -1,11 +1,11 @@
-import 'package:aurora/user_interface/setup_wizard/data/repository/setup_wizard_source.dart';
+import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:aurora/user_interface/setup_wizard/data/source/dio_client.dart';
+import 'package:aurora/user_interface/setup/data/source/dio_client.dart';
 import 'package:flutter/foundation.dart';
 
-class SetupWizardSourceImpl extends SetupWizardSource{
+class SetupSourceImpl extends SetupSource{
   
-  SetupWizardSourceImpl(this._dioClient);
+  SetupSourceImpl(this._dioClient);
 
   final DioClient _dioClient;
   

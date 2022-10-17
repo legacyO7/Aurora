@@ -1,10 +1,10 @@
 abstract class UninstallEvent{}
 
-class EventUInCheckDisableServices implements UninstallEvent{
+class UninstallEventCheckDisableServices implements UninstallEvent{
   final bool? disableThreshold;
   final bool? disableFaustusModule;
 
-  EventUInCheckDisableServices({this.disableThreshold, this.disableFaustusModule});
+  UninstallEventCheckDisableServices({this.disableThreshold, this.disableFaustusModule});
 }
 
-class EventUInSubmitDisableServices implements UninstallEvent{}
+class UninstallEventSubmitDisableServices implements UninstallEvent{}

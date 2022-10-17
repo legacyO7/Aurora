@@ -34,7 +34,7 @@ Widget modeController({
                            title: e.title,
                            isSelected: state.mode==e.value,
                            action: () {
-                             context.read<KeyboardSettingsBloc>().add(EventKSMode(mode: e.value??0));
+                             context.read<KeyboardSettingsBloc>().add(KeyboardSettingsEventSetMode(mode: e.value??0));
                            } )).toList()
                ),
              ],

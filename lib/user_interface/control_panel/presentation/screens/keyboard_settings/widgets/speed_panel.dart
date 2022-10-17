@@ -34,7 +34,7 @@ Widget speedController({
                          title: e.title,
                          isSelected: state.speed==e.value,
                          action: () {
-                           context.read<KeyboardSettingsBloc>().add(EventKSSpeed(speed: e.value??0));
+                           context.read<KeyboardSettingsBloc>().add(KeyboardSettingsEventSetSpeed(speed: e.value??0));
                          } )).toList()
              ),
            ],

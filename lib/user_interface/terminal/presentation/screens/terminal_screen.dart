@@ -22,7 +22,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
   @override
   initState() {
     super.initState();
-    context.read<TerminalBloc>().add(EventTRListen());
+    context.read<TerminalBloc>().add(TerminalEventListen());
     terminalViewController = ScrollController();
   }
 

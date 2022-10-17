@@ -27,7 +27,7 @@ Widget brightnessController({required BuildContext context, required String titl
                           title: e.title,
                           isSelected: state.brightness == e.value,
                           action: () {
-                            context.read<KeyboardSettingsBloc>().add(EventKSBrightness(brightness: e.value ?? 0));
+                            context.read<KeyboardSettingsBloc>().add(KeyboardSettingsEventSetBrightness(brightness: e.value ?? 0));
                           }))
                       .toList()),
             ],

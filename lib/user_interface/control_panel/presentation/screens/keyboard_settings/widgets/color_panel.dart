@@ -22,7 +22,7 @@ Widget colorController(BuildContext context) {
       colorCodeHasColor: false,
       onColorChanged: (color) async{
         context.read<KeyboardSettingsBloc>()
-            ..add(EventKSColor(color: color))
-            ..add(EventKSMode());
+            ..add(KeyboardSettingsEventSetColor(color: color))
+            ..add(KeyboardSettingsEventSetMode());
       });
 }

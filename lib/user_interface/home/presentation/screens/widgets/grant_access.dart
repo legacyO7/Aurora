@@ -10,7 +10,7 @@ Widget grantAccess(BuildContext context){
   return Center(
     child: ArButton(title: "Grant Access",
         isSelected: true,
-        action: ()=> context.read<HomeBloc>().add(EventHRequestAccess())
+        action: ()=> context.read<HomeBloc>().add(HomeEventRequestAccess())
     ),
   );
 }

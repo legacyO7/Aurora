@@ -20,7 +20,7 @@ class _MyHomePageState extends State<HomeScreen> {
 
   @override
   void initState() {
-    context.read<HomeBloc>().add(EventHRequestAccess());
+    context.read<HomeBloc>().add(HomeEventRequestAccess());
     super.initState();
   }
 

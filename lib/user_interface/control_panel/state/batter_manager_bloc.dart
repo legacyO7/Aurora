@@ -11,9 +11,9 @@ import 'batter_manager_state.dart';
 
 class BatteryManagerBloc extends TerminalBaseBloc<BatteryManagerEvent,BatteryManagerInit>{
   BatteryManagerBloc(this._prefRepo):super(const BatteryManagerInit()){
-    on<EventBMInit>((_, emit) => _getBatteryLevel(emit));
-    on<EventBMOnSlide>((event, emit) => _setBatteryLevel(event.value,emit));
-    on<EventBMOnSlideEnd>((event, emit) => _finalizeBatteryLevel(event.value,emit));
+    on<BatteryManagerEventInit>((_, emit) => _getBatteryLevel(emit));
+    on<BatteryManagerEventOnSlide>((event, emit) => _setBatteryLevel(event.value,emit));
+    on<BatteryManagerEventOnSlideEnd>((event, emit) => _finalizeBatteryLevel(event.value,emit));
   }
 
   final PrefRepo _prefRepo;

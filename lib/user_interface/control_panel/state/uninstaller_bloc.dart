@@ -8,14 +8,14 @@ import 'package:aurora/utility/constants.dart';
 class UninstallerBloc extends TerminalBaseBloc<UninstallEvent,ControlPanelState> {
   UninstallerBloc(this._homeRepo,this._prefRepo) :
         super(const ControlPanelStateInit(disableFaustusModule: false, disableThreshold: false)){
-    on<EventUInCheckDisableServices>((event, emit) => _setDisableService(event,emit));
-    on<EventUInSubmitDisableServices>((_, emit) => _disableServices(emit));
+    on<UninstallEventCheckDisableServices>((event, emit) => _setDisableService(event,emit));
+    on<UninstallEventSubmitDisableServices>((_, emit) => _disableServices(emit));
   }
 
   final HomeRepo _homeRepo;
   final PrefRepo _prefRepo;
 
-  void _setDisableService(EventUInCheckDisableServices event, emit) {
+  void _setDisableService(UninstallEventCheckDisableServices event, emit) {
     final _state =state;
     if(_state is ControlPanelStateInit) {
       emit(_state.copyState(

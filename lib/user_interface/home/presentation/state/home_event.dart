@@ -1,7 +1,7 @@
 abstract class HomeEvent{}
 
-class EventHRequestAccess extends HomeEvent{}
-class EventHLaunchUrl extends HomeEvent{
+class HomeEventRequestAccess extends HomeEvent{}
+class HomeEventLaunch extends HomeEvent{
   String? url;
-  EventHLaunchUrl({this.url});
+  HomeEventLaunch({this.url});
 }

@@ -1,10 +1,10 @@
 
 import 'package:aurora/user_interface/home/presentation/screens/home_screen.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_screen.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/screens/widgets/setup_splash.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_bloc.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_event.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_state.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/setup_screen.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/widgets/setup_splash.dart';
+import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
+import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
+import 'package:aurora/user_interface/setup/presentation/state/setup_state.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +23,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
   @override
   initState() {
-    context.read<SetupWizardBloc>().add(EventSWInit());
+    context.read<SetupBloc>().add(EventSWInit());
     super.initState();
   }
 
@@ -42,34 +42,34 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
         children: [
           setupSplash(),
           Flexible(
-            child: BlocListener <SetupWizardBloc,SetupWizardState>(
+            child: BlocListener <SetupBloc,SetupState>(
               listener: (BuildContext context, state) {
-                if(state is SetupWizardCompatibleState){
+                if(state is SetupCompatibleState){
                   Future.delayed(const Duration(milliseconds: 1000)).then((value) =>
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomeScreen()))
                   );
                 }
               },
-              child: BlocBuilder<SetupWizardBloc,SetupWizardState>(
+              child: BlocBuilder<SetupBloc,SetupState>(
                 builder: (BuildContext context, state) {
 
-                  if(state is SetupWizardInitState ) {
+                  if(state is SetupInitState ) {
                     return const Text("checking compatibility...");
                   }
 
-                  if(state is SetupWizardConnectedState ) {
+                  if(state is SetupConnectedState ) {
                     return const Text("checking for updates...");
                   }
 
-                  if(state is SetupWizardIncompatibleState || state is SetupWizardPermissionState) {
+                  if(state is SetupIncompatibleState || state is SetupPermissionState) {
                     return const SetupScreen();
                   }
 
-                  if(state is SetupWizardUpdateAvailableState ) {
+                  if(state is SetupUpdateAvailableState ) {
                     return UpdateWidget(changelog: state.changelog,);
                   }
 
-                  if(state is SetupWizardCompatibleState) {
+                  if(state is SetupCompatibleState) {
                     return const Text("initializing...");
                   }
 

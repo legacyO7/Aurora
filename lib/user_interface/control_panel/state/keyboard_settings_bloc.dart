@@ -9,11 +9,11 @@ import 'keyboard_settings_state.dart';
 
 class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,KeyboardSettingsState>{
   KeyboardSettingsBloc(this._prefRepo):super(const KeyboardSettingsState()){
-   on<EventKSBrightness>((event, emit)=> _setBrightness(event.brightness,emit));
-   on<EventKSSpeed>((event, emit)=> _setSpeed(event.speed,emit));
-   on<EventKSMode>((event, emit)=> _setMode(event.mode,emit));
-   on<EventKSColor>((event, emit)=> _setColor(event.color??Constants.arColor,emit));
-   on<EventKSInit>((event, emit) => _initPanel(emit));
+   on<KeyboardSettingsEventSetBrightness>((event, emit)=> _setBrightness(event.brightness,emit));
+   on<KeyboardSettingsEventSetSpeed>((event, emit)=> _setSpeed(event.speed,emit));
+   on<KeyboardSettingsEventSetMode>((event, emit)=> _setMode(event.mode,emit));
+   on<KeyboardSettingsEventSetColor>((event, emit)=> _setColor(event.color??Constants.arColor,emit));
+   on<KeyboardSettingsEventInit>((event, emit) => _initPanel(emit));
   }
 
   final PrefRepo _prefRepo;

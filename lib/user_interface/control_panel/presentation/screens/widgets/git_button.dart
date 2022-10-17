@@ -9,7 +9,7 @@ class GitButton extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        onPressed: () => context.read<HomeBloc>().add(EventHLaunchUrl()),
+        onPressed: () => context.read<HomeBloc>().add(HomeEventLaunch()),
         icon: const Icon(Icons.home));
   }
 

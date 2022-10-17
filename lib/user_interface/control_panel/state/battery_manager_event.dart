@@ -1,13 +1,13 @@
 abstract class BatteryManagerEvent{}
 
-class EventBMInit implements BatteryManagerEvent{}
+class BatteryManagerEventInit implements BatteryManagerEvent{}
 
-class EventBMOnSlide implements BatteryManagerEvent{
+class BatteryManagerEventOnSlide implements BatteryManagerEvent{
   int value;
-  EventBMOnSlide({this.value=0});
+  BatteryManagerEventOnSlide({this.value=0});
 }
 
-class EventBMOnSlideEnd implements BatteryManagerEvent{
+class BatteryManagerEventOnSlideEnd implements BatteryManagerEvent{
   int value;
-  EventBMOnSlideEnd({this.value=0});
+  BatteryManagerEventOnSlideEnd({this.value=0});
 }

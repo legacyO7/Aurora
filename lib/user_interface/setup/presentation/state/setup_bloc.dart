@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
-import 'package:aurora/user_interface/setup_wizard/domain/repository/setup_wizard_repo.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/screens/widgets/install_faustus.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/screens/widgets/install_packages.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_event.dart';
+import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/widgets/install_faustus.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/widgets/install_packages.dart';
+import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/arbutton_cubit.dart';
@@ -12,20 +12,20 @@ import 'package:aurora/utility/ar_widgets/arsnackbar.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'setup_wizard_state.dart';
+import 'setup_state.dart';
 
-class SetupWizardBloc extends TerminalBaseBloc<SetupWizardEvent, SetupWizardState> {
-  SetupWizardBloc(this._homeRepo, this._setupWizardRepo,this._arButtonCubit) : super(SetupWizardInitState()){
+class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
+  SetupBloc(this._homeRepo, this._setupRepo,this._arButtonCubit) : super(SetupInitState()){
     on<EventSWInit>((_, emit) => _initSetup(emit));
-    on<EventSWAllowConfigure>((event, emit) => _allowConfigure(event.allow, emit));
-    on<EventSWOnCancel>((event, emit) => _onCancel(stepValue: event.stepValue,emit));
-    on<EventSWOnInstall>((event, emit) => _onInstall(stepValue: event.stepValue,emit));
-    on<EventSWValidateRepo>((event, emit) => _validateRepo(value: event.url,emit));
-    on<EventSWIgnoreUpdate>((_, emit) => _ignoreUpdate(emit));
+    on<SetupEventConfigure>((event, emit) => _allowConfigure(event.allow, emit));
+    on<SetupEventOnCancel>((event, emit) => _onCancel(stepValue: event.stepValue,emit));
+    on<SetupEventOnInstall>((event, emit) => _onInstall(stepValue: event.stepValue,emit));
+    on<SetupEventValidateRepo>((event, emit) => _validateRepo(value: event.url,emit));
+    on<SetupEventIgnoreUpdate>((_, emit) => _ignoreUpdate(emit));
   }
 
   final HomeRepo _homeRepo;
-  final SetupWizardRepo _setupWizardRepo;
+  final SetupRepo _setupRepo;
   final ArButtonCubit _arButtonCubit;
 
   String? _setupPath;
@@ -46,16 +46,16 @@ class SetupWizardBloc extends TerminalBaseBloc<SetupWizardEvent, SetupWizardStat
 
     navigate(){
       if (_homeRepo.compatibilityChecker()) {
-        emit(SetupWizardCompatibleState());
+        emit(SetupCompatibleState());
       } else {
-        emit(SetupWizardPermissionState());
+        emit(SetupPermissionState());
       }
     }
 
     if (await _homeRepo.checkInternetAccess() && !ignoreUpdate) {
-      emit(SetupWizardConnectedState());
+      emit(SetupConnectedState());
       if (await _isUpdateAvailable()) {
-        emit(SetupWizardUpdateAvailableState(await _fetchChangelog()));
+        emit(SetupUpdateAvailableState(await _fetchChangelog()));
       } else {
         navigate();
       }
@@ -65,7 +65,7 @@ class SetupWizardBloc extends TerminalBaseBloc<SetupWizardEvent, SetupWizardStat
   }
 
   Future<bool> _isUpdateAvailable()async{
-    var liveVersion=  _homeRepo.convertVersionToInt(await _setupWizardRepo.getAuroraLiveVersion());
+    var liveVersion=  _homeRepo.convertVersionToInt(await _setupRepo.getAuroraLiveVersion());
     var currentVersion= _homeRepo.convertVersionToInt(await _homeRepo.getVersion());
 
     if(liveVersion==0||currentVersion==0) {
@@ -76,7 +76,7 @@ class SetupWizardBloc extends TerminalBaseBloc<SetupWizardEvent, SetupWizardStat
   }
 
   Future<String> _fetchChangelog() async{
-    return await _setupWizardRepo.getChangelog();
+    return await _setupRepo.getChangelog();
   }
 
 
@@ -85,7 +85,7 @@ class SetupWizardBloc extends TerminalBaseBloc<SetupWizardEvent, SetupWizardStat
     if(allow) {
       _emitInstallPackage(emit);
     } else {
-      emit(SetupWizardPermissionState());
+      emit(SetupPermissionState());
     }
   }
 
@@ -105,7 +105,7 @@ class SetupWizardBloc extends TerminalBaseBloc<SetupWizardEvent, SetupWizardStat
       if (stepValue == 0) {
         await _homeRepo.extractAsset(sourceFileName: Constants.kFaustusInstaller);
         _setupPath = "${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.kWorkingDirectory}";
-        _terminalList = '" ${(await _setupWizardRepo.getTerminalList())} "';
+        _terminalList = '" ${(await _setupRepo.getTerminalList())} "';
         if (_terminalList.isNotEmpty) {
 
           isSuccess=(await super.getOutput(command: "$_setupPath installpackages $_terminalList")).toString().contains("success")&&_homeRepo.readFile(path: '${Constants.kWorkingDirectory}/log').isEmpty;
@@ -123,12 +123,12 @@ class SetupWizardBloc extends TerminalBaseBloc<SetupWizardEvent, SetupWizardStat
     
   }
 
-  _processOutput(emit,{required SetupWizardState state, required bool isSuccess}) {
-    if (state is SetupWizardIncompatibleState) {
+  _processOutput(emit,{required SetupState state, required bool isSuccess}) {
+    if (state is SetupIncompatibleState) {
       if (isSuccess && state.stepValue == 0) {
        _emitInstallFaustus(emit);
       } else if (isSuccess && state.stepValue == 2) {
-        emit(SetupWizardCompatibleState());
+        emit(SetupCompatibleState());
       } else {
         emit(state.copyState(isValid: true));
         arSnackBar(text: "That didn't go as planned!", isPositive: false);
@@ -144,10 +144,10 @@ class SetupWizardBloc extends TerminalBaseBloc<SetupWizardEvent, SetupWizardStat
     _emitInstallFaustus(emit,isValid: isValid);
   }
 
-  _emitInstallPackage(emit)=> emit(SetupWizardIncompatibleState(stepValue: 0, child: packageInstaller(), isValid: true));
+  _emitInstallPackage(emit)=> emit(SetupIncompatibleState(stepValue: 0, child: packageInstaller(), isValid: true));
 
-  _emitInstallFaustus(emit,{bool? isValid})=>  emit(SetupWizardIncompatibleState(stepValue: 1, child: const FaustusInstaller(),isValid: isValid??true));
+  _emitInstallFaustus(emit,{bool? isValid})=>  emit(SetupIncompatibleState(stepValue: 1, child: const FaustusInstaller(),isValid: isValid??true));
 
-  _emitInstallFaustusTerminal(emit)=> emit(SetupWizardIncompatibleState(stepValue: 2, child: const TerminalScreen(), isValid: true));
+  _emitInstallFaustusTerminal(emit)=> emit(SetupIncompatibleState(stepValue: 2, child: const TerminalScreen(), isValid: true));
 
 }

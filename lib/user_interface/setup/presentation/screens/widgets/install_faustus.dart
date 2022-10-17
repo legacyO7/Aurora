@@ -1,6 +1,6 @@
-import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_bloc.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_event.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/state/setup_wizard_state.dart';
+import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
+import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
+import 'package:aurora/user_interface/setup/presentation/state/setup_state.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/placeholder.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
   void initState() {
     _controller=TextEditingController();
     _controller.text=Constants.kFaustusGitUrl;
-    context.read<SetupWizardBloc>().add(EventSWValidateRepo(url: _controller.text));
+    context.read<SetupBloc>().add(SetupEventValidateRepo(url: _controller.text));
     super.initState();
   }
 
@@ -31,9 +31,9 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
 
   @override
   Widget build(BuildContext context) {
-   return BlocBuilder<SetupWizardBloc,SetupWizardState>(
+   return BlocBuilder<SetupBloc,SetupState>(
      builder: (BuildContext context, state) {
-       if(state is SetupWizardIncompatibleState){
+       if(state is SetupIncompatibleState){
          Color setColor()=> state.isValid? Colors.green:Colors.red;
          return Column(
            children: [
@@ -78,7 +78,7 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
                        decoration: const InputDecoration(
                          border: InputBorder.none,
                        ),
-                       onChanged: (value)=>context.read<SetupWizardBloc>().add(EventSWValidateRepo(url: value)),
+                       onChanged: (value)=>context.read<SetupBloc>().add(SetupEventValidateRepo(url: value)),
                      ),
                    ),
                    Icon((state.isValid)?Icons.check:Icons.close,color:setColor())

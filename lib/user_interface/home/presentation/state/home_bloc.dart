@@ -11,8 +11,8 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   final PrefRepo _prefRepo;
 
   HomeBloc(this._prefRepo, this._homeRepo) : super(HomeStateInit()){
-    on<EventHRequestAccess>((_, emit) => _requestAccess(emit));
-    on<EventHLaunchUrl>((event, __) => _launchUrl(subPath: event.url));
+    on<HomeEventRequestAccess>((_, emit) => _requestAccess(emit));
+    on<HomeEventLaunch>((event, __) => _launchUrl(subPath: event.url));
   }
 
   Future _requestAccess(emit) async {

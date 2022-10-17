@@ -1,7 +1,7 @@
 abstract class TerminalEvent{}
 
-class EventTRListen implements TerminalEvent{}
+class TerminalEventListen implements TerminalEvent{}
 
-class EventTRKill implements TerminalEvent{}
+class TerminalEventKill implements TerminalEvent{}
 
-class EventTRDispose implements TerminalEvent{}
+class TerminalEventDispose implements TerminalEvent{}

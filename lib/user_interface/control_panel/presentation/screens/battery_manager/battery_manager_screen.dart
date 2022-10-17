@@ -18,7 +18,7 @@ class _BatteryManagerScreenState extends State<BatteryManagerScreen> {
 
   @override
   void initState() {
-    context.read<BatteryManagerBloc>().add(EventBMInit());
+    context.read<BatteryManagerBloc>().add(BatteryManagerEventInit());
     super.initState();
   }
 
@@ -73,9 +73,9 @@ class _BatteryManagerScreenState extends State<BatteryManagerScreen> {
                disabled: true,
              ),
              onDragging:  (_, lowerValue, __) =>
-               context.read<BatteryManagerBloc>().add(EventBMOnSlide(value:int.parse(lowerValue.toString().split('.')[0]))),
+               context.read<BatteryManagerBloc>().add(BatteryManagerEventOnSlide(value:int.parse(lowerValue.toString().split('.')[0]))),
              onDragCompleted: (_, lowerValue, __) =>
-               context.read<BatteryManagerBloc>().add(EventBMOnSlideEnd(value: int.parse(lowerValue.toString().split('.')[0])))
+               context.read<BatteryManagerBloc>().add(BatteryManagerEventOnSlideEnd(value: int.parse(lowerValue.toString().split('.')[0])))
 
            )
          ],

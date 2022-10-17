@@ -2,7 +2,7 @@ import 'package:aurora/user_interface/control_panel/state/uninstaller_bloc.dart'
 import 'package:aurora/user_interface/control_panel/state/uninstaller_event.dart';
 import 'package:aurora/user_interface/control_panel/state/uninstaller_state.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
-import 'package:aurora/user_interface/setup_wizard/presentation/screens/setup_wizard_screen.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/setup_wizard_screen.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
 import 'package:aurora/utility/ar_widgets/archeckbox.dart';
 import 'package:aurora/utility/ar_widgets/ardialog.dart';
@@ -24,13 +24,13 @@ class UninstallButton extends StatelessWidget {
             ArCheckbox(
                 text: "Disable charging threshold",
                 isSelected: state.disableThreshold,
-                onChange: (_)=>context.read<UninstallerBloc>().add(EventUInCheckDisableServices(disableThreshold: !state.disableThreshold))
+                onChange: (_)=>context.read<UninstallerBloc>().add(UninstallEventCheckDisableServices(disableThreshold: !state.disableThreshold))
             ),
 
             ArCheckbox(
                 text: "Disable faustus module",
                 isSelected: state.disableFaustusModule,
-                onChange: (_)=>context.read<UninstallerBloc>().add(EventUInCheckDisableServices(disableFaustusModule: !state.disableFaustusModule))
+                onChange: (_)=>context.read<UninstallerBloc>().add(UninstallEventCheckDisableServices(disableFaustusModule: !state.disableFaustusModule))
             ),
           ],
         );
@@ -52,7 +52,7 @@ class UninstallButton extends StatelessWidget {
               subject: "Select the services to be disabled",
               optionalWidget: _selectorWindow(),
               onConfirm: () {
-                context.read<UninstallerBloc>().add(EventUInSubmitDisableServices());
+                context.read<UninstallerBloc>().add(UninstallEventSubmitDisableServices());
               },
               onCancel: () {
                 Navigator.pop(context);

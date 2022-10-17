@@ -24,7 +24,7 @@ class _KeyboardSettingsScreenState extends State<KeyboardSettingsScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<KeyboardSettingsBloc>().add(EventKSInit());
+    context.read<KeyboardSettingsBloc>().add(KeyboardSettingsEventInit());
   }
 
   @override

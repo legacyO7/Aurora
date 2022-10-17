@@ -6,9 +6,9 @@ import 'terminal_state.dart';
 
 class TerminalBloc extends TerminalBaseBloc<TerminalEvent,TerminalState>{
   TerminalBloc():super(TerminalStateInit()){
-   on<EventTRListen>((_, emit) => _listenToTerminal(emit));
-   on<EventTRKill>((_, __) => _killCurrentProcess());
-   on<EventTRDispose>((_, __) => _dispose());
+   on<TerminalEventListen>((_, emit) => _listenToTerminal(emit));
+   on<TerminalEventKill>((_, __) => _killCurrentProcess());
+   on<TerminalEventDispose>((_, __) => _dispose());
   }
   
   void _listenToTerminal(emit){

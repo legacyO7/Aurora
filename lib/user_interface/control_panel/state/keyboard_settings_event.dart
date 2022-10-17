@@ -2,26 +2,26 @@ import 'dart:ui';
 
 abstract class KeyboardSettingsEvent{}
 
-class EventKSInit extends KeyboardSettingsEvent{
-  EventKSInit();
+class KeyboardSettingsEventInit extends KeyboardSettingsEvent{
+  KeyboardSettingsEventInit();
 }
 
-class EventKSColor extends KeyboardSettingsEvent{
+class KeyboardSettingsEventSetColor extends KeyboardSettingsEvent{
   final Color? color;
-  EventKSColor({this.color});
+  KeyboardSettingsEventSetColor({this.color});
 }
 
-class EventKSBrightness extends KeyboardSettingsEvent{
+class KeyboardSettingsEventSetBrightness extends KeyboardSettingsEvent{
   final int brightness;
-  EventKSBrightness({this.brightness=0});
+  KeyboardSettingsEventSetBrightness({this.brightness=0});
 }
 
-class EventKSMode extends KeyboardSettingsEvent{
+class KeyboardSettingsEventSetMode extends KeyboardSettingsEvent{
   final int mode;
-  EventKSMode({this.mode=0});
+  KeyboardSettingsEventSetMode({this.mode=0});
 }
 
-class EventKSSpeed extends KeyboardSettingsEvent{
+class KeyboardSettingsEventSetSpeed extends KeyboardSettingsEvent{
   final int speed;
-  EventKSSpeed({this.speed=0});
+  KeyboardSettingsEventSetSpeed({this.speed=0});
 }
