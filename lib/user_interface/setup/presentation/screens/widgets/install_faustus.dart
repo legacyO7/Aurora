@@ -37,7 +37,7 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
          Color setColor()=> state.isValid? Colors.green:Colors.red;
          return Column(
            children: [
-             const Text("install Faustus"),
+             const Text("Install Faustus Module"),
              Container(
                decoration: BoxDecoration(
                  border: Border.all(

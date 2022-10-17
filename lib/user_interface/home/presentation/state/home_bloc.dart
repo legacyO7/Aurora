@@ -13,6 +13,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   HomeBloc(this._prefRepo, this._homeRepo) : super(HomeStateInit()){
     on<HomeEventRequestAccess>((_, emit) => _requestAccess(emit));
     on<HomeEventLaunch>((event, __) => _launchUrl(subPath: event.url));
+    on<HomeEventDispose>((_, emit) => _dispose(emit));
   }
 
   Future _requestAccess(emit) async {
@@ -33,8 +34,10 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
     _homeRepo.launchArUrl(subPath: subPath);
   }
 
-  void dispose(){
+  void _dispose(emit){
     emit(HomeStateInit());
   }
+
+  Future<bool> compatibilityChecker() async=>_homeRepo.compatibilityChecker()&&( await _homeRepo.getBatteryCharge()!=100);
 
 }

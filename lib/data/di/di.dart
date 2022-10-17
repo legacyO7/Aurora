@@ -33,7 +33,7 @@ Future initDI() async{
   sl.registerLazySingleton(() => UninstallerBloc(sl(),sl()));
   sl.registerLazySingleton(() => TerminalBloc());
   sl.registerLazySingleton(() => KeyboardSettingsBloc(sl()));
-  sl.registerLazySingleton(() => BatteryManagerBloc(sl()));
+  sl.registerLazySingleton(() => BatteryManagerBloc(sl(),sl()));
   sl.registerLazySingleton(() => SetupBloc(sl(),sl(),sl()));
   sl.registerLazySingleton(() => ArButtonCubit());
 

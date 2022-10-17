@@ -57,4 +57,9 @@ class HomeRepoImpl extends HomeRepo with HomeMixin{
   @override
   bool compatibilityChecker() => Directory(Constants.kFaustusModulePath).existsSync();
 
+  @override
+  Future<int> getBatteryCharge() async{
+    return int.parse((await File(Constants.kBatteryThresholdPath).readAsString()).toString().trim());
+  }
+
 }

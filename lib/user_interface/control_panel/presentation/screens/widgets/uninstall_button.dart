@@ -2,6 +2,7 @@ import 'package:aurora/user_interface/control_panel/state/uninstaller_bloc.dart'
 import 'package:aurora/user_interface/control_panel/state/uninstaller_event.dart';
 import 'package:aurora/user_interface/control_panel/state/uninstaller_state.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
+import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_wizard_screen.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
 import 'package:aurora/utility/ar_widgets/archeckbox.dart';
@@ -54,10 +55,12 @@ class UninstallButton extends StatelessWidget {
               onConfirm: () {
                 context.read<UninstallerBloc>().add(UninstallEventSubmitDisableServices());
               },
-              onCancel: () {
+              onCancel: () async {
                 Navigator.pop(context);
-                context.read<HomeBloc>().dispose();
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SetupWizardScreen()));
+                if(!await context.read<HomeBloc>().compatibilityChecker()) {
+                  context.read<HomeBloc>().add(HomeEventDispose());
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SetupWizardScreen()));
+                }
               });
         },
         icon: const Icon(Icons.delete_outline));

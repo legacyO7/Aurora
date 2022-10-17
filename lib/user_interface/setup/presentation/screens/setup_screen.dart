@@ -21,15 +21,15 @@ class _SetupScreenState extends State<SetupScreen> {
 
   List<StepperData> stepperData = [
     StepperData(
-      title: "I came",
+      title: "Acknowledge",
       subtitle: '',
     ),
     StepperData(
-      title: "I saw",
+      title: "Install Packages",
       subtitle: '',
     ),
     StepperData(
-      title: "I conquered",
+      title: "Install Module",
       subtitle: '',
     ),
   ];
