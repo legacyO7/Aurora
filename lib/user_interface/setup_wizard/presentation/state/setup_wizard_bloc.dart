@@ -55,7 +55,7 @@ class SetupWizardBloc extends TerminalBaseBloc<SetupWizardEvent, SetupWizardStat
     if (await _homeRepo.checkInternetAccess() && !ignoreUpdate) {
       emit(SetupWizardConnectedState());
       if (await _isUpdateAvailable()) {
-        emit(SetupWizardUpdateAvailableState());
+        emit(SetupWizardUpdateAvailableState(await _fetchChangelog()));
       } else {
         navigate();
       }
@@ -74,6 +74,12 @@ class SetupWizardBloc extends TerminalBaseBloc<SetupWizardEvent, SetupWizardStat
 
     return liveVersion!=currentVersion;
   }
+
+  Future<String> _fetchChangelog() async{
+    return await _setupWizardRepo.getChangelog();
+  }
+
+
 
   _allowConfigure(bool allow,emit){
     if(allow) {

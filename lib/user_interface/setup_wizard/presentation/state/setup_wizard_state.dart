@@ -11,7 +11,8 @@ class SetupWizardConnectedState extends SetupWizardState{
 }
 
 class SetupWizardUpdateAvailableState extends SetupWizardState{
-  SetupWizardUpdateAvailableState();
+  String changelog;
+  SetupWizardUpdateAvailableState(this.changelog);
 }
 
 class SetupWizardCompatibleState extends SetupWizardState{

@@ -20,5 +20,9 @@ class SetupWizardRepoImpl extends SetupWizardRepo{
     return output.split('version: ')[1].split('+')[0];
   }
 
+  @override
+  Future<String> getChangelog() async{
+    return await _setupWizardSource.getChangelog();
+  }
 
 }

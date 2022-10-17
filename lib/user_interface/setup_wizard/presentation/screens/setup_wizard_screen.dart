@@ -66,7 +66,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                   }
 
                   if(state is SetupWizardUpdateAvailableState ) {
-                    return const UpdateWidget();
+                    return UpdateWidget(changelog: state.changelog,);
                   }
 
                   if(state is SetupWizardCompatibleState) {

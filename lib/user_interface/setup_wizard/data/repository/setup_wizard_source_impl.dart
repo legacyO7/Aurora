@@ -12,7 +12,7 @@ class SetupWizardSourceImpl extends SetupWizardSource{
   @override
   Future<String> getTerminalList() async{
     try {
-      return (await _dioClient.getResponse(url: Constants.kTerminalListUrl)).data.toString();
+      return (await _dioClient.fetch(url: Constants.kTerminalListUrl)).data.toString();
     }on Exception{
       return '';
     }
@@ -21,7 +21,17 @@ class SetupWizardSourceImpl extends SetupWizardSource{
   @override
   Future<String> getAuroraLiveVersion() async{
     try{
-      return (await _dioClient.getResponse(url: Constants.kAuroraGitRawYaml)).data.toString();
+      return (await _dioClient.fetch(url: Constants.kAuroraGitRawYaml)).data.toString();
+    }catch(e){
+      debugPrint(e.toString());
+      return '';
+    }
+  }
+
+  @override
+  Future<String> getChangelog() async{
+    try{
+      return (await _dioClient.fetch(url: Constants.kAuroraGitRawChangelog)).data.toString();
     }catch(e){
       debugPrint(e.toString());
       return '';
