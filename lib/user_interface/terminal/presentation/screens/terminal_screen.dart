@@ -1,6 +1,4 @@
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_state.dart';
 import 'package:aurora/utility/ar_widgets/arterminal.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +20,6 @@ class _TerminalScreenState extends State<TerminalScreen> {
   @override
   initState() {
     super.initState();
-    context.read<TerminalBloc>().add(TerminalEventListen());
     terminalViewController = ScrollController();
   }
 
@@ -57,7 +54,6 @@ class _TerminalScreenState extends State<TerminalScreen> {
               );
             }
             else {
-              context.read<TerminalBaseBloc>().execute("clear");
               return Container();
             }
           },

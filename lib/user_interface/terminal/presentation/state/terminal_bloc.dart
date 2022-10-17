@@ -6,14 +6,15 @@ import 'terminal_state.dart';
 
 class TerminalBloc extends TerminalBaseBloc<TerminalEvent,TerminalState>{
   TerminalBloc():super(TerminalStateInit()){
-   on<TerminalEventListen>((_, emit) => _listenToTerminal(emit));
    on<TerminalEventKill>((_, __) => _killCurrentProcess());
    on<TerminalEventDispose>((_, __) => _dispose());
+
+   _listenToTerminal();
   }
-  
-  void _listenToTerminal(emit){
+
+  void _listenToTerminal() async{
     super.terminalOutput.listen((event) {
-      emit(TerminalStateLoaded(terminalOut: event));
+     emit(TerminalStateLoaded(terminalOut: event));
     });
   }
 
