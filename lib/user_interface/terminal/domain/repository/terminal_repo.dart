@@ -1,9 +1,12 @@
-import '../../../../utility/terminal_text.dart';
+
 
 abstract class TerminalRepo{
   Future execute(String command);
   void killProcess();
-  bool checkRootAccess();
+  Future<bool> checkAccess();
   bool isInProgress();
-  Stream<List<TerminalText>> get terminalOutStream;
+  Stream<List<String>> get terminalOutStream;
+  void disposeStream();
+  Future<List<String>> getOutput({required String command});
+  void clearTerminalOut();
 }

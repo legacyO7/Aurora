@@ -1,14 +1,13 @@
-import 'package:aurora/user_interface/home/presentation/state/home_cubit.dart';
-import 'package:aurora/user_interface/home/presentation/state/home_state.dart';
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_cubit.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_state.dart';
+import 'package:aurora/utility/ar_widgets/arterminal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class TerminalScreen extends StatefulWidget {
-  const TerminalScreen({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const TerminalScreen({Key? key}) : super(key: key);
 
   @override
   State<TerminalScreen> createState() => _TerminalScreenState();
@@ -17,77 +16,51 @@ class TerminalScreen extends StatefulWidget {
 class _TerminalScreenState extends State<TerminalScreen> {
 
   late ScrollController terminalViewController;
-  late FocusNode tvFocus;
-  late TextEditingController _command;
 
 
   @override
   initState() {
     super.initState();
-    _command = TextEditingController();
     terminalViewController = ScrollController();
-    tvFocus = FocusNode();
   }
 
   @override
   dispose() {
     super.dispose();
-    tvFocus.dispose();
     terminalViewController.dispose();
-    _command.dispose();
   }
 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: BlocBuilder<HomeCubit,HomeState>(
-        builder: (BuildContext context, state) {
-          if(state is AccessGranted ) {
-            var c = state.terminalOut.reversed.toList(growable: false);
-            return Column(
-              children: [
-                Expanded(
-                  child: ListView.separated(
-                      controller: terminalViewController,
-                      reverse: true,
-                      itemBuilder: (ctx, i) {
-                        return Text(c[i].text,style: TextStyle(color: c[i].color));
-                      },
-                      separatorBuilder: (_, __) => const Divider(),
-                      itemCount: state.terminalOut.length),
-                ),
-                const Divider(color: Colors.red,),
-                Row(
-                    children: [
-                      Flexible(
-                        child: TextFormField(
-                          maxLines: 1,
-                          focusNode: tvFocus,
-                          controller: _command,
-                          onFieldSubmitted: (value) {
-                            context.read<HomeCubit>().execute(value);
-                            _command.clear();
-                            tvFocus.requestFocus();
-                          },
-                        ),
-                      ),
-                        !state.inProgress?const Text('idle'):
-                        IconButton(onPressed: () {
-                          context.read<TerminalCubit>().killProcess();
-                        }, icon: const Icon(Icons.close))
-                    ])
-              ],
-            );
-          }
-          else {
-            context.read<HomeCubit>().execute("echo hello world");
-            return Container();
-          }
-        },
-
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+      height: MediaQuery.of(context).size.height,
+      color: Colors.black,
+      child: SizedBox(
+        child: BlocBuilder<TerminalBloc,TerminalState>(
+          builder: (BuildContext context, state) {
+            if(state is TerminalStateLoaded ) {
+              var c = state.terminalOut.reversed.toList(growable: false);
+              return Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                        controller: terminalViewController,
+                        reverse: true,
+                        itemBuilder: (ctx, i) => arTerminal(context.read<TerminalBloc>().convertToTerminalText(line: c[i])),
+                        itemCount: state.terminalOut.length),
+                  ),
+                ],
+              );
+            }
+            else {
+              context.read<TerminalBaseBloc>().clearTerminalOutput();
+              return Container();
+            }
+          },
+        ),
+      ),
     );
   }
 }
