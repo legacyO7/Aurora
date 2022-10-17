@@ -1,3 +1,4 @@
+import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_state.dart';
 import 'package:aurora/utility/ar_widgets/arterminal.dart';
@@ -54,6 +55,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
               );
             }
             else {
+              context.read<TerminalBaseBloc>().clearTerminalOutput();
               return Container();
             }
           },

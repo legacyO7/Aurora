@@ -8,5 +8,5 @@ abstract class TerminalRepo{
   Stream<List<String>> get terminalOutStream;
   void disposeStream();
   Future<List<String>> getOutput({required String command});
-  clearTerminalOut();
+  void clearTerminalOut();
 }

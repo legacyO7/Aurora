@@ -28,13 +28,6 @@ abstract class TerminalBaseBloc<Event,State> extends Bloc<Event,State> {
     return await _terminalRepo.getOutput(command: command);
   }
 
-  List<String> cleanTerminalOut(List<String> text){
-   for (var element in text) {
-     element=element.split(' ')[1];
-   }
-   return text;
-  }
-
   void dispose(){
     _terminalRepo.disposeStream();
   }
