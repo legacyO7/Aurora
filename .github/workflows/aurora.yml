@@ -32,9 +32,19 @@ jobs:
     - name: Install Cider
       run: flutter pub global activate cider
       
+    - name: Cider version
+      run: cider version 
+      
+    - name: Cider 2 Version
+      run: flutter pub run cider version
+      
     - name: Get Version
-      id: version
-      run: echo ::set-output name=version::$(flutter pub run cider version)
+      id: version_id
+      run: echo "::set-output name=version::$(cider version)"
+    
+    - name: Get Version
+      id: changelog_id
+      run: echo ::set-output name=changelog::$(cat ./changelog.txt)   
 
     - name: Get packages
       run: flutter pub get
@@ -49,7 +59,7 @@ jobs:
       run:  appimage-builder --skip-tests
 
     - name: Rename Build AppImage
-      run: mv legacy07-latest-x86_64.AppImage aurora-linux-${{ steps.version.outputs.version }}.AppImage
+      run: mv legacy07-latest-x86_64.AppImage aurora-linux-${{ steps.version_id.outputs.version }}.AppImage
      
     - name: List files
       run: ls
@@ -60,10 +70,10 @@ jobs:
           # GitHub token.
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           # Local file to upload.
-          file: aurora-linux-${{ steps.version.outputs.version }}.AppImage
+          file: aurora-linux-${{ steps.version_id.outputs.version }}.AppImage
           # Tag to use as a release.
-          tag: ${{ github.ref }}     
-          body:  "$(cat ./changelog.txt)"
+          tag: ${{ steps.version_id.outputs.version }}-${{ github.ref }}     
+          body:  ${{ steps.changelog_id.outputs.changelog }}
 
 
           
