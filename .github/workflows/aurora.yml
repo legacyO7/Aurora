@@ -30,7 +30,7 @@ jobs:
       run: flutter config --enable-linux-desktop
 
     - name: Install Cider
-      run: flutter pub global activate cide
+      run: flutter pub global activate cider
 
     - name: Get packages
       run: flutter pub get
