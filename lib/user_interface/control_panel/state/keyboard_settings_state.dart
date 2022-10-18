@@ -1,5 +1,5 @@
 import 'dart:ui';
-
+import 'package:aurora/utility/colors.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +13,7 @@ class KeyboardSettingsState extends Equatable{
     this.brightness=0,
     this.mode=0,
     this.speed=0,
-    this.color=Colors.green
+    this.color=ArColors.green
   });
 
   KeyboardSettingsState copyState({

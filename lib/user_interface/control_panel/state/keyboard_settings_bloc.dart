@@ -2,6 +2,7 @@
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
+import 'package:aurora/utility/colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -12,12 +13,12 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
    on<KeyboardSettingsEventSetBrightness>((event, emit)=> _setBrightness(event.brightness,emit));
    on<KeyboardSettingsEventSetSpeed>((event, emit)=> _setSpeed(event.speed,emit));
    on<KeyboardSettingsEventSetMode>((event, emit)=> _setMode(event.mode,emit));
-   on<KeyboardSettingsEventSetColor>((event, emit)=> _setColor(event.color??Constants.arColor,emit));
+   on<KeyboardSettingsEventSetColor>((event, emit)=> _setColor(event.color??ArColors.accentColor,emit));
    on<KeyboardSettingsEventInit>((event, emit) => _initPanel(emit));
   }
 
   final PrefRepo _prefRepo;
-  Color _color=Constants.arColor;
+  Color _color=ArColors.accentColor;
 
   _initPanel(emit) async{
    await _setColor(await _prefRepo.getColor(), emit);
@@ -31,7 +32,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
     _color= color;
     await super.execute("${Constants.kExecFaustusPath} color ${_color.red.toRadixString(16)} ${_color.green.toRadixString(16)} ${_color.blue.toRadixString(16)} 0");
     _prefRepo.setColor(_color.toString());
-    Constants.arColor=_color;
+    ArColors.accentColor=_color;
     emit(state.copyState(color: _color));
   }
 

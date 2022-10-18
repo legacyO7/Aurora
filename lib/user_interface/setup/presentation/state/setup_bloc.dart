@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/widgets/install_faustus.dart';
@@ -15,7 +16,7 @@ import 'package:path_provider/path_provider.dart';
 import 'setup_state.dart';
 
 class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
-  SetupBloc(this._homeRepo, this._setupWizardRepo,this._arButtonCubit) : super(SetupInitState()){
+  SetupBloc(this._homeRepo,this._prefRepo, this._setupWizardRepo,this._arButtonCubit) : super(SetupInitState()){
     on<EventSWInit>((_, emit) => _initSetup(emit));
     on<SetupEventConfigure>((event, emit) => _allowConfigure(event.allow, emit));
     on<SetupEventOnCancel>((event, emit) => _onCancel(stepValue: event.stepValue,emit));
@@ -25,6 +26,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   }
 
   final HomeRepo _homeRepo;
+  final PrefRepo _prefRepo;
   final SetupRepo _setupWizardRepo;
   final ArButtonCubit _arButtonCubit;
 
@@ -35,7 +37,12 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     Constants.arVersion= await _homeRepo.getVersion();
     Constants.kWorkingDirectory = (await Directory('${(await getTemporaryDirectory()).path}/legacy07.aurora').create()).path;
     Constants.kSecureBootEnabled = await _homeRepo.isSecureBootEnabled();
-    await _checkForUpdates(emit);
+    if(await _prefRepo.getVersion() !=Constants.arVersion && await _homeRepo.checkInternetAccess()){
+      emit(SetupWhatsNewState(await _fetchChangelog()));
+      await _prefRepo.setVersion(Constants.arVersion);
+    }else {
+      await _checkForUpdates(emit);
+    }
   }
 
   Future _onUpdate(emit,{bool ignoreUpdate=false})async{

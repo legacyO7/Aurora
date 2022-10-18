@@ -15,6 +15,11 @@ class SetupUpdateAvailableState extends SetupState{
   SetupUpdateAvailableState(this.changelog);
 }
 
+class SetupWhatsNewState extends SetupState{
+  String changelog;
+  SetupWhatsNewState(this.changelog);
+}
+
 class SetupCompatibleState extends SetupState{
   SetupCompatibleState();
 }

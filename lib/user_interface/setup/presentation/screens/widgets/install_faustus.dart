@@ -1,6 +1,7 @@
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_state.dart';
+import 'package:aurora/utility/colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/placeholder.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
    return BlocBuilder<SetupBloc,SetupState>(
      builder: (BuildContext context, state) {
        if(state is SetupIncompatibleState){
-         Color setColor()=> state.isValid? Colors.green:Colors.red;
+         Color setColor()=> state.isValid? ArColors.green:ArColors.red;
          return Column(
            children: [
              const Text("Install Faustus Module"),
