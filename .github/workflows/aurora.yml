@@ -18,56 +18,26 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2.4.0
-    - name: Setup Flutter SDK
-      uses: subosito/flutter-action@v2.6.1
-      with:
-          channel: 'stable'
-        
-    - name: Install Linux build tools
-      run: sudo apt-get update && sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev squashfs-tools python3
-      
-    - name: Enable desktop
-      run: flutter config --enable-linux-desktop
-
-    - name: Install Cider
-      run: flutter pub global activate cider
-      
-    - name: Get Version
-      id: version_id
-      run: echo "::set-output name=version::$(cider version)"
-    
-    - name: Get Version
+               
+    - name: Get Changelog
       id: changelog_id
-      run: echo ::set-output name=changelog::$(cat ./changelog.txt)   
+      run: |
+         MY_STRING=$(cat ./changelog.txt )
+          MY_STRING="${MY_STRING//'%'/'%25'}"
+          MY_STRING="${MY_STRING//$'\n'/'%0A'}"
+          MY_STRING="${MY_STRING//$'\r'/'%0D'}"
+         echo ::set-output name=changelog::$MY_STRING
 
-    - name: Get packages
-      run: flutter pub get
-
-    - name: Flutter build app
-      run: flutter build linux
-
-    - name: Install AppImage
-      run: sudo pip3 install appimage-builder
-      
-    - name: Build AppImage
-      run:  appimage-builder --skip-tests
-
-    - name: Rename Build AppImage
-      run: mv legacy07-latest-x86_64.AppImage aurora-linux-${{ steps.version_id.outputs.version }}.AppImage
-     
-    - name: List files
-      run: ls
+   
           
     - name: Upload files to a GitHub release
       uses: svenstaro/upload-release-action@2.2.1
       with:
           # GitHub token.
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          # Local file to upload.
-          file: aurora-linux-${{ steps.version_id.outputs.version }}.AppImage
           # Tag to use as a release.
           tag: ${{ steps.version_id.outputs.version }}-${{ github.ref }}     
-          body:  ${{ steps.changelog_id.outputs.changelog }}
+          body:   ${{join(steps.run_tests.outputs.*, '\n')}}${{ steps.changelog_id.outputs.changelog }}
 
 
           
