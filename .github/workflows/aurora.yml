@@ -32,12 +32,6 @@ jobs:
     - name: Install Cider
       run: flutter pub global activate cider
       
-    - name: Cider version
-      run: cider version 
-      
-    - name: Cider 2 Version
-      run: flutter pub run cider version
-      
     - name: Get Version
       id: version_id
       run: echo "::set-output name=version::$(cider version)"
