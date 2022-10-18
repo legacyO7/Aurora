@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:aurora/utility/colors.dart';
 import 'package:flutter/material.dart';
 
 Widget setupSplash(){
@@ -17,7 +18,7 @@ Widget setupSplash(){
             ArColors.orange,
             ArColors.yellow,
             ArColors.green,
-            ArColors.deepPurple,
+            ArColors.purpleDark,
             ArColors.blue,
             ArColors.cyan,
           ],
