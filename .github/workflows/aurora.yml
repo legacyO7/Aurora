@@ -71,5 +71,5 @@ jobs:
           # Local file to upload.
           file: aurora-linux-${{ steps.version_id.outputs.version }}.AppImage
           # Tag to use as a release.
-          tag: ${{ steps.version_id.outputs.version }}-${{ github.ref }}
+          tag: ${{ steps.version_id.outputs.version }}
           body:   ${{join(steps.run_tests.outputs.*, '\n')}}${{ steps.changelog_id.outputs.changelog }}
