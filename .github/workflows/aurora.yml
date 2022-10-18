@@ -5,9 +5,9 @@ name: Aurora CI
 
 on:
 
-  push:
+  pull_request:
     branches:
-      - beta
+      - stable
 
 jobs:
   build:
