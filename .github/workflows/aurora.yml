@@ -31,6 +31,10 @@ jobs:
 
     - name: Install Cider
       run: flutter pub global activate cider
+      
+    - name: Get Version
+      id: version
+      run: echo ::set-output name=version::$(flutter pub run cider version)
 
     - name: Get packages
       run: flutter pub get
@@ -45,7 +49,10 @@ jobs:
       run:  appimage-builder --skip-tests
 
     - name: Rename Build AppImage
-      run: mv legacy07-latest-x86_64.AppImage aurora-linux-$(flutter pub run cider version).AppImage
+      run: mv legacy07-latest-x86_64.AppImage aurora-linux-${{ steps.version.outputs.version }}.AppImage
+     
+    - name: List files
+      run: ls
           
     - name: Upload files to a GitHub release
       uses: svenstaro/upload-release-action@2.2.1
@@ -53,7 +60,7 @@ jobs:
           # GitHub token.
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           # Local file to upload.
-          file: aurora-linux-$(flutter pub run cider version).AppImage
+          file: aurora-linux-${{ steps.version.outputs.version }}.AppImage
           # Tag to use as a release.
           tag: ${{ github.ref }}     
           body:  "$(cat ./changelog.txt)"
