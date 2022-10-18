@@ -1,6 +1,5 @@
 import 'package:aurora/utility/ar_widgets/arbutton.dart';
 import 'package:aurora/utility/ar_widgets/arbutton_cubit.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,7 +22,7 @@ Future<dynamic> arDialog({required String title, required String subject, bool? 
 }
 
 class _ArDialogBody extends StatefulWidget {
-   _ArDialogBody({
+   const _ArDialogBody({
     required this.title,
     required this.subject,
     this.isWarning = false,
@@ -32,12 +31,12 @@ class _ArDialogBody extends StatefulWidget {
     this.onCancel,
   });
 
-  String title;
-  String subject;
-  bool? isWarning;
-  Function onConfirm;
-  Widget? optionalWidget;
-  Function? onCancel;
+  final String title;
+  final String subject;
+  final bool? isWarning;
+  final Function onConfirm;
+  final Widget? optionalWidget;
+  final Function? onCancel;
 
   @override
   State<_ArDialogBody> createState() {

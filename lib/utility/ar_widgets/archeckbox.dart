@@ -1,3 +1,4 @@
+import 'package:aurora/utility/colors.dart';
 import 'package:flutter/material.dart';
 
 class ArCheckbox extends StatelessWidget{
@@ -21,11 +22,11 @@ class ArCheckbox extends StatelessWidget{
     return Theme(
       data: Theme.of(context).copyWith(
           checkboxTheme: CheckboxThemeData(
-            fillColor: getMaterialColor(isSelected?Colors.red:Colors.transparent),
-            checkColor:  getMaterialColor(Colors.white),
-            overlayColor:  getMaterialColor(Colors.orange),
+            fillColor: getMaterialColor(isSelected?ArColors.red:ArColors.transparent),
+            checkColor:  getMaterialColor(ArColors.white),
+            overlayColor:  getMaterialColor(ArColors.orange),
             side: const BorderSide(
-              color: Colors.red,
+              color: ArColors.red,
               width: 1,
             ),
           )
