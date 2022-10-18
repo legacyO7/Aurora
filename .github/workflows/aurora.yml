@@ -24,7 +24,7 @@ jobs:
           channel: 'stable'
         
     - name: Install Linux build tools
-      run: sudo apt-get update && sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev squashfs-tools mksquashfs
+      run: sudo apt-get update && sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev squashfs-tools python3
       
     - name: Enable desktop
       run: flutter config --enable-linux-desktop
@@ -38,10 +38,11 @@ jobs:
     - name: Flutter build app
       run: flutter build linux
 
+    - name: Install AppImage
+      run: sudo pip3 install appimage-builder
+      
     - name: Build AppImage
-      uses: AppImageCrafters/build-appimage@master
-      with:
-           recipe: "AppImageBuilder.yml"
+      run:  appimage-builder --skip-tests
 
     - name: Rename Build AppImage
       run: mv legacy07-latest-x86_64.AppImage aurora-linux-$(flutter pub run cider version).AppImage
