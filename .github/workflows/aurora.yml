@@ -37,7 +37,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: /usr/bin/git
           # Tag to use as a release.
-          tag: ${{ steps.version_id.outputs.version }}-${{ github.ref }}     
+          tag: "ttt"     
           body:   ${{join(steps.run_tests.outputs.*, '\n')}}${{ steps.changelog_id.outputs.changelog }}
 
 
