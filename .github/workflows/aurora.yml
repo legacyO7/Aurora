@@ -1,0 +1,78 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Aurora CI
+
+on:
+
+ push:
+    branches: 
+      - stable
+      - beta
+
+jobs:
+  build:
+    name: "Building System"
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+    - uses: actions/checkout@v2.4.0
+    - name: Setup Flutter SDK
+      uses: subosito/flutter-action@v2.6.1
+      with:
+          channel: 'stable'
+        
+    - name: Install Linux build tools
+      run: sudo apt-get update && sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev squashfs-tools
+      
+    - name: Enable desktop
+      run: flutter config --enable-linux-desktop
+
+    - name: Get packages
+      run: flutter pub get
+
+    - name: Analyze
+      run: flutter analyze
+
+    - name: Flutter build app
+      run: flutter build linux   
+      
+    - name: Run read-yaml action
+      id: version
+      uses: jbutcher5/read-yaml@main     
+      with:
+          file: './pubspec.yaml'          # File to read from
+          key-path: '["version"]' # Access the runs key then the using key and retuns the value.
+
+    - name: Display version
+      run: echo "${{ steps.yaml-data.outputs.data }}"   
+      
+    - name: Compress artifacts
+      uses: TheDoctor0/zip-release@0.6.1
+      with:
+          filename: linux-beta-${{ steps.yaml-data.outputs.data }}.zip
+
+    - name: Build AppImage
+      uses: AppImageCrafters/build-appimage@master
+      with:
+           recipe: "AppImageBuilder.yml"
+
+    - name: Rename Build AppImage
+      run: mv legacy07-latest-x86_64.AppImage aurora-linux-beta-${{ steps.yaml-data.outputs.data }}.AppImage
+          
+    - name: Upload files to a GitHub release
+      uses: svenstaro/upload-release-action@2.2.1
+      with:
+          # GitHub token.
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          # Local file to upload.
+          file: aurora-linux-beta-${{ steps.yaml-data.outputs.data }}.AppImage
+          # Tag to use as a release.
+          tag: ${{ github.ref }}     
+          body:  "$(cat ./changelog.txt)"
+
+
+          
+           
