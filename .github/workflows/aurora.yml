@@ -29,26 +29,14 @@ jobs:
     - name: Enable desktop
       run: flutter config --enable-linux-desktop
 
+    - name: Install Cider
+      run: flutter pub global activate cide
+
     - name: Get packages
       run: flutter pub get
 
     - name: Flutter build app
-      run: flutter build linux   
-      
-    - name: Run read-yaml action
-      id: version
-      uses: jbutcher5/read-yaml@main     
-      with:
-          file: './pubspec.yaml'          # File to read from
-          key-path: '["version"]' # Access the runs key then the using key and retuns the value.
-
-    - name: Display version
-      run: echo "${{ steps.yaml-data.outputs.data }}"   
-      
-    - name: Compress artifacts
-      uses: TheDoctor0/zip-release@0.6.1
-      with:
-          filename: linux-beta-${{ steps.yaml-data.outputs.data }}.zip
+      run: flutter build linux
 
     - name: Build AppImage
       uses: AppImageCrafters/build-appimage@master
@@ -56,7 +44,7 @@ jobs:
            recipe: "AppImageBuilder.yml"
 
     - name: Rename Build AppImage
-      run: mv legacy07-latest-x86_64.AppImage aurora-linux-beta-${{ steps.yaml-data.outputs.data }}.AppImage
+      run: mv legacy07-latest-x86_64.AppImage aurora-linux-$(flutter pub run cider version).AppImage
           
     - name: Upload files to a GitHub release
       uses: svenstaro/upload-release-action@2.2.1
@@ -64,7 +52,7 @@ jobs:
           # GitHub token.
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           # Local file to upload.
-          file: aurora-linux-beta-${{ steps.yaml-data.outputs.data }}.AppImage
+          file: aurora-linux-$(flutter pub run cider version).AppImage
           # Tag to use as a release.
           tag: ${{ github.ref }}     
           body:  "$(cat ./changelog.txt)"
