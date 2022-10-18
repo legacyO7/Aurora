@@ -8,7 +8,6 @@ on:
  push:
     branches: 
       - stable
-      - beta
 
 jobs:
   build:
@@ -32,9 +31,6 @@ jobs:
 
     - name: Get packages
       run: flutter pub get
-
-    - name: Analyze
-      run: flutter analyze
 
     - name: Flutter build app
       run: flutter build linux   
