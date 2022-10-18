@@ -1,9 +1,9 @@
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/widgets/changelog_container.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/utility/ar_widgets/arbutton.dart';
-import 'package:aurora/utility/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,13 +21,7 @@ class UpdateWidget extends StatelessWidget{
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Text("A new update is available"),
-        Flexible(child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 20,horizontal: 10),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            decoration:  BoxDecoration(
-                border: Border.all(color: Constants.arColor)
-            ),
-            child: SingleChildScrollView(child: Text(changelog)))),
+        changelogContainer(changelog: changelog),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,

@@ -1,7 +1,9 @@
 
 import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/git_button.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/uninstall_button.dart';
+import 'package:aurora/user_interface/control_panel/state/batter_manager_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'battery_manager/battery_manager_screen.dart';
 import 'keyboard_settings/keyboard_settings_screen.dart';
@@ -33,6 +35,7 @@ class _ControlPanelState extends State<ControlPanelScreen> {
                 UninstallButton()
               ],
             ),
+            if(context.read<BatteryManagerBloc>().showBatterManager)
             const Expanded(
               child:BatteryManagerScreen()
             ),

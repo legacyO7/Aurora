@@ -16,9 +16,9 @@ class UninstallerBloc extends TerminalBaseBloc<UninstallEvent,ControlPanelState>
   final PrefRepo _prefRepo;
 
   void _setDisableService(UninstallEventCheckDisableServices event, emit) {
-    final _state =state;
-    if(_state is ControlPanelStateInit) {
-      emit(_state.copyState(
+    final state_ =state;
+    if(state_ is ControlPanelStateInit) {
+      emit(state_.copyState(
         disableThreshold: event.disableThreshold,
         disableFaustusModule: event.disableFaustusModule
       ));
@@ -26,23 +26,23 @@ class UninstallerBloc extends TerminalBaseBloc<UninstallEvent,ControlPanelState>
   }
   
   Future _disableServices(emit) async{
-    final _state = state;
-    if(_state is ControlPanelStateInit && (_state.disableThreshold || _state.disableFaustusModule)){
+    final state_ = state;
+    if(state_ is ControlPanelStateInit && (state_.disableThreshold || state_.disableFaustusModule)){
 
       var command="${Constants.kPolkit} ${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.kWorkingDirectory} ";
 
-      if(_state.disableFaustusModule && _state.disableThreshold){
+      if(state_.disableFaustusModule && state_.disableThreshold){
         command+='disablethresholdfaustus';
         _prefRepo.setThreshold(100);
-      }else if(_state.disableFaustusModule){
+      }else if(state_.disableFaustusModule){
         command+='disablefaustus';
-      }else if(_state.disableThreshold){
+      }else if(state_.disableThreshold){
         command+='disablethreshold';
         _prefRepo.setThreshold(100);
       }
       emit(const ControlPanelTerminalState());
       await super.execute(command);
-      emit(ControlPanelStateInit(disableFaustusModule: _state.disableFaustusModule, disableThreshold: _state.disableThreshold));
+      emit(ControlPanelStateInit(disableFaustusModule: state_.disableFaustusModule, disableThreshold: state_.disableThreshold));
     }
   }
 

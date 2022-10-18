@@ -11,7 +11,7 @@ mixin HomeMixin on HomeRepo{
 
   @override
   int convertVersionToInt(String version) {
-   return int.tryParse(version.replaceAll('.', '').replaceAll('+', ''))??0;
+   return int.tryParse(version.replaceAll('.', '').replaceAll('+', '').split('-')[0])??0;
   }
   
 }

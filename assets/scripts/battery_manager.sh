@@ -5,6 +5,7 @@ service_path=/etc/systemd/system/
 
 setthreshold() {
 
+ if [ -d "$service_path" ]; then
   echo Setting charging threshold to $1 %...
   echo $1 | tee $battery_threshold_path >/dev/null
   cd $service_path
@@ -22,6 +23,7 @@ ExecStart= /bin/bash -c 'echo $1 > $battery_threshold_path'
 [Install]
 WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target" >aurora-controller.service
 
+fi
 }
 
 setaccess() {
