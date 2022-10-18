@@ -1,3 +1,4 @@
+import 'package:aurora/utility/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
