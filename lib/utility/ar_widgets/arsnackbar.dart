@@ -20,7 +20,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> arSnackBar({
             child: Center(
               child: Text(
                 text,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: const TextStyle(color: ArColors.white, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -28,6 +28,6 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> arSnackBar({
         ],
       ),
     ),
-    backgroundColor: isPositive ? Colors.green : Colors.red,
+    backgroundColor: isPositive ? ArColors.green : ArColors.red,
   ));
 }

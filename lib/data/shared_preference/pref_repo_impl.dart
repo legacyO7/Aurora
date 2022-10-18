@@ -18,7 +18,7 @@ class PrefRepoImpl extends PrefRepo{
 
   @override
   Future<Color> getColor() async {
-    return Color(int.parse((_sharedPreferences.getString(PrefConstants.color)??Colors.blue.toString()).split('(0x')[1].split(')')[0],radix: 16));
+    return Color(int.parse((_sharedPreferences.getString(PrefConstants.color)??ArColors.blue.toString()).split('(0x')[1].split(')')[0],radix: 16));
   }
 
   @override

@@ -30,7 +30,4 @@ class Constants {
 
   static GlobalKey<ScaffoldState> kScaffoldKey = GlobalKey<ScaffoldState>();
 
-  static Color arColor= Colors.green;
-
-
 }

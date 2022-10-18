@@ -1,15 +1,16 @@
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
+import 'package:aurora/utility/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ArButton extends StatefulWidget {
-  ArButton({super.key, required this.title, required this.action, this.isSelected = false, this.isEnabled = true, this.isLoading = false});
+  const ArButton({super.key, required this.title, required this.action, this.isSelected = false, this.isEnabled = true, this.isLoading = false});
 
-  String title;
-  Function action;
-  bool isSelected = false;
-  bool isEnabled = true;
-  bool isLoading = false;
+  final String title;
+  final Function action;
+  final bool isSelected;
+  final bool isEnabled;
+  final bool isLoading;
 
   @override
   State<ArButton> createState() {
@@ -52,8 +53,8 @@ class _ArButtonState extends State<ArButton> {
                 color: widget.isEnabled
                     ? widget.isSelected
                         ? context.read<KeyboardSettingsBloc>().selectedColor
-                        : Colors.grey[800]
-                    : Colors.grey,
+                        : ArColors.greyDisabled
+                    : ArColors.grey,
                 duration: const Duration(milliseconds: 500),
                 child: Center(
                     child: Stack(
@@ -65,14 +66,14 @@ class _ArButtonState extends State<ArButton> {
                             foreground: Paint()
                               ..style = PaintingStyle.stroke
                               ..strokeWidth = 3
-                              ..color = Colors.deepPurple,
+                              ..color = ArColors.purpleDark,
                           ),
                           textAlign: TextAlign.center,
                         ),
                         Text(
                           widget.title,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: ArColors.white,
                           ),
                           textAlign: TextAlign.center,
                         ),

@@ -2,6 +2,7 @@ import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_state.dart';
 import 'package:aurora/utility/ar_widgets/arterminal.dart';
+import 'package:aurora/utility/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,7 +37,7 @@ class _TerminalScreenState extends State<TerminalScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
       height: MediaQuery.of(context).size.height,
-      color: Colors.black,
+      color: ArColors.black,
       child: SizedBox(
         child: BlocBuilder<TerminalBloc,TerminalState>(
           builder: (BuildContext context, state) {

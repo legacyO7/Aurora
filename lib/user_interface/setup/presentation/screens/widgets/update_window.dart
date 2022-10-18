@@ -3,6 +3,7 @@ import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/utility/ar_widgets/arbutton.dart';
+import 'package:aurora/utility/colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class UpdateWidget extends StatelessWidget{
             margin: const EdgeInsets.symmetric(vertical: 20,horizontal: 10),
             padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration:  BoxDecoration(
-                border: Border.all(color: Constants.arColor)
+                border: Border.all(color: ArColors.accentColor)
             ),
             child: SingleChildScrollView(child: Text(changelog)))),
         Row(

@@ -6,11 +6,11 @@ Widget arTerminal(TerminalText terminalText){
 
   Color _commandColor(CommandStatus commandStatus) {
     if (commandStatus == CommandStatus.stdinp) {
-      return Colors.blue;
+      return ArColors.blue;
     } else if (commandStatus == CommandStatus.stdout) {
-      return Colors.green;
+      return ArColors.green;
     } else {
-      return Colors.red;
+      return ArColors.red;
     }
   }
 
