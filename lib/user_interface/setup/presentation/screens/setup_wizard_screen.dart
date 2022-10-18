@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'widgets/update_window.dart';
+import 'widgets/whats_new_widget.dart';
 
 class SetupWizardScreen extends StatefulWidget {
   const SetupWizardScreen({Key? key}) : super(key: key);
@@ -68,6 +69,10 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
                   if(state is SetupIncompatibleState || state is SetupPermissionState) {
                     return const SetupScreen();
+                  }
+
+                  if(state is SetupWhatsNewState ) {
+                    return WhatsNewWidget(changelog: state.changelog,);
                   }
 
                   if(state is SetupUpdateAvailableState ) {

@@ -1,19 +1,20 @@
 import 'package:aurora/user_interface/terminal/domain/model/terminal_text.dart';
+import 'package:aurora/utility/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 Widget arTerminal(TerminalText terminalText){
 
-  Color _commandColor(CommandStatus commandStatus) {
+  Color commandColor(CommandStatus commandStatus) {
     if (commandStatus == CommandStatus.stdinp) {
-      return Colors.blue;
+      return ArColors.blue;
     } else if (commandStatus == CommandStatus.stdout) {
-      return Colors.green;
+      return ArColors.green;
     } else {
-      return Colors.red;
+      return ArColors.red;
     }
   }
 
 
-  return Text(terminalText.text,style: TextStyle(color: _commandColor(terminalText.commandStatus)));
+  return Text(terminalText.text,style: TextStyle(color: commandColor(terminalText.commandStatus)));
 }

@@ -42,4 +42,6 @@ class BatteryManagerBloc extends TerminalBaseBloc<BatteryManagerEvent,BatteryMan
   }
 
   int get batteryLevel => _batteryLevel;
+  bool get showBatterManager=> _homeRepo.systemHasSystemd();
+
 }

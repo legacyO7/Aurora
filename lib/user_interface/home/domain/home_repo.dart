@@ -8,6 +8,7 @@ abstract class HomeRepo{
   Future launchArUrl({String? subPath});
   Future<String> getVersion();
   bool compatibilityChecker();
+  bool systemHasSystemd();
   Future<int> getBatteryCharge();
   int convertVersionToInt(String version);
 }

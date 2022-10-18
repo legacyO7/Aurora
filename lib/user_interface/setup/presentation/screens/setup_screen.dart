@@ -6,6 +6,7 @@ import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart'
 import 'package:aurora/user_interface/setup/presentation/state/setup_state.dart';
 import 'package:aurora/utility/ar_widgets/arbutton.dart';
 import 'package:aurora/utility/ar_widgets/arbutton_cubit.dart';
+import 'package:aurora/utility/colors.dart';
 import 'package:aurora/utility/placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,15 +72,15 @@ class _SetupScreenState extends State<SetupScreen> {
                 children: [
                   Expanded(
                     child: AnotherStepper(
-                      titleTextStyle: const TextStyle(color: Colors.white),
+                      titleTextStyle: const TextStyle(color: ArColors.white),
                       stepperList: stepperData,
                       stepperDirection: Axis.horizontal,
                       horizontalStepperHeight: 7,
-                      activeBarColor: Colors.purple,
+                      activeBarColor: ArColors.purple,
                       activeIndex: state.stepValue,
                       barThickness: 5,
-                      dotWidget: const Icon(Icons.flag,color: Colors.purpleAccent),
-                      inActiveBarColor: Colors.grey,
+                      dotWidget: const Icon(Icons.flag,color: ArColors.purpleDark),
+                      inActiveBarColor: ArColors.grey,
                       inverted: true,
                       gap: MediaQuery.of(context).size.width/7,
                     ),
