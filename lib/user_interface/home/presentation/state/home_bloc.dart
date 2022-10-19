@@ -38,6 +38,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
     emit(HomeStateInit());
   }
 
-  Future<bool> compatibilityChecker() async=>_homeRepo.compatibilityChecker()&&( await _homeRepo.getBatteryCharge()!=100);
+  Future<bool> compatibilityChecker() async=>
+      (await _homeRepo.compatibilityChecker())==0&&( await _homeRepo.getBatteryCharge()!=100);
 
 }
