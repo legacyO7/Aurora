@@ -1,13 +1,33 @@
+import 'dart:io';
+
 import 'package:aurora/data/di/di.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
+import 'package:aurora/utility/constants.dart';
 
 mixin HomeMixin on HomeRepo{
 
+  final TerminalRepo _terminalRepo=sl<TerminalRepo>();
+
   @override
   Future<bool> isSecureBootEnabled() async{
-    return (await sl<TerminalRepo>().getOutput(command: "mokutil --sb-state")).toString().contains("enabled");
+    return (await _terminalRepo.getOutput(command: "mokutil --sb-state")).toString().contains("enabled");
   }
+
+  @override
+  Future<int> compatibilityChecker() async{
+
+    if((await _terminalRepo.getOutput(command: 'which pkexec')).length==1) {
+      return 1;
+    }
+
+    if(!Directory(Constants.kFaustusModulePath).existsSync()) {
+      return 2;
+    }
+
+    return 0;
+  }
+
 
   @override
   int convertVersionToInt(String version) {
