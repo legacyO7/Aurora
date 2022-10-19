@@ -1,4 +1,9 @@
 
 Changelogs:
 
--initial build
+- initial build
+- new ui design
+- no installation required
+- optimized & fixed many bugs
+- reduced size
+
