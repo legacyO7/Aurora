@@ -34,7 +34,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   String _terminalList = '';
 
   _initSetup(emit) async {
-    Constants.arVersion= await _homeRepo.getVersion();
+    await _homeRepo.getVersion();
     Constants.kWorkingDirectory = (await Directory('${(await getTemporaryDirectory()).path}/legacy07.aurora').create()).path;
     Constants.kSecureBootEnabled = await _homeRepo.isSecureBootEnabled();
     if(await _prefRepo.getVersion() !=Constants.arVersion && await _homeRepo.checkInternetAccess()){
@@ -79,7 +79,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
   Future<bool> _isUpdateAvailable()async{
     var liveVersion=  _homeRepo.convertVersionToInt(await _setupWizardRepo.getAuroraLiveVersion());
-    var currentVersion= _homeRepo.convertVersionToInt(await _homeRepo.getVersion());
+    var currentVersion= _homeRepo.convertVersionToInt(Constants.arVersion);
 
     if(liveVersion==0||currentVersion==0) {
       return false;

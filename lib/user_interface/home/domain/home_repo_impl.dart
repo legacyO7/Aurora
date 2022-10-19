@@ -51,7 +51,10 @@ class HomeRepoImpl extends HomeRepo with HomeMixin{
 
   @override
   Future<String> getVersion() async{
-    return (await PackageInfo.fromPlatform()).version;
+    var version= (await PackageInfo.fromPlatform()).version;
+    Constants.arVersion=version;
+    Constants.arFlavour=version.split('-')[1];
+    return version;
   }
 
 
