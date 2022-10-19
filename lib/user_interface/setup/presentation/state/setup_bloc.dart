@@ -53,8 +53,8 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
     bool isConnected=await _homeRepo.checkInternetAccess();
 
-    navigate(){
-      if (_homeRepo.compatibilityChecker()) {
+    navigate() async {
+      if (await _homeRepo.compatibilityChecker()==0) {
         emit(SetupCompatibleState());
       } else {
         if(isConnected) {
@@ -70,10 +70,10 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
       if (await _isUpdateAvailable()) {
         emit(SetupUpdateAvailableState(await _fetchChangelog()));
       } else {
-        navigate();
+        await navigate();
       }
     }else{
-      navigate();
+       await navigate();
     }
   }
 
@@ -126,19 +126,20 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
         } else {
           arSnackBar(text: "Fetching Data Failed", isPositive: false);
         }
-      } else {        
-        _emitInstallFaustusTerminal(emit);
-        await super.execute("${Constants.kSecureBootEnabled ? '' : Constants.kPolkit} $_setupPath installfaustus ${Constants.kFaustusGitUrl} $_terminalList");
-        isSuccess=_homeRepo.compatibilityChecker();
+      } else {
+          _emitInstallFaustusTerminal(emit);
+          await super.execute("${Constants.kSecureBootEnabled ? '' : Constants.kPolkit} $_setupPath installfaustus ${Constants.kFaustusGitUrl} $_terminalList");
+          isSuccess = await _homeRepo.compatibilityChecker()==0;
       }
+
       _arButtonCubit.setUnLoad();
-      _processOutput(emit,state: state,isSuccess: isSuccess,);
+      await _processOutput(emit,state: state,isSuccess: isSuccess);
     
   }
 
-  _processOutput(emit,{required SetupState state, required bool isSuccess}) {
+  _processOutput(emit,{required SetupState state, required bool isSuccess}) async {
     if (state is SetupIncompatibleState) {
-      if (isSuccess && state.stepValue == 0) {
+      if (isSuccess && state.stepValue == 0 && await _homeRepo.compatibilityChecker()!=1) {
        _emitInstallFaustus(emit);
       } else if (isSuccess && state.stepValue == 2) {
         emit(SetupCompatibleState());

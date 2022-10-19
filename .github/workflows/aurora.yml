@@ -66,10 +66,8 @@ jobs:
       - name: Upload files to a GitHub release
         uses: svenstaro/upload-release-action@2.2.1
         with:
-          # GitHub token.
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          # Local file to upload.
           file: aurora-linux-${{ steps.version_id.outputs.version }}.AppImage
-          # Tag to use as a release.
+          release_name: aurora-${{ steps.version_id.outputs.version }}
           tag: ${{ steps.version_id.outputs.version }}
           body:   ${{join(steps.run_tests.outputs.*, '\n')}}${{ steps.changelog_id.outputs.changelog }}
