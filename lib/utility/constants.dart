@@ -28,7 +28,7 @@ class Constants {
   static String kFaustusGitUrl = "https://github.com/legacyO7/faustus.git";
   static const String kTerminalListUrl = "https://raw.githubusercontent.com/i3/i3/next/i3-sensible-terminal";
   static const String kAuroraGitRawYaml = "https://raw.githubusercontent.com/legacyO7/Aurora/stable/pubspec.yaml";
-  static const String kAuroraGitRawChangelog = "https://raw.githubusercontent.com/legacyO7/Aurora/canary/changelog.txt";
+  static const String kAuroraGitRawChangelog = "https://raw.githubusercontent.com/legacyO7/Aurora/stable/changelog.txt";
 
   static const int kMinimumChargeLevel = 50;
   static bool kSecureBootEnabled = false;

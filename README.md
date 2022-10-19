@@ -6,24 +6,30 @@
 Aurora is a simple tool that controls the keyboard lighting and charging threshold settings. This utility acts as an interface for the Faustus Kernel Module to achieve these functions.
 
 
-![App Screenshot](https://github.com/legacyO7/Aurora/blob/canary/assets/images/snaps/arsrceen_1.png)
+![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arsrceen_1.png)
 
 
 ## Installation
 
-Aurora comes with an AppImage release which can be opened on any linux distros.
-Here you can find the most recent release.
+Aurora comes with an AppImage release which can be opened on any common linux distros.
+Find the latest release from [here](https://github.com/legacyO7/Aurora/releases).
 
-#### Post Installation
-Aurora will direct you to the installation screen if the module is not already installed on your system.
+#### Prerequisites
 
-![App Screenshot](https://github.com/legacyO7/Aurora/blob/canary/assets/images/snaps/arsrceen_2.png)
+- [PolKit](https://en.wikipedia.org/wiki/Polkit) to obtain root privileges `pkexec`
+- [faustus module](https://github.com/hackbnw/faustus)
+- If the module is not installed, `dkms openssl mokutil xterm wget git make cmake` are required for installing the module
 
-Aurora also provides an option to choose the faustus module repo. If the device is compatible with the module but isn't supported officially, you can create yourown fork that adds support to the device
+#### Post Execution
+Aurora will direct you to the installation screen if the prerequisites are not satisfied on your system.
+
+![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arsrceen_2.png)
+
+Aurora also provides an option to choose the faustus module repo. If the device is compatible with the module but isn't supported officially, you can create your own fork that adds support to your device
 (Read the [documentation](https://github.com/hackbnw/faustus) for more information on the process and any potential dangers.)
 By default, Aurora uses [this fork](https://github.com/legacyO7/faustus.git) that adds support for "FA706IH"
 
-![App Screenshot](https://github.com/legacyO7/Aurora/blob/canary/assets/images/snaps/arsrceen_3.png)
+![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arsrceen_3.png)
 
 Secureboot enabled devices need to enroll MOK
 
@@ -46,9 +52,8 @@ Secureboot enabled devices need to enroll MOK
 
 
 ## Limitations
-- Although this utility comes with an AppImage, its functionality is only tested on debian-based distros. Aurora will work out of the box if the module supports the device and is installed manually
+- Although this utility comes with an AppImage, its functionality is only tested on debian-based distros. Aurora will work out of the box if the prerequisites are satisfied
 - Battery manager will not work on distros without systemd
-- Aurora installer is an experimental feature. If the installer fails, install the packages and module manually
  
 
 ## Contributing
@@ -61,6 +66,9 @@ Feel free to send a PR
 ## Authors
 
 - [@legacyO7](https://www.github.com/legacyO7)
+
+#### Quires
+legacy07.theia@gmail.com
 
 
 ## Credits
