@@ -7,7 +7,7 @@ on:
 
   push:
     branches:
-      - beta
+      - stable
 
 jobs:
   build:
