@@ -1,5 +1,4 @@
-import 'package:aurora/utility/ar_widgets/arbutton.dart';
-import 'package:aurora/utility/ar_widgets/arbutton_cubit.dart';
+import 'package:aurora/utility/ar_widgets/arwidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

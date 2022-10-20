@@ -15,7 +15,7 @@ import 'package:aurora/user_interface/terminal/data/source/terminal_source_impl.
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo_impl.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
-import 'package:aurora/utility/ar_widgets/arbutton_cubit.dart';
+import 'package:aurora/utility/ar_widgets/arwidgets.dart';
 import 'package:aurora/user_interface/setup/data/source/dio_client.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';

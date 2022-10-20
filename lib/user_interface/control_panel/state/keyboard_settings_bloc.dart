@@ -2,7 +2,7 @@
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
-import 'package:aurora/utility/colors.dart';
+import 'package:aurora/utility/ar_widgets/colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 

@@ -3,7 +3,7 @@ import 'package:aurora/user_interface/control_panel/state/batter_manager_bloc.da
 import 'package:aurora/user_interface/control_panel/state/batter_manager_state.dart';
 import 'package:aurora/user_interface/control_panel/state/battery_manager_event.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
-import 'package:aurora/utility/colors.dart';
+import 'package:aurora/utility/ar_widgets/colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

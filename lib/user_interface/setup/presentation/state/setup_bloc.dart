@@ -8,8 +8,7 @@ import 'package:aurora/user_interface/setup/presentation/screens/widgets/install
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
-import 'package:aurora/utility/ar_widgets/arbutton_cubit.dart';
-import 'package:aurora/utility/ar_widgets/arsnackbar.dart';
+import 'package:aurora/utility/ar_widgets/arwidgets.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:path_provider/path_provider.dart';
 

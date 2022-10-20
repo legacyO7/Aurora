@@ -7,7 +7,7 @@ import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc
 import 'package:aurora/user_interface/setup/presentation/screens/setup_wizard_screen.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
-import 'package:aurora/utility/ar_widgets/arbutton_cubit.dart';
+import 'package:aurora/utility/ar_widgets/arwidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:window_size/window_size.dart';

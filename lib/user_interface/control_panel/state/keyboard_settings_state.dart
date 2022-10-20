@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:aurora/utility/colors.dart';
+import 'package:aurora/utility/ar_widgets/colors.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 

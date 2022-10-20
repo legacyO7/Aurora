@@ -1,7 +1,7 @@
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_state.dart';
-import 'package:aurora/utility/ar_widgets/arbutton.dart';
+import 'package:aurora/utility/ar_widgets/arwidgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
