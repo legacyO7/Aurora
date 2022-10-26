@@ -8,6 +8,7 @@ class GlobalConfig {
    String? kExecFaustusPath = '';
    String? kExecBatteryManagerPath = '';
    String? kWorkingDirectory = '/tmp';
+   String? kExecPermissionChecker;
 
   //url
    String? kAuroraGitRawYaml;
@@ -28,7 +29,8 @@ class GlobalConfig {
     this.kAuroraGitRawYaml,
     this.kAuroraGitRawChangelog,
     this.kSecureBootEnabled,
-    this.kFaustusGitUrl
+    this.kFaustusGitUrl,
+    this.kExecPermissionChecker
   });
 
   setInstance({
@@ -40,7 +42,8 @@ class GlobalConfig {
     kAuroraGitRawYaml,
     kAuroraGitRawChangelog,
     kSecureBootEnabled,
-    kFaustusGitUrl
+    kFaustusGitUrl,
+    kExecPermissionChecker
   }){
 
     this.arFlavour= arFlavour??this.arFlavour;
@@ -52,6 +55,7 @@ class GlobalConfig {
     this.kSecureBootEnabled= kSecureBootEnabled??this.kSecureBootEnabled;
     this.kWorkingDirectory= kWorkingDirectory??this.kWorkingDirectory;
     this.kFaustusGitUrl=kFaustusGitUrl??'https://github.com/legacyO7/faustus.git';
+    this.kExecPermissionChecker=kExecPermissionChecker??this.kExecPermissionChecker;
 
   }
 }
