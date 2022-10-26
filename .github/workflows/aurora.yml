@@ -1,0 +1,73 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Aurora CI
+
+on:
+
+  push:
+    branches:
+      - stable
+
+jobs:
+  build:
+    name: "Build Aurora"
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2.4.0
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2.6.1
+        with:
+          channel: 'stable'
+
+      - name: Install Linux build tools
+        run: sudo apt-get update && sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev squashfs-tools python3
+
+      - name: Enable desktop
+        run: flutter config --enable-linux-desktop
+
+      - name: Install Cider
+        run: flutter pub global activate cider
+
+      - name: Get Version
+        id: version_id
+        run: echo "::set-output name=version::$(cider version)"
+
+      - name: Get Changelog
+        id: changelog_id
+        run: |
+          changelogs=$(cat ./changelog.txt )
+           changelogs="${changelogs//'%'/'%25'}"
+           changelogs="${changelogs//$'\n'/'%0A'}"
+           changelogs="${changelogs//$'\r'/'%0D'}"
+          echo ::set-output name=changelog::$changelogs
+
+      - name: Get packages
+        run: flutter pub get
+
+      - name: Flutter build app
+        run: flutter build linux
+
+      - name: Install AppImage
+        run: sudo pip3 install appimage-builder
+
+      - name: Build AppImage
+        run:  appimage-builder --skip-tests
+
+      - name: Rename Build AppImage
+        run: mv legacy07-latest-x86_64.AppImage aurora-linux-${{ steps.version_id.outputs.version }}.AppImage
+
+      - name: List files
+        run: ls
+
+      - name: Upload files to a GitHub release
+        uses: svenstaro/upload-release-action@2.2.1
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: aurora-linux-${{ steps.version_id.outputs.version }}.AppImage
+          release_name: aurora-${{ steps.version_id.outputs.version }}
+          tag: ${{ steps.version_id.outputs.version }}
+          body:   ${{join(steps.run_tests.outputs.*, '\n')}}${{ steps.changelog_id.outputs.changelog }}
