@@ -1,6 +1,7 @@
 
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_event.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/colors.dart';
 import 'package:aurora/utility/constants.dart';
@@ -30,27 +31,27 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
 
   _setColor(Color color ,emit) async {
     _color= color;
-    await super.execute("${Constants.kExecFaustusPath} color ${_color.red.toRadixString(16)} ${_color.green.toRadixString(16)} ${_color.blue.toRadixString(16)} 0");
+    await super.execute("${Constants.globalConfig.kExecFaustusPath} color ${_color.red.toRadixString(16)} ${_color.green.toRadixString(16)} ${_color.blue.toRadixString(16)} 0");
     _prefRepo.setColor(_color.toString());
     ArColors.accentColor=_color;
     emit(state.copyState(color: _color));
   }
 
   _setBrightness(int brightness, emit) async {
-    await super.execute("${Constants.kExecFaustusPath} brightness $brightness ");
+    await super.execute("${Constants.globalConfig.kExecFaustusPath} brightness $brightness ");
     _prefRepo.setBrightness(brightness);
     emit(state.copyState(brightness: brightness));
   }
 
 
   _setMode(int mode, emit)async{
-    await super.execute("${Constants.kExecFaustusPath} mode $mode ");
+    await super.execute("${Constants.globalConfig.kExecFaustusPath} mode $mode ");
     _prefRepo.setMode(mode);
     emit(state.copyState(mode: mode));
   }
 
   _setSpeed(int speed, emit) async{
-    await super.execute("${Constants.kExecFaustusPath} speed $speed ");
+    await super.execute("${Constants.globalConfig.kExecFaustusPath} speed $speed ");
     _prefRepo.setSpeed(speed);
     emit(state.copyState(speed: speed));
   }

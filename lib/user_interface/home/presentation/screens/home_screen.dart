@@ -44,7 +44,7 @@ class _MyHomePageState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text("Aurora",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: context.watch<KeyboardSettingsBloc>().selectedColor),),
-                  Text("\tv${Constants.arVersion}",style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                  Text("\tv${Constants.globalConfig.arVersion}",style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
                 ],
               ),
             ),

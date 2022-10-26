@@ -18,7 +18,7 @@ class HomeRepoImpl extends HomeRepo with HomeMixin{
   @override
   Future<String> extractAsset({required String sourceFileName}) async {
     final byteData = await rootBundle.load('${Constants.kAssetsPath}/$sourceFileName');
-    var destinationFileName = "${Constants.kWorkingDirectory}/$sourceFileName";
+    var destinationFileName = "${Constants.globalConfig.kWorkingDirectory}/$sourceFileName";
     await File(destinationFileName).writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
     await _terminalSource.execute("chmod +x $destinationFileName");
     return destinationFileName;
@@ -52,8 +52,11 @@ class HomeRepoImpl extends HomeRepo with HomeMixin{
   @override
   Future<String> getVersion() async{
     var version= (await PackageInfo.fromPlatform()).version;
-    Constants.arVersion=version;
-    Constants.arFlavour=version.split('-')[1];
+    Constants.globalConfig.setInstance(
+        arVersion:version,
+        arFlavour: version.split('-')[1]
+    );
+
     return version;
   }
 

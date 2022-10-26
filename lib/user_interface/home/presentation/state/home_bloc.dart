@@ -17,13 +17,15 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   }
 
   Future _requestAccess(emit) async {
-    
-    Constants.kExecBatteryManagerPath=await _homeRepo.extractAsset(sourceFileName:Constants.kBatteryManager);
-    Constants.kExecFaustusPath=await _homeRepo.extractAsset(sourceFileName:Constants.kFaustus);
+
+    Constants.globalConfig.setInstance(
+        kExecBatteryManagerPath: await _homeRepo.extractAsset(sourceFileName:Constants.kBatteryManager),
+        kExecFaustusPath:   await _homeRepo.extractAsset(sourceFileName:Constants.kFaustus)
+    );
 
     var checkAccess=await super.checkAccess();
     if(!checkAccess) {
-      await super.execute("${Constants.kPolkit} ${Constants.kExecFaustusPath} init ${Constants.kWorkingDirectory} ${await _prefRepo.getThreshold()}");
+      await super.execute("${Constants.kPolkit} ${Constants.globalConfig.kExecFaustusPath} init ${Constants.globalConfig.kWorkingDirectory} ${await _prefRepo.getThreshold()}");
       checkAccess=await super.checkAccess();
     }
     emit(AccessGranted(hasAccess: checkAccess));

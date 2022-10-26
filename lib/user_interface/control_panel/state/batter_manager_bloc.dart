@@ -1,6 +1,7 @@
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/control_panel/state/battery_manager_event.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,7 +33,7 @@ class BatteryManagerBloc extends TerminalBaseBloc<BatteryManagerEvent,BatteryMan
 
   _finalizeBatteryLevel(int level,emit) async{
     _batteryLevel=level;
-    await super.execute("${Constants.kExecBatteryManagerPath} $level");
+    await super.execute("${Constants.globalConfig.kExecBatteryManagerPath} $level");
     await _prefRepo.setThreshold(level);
     emit(BatteryManagerInit(batteryLevel: _batteryLevel));
   }

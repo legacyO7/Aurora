@@ -21,7 +21,7 @@ class SetupSourceImpl extends SetupSource{
   @override
   Future<String> getAuroraLiveVersion() async{
     try{
-      return (await _dioClient.fetch(url: Constants.kAuroraGitRawYaml)).data.toString();
+      return (await _dioClient.fetch(url: Constants.globalConfig.kAuroraGitRawYaml!)).data.toString();
     }catch(e){
       debugPrint(e.toString());
       return '';
@@ -31,7 +31,7 @@ class SetupSourceImpl extends SetupSource{
   @override
   Future<String> getChangelog() async{
     try{
-      return (await _dioClient.fetch(url: Constants.kAuroraGitRawChangelog)).data.toString();
+      return (await _dioClient.fetch(url: Constants.globalConfig.kAuroraGitRawChangelog!)).data.toString();
     }catch(e){
       debugPrint(e.toString());
       return '';

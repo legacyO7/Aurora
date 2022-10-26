@@ -19,7 +19,7 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
   @override
   void initState() {
     _controller=TextEditingController();
-    _controller.text=Constants.kFaustusGitUrl;
+    _controller.text=Constants.globalConfig.kFaustusGitUrl!;
     context.read<SetupBloc>().add(SetupEventValidateRepo(url: _controller.text));
     super.initState();
   }
