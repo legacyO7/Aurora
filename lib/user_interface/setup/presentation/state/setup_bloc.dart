@@ -93,8 +93,6 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     return await _setupWizardRepo.getChangelog();
   }
 
-
-
   _allowConfigure(bool allow,emit){
     if(allow) {
       _emitInstallPackage(emit);

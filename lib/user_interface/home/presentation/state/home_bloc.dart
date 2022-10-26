@@ -20,7 +20,8 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
 
     Constants.globalConfig.setInstance(
         kExecBatteryManagerPath: await _homeRepo.extractAsset(sourceFileName:Constants.kBatteryManager),
-        kExecFaustusPath:   await _homeRepo.extractAsset(sourceFileName:Constants.kFaustus)
+        kExecFaustusPath:   await _homeRepo.extractAsset(sourceFileName:Constants.kFaustus),
+        kExecPermissionChecker: await _homeRepo.extractAsset(sourceFileName: Constants.kPermissionChecker)
     );
 
     var checkAccess=await super.checkAccess();

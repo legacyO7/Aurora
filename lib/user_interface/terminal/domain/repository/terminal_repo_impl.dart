@@ -20,7 +20,6 @@ class TerminalRepoImpl extends TerminalRepo{
   late Sink<List<String>>  _terminalSink;
 
   final List<String> _terminalOut=[];
-  bool _hasRootAccess=false;
 
   final TerminalSource _terminalSource;
 
@@ -31,13 +30,13 @@ class TerminalRepoImpl extends TerminalRepo{
   }
 
   @override
-  Future<bool> checkAccess({String? command}) async{
-    _hasRootAccess=false;
-    await getOutput(command: command??"${Constants.globalConfig.kExecFaustusPath} save").then((value) {
-      _hasRootAccess=value.toString().contains('Permission denied');
-    });
+  Future<bool> checkAccess() async{
+    List<String> value = await getOutput(command: Constants.globalConfig.kExecPermissionChecker!);
+    if(value.length>1) {
+      return value[1].split(' ')[1].toLowerCase()=='true';
+    }
 
-    return _hasRootAccess;
+    return false;
   }
 
   @override
