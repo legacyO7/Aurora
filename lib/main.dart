@@ -14,6 +14,7 @@ import 'package:window_size/window_size.dart';
 
 import 'user_interface/home/presentation/state/home_bloc.dart';
 
+
 void main() async{
   await initDI();
   WidgetsFlutterBinding.ensureInitialized();

@@ -33,11 +33,14 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
   _initSetup(emit) async {
     await _homeRepo.getVersion();
-    Constants.kWorkingDirectory = (await Directory('${(await getTemporaryDirectory()).path}/legacy07.aurora').create()).path;
-    Constants.kSecureBootEnabled = await _homeRepo.isSecureBootEnabled();
-    if(await _prefRepo.getVersion() !=Constants.arVersion && await _homeRepo.checkInternetAccess()){
+    Constants.globalConfig.setInstance(
+      kWorkingDirectory: (await Directory('${(await getTemporaryDirectory()).path}/legacy07.aurora').create()).path,
+      kSecureBootEnabled: await _homeRepo.isSecureBootEnabled()
+    );
+
+    if(await _prefRepo.getVersion() !=Constants.globalConfig.arVersion && await _homeRepo.checkInternetAccess()){
       emit(SetupWhatsNewState(await _fetchChangelog()));
-      await _prefRepo.setVersion(Constants.arVersion);
+      await _prefRepo.setVersion(Constants.globalConfig.arVersion!);
     }else {
       await _checkForUpdates(emit);
     }
@@ -77,7 +80,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
   Future<bool> _isUpdateAvailable()async{
     var liveVersion=  _homeRepo.convertVersionToInt(await _setupWizardRepo.getAuroraLiveVersion());
-    var currentVersion= _homeRepo.convertVersionToInt(Constants.arVersion);
+    var currentVersion= _homeRepo.convertVersionToInt(Constants.globalConfig.arVersion!);
 
     if(liveVersion==0||currentVersion==0) {
       return false;
@@ -115,18 +118,18 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
       _arButtonCubit.setLoad();
       if (stepValue == 0) {
         await _homeRepo.extractAsset(sourceFileName: Constants.kFaustusInstaller);
-        _setupPath = "${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.kWorkingDirectory}";
+        _setupPath = "${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.globalConfig.kWorkingDirectory}";
         _terminalList = '" ${(await _setupWizardRepo.getTerminalList())} "';
         if (_terminalList.isNotEmpty) {
 
-          isSuccess=(await super.getOutput(command: "$_setupPath installpackages $_terminalList")).toString().contains("success")&&_homeRepo.readFile(path: '${Constants.kWorkingDirectory}/log').isEmpty;
+          isSuccess=(await super.getOutput(command: "$_setupPath installpackages $_terminalList")).toString().contains("success")&&_homeRepo.readFile(path: '${Constants.globalConfig.kWorkingDirectory}/log').isEmpty;
 
         } else {
           arSnackBar(text: "Fetching Data Failed", isPositive: false);
         }
       } else {
           _emitInstallFaustusTerminal(emit);
-          await super.execute("${Constants.kSecureBootEnabled ? '' : Constants.kPolkit} $_setupPath installfaustus ${Constants.kFaustusGitUrl} $_terminalList");
+          await super.execute("${Constants.globalConfig.kSecureBootEnabled! ? '' : Constants.kPolkit} $_setupPath installfaustus ${Constants.globalConfig.kFaustusGitUrl} $_terminalList");
           isSuccess = await _homeRepo.compatibilityChecker()==0;
       }
 
@@ -151,7 +154,9 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   void _validateRepo(emit,{required String value}) {
     bool isValid = value.isNotEmpty && value.startsWith('https') && value.endsWith('.git');
     if (isValid) {
-      Constants.kFaustusGitUrl = value;
+      Constants.globalConfig.setInstance(
+          kFaustusGitUrl:value
+      );
     }
     _emitInstallFaustus(emit,isValid: isValid);
   }

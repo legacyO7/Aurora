@@ -38,7 +38,7 @@ class TerminalSourceImpl extends TerminalSource{
          process = await Process.start(
               exec,
               arguments,
-              workingDirectory: Constants.kWorkingDirectory
+              workingDirectory: Constants.globalConfig.kWorkingDirectory
           );
         }
 

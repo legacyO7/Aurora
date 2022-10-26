@@ -17,6 +17,7 @@ import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo_i
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/utility/ar_widgets/arwidgets.dart';
 import 'package:aurora/user_interface/setup/data/source/dio_client.dart';
+import 'package:aurora/utility/global_configuration.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,4 +51,5 @@ Future initDI() async{
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
   sl.registerLazySingleton<Dio>(() => Dio());
+  sl.registerLazySingleton<GlobalConfig>(() => GlobalConfig());
 }

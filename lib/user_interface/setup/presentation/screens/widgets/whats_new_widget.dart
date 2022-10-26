@@ -18,7 +18,7 @@ class WhatsNewWidget extends StatelessWidget{
      mainAxisSize: MainAxisSize.min,
      crossAxisAlignment: CrossAxisAlignment.stretch,
      children: [
-     Center(child: Text("Whats new in v${Constants.arVersion}")),
+     Center(child: Text("Whats new in v${Constants.globalConfig.arVersion}")),
      changelogContainer(changelog: changelog),
      Center(
        child: ArButton(

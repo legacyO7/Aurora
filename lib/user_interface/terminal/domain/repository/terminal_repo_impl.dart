@@ -31,14 +31,10 @@ class TerminalRepoImpl extends TerminalRepo{
   }
 
   @override
-  Future<bool> checkAccess() async{
+  Future<bool> checkAccess({String? command}) async{
     _hasRootAccess=false;
-    await getOutput(command: "${Constants.kExecFaustusPath} save").then((value) {
-      for (int i =0;i<value.length;i++) {
-        if(value[i].contains('faustus_controller.sh save')&&i+1<value.length){
-          _hasRootAccess=!value[i+1].contains('Permission denied');
-        }
-      }
+    await getOutput(command: command??"${Constants.globalConfig.kExecFaustusPath} save").then((value) {
+      _hasRootAccess=value.toString().contains('Permission denied');
     });
 
     return _hasRootAccess;

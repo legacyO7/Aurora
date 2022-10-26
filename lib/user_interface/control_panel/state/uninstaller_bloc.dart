@@ -29,7 +29,7 @@ class UninstallerBloc extends TerminalBaseBloc<UninstallEvent,ControlPanelState>
     final state_ = state;
     if(state_ is ControlPanelStateInit && (state_.disableThreshold || state_.disableFaustusModule)){
 
-      var command="${Constants.kPolkit} ${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.kWorkingDirectory} ";
+      var command="${Constants.kPolkit} ${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.globalConfig.kWorkingDirectory} ";
 
       if(state_.disableFaustusModule && state_.disableThreshold){
         command+='disablethresholdfaustus';
