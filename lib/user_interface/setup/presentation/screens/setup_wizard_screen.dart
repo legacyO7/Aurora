@@ -1,17 +1,12 @@
 
-import 'package:aurora/user_interface/home/presentation/screens/home_screen.dart';
-import 'package:aurora/user_interface/setup/presentation/screens/setup_screen.dart';
-import 'package:aurora/user_interface/setup/presentation/screens/widgets/ask_network_access.dart';
-import 'package:aurora/user_interface/setup/presentation/screens/widgets/setup_splash.dart';
+import 'package:aurora/user_interface/home/presentation/screens/home_widgets.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_state.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'widgets/update_window.dart';
-import 'widgets/whats_new_widget.dart';
 
 class SetupWizardScreen extends StatefulWidget {
   const SetupWizardScreen({Key? key}) : super(key: key);

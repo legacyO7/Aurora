@@ -3,8 +3,8 @@ import 'package:aurora/user_interface/control_panel/state/uninstaller_event.dart
 import 'package:aurora/user_interface/control_panel/state/uninstaller_state.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
-import 'package:aurora/user_interface/setup/presentation/screens/setup_wizard_screen.dart';
-import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
+import 'package:aurora/user_interface/terminal/presentation/screens/terminal_widgets.dart';
 import 'package:aurora/utility/ar_widgets/arwidgets.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';

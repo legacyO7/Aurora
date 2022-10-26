@@ -1,15 +1,9 @@
-
-import 'package:aurora/user_interface/control_panel/presentation/screens/keyboard_settings/widgets/color_panel.dart';
-import 'package:aurora/user_interface/control_panel/presentation/screens/keyboard_settings/widgets/mode_panel.dart';
-import 'package:aurora/user_interface/control_panel/presentation/screens/keyboard_settings/widgets/speed_panel.dart';
+import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_widgets.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'widgets/brightness_panel.dart';
-
 
 
 class KeyboardSettingsScreen extends StatefulWidget {
