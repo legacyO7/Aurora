@@ -30,12 +30,12 @@ setaccess() {
   chmod -R o+rwx $battery_threshold_path
   chmod -R o+rwx $service_path
 
-  if [ -f "$service_path/aurora-controller.service" ]; then
+  if [ -f $service_path"aurora-controller.service" ]; then
     sudo systemctl disable aurora-controller.service
     sudo systemctl enable aurora-controller.service
-
   else
     setthreshold $1
+    chmod -R o+rwx $service_path"aurora-controller.service"
     sudo systemctl enable aurora-controller.service
   fi
 }
