@@ -54,7 +54,7 @@ class HomeRepoImpl extends HomeRepo with HomeMixin{
     var version= (await PackageInfo.fromPlatform()).version;
     Constants.globalConfig.setInstance(
         arVersion:version,
-        arFlavour: version.split('-')[1]
+        arChannel: version.split('-')[1]
     );
 
     return version;

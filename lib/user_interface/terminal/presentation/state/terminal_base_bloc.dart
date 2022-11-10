@@ -1,5 +1,4 @@
 import 'package:aurora/data/di/di.dart';
-import 'package:aurora/user_interface/home/presentation/state/home_state.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

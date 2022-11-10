@@ -1,13 +1,13 @@
 class GlobalConfig {
 
   //version
-   String? arVersion = '-';
-   String? arFlavour = 'stable';
+   String? arVersion;
+   String? arChannel;
 
   //paths
-   String? kExecFaustusPath = '';
-   String? kExecBatteryManagerPath = '';
-   String? kWorkingDirectory = '/tmp';
+   String? kExecFaustusPath;
+   String? kExecBatteryManagerPath;
+   String? kWorkingDirectory;
    String? kExecPermissionChecker;
 
   //url
@@ -22,7 +22,7 @@ class GlobalConfig {
 
   GlobalConfig({
     this.arVersion,
-    this.arFlavour,
+    this.arChannel,
     this.kExecFaustusPath,
     this.kExecBatteryManagerPath,
     this.kWorkingDirectory,
@@ -33,9 +33,24 @@ class GlobalConfig {
     this.kExecPermissionChecker
   });
 
+  GlobalConfig getInstance(){
+    return GlobalConfig(
+        arVersion: arVersion,
+        arChannel:arChannel,
+        kExecFaustusPath:kExecFaustusPath,
+        kExecBatteryManagerPath:kExecBatteryManagerPath,
+        kWorkingDirectory:kWorkingDirectory,
+        kAuroraGitRawYaml:kAuroraGitRawYaml,
+        kAuroraGitRawChangelog:kAuroraGitRawChangelog,
+        kSecureBootEnabled:kSecureBootEnabled,
+        kFaustusGitUrl:kFaustusGitUrl,
+        kExecPermissionChecker:kExecPermissionChecker
+    );
+  }
+
   setInstance({
     arVersion,
-    arFlavour,
+    arChannel,
     kExecFaustusPath,
     kExecBatteryManagerPath,
     kWorkingDirectory,
@@ -46,10 +61,10 @@ class GlobalConfig {
     kExecPermissionChecker
   }){
 
-    this.arFlavour= arFlavour??this.arFlavour;
+    this.arChannel= arChannel??"stable";
     this.arVersion=  arVersion??this.arVersion;
-    this.kAuroraGitRawChangelog= kAuroraGitRawChangelog?? "https://raw.githubusercontent.com/legacyO7/Aurora/${arFlavour??this.arFlavour}/changelog.txt";
-    this.kAuroraGitRawYaml= kAuroraGitRawYaml?? "https://raw.githubusercontent.com/legacyO7/Aurora/${arFlavour??this.arFlavour}/pubspec.yaml";
+    this.kAuroraGitRawChangelog= kAuroraGitRawChangelog?? "https://raw.githubusercontent.com/legacyO7/Aurora/${arChannel??this.arChannel}/changelog.txt";
+    this.kAuroraGitRawYaml= kAuroraGitRawYaml?? "https://raw.githubusercontent.com/legacyO7/Aurora/${arChannel??this.arChannel}/pubspec.yaml";
     this.kExecBatteryManagerPath=kExecBatteryManagerPath??this.kExecBatteryManagerPath;
     this.kExecFaustusPath= kExecFaustusPath??this.kExecFaustusPath;
     this.kSecureBootEnabled= kSecureBootEnabled??this.kSecureBootEnabled;
