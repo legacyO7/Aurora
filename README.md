@@ -3,7 +3,7 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
 
-Aurora is a simple tool that controls the keyboard lighting and charging threshold settings. This utility acts as an interface for the Faustus Kernel Module to achieve these functions.
+Aurora is an alternate to Aura Sync for linux to control the keyboard backlights and charging threshold settings. This utility acts as an interface for the Faustus Kernel Module to achieve these functions.
 
 
 ![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arsrceen_1.png)
@@ -20,7 +20,7 @@ Find the latest release from [here](https://github.com/legacyO7/Aurora/releases)
 - [faustus module](https://github.com/hackbnw/faustus)
 - If the module is not installed, `dkms openssl mokutil xterm wget git make cmake` are required for installing the module
 
-#### Post Execution
+#### First Run
 Aurora will direct you to the installation screen if the prerequisites are not satisfied on your system.
 
 ![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arsrceen_2.png)
@@ -33,10 +33,7 @@ By default, Aurora uses [this fork](https://github.com/legacyO7/faustus.git) tha
 
 Secureboot enabled devices need to enroll MOK
 
-## Build and Run 
-
-##### - Automated [WIP]
-
+## Build and Run
 
 ##### - Manual
 
@@ -68,7 +65,7 @@ Feel free to send a PR
 - [@legacyO7](https://www.github.com/legacyO7)
 
 #### Quires
-legacy07.theia@gmail.com
+legacy07.git@gmail.com
 
 
 ## Credits
@@ -76,4 +73,7 @@ legacy07.theia@gmail.com
 - [i3](https://github.com/i3) (i3-sensible-terminal)
 
 - [hackbnw](https://github.com/hackbnw) (faustus module)
+
+## Older Versions
+- [TUF-Aurora](https://github.com/legacyO7/TUF-Aurora) (deprecated)
 
