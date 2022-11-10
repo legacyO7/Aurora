@@ -1,9 +1,6 @@
 
 Changelogs:
 
-- initial build
-- new ui design
-- no installation required
-- optimized & fixed many bugs
-- reduced size
+- fix threshold slider on reinstall
+- bugfixes and optimizations
 
