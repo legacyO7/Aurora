@@ -1,5 +1,7 @@
 
 
+import 'package:aurora/user_interface/home/domain/home_mixin.dart';
+
 abstract class HomeRepo{
   Future<String> extractAsset({required String sourceFileName});
   List<String?> readFile({required String path});
