@@ -5,11 +5,12 @@ import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/constants.dart';
 
-class UninstallerBloc extends TerminalBaseBloc<UninstallEvent,ControlPanelState> {
+class UninstallerBloc extends TerminalBaseBloc<UninstallEvent,UninstallState> {
   UninstallerBloc(this._homeRepo,this._prefRepo) :
-        super(const ControlPanelStateInit(disableFaustusModule: false, disableThreshold: false)){
+        super(UninstallInitState(disableFaustusModule: false, disableThreshold: false)){
     on<UninstallEventCheckDisableServices>((event, emit) => _setDisableService(event,emit));
     on<UninstallEventSubmitDisableServices>((_, emit) => _disableServices(emit));
+    on<UninstallEventDispose>((_, emit) => _dispose(emit));
   }
 
   final HomeRepo _homeRepo;
@@ -17,17 +18,17 @@ class UninstallerBloc extends TerminalBaseBloc<UninstallEvent,ControlPanelState>
 
   void _setDisableService(UninstallEventCheckDisableServices event, emit) {
     final state_ =state;
-    if(state_ is ControlPanelStateInit) {
+    if(state_ is UninstallInitState) {
       emit(state_.copyState(
         disableThreshold: event.disableThreshold,
         disableFaustusModule: event.disableFaustusModule
       ));
     }
   }
-  
+
   Future _disableServices(emit) async{
     final state_ = state;
-    if(state_ is ControlPanelStateInit && (state_.disableThreshold || state_.disableFaustusModule)){
+    if(state_ is UninstallInitState && (state_.disableThreshold || state_.disableFaustusModule)){
 
       var command="${Constants.kPolkit} ${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.globalConfig.kWorkingDirectory} ";
 
@@ -40,11 +41,14 @@ class UninstallerBloc extends TerminalBaseBloc<UninstallEvent,ControlPanelState>
         command+='disablethreshold';
         _prefRepo.setThreshold(100);
       }
-      emit(const ControlPanelTerminalState());
+      emit(UninstallTerminalState());
       await super.execute(command);
-      emit(ControlPanelStateInit(disableFaustusModule: state_.disableFaustusModule, disableThreshold: state_.disableThreshold));
+      emit(UninstallProcessCompletedState());
     }
   }
 
+  void _dispose(emit){
+    emit(UninstallInitState(disableFaustusModule: false,disableThreshold: false));
+  }
 
 }

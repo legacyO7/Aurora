@@ -1,22 +1,22 @@
 import 'package:equatable/equatable.dart';
 
-abstract class ControlPanelState extends Equatable{
+abstract class UninstallState extends Equatable{
 
 }
 
-class ControlPanelStateInit implements ControlPanelState {
+class UninstallInitState extends UninstallState {
   final bool disableThreshold;
   final bool disableFaustusModule;
 
-  const ControlPanelStateInit({
+  UninstallInitState({
     this.disableThreshold = false,
     this.disableFaustusModule = false});
 
-  ControlPanelStateInit copyState({
+  UninstallInitState copyState({
     bool? disableThreshold,
     bool? disableFaustusModule
   }) {
-    return ControlPanelStateInit(
+    return UninstallInitState(
         disableThreshold: disableThreshold ?? this.disableThreshold,
         disableFaustusModule: disableFaustusModule ?? this.disableFaustusModule
     );
@@ -25,17 +25,17 @@ class ControlPanelStateInit implements ControlPanelState {
   @override
   List<Object?> get props => [disableFaustusModule, disableThreshold];
 
-  @override
-  bool? get stringify => throw UnimplementedError();
-
 }
 
-class ControlPanelTerminalState implements ControlPanelState {
-  const ControlPanelTerminalState();
+class UninstallTerminalState extends UninstallState {
+  UninstallTerminalState();
 
   @override
   List<Object?> get props => [];
+  
+}
 
+class UninstallProcessCompletedState extends UninstallState{
   @override
-  bool? get stringify => throw UnimplementedError();
+  List<Object?> get props => [];
 }
