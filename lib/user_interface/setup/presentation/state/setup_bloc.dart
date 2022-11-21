@@ -55,7 +55,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     bool isConnected=await _homeRepo.checkInternetAccess();
 
     navigate() async {
-      if (await _homeRepo.compatibilityChecker()==1) {
+      if (await _homeRepo.compatibilityChecker()==0) {
         emit(SetupCompatibleState());
       } else {
         if(isConnected) {
