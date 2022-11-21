@@ -5,7 +5,7 @@ import 'global_configuration.dart';
 
 class Constants {
 
-  static final GlobalConfig globalConfig=sl<GlobalConfig>().getInstance();
+  static final GlobalConfig globalConfig=sl<GlobalConfig>();
 
   //files
   static const String kFaustus = 'faustus_controller.sh';
