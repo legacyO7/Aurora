@@ -1,6 +1,7 @@
 
 import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:another_stepper/widgets/another_stepper.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/widgets/stepper_icon_widget.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_state.dart';
@@ -17,21 +18,6 @@ class SetupScreen extends StatefulWidget {
 
 class _SetupScreenState extends State<SetupScreen> {
 
-  List<StepperData> stepperData = [
-    StepperData(
-      title: "Acknowledge",
-      subtitle: '',
-    ),
-    StepperData(
-      title: "Install Packages",
-      subtitle: '',
-    ),
-    StepperData(
-      title: "Install Module",
-      subtitle: '',
-    ),
-  ];
-
   @override
   initState() {
     super.initState();
@@ -45,6 +31,7 @@ class _SetupScreenState extends State<SetupScreen> {
 
   @override
   Widget build(BuildContext ctx) {
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: BlocBuilder<SetupBloc,SetupState>(
@@ -64,6 +51,24 @@ class _SetupScreenState extends State<SetupScreen> {
           }
 
           if(state is SetupIncompatibleState){
+
+            List<StepperData> stepperData = [
+              StepperData(
+                  title: "Acknowledge",
+                  subtitle: '',
+                  iconWidget: stepperIcon(index:  0,stepValue: state.stepValue)
+              ),
+              StepperData(
+                title: "Install Packages",
+                subtitle: '',
+                iconWidget: stepperIcon(index:  1,stepValue: state.stepValue)
+              ),
+              StepperData(
+                title: "Install Module",
+                subtitle: '',
+                iconWidget: stepperIcon(index:  2,stepValue: state.stepValue)
+              ),
+            ];
             return  Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -72,11 +77,9 @@ class _SetupScreenState extends State<SetupScreen> {
                       titleTextStyle: const TextStyle(color: ArColors.white),
                       stepperList: stepperData,
                       stepperDirection: Axis.horizontal,
-                      horizontalStepperHeight: 7,
                       activeBarColor: ArColors.purple,
                       activeIndex: state.stepValue,
                       barThickness: 5,
-                      dotWidget: const Icon(Icons.flag,color: ArColors.purpleDark),
                       inActiveBarColor: ArColors.grey,
                       inverted: true,
                       gap: MediaQuery.of(context).size.width/7,

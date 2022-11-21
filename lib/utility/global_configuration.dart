@@ -33,21 +33,6 @@ class GlobalConfig {
     this.kExecPermissionChecker
   });
 
-  GlobalConfig getInstance(){
-    return GlobalConfig(
-        arVersion: arVersion,
-        arChannel:arChannel,
-        kExecFaustusPath:kExecFaustusPath,
-        kExecBatteryManagerPath:kExecBatteryManagerPath,
-        kWorkingDirectory:kWorkingDirectory,
-        kAuroraGitRawYaml:kAuroraGitRawYaml,
-        kAuroraGitRawChangelog:kAuroraGitRawChangelog,
-        kSecureBootEnabled:kSecureBootEnabled,
-        kFaustusGitUrl:kFaustusGitUrl,
-        kExecPermissionChecker:kExecPermissionChecker
-    );
-  }
-
   setInstance({
     arVersion,
     arChannel,
