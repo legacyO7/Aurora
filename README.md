@@ -35,8 +35,6 @@ Secureboot enabled devices need to enroll MOK
 
 ## Build and Run
 
-##### - Manual
-
 - [Install Flutter SDK](https://docs.flutter.dev/get-started/install/linux)
 - Install additional requirements 
 `sudo apt-get install libgtk-3-0 libblkid1 liblzma5`
