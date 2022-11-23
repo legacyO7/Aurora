@@ -33,8 +33,7 @@ executeinterminal(){
            for terminal in "${terminal_list[@]}"; do
                 echo $terminal
                 if command -v "$terminal" > /dev/null 2>&1; then
-                    exec `$terminal -e "exec 2>$tmpdir/log && $@"`
-                    echo success
+                    exec `$terminal -e "$@"`
                     break;
                 fi
             done

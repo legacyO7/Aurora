@@ -55,7 +55,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     bool isConnected=await _homeRepo.checkInternetAccess();
 
     navigate() async {
-      if (await _homeRepo.compatibilityChecker()==0) {
+      if (await _homeRepo.compatibilityChecker()==1) {
         emit(SetupCompatibleState());
       } else {
         if(isConnected) {
@@ -119,8 +119,8 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
         _setupPath = "${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.globalConfig.kWorkingDirectory}";
         _terminalList = '" ${(await _setupWizardRepo.getTerminalList())} "';
         if (_terminalList.isNotEmpty) {
-
-          isSuccess=(await super.getOutput(command: "$_setupPath installpackages $_terminalList")).toString().contains("success")&&_homeRepo.readFile(path: '${Constants.globalConfig.kWorkingDirectory}/log').isEmpty;
+          await super.getOutput(command: "$_setupPath installpackages $_terminalList");
+          isSuccess = await _homeRepo.compatibilityChecker()!=1;
 
         } else {
           arSnackBar(text: "Fetching Data Failed", isPositive: false);
