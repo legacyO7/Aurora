@@ -1,6 +1,6 @@
 
 
-import 'package:aurora/user_interface/home/domain/home_mixin.dart';
+
 
 abstract class HomeRepo{
   Future<String> extractAsset({required String sourceFileName});
@@ -10,6 +10,7 @@ abstract class HomeRepo{
   Future launchArUrl({String? subPath});
   Future<String> getVersion();
   Future<int> compatibilityChecker();
+  Future<bool> pkexecChecker();
   bool systemHasSystemd();
   Future<int> getBatteryCharge();
   int convertVersionToInt(String version);

@@ -133,19 +133,30 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   void _onInstall(emit,{required int stepValue}) async {
       var isSuccess=false;
       _arButtonCubit.setLoad();
+
+      bool pkexec=await _homeRepo.pkexecChecker();
+
+      if(Constants.globalConfig.kSecureBootEnabled! || !pkexec){
+        _terminalList = '" ${(await _setupWizardRepo.getTerminalList())} "';
+      }
+
       if (stepValue == 0) {
         await _homeRepo.extractAsset(sourceFileName: Constants.kFaustusInstaller);
         _setupPath = "${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.globalConfig.kWorkingDirectory}";
-        _terminalList = '" ${(await _setupWizardRepo.getTerminalList())} "';
-        if (_terminalList.isNotEmpty) {
-          await super.getOutput(command: "$_setupPath installpackages $_terminalList");
+
+        if (_terminalList.isNotEmpty||pkexec) {
+          if(pkexec) {
+            _emitInstallFaustusTerminal(emit,stepValue: 0);
+          }
+          await super.getOutput(command: "${!pkexec ? '' : Constants.kPolkit }$_setupPath installpackages $_terminalList");
           isSuccess = await _homeRepo.compatibilityChecker()!=1;
 
         } else {
           arSnackBar(text: "Fetching Data Failed", isPositive: false);
         }
+
       } else {
-          _emitInstallFaustusTerminal(emit);
+          _emitInstallFaustusTerminal(emit,stepValue: 2);
           await super.execute("${Constants.globalConfig.kSecureBootEnabled! ? '' : Constants.kPolkit} $_setupPath installfaustus ${Constants.globalConfig.kFaustusGitUrl} $_terminalList");
           isSuccess = await _homeRepo.compatibilityChecker()==0;
       }
@@ -182,6 +193,6 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
   _emitInstallFaustus(emit,{bool? isValid})=>  emit(SetupIncompatibleState(stepValue: 1, child: const FaustusInstaller(),isValid: isValid??true));
 
-  _emitInstallFaustusTerminal(emit)=> emit(SetupIncompatibleState(stepValue: 2, child: const TerminalScreen(), isValid: true));
+  _emitInstallFaustusTerminal(emit,{required int stepValue})=> emit(SetupIncompatibleState(stepValue: stepValue, child: const TerminalScreen(), isValid: true));
 
 }
