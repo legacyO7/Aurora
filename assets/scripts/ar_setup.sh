@@ -1,7 +1,7 @@
 #!/bin/bash
 
 package_manager='unknown'
-packages_to_install="dkms openssl mokutil xterm wget git pkexec make cmake"
+packages_to_install="dkms openssl mokutil git pkexec make cmake"
 terminal_list="$4"
 tmpdir="$1"
 git_faustus="$3"

@@ -8,8 +8,6 @@ Widget packageInstaller(){
 dkms\n
 openssl\n
 mokutil\n
-xterm\n
-wget\n
 git\n
 pkexec\n
 make\n
