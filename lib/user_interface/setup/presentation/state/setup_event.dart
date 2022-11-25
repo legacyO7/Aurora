@@ -7,6 +7,10 @@ class SetupEventConfigure implements SetupEvent {
   SetupEventConfigure({required this.allow});
 }
 
+class SetupEventBatteryManagerMode implements SetupEvent {
+  SetupEventBatteryManagerMode();
+}
+
 class SetupEventOnUpdate implements SetupEvent {
   final bool ignoreUpdate;
   SetupEventOnUpdate({required this.ignoreUpdate});

@@ -22,7 +22,15 @@ mixin HomeMixin on HomeRepo{
     }
 
     if(!Directory(Constants.kFaustusModulePath).existsSync()) {
-      return 2;
+      if(File(Constants.kBatteryThresholdPath).existsSync() && systemHasSystemd()) {
+        return 3;
+      } else {
+        return 2;
+      }
+    }
+
+    if(!systemHasSystemd()) {
+      return 4;
     }
 
     return 0;

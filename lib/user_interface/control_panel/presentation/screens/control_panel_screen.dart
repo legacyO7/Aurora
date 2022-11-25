@@ -1,8 +1,8 @@
 
 import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_widgets.dart';
-import 'package:aurora/user_interface/control_panel/state/batter_manager_bloc.dart';
+import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_configuration.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ControlPanelScreen extends StatefulWidget {
   const ControlPanelScreen({Key? key}) : super(key: key);
@@ -31,10 +31,11 @@ class _ControlPanelState extends State<ControlPanelScreen> {
                 UninstallButton()
               ],
             ),
-            if(context.read<BatteryManagerBloc>().showBatterManager)
+            if(Constants.globalConfig.arMode!=ARMODE.faustus)
             const Expanded(
               child:BatteryManagerScreen()
             ),
+            if(Constants.globalConfig.arMode!=ARMODE.batterymanager)
             const Expanded(
                 flex: 2,
                 child: KeyboardSettingsScreen())

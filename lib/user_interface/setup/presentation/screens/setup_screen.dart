@@ -36,6 +36,10 @@ class _SetupScreenState extends State<SetupScreen> {
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: BlocBuilder<SetupBloc,SetupState>(
         builder: (BuildContext context, state) {
+          
+          void configureFaustus(){
+            context.read<SetupBloc>().add(SetupEventConfigure(allow: true)); 
+          }
 
           if(state is SetupPermissionState){
             return Column(
@@ -43,9 +47,31 @@ class _SetupScreenState extends State<SetupScreen> {
               children: [
                 const Text("Aurora wants to configure your system"),
                 ArButton(title: "Allow",
-                    action: (){
-                  context.read<SetupBloc>().add(SetupEventConfigure(allow: true));
-                })
+                    action: ()=> configureFaustus()
+                )
+              ],
+            );
+          }
+
+          if(state is SetupBatteryManagerCompatibleState){
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text("Faustus Module is missing. Enter Battery Manager mode?"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  ArButton(title: "Okay",
+                      action: (){
+                        context.read<SetupBloc>().add(SetupEventBatteryManagerMode());
+                      }),
+                  ArButton(
+                      isSelected: true,
+                      edgeInsets: const EdgeInsets.only(left: 10),
+                      title: "Configure Faustus",
+                      action: ()=> configureFaustus()
+                  )
+                ],)
               ],
             );
           }

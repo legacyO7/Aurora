@@ -9,6 +9,7 @@ import 'package:aurora/user_interface/terminal/presentation/screens/terminal_wid
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/arwidgets.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_configuration.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'setup_state.dart';
@@ -21,6 +22,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     on<SetupEventOnInstall>((event, emit) => _onInstall(stepValue: event.stepValue,emit));
     on<SetupEventValidateRepo>((event, emit) => _validateRepo(value: event.url,emit));
     on<SetupEventOnUpdate>((event, emit) => _onUpdate(emit,ignoreUpdate: event.ignoreUpdate));
+    on<SetupEventBatteryManagerMode>((event, emit) => _enterBatteryManagerMode(emit));
   }
 
   final HomeRepo _homeRepo;
@@ -55,14 +57,26 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     bool isConnected=await _homeRepo.checkInternetAccess();
 
     navigate() async {
-      if (await _homeRepo.compatibilityChecker()==1) {
-        emit(SetupCompatibleState());
-      } else {
-        if(isConnected) {
-          emit(SetupPermissionState());
-        } else {
-          emit(SetupAskNetworkAccessState());
-        }
+
+      switch( await _homeRepo.compatibilityChecker()){
+        case 0:
+          Constants.globalConfig.setInstance(arMode: ARMODE.normal);
+          emit(SetupCompatibleState());
+          break;
+        case 3:
+          emit(SetupBatteryManagerCompatibleState());
+          break;
+        case 4:
+          Constants.globalConfig.setInstance(arMode: ARMODE.faustus);
+          emit(SetupCompatibleState());
+          break;
+
+        default:
+          if(isConnected) {
+            emit(SetupPermissionState());
+          } else {
+            emit(SetupAskNetworkAccessState());
+          }
       }
     }
 
@@ -76,6 +90,11 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     }else{
        await navigate();
     }
+  }
+
+  void _enterBatteryManagerMode(emit){
+    Constants.globalConfig.setInstance(arMode: ARMODE.batterymanager);
+    emit(SetupCompatibleState());
   }
 
   Future<bool> _isUpdateAvailable()async{

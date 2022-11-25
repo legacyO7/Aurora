@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ArButton extends StatefulWidget {
-  const ArButton({super.key, required this.title, required this.action, this.isSelected = false, this.isEnabled = true, this.isLoading = false});
+  const ArButton({super.key, required this.title, required this.action, this.isSelected = false, this.isEnabled = true, this.isLoading = false,this.edgeInsets});
 
   final String title;
   final Function action;
   final bool isSelected;
   final bool isEnabled;
   final bool isLoading;
+  final EdgeInsetsGeometry? edgeInsets;
 
   @override
   State<ArButton> createState() {
@@ -31,7 +32,8 @@ class _ArButtonState extends State<ArButton> {
   Widget build(BuildContext context) {
     height = widget.isSelected ? 50 : 40;
     width = widget.isSelected ? 120 : 100;
-    return Padding(
+    return Container(
+      margin: widget.edgeInsets,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 1),
       child: widget.isLoading && widget.isSelected
           ? SizedBox(
