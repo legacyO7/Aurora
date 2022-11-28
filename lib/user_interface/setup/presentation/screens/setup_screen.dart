@@ -57,7 +57,7 @@ class _SetupScreenState extends State<SetupScreen> {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text("Faustus Module is missing. Enter Battery Manager mode?"),
+                const Text("Faustus Module is missing. Proceed anyway??"),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
