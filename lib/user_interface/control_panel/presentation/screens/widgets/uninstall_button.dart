@@ -14,31 +14,40 @@ class UninstallButton extends StatelessWidget {
   const UninstallButton({super.key});
 
   Widget _selectorWindow() {
-    return BlocBuilder<UninstallerBloc, Equatable>(builder: (BuildContext context, state) {
-      if (state is ControlPanelStateInit) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+    return BlocListener<UninstallerBloc,Equatable>(
+      listener: (BuildContext context, state) {
+        if(state is UninstallProcessCompletedState) {
+          _navigate(context);
+        }
+      },
+      child: BlocBuilder<UninstallerBloc, Equatable>
+        (builder: (BuildContext context, state) {
 
-            ArCheckbox(
-                text: "Disable charging threshold",
-                isSelected: state.disableThreshold,
-                onChange: (_)=>context.read<UninstallerBloc>().add(UninstallEventCheckDisableServices(disableThreshold: !state.disableThreshold))
-            ),
+        if (state is UninstallInitState) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
 
-            ArCheckbox(
-                text: "Disable faustus module",
-                isSelected: state.disableFaustusModule,
-                onChange: (_)=>context.read<UninstallerBloc>().add(UninstallEventCheckDisableServices(disableFaustusModule: !state.disableFaustusModule))
-            ),
-          ],
-        );
-      } else if (state is ControlPanelTerminalState) {
-        return const TerminalScreen();
-      }
+              ArCheckbox(
+                  text: "Disable charging threshold",
+                  isSelected: state.disableThreshold,
+                  onChange: (_)=>context.read<UninstallerBloc>().add(UninstallEventCheckDisableServices(disableThreshold: !state.disableThreshold))
+              ),
 
-      return placeholder();
-    });
+              ArCheckbox(
+                  text: "Disable faustus module",
+                  isSelected: state.disableFaustusModule,
+                  onChange: (_)=>context.read<UninstallerBloc>().add(UninstallEventCheckDisableServices(disableFaustusModule: !state.disableFaustusModule))
+              ),
+            ],
+          );
+        } else if (state is UninstallTerminalState) {
+          return const TerminalScreen();
+        }
+
+        return placeholder();
+      }),
+    );
   }
 
   @override
@@ -53,14 +62,19 @@ class UninstallButton extends StatelessWidget {
               onConfirm: () {
                 context.read<UninstallerBloc>().add(UninstallEventSubmitDisableServices());
               },
-              onCancel: () async {
-                Navigator.pop(context);
-                if(!await context.read<HomeBloc>().compatibilityChecker()) {
-                  context.read<HomeBloc>().add(HomeEventDispose());
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SetupWizardScreen()));
-                }
+              onCancel: (){
+                _navigate(context);
               });
         },
         icon: const Icon(Icons.delete_outline));
+  }
+
+  _navigate(BuildContext context)async{
+    context.read<UninstallerBloc>().add(UninstallEventDispose());
+    Navigator.pop(context);
+    if(!await context.read<HomeBloc>().compatibilityChecker()) {
+    context.read<HomeBloc>().add(HomeEventDispose());
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SetupWizardScreen()));
+    }
   }
 }

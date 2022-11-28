@@ -1,6 +1,8 @@
 
 Changelogs:
 
-- fix threshold slider on reinstall
-- bugfixes and optimizations
-
+- fix installation crashes on some terminals
+- uses aurora terminal for package installation, if polkit is available
+- able to configure charging threshold even if faustus module is not installed
+- optimized uninstallation procedure
+- updated setup wizard ui

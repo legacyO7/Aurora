@@ -1,3 +1,4 @@
+import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:aurora/utility/ar_widgets/arwidgets.dart';
 import 'package:flutter/material.dart';
 
@@ -21,5 +22,22 @@ Widget stepperIcon({required int stepValue, required int index}){
     const Icon(
       Icons.flag
     ),
+  );
+}
+
+StepperData stepperListData({
+  required String text,
+  required int stepValue,
+  required int index}){
+  return StepperData(
+      title: StepperText(
+        text,
+        textStyle: const TextStyle(color: ArColors.white),
+      ),
+      subtitle: StepperText(''),
+      iconWidget: stepperIcon(
+          index: index,
+          stepValue: stepValue
+      )
   );
 }

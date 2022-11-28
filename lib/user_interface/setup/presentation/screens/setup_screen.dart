@@ -1,7 +1,7 @@
 
 import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:another_stepper/widgets/another_stepper.dart';
-import 'package:aurora/user_interface/setup/presentation/screens/widgets/stepper_icon_widget.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/widgets/stepper_widget.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_state.dart';
@@ -36,6 +36,10 @@ class _SetupScreenState extends State<SetupScreen> {
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: BlocBuilder<SetupBloc,SetupState>(
         builder: (BuildContext context, state) {
+          
+          void configureFaustus(){
+            context.read<SetupBloc>().add(SetupEventConfigure(allow: true)); 
+          }
 
           if(state is SetupPermissionState){
             return Column(
@@ -43,9 +47,31 @@ class _SetupScreenState extends State<SetupScreen> {
               children: [
                 const Text("Aurora wants to configure your system"),
                 ArButton(title: "Allow",
-                    action: (){
-                  context.read<SetupBloc>().add(SetupEventConfigure(allow: true));
-                })
+                    action: ()=> configureFaustus()
+                )
+              ],
+            );
+          }
+
+          if(state is SetupBatteryManagerCompatibleState){
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text("Faustus Module is missing. Proceed anyway??"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                  ArButton(title: "Okay",
+                      action: (){
+                        context.read<SetupBloc>().add(SetupEventBatteryManagerMode());
+                      }),
+                  ArButton(
+                      isSelected: true,
+                      edgeInsets: const EdgeInsets.only(left: 10),
+                      title: "Configure Faustus",
+                      action: ()=> configureFaustus()
+                  )
+                ],)
               ],
             );
           }
@@ -53,28 +79,24 @@ class _SetupScreenState extends State<SetupScreen> {
           if(state is SetupIncompatibleState){
 
             List<StepperData> stepperData = [
-              StepperData(
-                  title: "Acknowledge",
-                  subtitle: '',
-                  iconWidget: stepperIcon(index:  0,stepValue: state.stepValue)
-              ),
-              StepperData(
-                title: "Install Packages",
-                subtitle: '',
-                iconWidget: stepperIcon(index:  1,stepValue: state.stepValue)
-              ),
-              StepperData(
-                title: "Install Module",
-                subtitle: '',
-                iconWidget: stepperIcon(index:  2,stepValue: state.stepValue)
-              ),
+              stepperListData(
+                  text: 'Acknowledge',
+                  stepValue: state.stepValue,
+                  index: 0),
+              stepperListData(
+                  text: 'Install Packages',
+                  stepValue: state.stepValue,
+                  index: 1),
+              stepperListData(
+                  text: 'Install Module',
+                  stepValue: state.stepValue,
+                  index: 2)
             ];
             return  Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: AnotherStepper(
-                      titleTextStyle: const TextStyle(color: ArColors.white),
                       stepperList: stepperData,
                       stepperDirection: Axis.horizontal,
                       activeBarColor: ArColors.purple,

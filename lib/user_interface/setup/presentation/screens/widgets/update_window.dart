@@ -29,12 +29,12 @@ class UpdateWidget extends StatelessWidget{
             ArButton(
                 isSelected: true,
                 title: "Download\nupdate", action:() => context.read<HomeBloc>().add(HomeEventLaunch())),
-            Container(
-              margin: const EdgeInsets.only(left: 10),
-              child: ArButton(title: "Ignore", action: (){
-                context.read<SetupBloc>().add(SetupEventOnUpdate(ignoreUpdate: true));
-              }),
-            ),
+            ArButton(
+                edgeInsets: const EdgeInsets.only(left: 10),
+                title: "Ignore",
+                action: (){
+              context.read<SetupBloc>().add(SetupEventOnUpdate(ignoreUpdate: true));
+            }),
           ],
         )
 

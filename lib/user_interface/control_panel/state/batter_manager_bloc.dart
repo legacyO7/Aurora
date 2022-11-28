@@ -1,7 +1,6 @@
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/control_panel/state/battery_manager_event.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
-import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,6 +42,5 @@ class BatteryManagerBloc extends TerminalBaseBloc<BatteryManagerEvent,BatteryMan
   }
 
   int get batteryLevel => _batteryLevel;
-  bool get showBatterManager=> _homeRepo.systemHasSystemd();
 
 }

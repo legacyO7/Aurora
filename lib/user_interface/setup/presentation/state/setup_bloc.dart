@@ -9,6 +9,7 @@ import 'package:aurora/user_interface/terminal/presentation/screens/terminal_wid
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/arwidgets.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_configuration.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'setup_state.dart';
@@ -21,6 +22,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     on<SetupEventOnInstall>((event, emit) => _onInstall(stepValue: event.stepValue,emit));
     on<SetupEventValidateRepo>((event, emit) => _validateRepo(value: event.url,emit));
     on<SetupEventOnUpdate>((event, emit) => _onUpdate(emit,ignoreUpdate: event.ignoreUpdate));
+    on<SetupEventBatteryManagerMode>((event, emit) => _enterBatteryManagerMode(emit));
   }
 
   final HomeRepo _homeRepo;
@@ -55,14 +57,26 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     bool isConnected=await _homeRepo.checkInternetAccess();
 
     navigate() async {
-      if (await _homeRepo.compatibilityChecker()==0) {
-        emit(SetupCompatibleState());
-      } else {
-        if(isConnected) {
-          emit(SetupPermissionState());
-        } else {
-          emit(SetupAskNetworkAccessState());
-        }
+
+      switch( await _homeRepo.compatibilityChecker()){
+        case 0:
+          Constants.globalConfig.setInstance(arMode: ARMODE.normal);
+          emit(SetupCompatibleState());
+          break;
+        case 3:
+          emit(SetupBatteryManagerCompatibleState());
+          break;
+        case 4:
+          Constants.globalConfig.setInstance(arMode: ARMODE.faustus);
+          emit(SetupCompatibleState());
+          break;
+
+        default:
+          if(isConnected) {
+            emit(SetupPermissionState());
+          } else {
+            emit(SetupAskNetworkAccessState());
+          }
       }
     }
 
@@ -76,6 +90,11 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     }else{
        await navigate();
     }
+  }
+
+  void _enterBatteryManagerMode(emit){
+    Constants.globalConfig.setInstance(arMode: ARMODE.batterymanager);
+    emit(SetupCompatibleState());
   }
 
   Future<bool> _isUpdateAvailable()async{
@@ -114,19 +133,30 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   void _onInstall(emit,{required int stepValue}) async {
       var isSuccess=false;
       _arButtonCubit.setLoad();
+
+      bool pkexec=await _homeRepo.pkexecChecker();
+
+      if(Constants.globalConfig.kSecureBootEnabled! || !pkexec){
+        _terminalList = '" ${(await _setupWizardRepo.getTerminalList())} "';
+      }
+
       if (stepValue == 0) {
         await _homeRepo.extractAsset(sourceFileName: Constants.kFaustusInstaller);
         _setupPath = "${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.globalConfig.kWorkingDirectory}";
-        _terminalList = '" ${(await _setupWizardRepo.getTerminalList())} "';
-        if (_terminalList.isNotEmpty) {
 
-          isSuccess=(await super.getOutput(command: "$_setupPath installpackages $_terminalList")).toString().contains("success")&&_homeRepo.readFile(path: '${Constants.globalConfig.kWorkingDirectory}/log').isEmpty;
+        if (_terminalList.isNotEmpty||pkexec) {
+          if(pkexec) {
+            _emitInstallFaustusTerminal(emit,stepValue: 0);
+          }
+          await super.getOutput(command: "${!pkexec ? '' : Constants.kPolkit }$_setupPath installpackages $_terminalList");
+          isSuccess = await _homeRepo.compatibilityChecker()!=1;
 
         } else {
           arSnackBar(text: "Fetching Data Failed", isPositive: false);
         }
+
       } else {
-          _emitInstallFaustusTerminal(emit);
+          _emitInstallFaustusTerminal(emit,stepValue: 2);
           await super.execute("${Constants.globalConfig.kSecureBootEnabled! ? '' : Constants.kPolkit} $_setupPath installfaustus ${Constants.globalConfig.kFaustusGitUrl} $_terminalList");
           isSuccess = await _homeRepo.compatibilityChecker()==0;
       }
@@ -163,6 +193,6 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
   _emitInstallFaustus(emit,{bool? isValid})=>  emit(SetupIncompatibleState(stepValue: 1, child: const FaustusInstaller(),isValid: isValid??true));
 
-  _emitInstallFaustusTerminal(emit)=> emit(SetupIncompatibleState(stepValue: 2, child: const TerminalScreen(), isValid: true));
+  _emitInstallFaustusTerminal(emit,{required int stepValue})=> emit(SetupIncompatibleState(stepValue: stepValue, child: const TerminalScreen(), isValid: true));
 
 }
