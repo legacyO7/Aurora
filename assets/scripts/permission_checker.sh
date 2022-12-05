@@ -43,8 +43,25 @@ permission_checker_file(){
    fi
 }
 
+checkpackages(){
+
+  for package in dkms openssl mokutil git make cmake
+  do
+    if ! command -v $package &> /dev/null
+    then
+         packages_to_install="$packages_to_install $package"
+    fi
+  done
+  echo $packages_to_install
+}
+
 if [ $# -ne 0 ];  then
-    permission_checker_file $1
+
+  if [ $1 == "checkpackages" ]; then
+      checkpackages
+  else
+     permission_checker_file $1
+  fi
 else
   permission_checker
 fi

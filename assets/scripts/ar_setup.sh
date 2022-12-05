@@ -1,7 +1,7 @@
 #!/bin/bash
 
 package_manager='unknown'
-packages_to_install="dkms openssl mokutil git pkexec make cmake"
+packages_to_install=""
 terminal_list="$4"
 tmpdir="$1"
 git_faustus="$3"
@@ -22,6 +22,11 @@ checkos(){
      fi
  done
 
+}
+
+
+checkpackages(){
+  packages_to_install=($($tmpdir/permission_checker.sh checkpackages))
 }
 
 executeinterminal(){
@@ -46,6 +51,8 @@ executeinterminal(){
 installpackages(){
 
   checkos
+  checkpackages
+
   if [ package_manager == "unknown" ]
   then
     echo "unsupported Operating System"
@@ -80,6 +87,9 @@ if [ $# -ne 0 ]
     case "$2" in
     checkos)
       checkos
+    ;;
+    checkpackages)
+      checkpackages
     ;;
     installpackages)
       setterminallist $@
