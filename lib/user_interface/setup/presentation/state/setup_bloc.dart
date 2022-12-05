@@ -58,6 +58,10 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
     navigate() async {
 
+      Constants.globalConfig.setInstance(
+          kExecPermissionCheckerPath: await _homeRepo.extractAsset(sourceFileName: Constants.kPermissionChecker)
+      );
+
       switch( await _homeRepo.compatibilityChecker()){
         case 0:
           Constants.globalConfig.setInstance(arMode: ARMODE.normal);
@@ -112,9 +116,17 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     return await _setupWizardRepo.getChangelog();
   }
 
-  _allowConfigure(bool allow,emit){
+  _allowConfigure(bool allow,emit) async{
     if(allow) {
-      _emitInstallPackage(emit);
+      await _homeRepo.extractAsset(sourceFileName: Constants.kFaustusInstaller);
+      _setupPath = "${await _homeRepo.extractAsset(
+          sourceFileName: Constants.kArSetup)} ${Constants.globalConfig
+        .kWorkingDirectory}";
+      if(_homeRepo.packagesToInstall.isNotEmpty) {
+        _emitInstallPackage(emit);
+      }else{
+        _emitInstallFaustus(emit);
+      }
     } else {
       emit(SetupPermissionState());
     }
@@ -140,21 +152,22 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
         _terminalList = '" ${(await _setupWizardRepo.getTerminalList())} "';
       }
 
-      if (stepValue == 0) {
-        await _homeRepo.extractAsset(sourceFileName: Constants.kFaustusInstaller);
-        _setupPath = "${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.globalConfig.kWorkingDirectory}";
+      if (stepValue == 0 ) {
+        if(_homeRepo.packagesToInstall.isEmpty) {
+          isSuccess = true;
+        }else {
 
-        if (_terminalList.isNotEmpty||pkexec) {
-          if(pkexec) {
-            _emitInstallFaustusTerminal(emit,stepValue: 0);
+          if (_terminalList.isNotEmpty || pkexec) {
+            if (pkexec) {
+              _emitInstallFaustusTerminal(emit, stepValue: 0);
+            }
+            await super.getOutput(command: "${!pkexec ? '' : Constants
+                .kPolkit} $_setupPath installpackages $_terminalList");
+            isSuccess = await _homeRepo.compatibilityChecker() != 1;
+          } else {
+            arSnackBar(text: "Fetching Data Failed", isPositive: false);
           }
-          await super.getOutput(command: "${!pkexec ? '' : Constants.kPolkit }$_setupPath installpackages $_terminalList");
-          isSuccess = await _homeRepo.compatibilityChecker()!=1;
-
-        } else {
-          arSnackBar(text: "Fetching Data Failed", isPositive: false);
         }
-
       } else {
           _emitInstallFaustusTerminal(emit,stepValue: 2);
           await super.execute("${Constants.globalConfig.kSecureBootEnabled! ? '' : Constants.kPolkit} $_setupPath installfaustus ${Constants.globalConfig.kFaustusGitUrl} $_terminalList");
@@ -189,7 +202,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     _emitInstallFaustus(emit,isValid: isValid);
   }
 
-  _emitInstallPackage(emit)=> emit(SetupIncompatibleState(stepValue: 0, child: packageInstaller(), isValid: true));
+  _emitInstallPackage(emit)=> emit(SetupIncompatibleState(stepValue: 0, child: packageInstaller(packagesToInstall: _homeRepo.packagesToInstall.split(' ')), isValid: true));
 
   _emitInstallFaustus(emit,{bool? isValid})=>  emit(SetupIncompatibleState(stepValue: 1, child: const FaustusInstaller(),isValid: isValid??true));
 

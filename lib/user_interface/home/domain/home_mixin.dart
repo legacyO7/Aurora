@@ -8,8 +8,8 @@ import 'package:aurora/utility/constants.dart';
 mixin HomeMixin on HomeRepo{
 
   final TerminalRepo _terminalRepo=sl<TerminalRepo>();
-  
-  final List _packages=['dkms','openssl', 'mokutil', 'git', 'pkexec','make', 'cmake'];
+
+  String  _packagesToInstall='';
 
   @override
   Future<bool> isSecureBootEnabled() async{
@@ -21,13 +21,22 @@ mixin HomeMixin on HomeRepo{
     return (await _terminalRepo.getOutput(command: 'which pkexec')).length==2;
   }
 
+  Future<String> listPackagesToInstall() async{
+    var output=(await _terminalRepo.getOutput(command: "${Constants.globalConfig.kExecPermissionCheckerPath} checkpackages"));
+    if(output.isEmpty||!output.last.contains('stdout')) {
+      return '';
+    }else{
+      _packagesToInstall= output.last.split('stdout')[1].trim();
+      return _packagesToInstall;
+    }
+
+  }
+
   @override
   Future<int> compatibilityChecker() async{
 
-    for(var package in _packages){
-      if((await _terminalRepo.getOutput(command: 'which $package')).length!=2) {
-        return 1;
-      }
+    if((await listPackagesToInstall()).isNotEmpty) {
+      return 1;
     }
 
     if(!Directory(Constants.kFaustusModulePath).existsSync()) {
@@ -50,5 +59,7 @@ mixin HomeMixin on HomeRepo{
   int convertVersionToInt(String version) {
    return int.tryParse(version.replaceAll('.', '').replaceAll('+', '').split('-')[0])??0;
   }
+
+  String get packagesToInstall=>_packagesToInstall;
   
 }

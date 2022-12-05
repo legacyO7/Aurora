@@ -33,7 +33,7 @@ class TerminalRepoImpl extends TerminalRepo{
   @override
   Future<bool> checkAccess() async{
 
-    var permissionChecker=Constants.globalConfig.kExecPermissionChecker!;
+    var permissionChecker=Constants.globalConfig.kExecPermissionCheckerPath!;
     if (Constants.globalConfig.arMode==ARMODE.batterymanager) {
       permissionChecker+=' ${Constants.kBatteryThresholdPath}';
     }
