@@ -11,4 +11,5 @@ abstract class HomeRepo{
   bool systemHasSystemd();
   Future<int> getBatteryCharge();
   int convertVersionToInt(String version);
+  String get packagesToInstall;
 }

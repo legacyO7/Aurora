@@ -10,7 +10,7 @@ class GlobalConfig {
    String? kExecFaustusPath;
    String? kExecBatteryManagerPath;
    String? kWorkingDirectory;
-   String? kExecPermissionChecker;
+   String? kExecPermissionCheckerPath;
 
   //url
    String? kAuroraGitRawYaml;
@@ -33,7 +33,7 @@ class GlobalConfig {
     this.kAuroraGitRawChangelog,
     this.kSecureBootEnabled,
     this.kFaustusGitUrl,
-    this.kExecPermissionChecker,
+    this.kExecPermissionCheckerPath,
     this.arMode=ARMODE.normal
   });
 
@@ -47,7 +47,7 @@ class GlobalConfig {
     kAuroraGitRawChangelog,
     kSecureBootEnabled,
     kFaustusGitUrl,
-    kExecPermissionChecker,
+    kExecPermissionCheckerPath,
     arMode
   }){
 
@@ -60,7 +60,7 @@ class GlobalConfig {
     this.kSecureBootEnabled= kSecureBootEnabled??this.kSecureBootEnabled;
     this.kWorkingDirectory= kWorkingDirectory??this.kWorkingDirectory;
     this.kFaustusGitUrl=kFaustusGitUrl??'https://github.com/legacyO7/faustus.git';
-    this.kExecPermissionChecker=kExecPermissionChecker??this.kExecPermissionChecker;
+    this.kExecPermissionCheckerPath=kExecPermissionCheckerPath??this.kExecPermissionCheckerPath;
     this.arMode=arMode??this.arMode;
 
   }
