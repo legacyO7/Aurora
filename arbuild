@@ -1,5 +1,0 @@
-#!/bin/bash
-
-flutter clean
-flutter build linux
-appimage-builder --skip-test
