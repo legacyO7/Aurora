@@ -47,7 +47,7 @@ Secureboot enabled devices need to enroll MOK
 
 
 ## Limitations
-- Although this utility comes with an AppImage, its functionality is only tested on debian-based distros. Aurora will work out of the box if the prerequisites are satisfied
+- Although this utility comes with an AppImage, its functionality is only tested on debian/RHEL-based distros. Aurora will work out of the box if the prerequisites are satisfied
 - Battery manager will not work on distros without systemd
  
 
