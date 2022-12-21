@@ -1,7 +1,7 @@
 #!/bin/bash
 
 package_manager='unknown'
-packages_to_install="dkms openssl mokutil xterm wget git pkexec make cmake"
+packages_to_install=""
 terminal_list="$4"
 tmpdir="$1"
 git_faustus="$3"
@@ -24,6 +24,11 @@ checkos(){
 
 }
 
+
+checkpackages(){
+  packages_to_install=($($tmpdir/permission_checker.sh checkpackages))
+}
+
 executeinterminal(){
 
    if [ "$EUID" -ne 0 ]; then
@@ -33,8 +38,7 @@ executeinterminal(){
            for terminal in "${terminal_list[@]}"; do
                 echo $terminal
                 if command -v "$terminal" > /dev/null 2>&1; then
-                    exec `$terminal -e "exec 2>$tmpdir/log && $@"`
-                    echo success
+                    exec `$terminal -e "$@"`
                     break;
                 fi
             done
@@ -47,6 +51,8 @@ executeinterminal(){
 installpackages(){
 
   checkos
+  checkpackages
+
   if [ package_manager == "unknown" ]
   then
     echo "unsupported Operating System"
@@ -81,6 +87,9 @@ if [ $# -ne 0 ]
     case "$2" in
     checkos)
       checkos
+    ;;
+    checkpackages)
+      checkpackages
     ;;
     installpackages)
       setterminallist $@

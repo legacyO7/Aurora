@@ -16,7 +16,7 @@ class DioClientImpl extends DioClient{
   required String url
   })async{
     try {
-      return await _dio.get(url);
+      return await _dio.get(url).timeout(const Duration(seconds: 15));
     }catch(e){
       throw Exception(e);
     }

@@ -1,6 +1,7 @@
 
 Changelogs:
 
-- fix threshold slider on reinstall
-- bugfixes and optimizations
-
+- fix installation issues with fedora linux
+- display only required libraries to install
+- skip package installation if required libraries are already installed
+- optimizations

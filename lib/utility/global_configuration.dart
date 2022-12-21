@@ -1,3 +1,5 @@
+enum ARMODE {normal, faustus, batterymanager}
+
 class GlobalConfig {
 
   //version
@@ -8,7 +10,7 @@ class GlobalConfig {
    String? kExecFaustusPath;
    String? kExecBatteryManagerPath;
    String? kWorkingDirectory;
-   String? kExecPermissionChecker;
+   String? kExecPermissionCheckerPath;
 
   //url
    String? kAuroraGitRawYaml;
@@ -18,6 +20,7 @@ class GlobalConfig {
 
    //misc
    bool? kSecureBootEnabled = false;
+   ARMODE arMode;
 
 
   GlobalConfig({
@@ -30,7 +33,8 @@ class GlobalConfig {
     this.kAuroraGitRawChangelog,
     this.kSecureBootEnabled,
     this.kFaustusGitUrl,
-    this.kExecPermissionChecker
+    this.kExecPermissionCheckerPath,
+    this.arMode=ARMODE.normal
   });
 
   setInstance({
@@ -43,7 +47,8 @@ class GlobalConfig {
     kAuroraGitRawChangelog,
     kSecureBootEnabled,
     kFaustusGitUrl,
-    kExecPermissionChecker
+    kExecPermissionCheckerPath,
+    arMode
   }){
 
     this.arChannel= arChannel??"stable";
@@ -55,7 +60,8 @@ class GlobalConfig {
     this.kSecureBootEnabled= kSecureBootEnabled??this.kSecureBootEnabled;
     this.kWorkingDirectory= kWorkingDirectory??this.kWorkingDirectory;
     this.kFaustusGitUrl=kFaustusGitUrl??'https://github.com/legacyO7/faustus.git';
-    this.kExecPermissionChecker=kExecPermissionChecker??this.kExecPermissionChecker;
+    this.kExecPermissionCheckerPath=kExecPermissionCheckerPath??this.kExecPermissionCheckerPath;
+    this.arMode=arMode??this.arMode;
 
   }
 }

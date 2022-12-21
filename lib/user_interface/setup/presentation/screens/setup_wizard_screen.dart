@@ -62,7 +62,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                     return const AskNetworkAccess();
                   }
 
-                  if(state is SetupIncompatibleState || state is SetupPermissionState) {
+                  if(state is SetupIncompatibleState || state is SetupPermissionState || state is SetupBatteryManagerCompatibleState) {
                     return const SetupScreen();
                   }
 

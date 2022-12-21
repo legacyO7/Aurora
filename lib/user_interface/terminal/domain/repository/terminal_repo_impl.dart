@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_configuration.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'terminal_repo.dart';
@@ -31,11 +32,15 @@ class TerminalRepoImpl extends TerminalRepo{
 
   @override
   Future<bool> checkAccess() async{
-    List<String> value = await getOutput(command: Constants.globalConfig.kExecPermissionChecker!);
+
+    var permissionChecker=Constants.globalConfig.kExecPermissionCheckerPath!;
+    if (Constants.globalConfig.arMode==ARMODE.batterymanager) {
+      permissionChecker+=' ${Constants.kBatteryThresholdPath}';
+    }
+    List<String> value = await getOutput(command: permissionChecker);
     if(value.length>1) {
       return value[1].split(' ')[1].toLowerCase()=='true';
     }
-
     return false;
   }
 

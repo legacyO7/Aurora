@@ -18,7 +18,7 @@ Find the latest release from [here](https://github.com/legacyO7/Aurora/releases)
 
 - [PolKit](https://en.wikipedia.org/wiki/Polkit) to obtain root privileges `pkexec`
 - [faustus module](https://github.com/hackbnw/faustus)
-- If the module is not installed, `dkms openssl mokutil xterm wget git make cmake` are required for installing the module
+- If the module is not installed, `dkms openssl mokutil git make cmake` are required for installing the module
 
 #### First Run
 Aurora will direct you to the installation screen if the prerequisites are not satisfied on your system.
