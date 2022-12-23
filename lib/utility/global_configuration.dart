@@ -51,7 +51,7 @@ class GlobalConfig {
     arMode
   }){
 
-    this.arChannel= arChannel??"stable";
+    this.arChannel= arChannel??this.arChannel;
     this.arVersion=  arVersion??this.arVersion;
     this.kAuroraGitRawChangelog= kAuroraGitRawChangelog?? "https://raw.githubusercontent.com/legacyO7/Aurora/${arChannel??this.arChannel}/changelog.txt";
     this.kAuroraGitRawYaml= kAuroraGitRawYaml?? "https://raw.githubusercontent.com/legacyO7/Aurora/${arChannel??this.arChannel}/pubspec.yaml";
