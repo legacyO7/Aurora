@@ -108,7 +108,7 @@ class _SetupScreenState extends State<SetupScreen> {
                     ),
                   ),
                   Expanded(
-                    flex: 4,
+                    flex: 3,
                     child:state.child??placeholder(),
                   ),
                   BlocBuilder<ArButtonCubit,bool>(

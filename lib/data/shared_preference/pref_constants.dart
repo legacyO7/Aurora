@@ -7,5 +7,6 @@ class PrefConstants{
   static const String mode="ar_mode";
   static const String speed="ar_speed";
   static const String threshold="ar_charge_threshold";
+  static const String theme="system";
 
 }
