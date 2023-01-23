@@ -1,8 +1,6 @@
 
 Changelogs:
 
-- fix installation crashes on some terminals
-- uses aurora terminal for package installation, if polkit is available
-- able to configure charging threshold even if faustus module is not installed
-- optimized uninstallation procedure
-- updated setup wizard ui
+- fixed annoying update reminder
+- added light theme for no good reason
+- updated dependencies
