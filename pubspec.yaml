@@ -31,16 +31,16 @@ dependencies:
     sdk: flutter
 
   flutter_bloc: ^8.1.1
-  flex_color_picker: ^3.0.0
+  flex_color_picker: ^3.0.2
   get_it: ^7.2.0
   path_provider: ^2.0.11
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.0.17
   rxdart: ^0.27.7
   another_xlider: ^1.1.2
   another_stepper: ^1.1.6
   package_info_plus: ^3.0.2
   dio: ^4.0.6
-  url_launcher: ^6.1.7
+  url_launcher: ^6.1.8
   animated_text_kit: ^4.2.2
   equatable: ^2.0.5
   window_size:
