@@ -1,5 +1,6 @@
 
 import 'package:aurora/user_interface/control_panel/state/batter_manager_bloc.dart';
+import 'package:aurora/user_interface/control_panel/state/theme_bloc.dart';
 import 'package:aurora/user_interface/control_panel/state/uninstaller_bloc.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
@@ -36,6 +37,7 @@ Future initDI() async{
   sl.registerLazySingleton(() => KeyboardSettingsBloc(sl()));
   sl.registerLazySingleton(() => BatteryManagerBloc(sl(),sl()));
   sl.registerLazySingleton(() => SetupBloc(sl(),sl(),sl(),sl()));
+  sl.registerLazySingleton(() => ThemeBloc(sl()));
   sl.registerLazySingleton(() => ArButtonCubit());
 
   sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));

@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:aurora/data/di/di.dart';
 import 'package:aurora/user_interface/control_panel/state/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/control_panel/state/theme_bloc.dart';
+import 'package:aurora/user_interface/control_panel/state/theme_event.dart';
+import 'package:aurora/user_interface/control_panel/state/theme_state.dart';
 import 'package:aurora/user_interface/control_panel/state/uninstaller_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
@@ -38,15 +41,18 @@ class Aurora extends StatelessWidget {
        BlocProvider.value(value: sl<KeyboardSettingsBloc>()),
        BlocProvider.value(value: sl<BatteryManagerBloc>()),
        BlocProvider.value(value: sl<TerminalBloc>()),
+       BlocProvider.value(value: sl<ThemeBloc>()..add(ThemeEventInit())),
        BlocProvider.value(value: sl<ArButtonCubit>()),
       ],
-      child: MaterialApp(
-        title: 'Aurora',
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-        ),
-        themeMode: ThemeMode.dark,
-        home: const SetupWizardScreen(),
+      child: BlocBuilder<ThemeBloc,ThemeState>(
+        builder: (_, state)=>
+            MaterialApp(
+              title: 'Aurora',
+              darkTheme: ThemeData.dark(),
+              theme: ThemeData.light(),
+              themeMode: state.arTheme,
+              home: const SetupWizardScreen(),
+            )
       ),
     );
   }

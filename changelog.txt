@@ -1,7 +1,6 @@
 
 Changelogs:
 
-- fix installation issues with fedora linux
-- display only required libraries to install
-- skip package installation if required libraries are already installed
-- optimizations
+- fixed annoying update reminder
+- added light theme for no good reason
+- updated dependencies

@@ -43,6 +43,22 @@ class PrefRepoImpl extends PrefRepo{
   }
 
   @override
+  Future<ThemeMode> getTheme() async{
+    switch((_sharedPreferences.getString(PrefConstants.theme))??PrefConstants.theme){
+      case 'system':
+        return ThemeMode.system;
+      case 'dark':
+        return ThemeMode.dark;
+      case 'light':
+        return ThemeMode.light;
+
+      default:
+        return ThemeMode.system;
+    }
+
+  }
+
+  @override
   Future setVersion(String version) async {
     await _sharedPreferences.setString(PrefConstants.version, version);
   }
@@ -70,5 +86,10 @@ class PrefRepoImpl extends PrefRepo{
   @override
   Future setThreshold(int threshold) async {
     await _sharedPreferences.setInt(PrefConstants.threshold, threshold);
+  }
+
+  @override
+  Future setTheme(ThemeMode arTheme) async {
+    await _sharedPreferences.setString(PrefConstants.theme, arTheme.name);
   }
 }

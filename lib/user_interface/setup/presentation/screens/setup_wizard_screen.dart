@@ -1,4 +1,5 @@
 
+import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/theme_button.dart';
 import 'package:aurora/user_interface/home/presentation/screens/home_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
@@ -37,6 +38,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          ThemeButton(),
           setupSplash(),
           Flexible(
             child: BlocListener <SetupBloc,SetupState>(
