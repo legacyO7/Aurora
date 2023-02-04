@@ -39,6 +39,13 @@ mixin HomeMixin on HomeRepo{
       return 1;
     }
 
+    if(File(Constants.kMainlineModuleModePath).existsSync() &&
+        File(Constants.kMainlineModuleStatePath).existsSync() &&
+        File(Constants.kMainlineBrightnessPath).existsSync()
+    ){
+      return 5;
+    }
+
     if(!Directory(Constants.kFaustusModulePath).existsSync()) {
       if(File(Constants.kBatteryThresholdPath).existsSync() && systemHasSystemd()) {
         return 3;

@@ -48,7 +48,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                 Flexible(
                   child: BlocListener <SetupBloc,SetupState>(
                     listener: (BuildContext context, state) {
-                      if(state is SetupCompatibleState){
+                      if(state is SetupCompatibleState|| state is SetupMainlineCompatibleState){
                         Future.delayed(const Duration(milliseconds: 1000)).then((value) =>
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomeScreen()))
                         );
@@ -83,6 +83,10 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
                         if(state is SetupCompatibleState) {
                           return const Text("initializing...");
+                        }
+
+                        if(state is SetupMainlineCompatibleState) {
+                          return const Text("using mainline kernel module, nothing to install");
                         }
 
                           return const Text("something is really wrong ;(");

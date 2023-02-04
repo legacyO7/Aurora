@@ -2,6 +2,7 @@ import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_state.dart';
 import 'package:aurora/utility/ar_widgets/arwidgets.dart';
+import 'package:aurora/utility/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,6 +34,7 @@ Widget modeController({
                        ArButton(
                            title: e.title,
                            isSelected: state.mode==e.value,
+                           isEnabled: !(Constants.globalConfig.isMainLine() && e.value==3),
                            action: () {
                              context.read<KeyboardSettingsBloc>().add(KeyboardSettingsEventSetMode(mode: e.value??0));
                            } )).toList()

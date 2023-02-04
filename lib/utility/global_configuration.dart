@@ -1,7 +1,7 @@
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 
-enum ARMODE {normal, faustus, batterymanager}
+enum ARMODE {normal, faustus, batterymanager, mainline}
 
 class GlobalConfig {
 
@@ -11,6 +11,7 @@ class GlobalConfig {
 
   //paths
    String? kExecFaustusPath;
+   String? kExecMainlinePath;
    String? kExecBatteryManagerPath;
    String? kWorkingDirectory;
    String? kExecPermissionCheckerPath;
@@ -30,6 +31,7 @@ class GlobalConfig {
     this.arVersion,
     this.arChannel,
     this.kExecFaustusPath,
+    this.kExecMainlinePath,
     this.kExecBatteryManagerPath,
     this.kWorkingDirectory,
     this.kAuroraGitRawYaml,
@@ -44,6 +46,7 @@ class GlobalConfig {
     arVersion,
     arChannel,
     kExecFaustusPath,
+    kExecMainlinePath,
     kExecBatteryManagerPath,
     kWorkingDirectory,
     kAuroraGitRawYaml,
@@ -60,6 +63,7 @@ class GlobalConfig {
     this.kAuroraGitRawYaml= kAuroraGitRawYaml?? "https://raw.githubusercontent.com/legacyO7/Aurora/${arChannel??this.arChannel}/pubspec.yaml";
     this.kExecBatteryManagerPath=kExecBatteryManagerPath??this.kExecBatteryManagerPath;
     this.kExecFaustusPath= kExecFaustusPath??this.kExecFaustusPath;
+    this.kExecMainlinePath= kExecMainlinePath??this.kExecMainlinePath;
     this.kSecureBootEnabled= kSecureBootEnabled??this.kSecureBootEnabled;
     this.kWorkingDirectory= kWorkingDirectory??this.kWorkingDirectory;
     this.kFaustusGitUrl=kFaustusGitUrl??'https://github.com/legacyO7/faustus.git';
@@ -70,4 +74,6 @@ class GlobalConfig {
 
   bool isDark()=>
       Theme.of(Constants.kScaffoldKey.currentState!.context).brightness==Brightness.dark;
+
+   bool isMainLine()=>Constants.globalConfig.arMode==ARMODE.mainline;
 }

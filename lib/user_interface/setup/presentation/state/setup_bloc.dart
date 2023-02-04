@@ -74,6 +74,10 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
           Constants.globalConfig.setInstance(arMode: ARMODE.faustus);
           emit(SetupCompatibleState());
           break;
+        case 5:
+          Constants.globalConfig.setInstance(arMode: ARMODE.mainline);
+          emit(SetupMainlineCompatibleState());
+          break;
 
         default:
           if(isConnected) {

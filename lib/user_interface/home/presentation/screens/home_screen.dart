@@ -49,14 +49,29 @@ class _MyHomePageState extends State<HomeScreen> {
                     children: [
                       Text("Aurora",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: context.watch<KeyboardSettingsBloc>().selectedColor),),
                       Text("\tv${Constants.globalConfig.arVersion}",style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: context.watch<KeyboardSettingsBloc>().selectedColor,
+                              width: 3.0
+                          ),
+                          borderRadius: const BorderRadius.all(
+                              Radius.circular(25.0)
+                          ),
+                          color: context.watch<KeyboardSettingsBloc>().selectedColor
+                        ),
+                        margin: const EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Text(Constants.globalConfig.isMainLine()?"Mainline":"Faustus"),
+                      )
                     ],
                   ),
-                  SizedBox()
+                  const SizedBox()
                 ],),
               ),
             ),
             Expanded(
-              flex: 6,
+              flex: 5,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: BlocBuilder<HomeBloc,HomeState>
