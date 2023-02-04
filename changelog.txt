@@ -1,6 +1,4 @@
 
 Changelogs:
 
-- fixed annoying update reminder
-- added light theme for no good reason
-- updated dependencies
+- ditch faustus module, if the mainline kernel supports keyboard backlight
