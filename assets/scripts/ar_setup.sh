@@ -77,8 +77,8 @@ disablefaustus(){
     echo -e "\033[1;34m Halting faustus\033[0m"
     sudo modprobe -r faustus
     printf "blacklist faustus\n" | sudo tee /etc/modprobe.d/faustus.conf
-    sudo modprobe asus_nb_wmi
-    sudo modprobe asus_wmi
+    sudo modprobe asus-nb-wmi
+    sudo modprobe asus-wmi
 }
 
 
