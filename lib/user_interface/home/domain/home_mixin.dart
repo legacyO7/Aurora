@@ -43,19 +43,16 @@ mixin HomeMixin on HomeRepo{
         File(Constants.kMainlineModuleStatePath).existsSync() &&
         File(Constants.kMainlineBrightnessPath).existsSync()
     ){
-      return 5;
+      return 4;
     }
 
-    if(!Directory(Constants.kFaustusModulePath).existsSync()) {
-      if(File(Constants.kBatteryThresholdPath).existsSync() && systemHasSystemd()) {
+    if(!checkFaustusFolder()) {
+      if(File(Constants.kBatteryThresholdPath).existsSync() &&
+          Constants.globalConfig.systemHasSystemd()) {
         return 3;
       } else {
         return 2;
       }
-    }
-
-    if(!systemHasSystemd()) {
-      return 4;
     }
 
     return 0;
@@ -66,6 +63,9 @@ mixin HomeMixin on HomeRepo{
   int convertVersionToInt(String version) {
    return int.tryParse(version.replaceAll('.', '').replaceAll('+', '').split('-')[0])??0;
   }
+
+  @override
+  bool checkFaustusFolder()=>Directory(Constants.kFaustusModulePath).existsSync();
 
   String get packagesToInstall=>_packagesToInstall;
   

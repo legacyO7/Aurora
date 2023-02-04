@@ -85,6 +85,10 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                           return const Text("initializing...");
                         }
 
+                        if(state is SetupDisableFaustusState) {
+                          return const Text("disabling faustus module...");
+                        }
+
                         if(state is SetupMainlineCompatibleState) {
                           return const Text("using mainline kernel module, nothing to install");
                         }

@@ -71,12 +71,13 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
           emit(SetupBatteryManagerCompatibleState());
           break;
         case 4:
-          Constants.globalConfig.setInstance(arMode: ARMODE.faustus);
-          emit(SetupCompatibleState());
-          break;
-        case 5:
           Constants.globalConfig.setInstance(arMode: ARMODE.mainline);
-          emit(SetupMainlineCompatibleState());
+          if(_homeRepo.checkFaustusFolder()){
+            emit(SetupDisableFaustusState());
+            await super.execute("${Constants.kPolkit} ${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.globalConfig.kWorkingDirectory} disablefaustus");
+          }
+            emit(SetupMainlineCompatibleState());
+
           break;
 
         default:

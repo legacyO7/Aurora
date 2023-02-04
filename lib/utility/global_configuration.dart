@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 
-enum ARMODE {normal, faustus, batterymanager, mainline}
+enum ARMODE {normal, batterymanager, mainline}
 
 class GlobalConfig {
 
@@ -75,5 +77,7 @@ class GlobalConfig {
   bool isDark()=>
       Theme.of(Constants.kScaffoldKey.currentState!.context).brightness==Brightness.dark;
 
-   bool isMainLine()=>Constants.globalConfig.arMode==ARMODE.mainline;
+  bool isMainLine()=>Constants.globalConfig.arMode==ARMODE.mainline;
+
+  bool systemHasSystemd() => Directory(Constants.kServicePath).existsSync();
 }

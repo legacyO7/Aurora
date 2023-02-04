@@ -49,7 +49,7 @@ class _ControlPanelState extends State<ControlPanelScreen> {
                     child: const UninstallButton())
               ],
             ),
-            if(Constants.globalConfig.arMode!=ARMODE.faustus)
+            if(Constants.globalConfig.systemHasSystemd())
             const Expanded(
               child:BatteryManagerScreen()
             ),
