@@ -1,4 +1,8 @@
-enum ARMODE {normal, faustus, batterymanager}
+import 'dart:io';
+
+import 'package:aurora/utility/constants.dart';
+
+enum ARMODE {normal, batterymanager, mainline}
 
 class GlobalConfig {
 
@@ -8,6 +12,7 @@ class GlobalConfig {
 
   //paths
    String? kExecFaustusPath;
+   String? kExecMainlinePath;
    String? kExecBatteryManagerPath;
    String? kWorkingDirectory;
    String? kExecPermissionCheckerPath;
@@ -27,6 +32,7 @@ class GlobalConfig {
     this.arVersion,
     this.arChannel,
     this.kExecFaustusPath,
+    this.kExecMainlinePath,
     this.kExecBatteryManagerPath,
     this.kWorkingDirectory,
     this.kAuroraGitRawYaml,
@@ -41,6 +47,7 @@ class GlobalConfig {
     arVersion,
     arChannel,
     kExecFaustusPath,
+    kExecMainlinePath,
     kExecBatteryManagerPath,
     kWorkingDirectory,
     kAuroraGitRawYaml,
@@ -57,6 +64,7 @@ class GlobalConfig {
     this.kAuroraGitRawYaml= kAuroraGitRawYaml?? "https://raw.githubusercontent.com/legacyO7/Aurora/${arChannel??this.arChannel}/pubspec.yaml";
     this.kExecBatteryManagerPath=kExecBatteryManagerPath??this.kExecBatteryManagerPath;
     this.kExecFaustusPath= kExecFaustusPath??this.kExecFaustusPath;
+    this.kExecMainlinePath= kExecMainlinePath??this.kExecMainlinePath;
     this.kSecureBootEnabled= kSecureBootEnabled??this.kSecureBootEnabled;
     this.kWorkingDirectory= kWorkingDirectory??this.kWorkingDirectory;
     this.kFaustusGitUrl=kFaustusGitUrl??'https://github.com/legacyO7/faustus.git';
@@ -64,4 +72,8 @@ class GlobalConfig {
     this.arMode=arMode??this.arMode;
 
   }
+
+  bool isMainLine()=>Constants.globalConfig.arMode==ARMODE.mainline;
+
+  bool systemHasSystemd() => Directory(Constants.kServicePath).existsSync();
 }

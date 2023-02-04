@@ -60,12 +60,6 @@ class HomeRepoImpl extends HomeRepo with HomeMixin{
     return version;
   }
 
-
-  @override
-  bool systemHasSystemd() {
-    return Directory(Constants.kServicePath).existsSync();
-  }
-
   @override
   Future<int> getBatteryCharge() async{
     return int.parse((await File(Constants.kBatteryThresholdPath).readAsString()).toString().trim());

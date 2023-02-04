@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:aurora/data/di/di.dart';
 import 'package:aurora/user_interface/control_panel/state/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
@@ -11,6 +9,7 @@ import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.d
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/utility/ar_widgets/arwidgets.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:window_size/window_size.dart';
@@ -21,11 +20,22 @@ import 'user_interface/home/presentation/state/home_bloc.dart';
 void main() async{
   await initDI();
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isLinux) {
-    setWindowMaxSize(const Size(1000, 600));
-    setWindowMinSize(const Size(1000, 600));
-  }
+
+  setWindowMaxSize(const Size(1000, 600));
+  setWindowMinSize(const Size(1000, 600));
+
   runApp(const Aurora());
+
+
+  doWhenWindowReady(() {
+    const initialSize = Size(1000, 600);
+    appWindow.minSize = initialSize;
+    appWindow.maxSize = initialSize;
+    appWindow.size = initialSize;
+    appWindow.alignment = Alignment.center;
+    appWindow.show();
+  });
+
 }
 
 class Aurora extends StatelessWidget {

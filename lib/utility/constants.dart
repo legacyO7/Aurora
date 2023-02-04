@@ -9,6 +9,7 @@ class Constants {
 
   //files
   static const String kFaustus = 'faustus_controller.sh';
+  static const String kMainline = 'mainline_controller.sh';
   static const String kBatteryManager = 'battery_manager.sh';
   static const String kArSetup = 'ar_setup.sh';
   static const String kFaustusInstaller = 'install_faustus.sh';
@@ -19,6 +20,9 @@ class Constants {
 
   //paths
   static const String kFaustusModulePath = "/sys/devices/platform/faustus/";
+  static const String kMainlineModuleModePath = "/sys/class/leds/asus::kbd_backlight/kbd_rgb_mode";
+  static const String kMainlineModuleStatePath = "/sys/class/leds/asus::kbd_backlight/kbd_rgb_state";
+  static const String kMainlineBrightnessPath = "/sys/class/leds/asus::kbd_backlight/brightness";
   static const String kAssetsPath = "assets/scripts/";
   static const String kBatteryThresholdPath = '/sys/class/power_supply/BAT1/charge_control_end_threshold';
   static const String kServicePath = '/etc/systemd/system/';

@@ -6,6 +6,7 @@ import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_widgets.dart';
 import 'package:aurora/utility/ar_widgets/arwidgets.dart';
+import 'package:aurora/utility/constants.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,6 +35,7 @@ class UninstallButton extends StatelessWidget {
                   onChange: (_)=>context.read<UninstallerBloc>().add(UninstallEventCheckDisableServices(disableThreshold: !state.disableThreshold))
               ),
 
+              if(!Constants.globalConfig.isMainLine())
               ArCheckbox(
                   text: "Disable faustus module",
                   isSelected: state.disableFaustusModule,
@@ -73,8 +75,8 @@ class UninstallButton extends StatelessWidget {
     context.read<UninstallerBloc>().add(UninstallEventDispose());
     Navigator.pop(context);
     if(!await context.read<HomeBloc>().compatibilityChecker()) {
-    context.read<HomeBloc>().add(HomeEventDispose());
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SetupWizardScreen()));
+      context.read<HomeBloc>().add(HomeEventDispose());
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SetupWizardScreen()));
     }
   }
 }

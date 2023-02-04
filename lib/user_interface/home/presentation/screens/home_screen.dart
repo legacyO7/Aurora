@@ -2,7 +2,9 @@ import 'package:aurora/user_interface/control_panel/presentation/screens/control
 import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/home/presentation/screens/home_widgets.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
+import 'package:aurora/utility/ar_widgets/ar_top_buttons.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,19 +38,40 @@ class _MyHomePageState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text("Aurora",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: context.watch<KeyboardSettingsBloc>().selectedColor),),
-                  Text("\tv${Constants.globalConfig.arVersion}",style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
-                ],
+            Flexible(
+              child: MoveWindow(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                  const ArWindowButtons(),
+                  Column(
+                    children: [
+                      Text("Aurora",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: context.watch<KeyboardSettingsBloc>().selectedColor),),
+                      Text("\tv${Constants.globalConfig.arVersion}",style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: context.watch<KeyboardSettingsBloc>().selectedColor,
+                              width: 3.0
+                          ),
+                          borderRadius: const BorderRadius.all(
+                              Radius.circular(25.0)
+                          ),
+                          color: context.watch<KeyboardSettingsBloc>().selectedColor
+                        ),
+                        margin: const EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Text(Constants.globalConfig.isMainLine()?"Mainline":"Faustus"),
+                      )
+                    ],
+                  ),
+                  const SizedBox()
+                ],),
               ),
             ),
             Expanded(
+              flex: 5,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: BlocBuilder<HomeBloc,HomeState>

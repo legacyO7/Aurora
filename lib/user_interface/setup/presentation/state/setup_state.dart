@@ -24,6 +24,14 @@ class SetupCompatibleState extends SetupState{
   SetupCompatibleState();
 }
 
+class SetupMainlineCompatibleState extends SetupState{
+  SetupMainlineCompatibleState();
+}
+
+class SetupDisableFaustusState extends SetupState{
+  SetupDisableFaustusState();
+}
+
 class SetupBatteryManagerCompatibleState extends SetupState{
   SetupBatteryManagerCompatibleState();
 }
