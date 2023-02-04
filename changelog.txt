@@ -2,3 +2,4 @@
 Changelogs:
 
 - ditch faustus module, if the mainline kernel supports keyboard backlight
+- improved UI
