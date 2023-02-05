@@ -1,5 +1,5 @@
 import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_widgets.dart';
-import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/home/presentation/screens/home_widgets.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/utility/ar_widgets/ar_top_buttons.dart';

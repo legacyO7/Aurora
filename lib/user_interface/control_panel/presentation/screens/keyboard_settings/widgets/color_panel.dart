@@ -1,5 +1,5 @@
-import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
-import 'package:aurora/user_interface/control_panel/state/keyboard_settings_event.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings_event.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

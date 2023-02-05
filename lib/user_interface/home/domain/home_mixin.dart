@@ -67,6 +67,7 @@ mixin HomeMixin on HomeRepo{
   @override
   bool checkFaustusFolder()=>Directory(Constants.kFaustusModulePath).existsSync();
 
+  @override
   String get packagesToInstall=>_packagesToInstall;
   
 }

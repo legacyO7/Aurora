@@ -1,6 +1,6 @@
 import 'package:aurora/data/shared_preference/pref_repo.dart';
-import 'package:aurora/user_interface/control_panel/state/theme_event.dart';
-import 'package:aurora/user_interface/control_panel/state/theme_state.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/theme_event.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/theme_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

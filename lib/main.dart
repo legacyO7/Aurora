@@ -1,10 +1,10 @@
 import 'package:aurora/data/di/di.dart';
-import 'package:aurora/user_interface/control_panel/state/batter_manager_bloc.dart';
-import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
-import 'package:aurora/user_interface/control_panel/state/theme_bloc.dart';
-import 'package:aurora/user_interface/control_panel/state/theme_event.dart';
-import 'package:aurora/user_interface/control_panel/state/theme_state.dart';
-import 'package:aurora/user_interface/control_panel/state/uninstaller_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/batter_manager_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/theme_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/theme_event.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/theme_state.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/uninstaller_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
