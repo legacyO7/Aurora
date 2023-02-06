@@ -4,6 +4,7 @@ import 'package:aurora/user_interface/home/presentation/screens/home_widgets.dar
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/utility/ar_widgets/ar_top_buttons.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_mixin.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +19,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<HomeScreen> {
+class _MyHomePageState extends State<HomeScreen> with GlobalMixin {
 
   @override
   void initState() {
@@ -62,7 +63,7 @@ class _MyHomePageState extends State<HomeScreen> {
                         ),
                         margin: const EdgeInsets.only(top: 10),
                         padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Text(Constants.globalConfig.isMainLine()?"Mainline":"Faustus"),
+                        child: Text(super.isMainLine()?"Mainline":"Faustus"),
                       )
                     ],
                   ),

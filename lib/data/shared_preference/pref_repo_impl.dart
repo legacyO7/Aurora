@@ -1,4 +1,7 @@
 
+import 'dart:convert';
+
+import 'package:aurora/data/model/ar_state_model.dart';
 import 'package:aurora/data/shared_preference/pref_constants.dart';
 import 'package:aurora/utility/ar_widgets/colors.dart';
 import 'package:aurora/utility/constants.dart';
@@ -35,6 +38,13 @@ class PrefRepoImpl extends PrefRepo{
   @override
   Future<int> getSpeed() async {
     return (_sharedPreferences.getInt(PrefConstants.speed))??0;
+  }
+
+  @override
+  Future<ArState> getState() async {
+    String state= (_sharedPreferences.getString(PrefConstants.state))??'';
+    if(state.isEmpty) return ArState();
+    return ArState.fromJson(jsonDecode(state));
   }
 
   @override
@@ -81,6 +91,11 @@ class PrefRepoImpl extends PrefRepo{
   @override
   Future setSpeed(int speed) async {
     await _sharedPreferences.setInt(PrefConstants.speed, speed);
+  }
+
+  @override
+  Future setState({ required bool boot, required bool awake, required bool sleep }) async {
+    await _sharedPreferences.setString(PrefConstants.state, '{ "boot": $boot, "awake": $awake, "sleep": $sleep }');
   }
 
   @override

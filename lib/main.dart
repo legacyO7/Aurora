@@ -9,6 +9,7 @@ import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.d
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/utility/ar_widgets/arwidgets.dart';
+import 'package:aurora/utility/global_mixin.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,21 +22,30 @@ void main() async{
   await initDI();
   WidgetsFlutterBinding.ensureInitialized();
 
-  setWindowMaxSize(const Size(1000, 600));
-  setWindowMinSize(const Size(1000, 600));
+  Size initialSize = ArWindow().setWindowSize();
+  setWindowMaxSize(initialSize);
+  setWindowMinSize(initialSize);
 
   runApp(const Aurora());
 
-
   doWhenWindowReady(() {
-    const initialSize = Size(1000, 600);
     appWindow.minSize = initialSize;
     appWindow.maxSize = initialSize;
     appWindow.size = initialSize;
     appWindow.alignment = Alignment.center;
     appWindow.show();
   });
+}
 
+
+class ArWindow with GlobalMixin{
+  Size setWindowSize() {
+    if(super.isMainLineCompatible()) {
+      return const Size(1000,700);
+    } else {
+      return const Size(1000,600);
+    }
+  }
 }
 
 class Aurora extends StatelessWidget {

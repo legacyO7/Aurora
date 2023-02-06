@@ -1,6 +1,4 @@
-import 'dart:io';
 
-import 'package:aurora/utility/constants.dart';
 
 enum ARMODE {normal, batterymanager, mainline}
 
@@ -73,7 +71,5 @@ class GlobalConfig {
 
   }
 
-  bool isMainLine()=>Constants.globalConfig.arMode==ARMODE.mainline;
-
-  bool systemHasSystemd() => Directory(Constants.kServicePath).existsSync();
+  
 }

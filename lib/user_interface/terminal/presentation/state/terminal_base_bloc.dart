@@ -1,8 +1,9 @@
 import 'package:aurora/data/di/di.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
+import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-abstract class TerminalBaseBloc<Event,State> extends Bloc<Event,State> {
+abstract class TerminalBaseBloc<Event,State> extends Bloc<Event,State> with GlobalMixin{
 
   TerminalBaseBloc(State initialState) : super(initialState);
 

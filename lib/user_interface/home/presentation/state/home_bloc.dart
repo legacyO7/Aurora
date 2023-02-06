@@ -22,7 +22,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
 
     _globalConfig.kExecBatteryManagerPath= await _homeRepo.extractAsset(sourceFileName:Constants.kBatteryManager);
     
-    if(_globalConfig.isMainLine()){
+    if(super.isMainLine()){
       _globalConfig.kExecMainlinePath= await _homeRepo.extractAsset(sourceFileName: Constants.kMainline);
     }else {     
       _globalConfig.kExecFaustusPath=await _homeRepo.extractAsset(sourceFileName: Constants.kFaustus);
@@ -30,7 +30,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
     
     var checkAccess=await super.checkAccess();
     if(!checkAccess) {
-        await super.execute("${Constants.kPolkit} ${_globalConfig.isMainLine()? _globalConfig.kExecMainlinePath: _globalConfig
+        await super.execute("${Constants.kPolkit} ${super.isMainLine()? _globalConfig.kExecMainlinePath: _globalConfig
             .kExecFaustusPath} init ${_globalConfig.kWorkingDirectory} ${await _prefRepo.getThreshold()}");
       checkAccess=await super.checkAccess();
     }

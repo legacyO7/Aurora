@@ -4,8 +4,9 @@ import 'package:aurora/data/di/di.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_mixin.dart';
 
-mixin HomeMixin on HomeRepo{
+mixin HomeMixin on HomeRepo implements GlobalMixin {
 
   final TerminalRepo _terminalRepo=sl<TerminalRepo>();
 
@@ -39,16 +40,12 @@ mixin HomeMixin on HomeRepo{
       return 1;
     }
 
-    if(File(Constants.kMainlineModuleModePath).existsSync() &&
-        File(Constants.kMainlineModuleStatePath).existsSync() &&
-        File(Constants.kMainlineBrightnessPath).existsSync()
-    ){
+    if(isMainLineCompatible()){
       return 4;
     }
 
     if(!checkFaustusFolder()) {
-      if(File(Constants.kBatteryThresholdPath).existsSync() &&
-          Constants.globalConfig.systemHasSystemd()) {
+      if(File(Constants.kBatteryThresholdPath).existsSync() && systemHasSystemd()) {
         return 3;
       } else {
         return 2;

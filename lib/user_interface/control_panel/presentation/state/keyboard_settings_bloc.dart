@@ -1,37 +1,55 @@
 
+import 'package:aurora/data/model/ar_state_model.dart';
 import 'package:aurora/data/shared_preference/pref_repo.dart';
+import 'package:aurora/user_interface/control_panel/domain/control_panel_repo.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/colors.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';
 
 import 'keyboard_settings_state.dart';
 
-class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,KeyboardSettingsState>{
-  KeyboardSettingsBloc(this._prefRepo):super(const KeyboardSettingsState()){
+class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,KeyboardSettingsState> with GlobalMixin{
+  KeyboardSettingsBloc(this._prefRepo,this._controlPanelRepo):super(const KeyboardSettingsState()){
    on<KeyboardSettingsEventSetBrightness>((event, emit)=> _setBrightness(event.brightness,emit));
    on<KeyboardSettingsEventSetSpeed>((event, emit)=> _setSpeed(event.speed,emit));
    on<KeyboardSettingsEventSetMode>((event, emit)=> _setMode(event.mode,emit));
    on<KeyboardSettingsEventSetColor>((event, emit)=> _setColor(event.color??ArColors.accentColor,emit));
    on<KeyboardSettingsEventInit>((event, emit) => _initPanel(emit));
+   on<KeyboardSettingsEventSetState>((event, emit) => _setMainLineStateParams(emit,awake: event.awake,sleep: event.sleep,boot: event.boot));
   }
 
   final PrefRepo _prefRepo;
+  final ControlPanelRepo _controlPanelRepo;
   Color _color=ArColors.accentColor;
   int _mode=0;
   int _speed=0;
+  bool _boot=false;
+  bool _awake=false;
+  bool _sleep=false;
+
 
   final _globalConfig=Constants.globalConfig;
 
   _initPanel(emit) async{
 
       await _setBrightness(await _prefRepo.getBrightness(), emit);
-      if(_globalConfig.isMainLine()){
-        await _setMainlineParams(
+      if(super.isMainLine()){
+        await _setMainlineModeParams(
           color: await _prefRepo.getColor(),
           mode: await _prefRepo.getMode(),
           speed: await _prefRepo.getSpeed(),
+          emit
+        );
+
+        ArState arState= await _prefRepo.getState();
+
+        await _setMainLineStateParams(
+          boot: !arState.boot!,
+          sleep: !arState.sleep!,
+          awake: !arState.awake!,
           emit
         );
       }else {
@@ -43,8 +61,8 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
 
   _setColor(Color color ,emit) async {
     _color= color;
-    if(_globalConfig.isMainLine()){
-      await _setMainlineParams(emit, color: _color);
+    if(super.isMainLine()){
+      await _setMainlineModeParams(emit, color: _color);
     }else {
       await super.execute(
           "${_globalConfig.kExecFaustusPath} color ${_color.red
@@ -57,7 +75,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
   }
 
   _setBrightness(int brightness, emit) async {
-    await super.execute("${_globalConfig.isMainLine()?_globalConfig.kExecMainlinePath: _globalConfig.kExecFaustusPath} brightness $brightness ");
+    await super.execute("${super.isMainLine()?_globalConfig.kExecMainlinePath: _globalConfig.kExecFaustusPath} brightness $brightness ");
     _prefRepo.setBrightness(brightness);
     emit(state.copyState(brightness: brightness));
   }
@@ -65,8 +83,8 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
 
   _setMode(int mode, emit)async{
     _mode=mode;
-    if(_globalConfig.isMainLine()){
-      await _setMainlineParams(emit,mode: mode);
+    if(super.isMainLine()){
+      await _setMainlineModeParams(emit,mode: mode);
     }else {
       await super.execute("${_globalConfig.kExecFaustusPath} mode $mode ");
       _prefRepo.setMode(mode);
@@ -76,8 +94,8 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
 
   _setSpeed(int speed, emit) async{
     _speed=speed;
-    if(_globalConfig.isMainLine()){
-      await _setMainlineParams(emit,speed: speed);
+    if(super.isMainLine()){
+      await _setMainlineModeParams(emit,speed: speed);
     }else {
       await super.execute("${_globalConfig.kExecFaustusPath} speed $speed ");
       _prefRepo.setSpeed(speed);
@@ -85,7 +103,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
     }
   }
   
-  _setMainlineParams(emit,{
+  _setMainlineModeParams(emit,{
     int? mode,
     Color? color,
     int? speed    
@@ -100,6 +118,22 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
     _prefRepo.setSpeed(_speed);
     _prefRepo.setMode(_mode);
   }
+  
+  _setMainLineStateParams(emit,{
+    bool? boot,
+    bool? awake,
+    bool? sleep
+  }) async{
+
+    _boot=boot==null?_boot:!boot;
+    _awake=awake==null?_awake:!awake;
+    _sleep=sleep==null?_sleep:!sleep;
+
+    await _controlPanelRepo.saveState(sleep: _parseBool(_sleep),awake: _parseBool(_awake),boot: _parseBool(_boot));
+    emit(state.copyState(boot: _boot,sleep: _sleep, awake: _awake));
+  }
+
+  _parseBool(bool? value)=>(value??false)?1:0;
 
   bool get isSpeedBarVisible => (state.mode)>0&&(state.mode)<3&&isModeBarVisible;
   bool get isModeBarVisible => (state.brightness)>0;
