@@ -49,7 +49,7 @@ Future initDI() async{
   sl.registerLazySingleton<ControlPanelRepo>(() => ControlPanelRepoImpl(sl(),sl()));
 
   sl.registerLazySingleton<SetupSource>(() => SetupSourceImpl(sl()));
-  sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl());
+  sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl()..clearLog());
 
   sl.registerLazySingleton<DioClient>(() => DioClientImpl(sl()));
 

@@ -6,6 +6,7 @@ import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart'
 import 'package:aurora/user_interface/terminal/domain/model/terminal_text.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TerminalSourceImpl extends TerminalSource{
@@ -51,6 +52,7 @@ class TerminalSourceImpl extends TerminalSource{
         if (kDebugMode) {
           print("STDERR: ${e.toString()}");
         }
+        await _logIt(e.toString());
         _inProgress=false;
       }
     }
@@ -69,10 +71,11 @@ class TerminalSourceImpl extends TerminalSource{
   }
 
   _convertToList({required String lines, required CommandStatus commandStatus}){
-    _lineSplitter.convert(lines).forEach((line) {
+    _lineSplitter.convert(lines).forEach((line) async{
       if (kDebugMode) {
         print("> ${commandStatus.name} $line");
       }
+      await _logIt(line);
       _terminalSink.add("${commandStatus.name} $line");
 
     });
@@ -104,5 +107,14 @@ class TerminalSourceImpl extends TerminalSource{
   void disposeStream(){
     _tStreamController.close();
     _terminalSink.close();
+  }
+
+  _logIt(String value) async{
+    File("${(await getTemporaryDirectory()).path}/ar.log").writeAsString("> $value\n",mode: FileMode.append);
+  }
+
+  @override
+  Future clearLog() async{
+    File("${(await getTemporaryDirectory()).path}/ar.log").deleteSync();
   }
 }
