@@ -21,9 +21,7 @@ Widget colorController(BuildContext context) {
         ColorPickerType.wheel: true,
       },
       colorCodeHasColor: false,
-      onColorChanged: (color) async{
-        context.read<KeyboardSettingsBloc>()
-            ..add(KeyboardSettingsEventSetColor(color: color))
-            ..add(KeyboardSettingsEventSetMode());
-      });
+      onColorChanged: (color) =>
+        context.read<KeyboardSettingsBloc>().add(KeyboardSettingsEventSetColor(color: color))
+  );
 }

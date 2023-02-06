@@ -26,6 +26,7 @@ class _KeyboardSettingsScreenState extends State<KeyboardSettingsScreen> with Gl
   @override
   Widget build(BuildContext context) {
    return Column(
+     mainAxisAlignment: MainAxisAlignment.center,
      children: [
        BlocBuilder<KeyboardSettingsBloc, KeyboardSettingsState>(
          builder: (BuildContext context, state) {

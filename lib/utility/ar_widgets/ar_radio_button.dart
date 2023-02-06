@@ -24,7 +24,7 @@ class ArRadioButton extends StatelessWidget{
           value: value, groupValue: true, onChanged: (bool? value) => onClick(value),
           child: SizedBox(
               width: 80,
-              child: Center(child: Text(title,textAlign: TextAlign.end,)))),
+              child: Center(child: Text(title,textAlign: TextAlign.end, style: TextStyle(color:value?context.invertedColor:null),)))),
       ),
     );
   }

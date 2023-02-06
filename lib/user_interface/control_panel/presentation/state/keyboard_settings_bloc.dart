@@ -16,7 +16,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
    on<KeyboardSettingsEventSetBrightness>((event, emit)=> _setBrightness(event.brightness,emit));
    on<KeyboardSettingsEventSetSpeed>((event, emit)=> _setSpeed(event.speed,emit));
    on<KeyboardSettingsEventSetMode>((event, emit)=> _setMode(event.mode,emit));
-   on<KeyboardSettingsEventSetColor>((event, emit)=> _setColor(event.color??ArColors.accentColor,emit));
+   on<KeyboardSettingsEventSetColor>((event, emit)=> _setColor(color: event.color??ArColors.accentColor,mode: 0, emit));
    on<KeyboardSettingsEventInit>((event, emit) => _initPanel(emit));
    on<KeyboardSettingsEventSetState>((event, emit) => _setMainLineStateParams(emit,awake: event.awake,sleep: event.sleep,boot: event.boot));
   }
@@ -53,16 +53,17 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
           emit
         );
       }else {
-        await _setColor(await _prefRepo.getColor(), emit);
+        await _setColor(color: await _prefRepo.getColor(), emit);
         await _setMode(await _prefRepo.getMode(), emit);
         await _setSpeed(await _prefRepo.getSpeed(), emit);
       }
   }
 
-  _setColor(Color color ,emit) async {
+  _setColor(emit,{required Color color,int? mode}) async {
     _color= color;
+    _mode=mode??_mode;
     if(super.isMainLine()){
-      await _setMainlineModeParams(emit, color: _color);
+      await _setMainlineModeParams(emit, color: _color,mode: _mode);
     }else {
       await super.execute(
           "${_globalConfig.kExecFaustusPath} color ${_color.red
