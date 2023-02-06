@@ -23,19 +23,19 @@ Widget stateController({
                ArRadioButton(
                  value: state.boot,
                  onClick: (bool value)=> bloc.add(KeyboardSettingsEventSetState(boot: value)),
-                 title: "boot",
+                 title: "Boot",
                ),
 
                ArRadioButton(
                  value: state.awake,
                  onClick: (bool value)=> bloc.add(KeyboardSettingsEventSetState(awake: value)),
-                 title: "awake",
+                 title: "Awake",
                ),
 
                ArRadioButton(
                  value: state.sleep,
                  onClick: (bool value)=> bloc.add(KeyboardSettingsEventSetState(sleep: value)),
-                 title: "sleep",
+                 title: "Sleep",
                ),
 
            ]);

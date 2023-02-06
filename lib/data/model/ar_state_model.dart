@@ -3,7 +3,7 @@ class ArState{
   bool? awake;
   bool? sleep;
 
-  ArState({this.boot=false, this.awake=false, this.sleep=false});
+  ArState({this.boot=false, this.awake=true, this.sleep=false});
 
   ArState.fromJson(Map<String, dynamic> json){
     if(json.isEmpty) return;

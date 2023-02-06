@@ -51,8 +51,9 @@ class TerminalSourceImpl extends TerminalSource{
       } catch (e) {
         if (kDebugMode) {
           print("STDERR: ${e.toString()}");
+        }else {
+          await _logIt(e.toString());
         }
-        await _logIt(e.toString());
         _inProgress=false;
       }
     }
@@ -74,8 +75,9 @@ class TerminalSourceImpl extends TerminalSource{
     _lineSplitter.convert(lines).forEach((line) async{
       if (kDebugMode) {
         print("> ${commandStatus.name} $line");
+      }else {
+        await _logIt(line);
       }
-      await _logIt(line);
       _terminalSink.add("${commandStatus.name} $line");
 
     });
