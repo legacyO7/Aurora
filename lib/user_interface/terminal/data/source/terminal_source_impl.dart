@@ -117,6 +117,9 @@ class TerminalSourceImpl extends TerminalSource{
 
   @override
   Future clearLog() async{
-    File("${(await getTemporaryDirectory()).path}/ar.log").deleteSync();
+    var logFile=File("${(await getTemporaryDirectory()).path}/ar.log");
+    if(logFile.existsSync()) {
+      logFile.deleteSync();
+    }
   }
 }

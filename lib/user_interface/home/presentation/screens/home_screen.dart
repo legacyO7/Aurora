@@ -1,7 +1,7 @@
 import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_widgets.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/home/presentation/screens/home_widgets.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
+import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:aurora/utility/ar_widgets/ar_top_buttons.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
@@ -48,22 +48,22 @@ class _MyHomePageState extends State<HomeScreen> with GlobalMixin {
                   const ArWindowButtons(),
                   Column(
                     children: [
-                      Text("Aurora",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: context.watch<KeyboardSettingsBloc>().selectedColor),),
+                      Text("Aurora",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold,color: context.selectedColor),),
                       Text("\tv${Constants.globalConfig.arVersion}",style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                              color: context.watch<KeyboardSettingsBloc>().selectedColor,
+                              color: context.selectedColor,
                               width: 3.0
                           ),
                           borderRadius: const BorderRadius.all(
                               Radius.circular(25.0)
                           ),
-                          color: context.watch<KeyboardSettingsBloc>().selectedColor
+                          color: context.selectedColor
                         ),
                         margin: const EdgeInsets.only(top: 10),
                         padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Text(super.isMainLine()?"Mainline":"Faustus"),
+                        child: Text(super.isMainLine()?"Mainline":"Faustus",style: TextStyle(color: context.invertedColor),),
                       )
                     ],
                   ),

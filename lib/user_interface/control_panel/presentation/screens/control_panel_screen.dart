@@ -2,6 +2,7 @@
 import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_widgets.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/theme_button.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings_bloc.dart';
+import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
 import 'package:aurora/utility/global_mixin.dart';
@@ -40,12 +41,12 @@ class _ControlPanelState extends State<ControlPanelScreen> with GlobalMixin{
                     child: const ThemeButton()),
                 Container(
                     decoration: BoxDecoration(
-                        border: Border.symmetric(vertical: BorderSide.none,horizontal: BorderSide(color:context.watch<KeyboardSettingsBloc>().selectedColor ))
+                        border: Border.symmetric(vertical: BorderSide.none,horizontal: BorderSide(color:context.selectedColor ))
                     ),
                     child: const GitButton()),
                 Container(
                     decoration: BoxDecoration(
-                        border: Border.all(color: context.watch<KeyboardSettingsBloc>().selectedColor),
+                        border: Border.all(color: context.selectedColor),
                         borderRadius: const BorderRadius.only(bottomRight: Radius.circular(20),topRight: Radius.circular(20))
                     ),
                     child: const UninstallButton())

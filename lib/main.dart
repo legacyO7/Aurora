@@ -41,7 +41,7 @@ void main() async{
 class ArWindow with GlobalMixin{
   Size setWindowSize() {
     if(super.isMainLineCompatible()) {
-      return const Size(1000,700);
+      return const Size(1000,680);
     } else {
       return const Size(1000,600);
     }
