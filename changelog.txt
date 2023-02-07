@@ -3,4 +3,4 @@ Changelogs:
 
 - added keyboard states, if using mainline for backlit
 - improved ui
-- many under the hood changed
+- many under the hood changes
