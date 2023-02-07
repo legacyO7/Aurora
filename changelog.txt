@@ -1,5 +1,6 @@
 
 Changelogs:
 
-- ditch faustus module, if the mainline kernel supports keyboard backlight
-- improved UI
+- added keyboard states, if using mainline for backlit
+- improved ui
+- many under the hood changed

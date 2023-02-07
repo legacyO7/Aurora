@@ -1,3 +1,4 @@
+import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 
@@ -42,8 +43,8 @@ class ArWindowButtons extends StatelessWidget {
     );
 
     final closeButtonColors = WindowButtonColors(
-      mouseOver: const Color(0xFFD32F2F),
-      mouseDown: const Color(0xFFB71C1C),
+      mouseOver: context.selectedColor,
+      mouseDown: context.selectedColor,
       iconNormal: Theme
           .of(context)
           .brightness == Brightness.dark

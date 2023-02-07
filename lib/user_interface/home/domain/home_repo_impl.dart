@@ -3,13 +3,14 @@ import 'dart:io';
 import 'package:aurora/user_interface/home/domain/home_mixin.dart';
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'home_repo.dart';
 
-class HomeRepoImpl extends HomeRepo with HomeMixin{
+class HomeRepoImpl extends HomeRepo with HomeMixin, GlobalMixin{
 
   HomeRepoImpl(this._terminalSource);
 
@@ -58,11 +59,6 @@ class HomeRepoImpl extends HomeRepo with HomeMixin{
     );
 
     return version;
-  }
-
-  @override
-  Future<int> getBatteryCharge() async{
-    return int.parse((await File(Constants.kBatteryThresholdPath).readAsString()).toString().trim());
   }
 
 }

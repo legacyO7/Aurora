@@ -50,6 +50,8 @@ class TerminalSourceImpl extends TerminalSource{
       } catch (e) {
         if (kDebugMode) {
           print("STDERR: ${e.toString()}");
+        }else {
+          await _logIt(e.toString());
         }
         _inProgress=false;
       }
@@ -69,9 +71,11 @@ class TerminalSourceImpl extends TerminalSource{
   }
 
   _convertToList({required String lines, required CommandStatus commandStatus}){
-    _lineSplitter.convert(lines).forEach((line) {
+    _lineSplitter.convert(lines).forEach((line) async{
       if (kDebugMode) {
         print("> ${commandStatus.name} $line");
+      }else {
+        await _logIt(line);
       }
       _terminalSink.add("${commandStatus.name} $line");
 
@@ -104,5 +108,17 @@ class TerminalSourceImpl extends TerminalSource{
   void disposeStream(){
     _tStreamController.close();
     _terminalSink.close();
+  }
+
+  _logIt(String value) async{
+    File("${Constants.globalConfig.kTmpPath}/ar.log").writeAsString("> $value\n",mode: FileMode.append);
+  }
+
+  @override
+  Future clearLog() async{
+    var logFile=File("${Constants.globalConfig.kTmpPath}/ar.log");
+    if(logFile.existsSync()) {
+      logFile.deleteSync();
+    }
   }
 }

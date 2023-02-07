@@ -25,3 +25,10 @@ class KeyboardSettingsEventSetSpeed extends KeyboardSettingsEvent{
   final int speed;
   KeyboardSettingsEventSetSpeed({this.speed=0});
 }
+
+class KeyboardSettingsEventSetState extends KeyboardSettingsEvent{
+  final bool? boot;
+  final bool? awake;
+  final bool? sleep;
+  KeyboardSettingsEventSetState({this.boot, this.awake, this.sleep});
+}

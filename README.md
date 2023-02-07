@@ -3,7 +3,7 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
 
-Aurora is an alternate to Aura Sync for linux to control the keyboard backlights and charging threshold settings. This utility acts as an interface for the Faustus Kernel Module to achieve these functions.
+Aurora is an alternate to Aura Sync for linux to control the keyboard backlight and charging threshold settings. This utility acts as an interface for the Faustus Kernel Module to achieve these functions.
 
 
 ![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arsrceen_1.png)

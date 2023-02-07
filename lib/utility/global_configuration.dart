@@ -1,6 +1,4 @@
-import 'dart:io';
 
-import 'package:aurora/utility/constants.dart';
 
 enum ARMODE {normal, batterymanager, mainline}
 
@@ -16,6 +14,7 @@ class GlobalConfig {
    String? kExecBatteryManagerPath;
    String? kWorkingDirectory;
    String? kExecPermissionCheckerPath;
+   String? kTmpPath;
 
   //url
    String? kAuroraGitRawYaml;
@@ -40,6 +39,7 @@ class GlobalConfig {
     this.kSecureBootEnabled,
     this.kFaustusGitUrl,
     this.kExecPermissionCheckerPath,
+    this.kTmpPath,
     this.arMode=ARMODE.normal
   });
 
@@ -55,7 +55,8 @@ class GlobalConfig {
     kSecureBootEnabled,
     kFaustusGitUrl,
     kExecPermissionCheckerPath,
-    arMode
+    arMode,
+    kTmpPath
   }){
 
     this.arChannel= arChannel??this.arChannel;
@@ -70,10 +71,9 @@ class GlobalConfig {
     this.kFaustusGitUrl=kFaustusGitUrl??'https://github.com/legacyO7/faustus.git';
     this.kExecPermissionCheckerPath=kExecPermissionCheckerPath??this.kExecPermissionCheckerPath;
     this.arMode=arMode??this.arMode;
+    this.kTmpPath=kTmpPath??this.kTmpPath;
 
   }
 
-  bool isMainLine()=>Constants.globalConfig.arMode==ARMODE.mainline;
-
-  bool systemHasSystemd() => Directory(Constants.kServicePath).existsSync();
+  
 }
