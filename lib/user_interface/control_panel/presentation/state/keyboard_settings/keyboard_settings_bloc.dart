@@ -2,7 +2,7 @@
 import 'package:aurora/data/model/ar_mode_model.dart';
 import 'package:aurora/data/model/ar_state_model.dart';
 import 'package:aurora/data/shared_preference/pref_repo.dart';
-import 'package:aurora/user_interface/control_panel/domain/control_panel_repo.dart';
+import 'package:aurora/user_interface/control_panel/domain/keyboard_settings/keyboard_settings_repo.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/colors.dart';
@@ -22,7 +22,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
   }
 
   final PrefRepo _prefRepo;
-  final ControlPanelRepo _controlPanelRepo;
+  final KeyboardSettingsRepo _controlPanelRepo;
 
   bool _boot=false;
   bool _awake=false;
@@ -97,6 +97,5 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
       255-arMode.color!.red,
       255-arMode.color!.green,
       255-arMode.color!.blue);
-
 
 }

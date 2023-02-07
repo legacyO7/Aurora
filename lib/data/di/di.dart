@@ -1,10 +1,14 @@
 
-import 'package:aurora/user_interface/control_panel/domain/control_panel_repo.dart';
-import 'package:aurora/user_interface/control_panel/domain/control_panel_repo_impl.dart';
+import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo.dart';
+import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo_impl.dart';
+import 'package:aurora/user_interface/control_panel/domain/keyboard_settings/keyboard_settings_repo.dart';
+import 'package:aurora/user_interface/control_panel/domain/keyboard_settings/keyboard_settings_repo_impl.dart';
+import 'package:aurora/user_interface/control_panel/domain/uninstaller/disabler_repo.dart';
+import 'package:aurora/user_interface/control_panel/domain/uninstaller/disabler_repo_impl.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_bloc.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/uninstaller/uninstaller_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo_impl.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
@@ -33,11 +37,11 @@ final sl = GetIt.I;
 Future initDI() async{
   sl.allowReassignment=true;
 
-  sl.registerLazySingleton(() => HomeBloc(sl(),sl()));
-  sl.registerLazySingleton(() => UninstallerBloc(sl(),sl()));
+  sl.registerLazySingleton(() => HomeBloc(sl(),sl(),sl()));
+  sl.registerLazySingleton(() => DisablerBloc(sl()));
   sl.registerLazySingleton(() => TerminalBloc());
   sl.registerLazySingleton(() => KeyboardSettingsBloc(sl(),sl()));
-  sl.registerLazySingleton(() => BatteryManagerBloc(sl(),sl()));
+  sl.registerLazySingleton(() => BatteryManagerBloc(sl()));
   sl.registerLazySingleton(() => SetupBloc(sl(),sl(),sl(),sl()));
   sl.registerLazySingleton(() => ThemeBloc(sl()));
   sl.registerLazySingleton(() => ArButtonCubit());
@@ -46,7 +50,9 @@ Future initDI() async{
   sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl()));
   sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
   sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl()));
-  sl.registerLazySingleton<ControlPanelRepo>(() => ControlPanelRepoImpl(sl(),sl()));
+  sl.registerLazySingleton<KeyboardSettingsRepo>(() => KeyboardSettingsRepoImpl(sl(),sl()));
+  sl.registerLazySingleton<BatteryManagerRepo>(() => BatteryManagerRepoImpl(sl(),sl()));
+  sl.registerLazySingleton<DisablerRepo>(() => DisablerRepoImpl(sl(),sl(),sl()));
 
   sl.registerLazySingleton<SetupSource>(() => SetupSourceImpl(sl()));
   sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl()..clearLog());

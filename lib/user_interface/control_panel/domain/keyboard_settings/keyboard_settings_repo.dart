@@ -1,6 +1,6 @@
 import 'package:aurora/data/model/ar_mode_model.dart';
 
-abstract class ControlPanelRepo{
+abstract class KeyboardSettingsRepo{
   Future setMode({required ArMode arMode});
   Future setColor({required ArMode arMode});
   Future setSpeed({required ArMode arMode});

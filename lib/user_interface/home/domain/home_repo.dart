@@ -9,7 +9,6 @@ abstract class HomeRepo{
   Future<String> getVersion();
   Future<int> compatibilityChecker();
   Future<bool> pkexecChecker();
-  Future<int> getBatteryCharge();
   int convertVersionToInt(String version);
   String get packagesToInstall;
 }

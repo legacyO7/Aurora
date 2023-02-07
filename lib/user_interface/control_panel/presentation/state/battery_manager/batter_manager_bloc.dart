@@ -1,6 +1,5 @@
-import 'package:aurora/data/shared_preference/pref_repo.dart';
+import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/battery_manager_event.dart';
-import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,19 +8,18 @@ import 'package:flutter/material.dart';
 import 'batter_manager_state.dart';
 
 class BatteryManagerBloc extends TerminalBaseBloc<BatteryManagerEvent,BatteryManagerInit>{
-  BatteryManagerBloc(this._prefRepo,this._homeRepo):super(const BatteryManagerInit()){
+  BatteryManagerBloc(this._batteryManagerRepo):super(const BatteryManagerInit()){
     on<BatteryManagerEventInit>((_, emit) => _getBatteryLevel(emit));
     on<BatteryManagerEventOnSlide>((event, emit) => _setBatteryLevel(event.value,emit));
     on<BatteryManagerEventOnSlideEnd>((event, emit) => _finalizeBatteryLevel(event.value,emit));
   }
 
-  final PrefRepo _prefRepo;
-  final HomeRepo _homeRepo;
+  final BatteryManagerRepo _batteryManagerRepo;
 
   int _batteryLevel=Constants.kMinimumChargeLevel;
 
   Future _getBatteryLevel(emit) async {
-    _batteryLevel= await _homeRepo.getBatteryCharge();
+    _batteryLevel= await _batteryManagerRepo.getBatteryCharge();
     emit(BatteryManagerInit(batteryLevel: _batteryLevel));
   }
 
@@ -32,8 +30,7 @@ class BatteryManagerBloc extends TerminalBaseBloc<BatteryManagerEvent,BatteryMan
 
   _finalizeBatteryLevel(int level,emit) async{
     _batteryLevel=level;
-    await super.execute("${Constants.globalConfig.kExecBatteryManagerPath} $level");
-    await _prefRepo.setThreshold(level);
+    await _batteryManagerRepo.setBatteryChargeLimit(limit: level);
     emit(BatteryManagerInit(batteryLevel: _batteryLevel));
   }
 

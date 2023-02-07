@@ -48,7 +48,7 @@ class _ControlPanelState extends State<ControlPanelScreen> with GlobalMixin{
                         border: Border.all(color: context.selectedColor),
                         borderRadius: const BorderRadius.only(bottomRight: Radius.circular(20),topRight: Radius.circular(20))
                     ),
-                    child: const UninstallButton())
+                    child: const DisableButton())
               ],
             ),
             if(super.systemHasSystemd())

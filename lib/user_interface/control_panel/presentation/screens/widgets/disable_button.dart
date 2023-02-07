@@ -1,6 +1,6 @@
-import 'package:aurora/user_interface/control_panel/presentation/state/uninstaller/uninstaller_bloc.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/uninstaller/uninstaller_event.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/uninstaller/uninstaller_state.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_event.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_state.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
@@ -11,20 +11,20 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class UninstallButton extends StatelessWidget with GlobalMixin {
-  const UninstallButton({super.key});
+class DisableButton extends StatelessWidget with GlobalMixin {
+  const DisableButton({super.key});
 
   Widget _selectorWindow() {
-    return BlocListener<UninstallerBloc,Equatable>(
+    return BlocListener<DisablerBloc,Equatable>(
       listener: (BuildContext context, state) {
-        if(state is UninstallProcessCompletedState) {
+        if(state is DisableProcessCompletedState) {
           _navigate(context);
         }
       },
-      child: BlocBuilder<UninstallerBloc, Equatable>
+      child: BlocBuilder<DisablerBloc, Equatable>
         (builder: (BuildContext context, state) {
 
-        if (state is UninstallInitState) {
+        if (state is DisableInitState) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -32,18 +32,18 @@ class UninstallButton extends StatelessWidget with GlobalMixin {
               ArCheckbox(
                   text: "Disable charging threshold",
                   isSelected: state.disableThreshold,
-                  onChange: (_)=>context.read<UninstallerBloc>().add(UninstallEventCheckDisableServices(disableThreshold: !state.disableThreshold))
+                  onChange: (_)=>context.read<DisablerBloc>().add(DisableEventCheckDisableServices(disableThreshold: !state.disableThreshold))
               ),
 
               if(!super.isMainLine())
               ArCheckbox(
                   text: "Disable faustus module",
                   isSelected: state.disableFaustusModule,
-                  onChange: (_)=>context.read<UninstallerBloc>().add(UninstallEventCheckDisableServices(disableFaustusModule: !state.disableFaustusModule))
+                  onChange: (_)=>context.read<DisablerBloc>().add(DisableEventCheckDisableServices(disableFaustusModule: !state.disableFaustusModule))
               ),
             ],
           );
-        } else if (state is UninstallTerminalState) {
+        } else if (state is DisableTerminalState) {
           return const TerminalScreen();
         }
 
@@ -62,7 +62,7 @@ class UninstallButton extends StatelessWidget with GlobalMixin {
               subject: "Select the services to be disabled",
               optionalWidget: _selectorWindow(),
               onConfirm: () {
-                context.read<UninstallerBloc>().add(UninstallEventSubmitDisableServices());
+                context.read<DisablerBloc>().add(DisableEventSubmitDisableServices());
               },
               onCancel: (){
                 _navigate(context);
@@ -72,7 +72,7 @@ class UninstallButton extends StatelessWidget with GlobalMixin {
   }
 
   _navigate(BuildContext context)async{
-    context.read<UninstallerBloc>().add(UninstallEventDispose());
+    context.read<DisablerBloc>().add(DisableEventDispose());
     Navigator.pop(context);
     if(!await context.read<HomeBloc>().compatibilityChecker()) {
       context.read<HomeBloc>().add(HomeEventDispose());

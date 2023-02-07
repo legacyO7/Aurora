@@ -4,7 +4,7 @@ import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_event.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_state.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/uninstaller/uninstaller_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
@@ -57,7 +57,7 @@ class Aurora extends StatelessWidget {
       providers: [
        BlocProvider.value(value: sl<SetupBloc>()),
        BlocProvider.value(value: sl<HomeBloc>()),
-       BlocProvider.value(value: sl<UninstallerBloc>()),
+       BlocProvider.value(value: sl<DisablerBloc>()),
        BlocProvider.value(value: sl<KeyboardSettingsBloc>()),
        BlocProvider.value(value: sl<BatteryManagerBloc>()),
        BlocProvider.value(value: sl<TerminalBloc>()),

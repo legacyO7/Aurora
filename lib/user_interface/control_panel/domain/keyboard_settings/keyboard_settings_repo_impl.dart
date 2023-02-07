@@ -8,11 +8,11 @@ import 'package:aurora/utility/ar_widgets/colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 
-import 'control_panel_repo.dart';
+import 'keyboard_settings_repo.dart';
 
-class ControlPanelRepoImpl extends ControlPanelRepo with GlobalMixin{
+class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
 
-  ControlPanelRepoImpl(this._terminalSource, this._prefRepo);
+  KeyboardSettingsRepoImpl(this._terminalSource, this._prefRepo);
 
   final TerminalSource _terminalSource;
   final PrefRepo _prefRepo;
