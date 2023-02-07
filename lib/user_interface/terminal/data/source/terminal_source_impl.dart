@@ -6,7 +6,6 @@ import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart'
 import 'package:aurora/user_interface/terminal/domain/model/terminal_text.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TerminalSourceImpl extends TerminalSource{
@@ -112,12 +111,12 @@ class TerminalSourceImpl extends TerminalSource{
   }
 
   _logIt(String value) async{
-    File("${(await getTemporaryDirectory()).path}/ar.log").writeAsString("> $value\n",mode: FileMode.append);
+    File("${Constants.globalConfig.kTmpPath}/ar.log").writeAsString("> $value\n",mode: FileMode.append);
   }
 
   @override
   Future clearLog() async{
-    var logFile=File("${(await getTemporaryDirectory()).path}/ar.log");
+    var logFile=File("${Constants.globalConfig.kTmpPath}/ar.log");
     if(logFile.existsSync()) {
       logFile.deleteSync();
     }

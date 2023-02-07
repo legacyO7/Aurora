@@ -9,10 +9,12 @@ import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.d
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/utility/ar_widgets/arwidgets.dart';
+import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:window_size/window_size.dart';
 
 import 'user_interface/home/presentation/state/home_bloc.dart';
@@ -35,6 +37,8 @@ void main() async{
     appWindow.alignment = Alignment.center;
     appWindow.show();
   });
+
+  Constants.globalConfig.kTmpPath=(await getTemporaryDirectory()).path;
 }
 
 

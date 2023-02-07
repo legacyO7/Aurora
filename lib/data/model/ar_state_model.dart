@@ -11,7 +11,13 @@ class ArState{
     boot=json['boot'];
     awake=json['awake'];
     sleep=json['sleep'];
+  }
 
-
+  ArState negateValue(){
+    return ArState(
+      awake: !awake!,
+      sleep: !sleep!,
+      boot: !boot!
+    );
   }
 }

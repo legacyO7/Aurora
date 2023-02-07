@@ -35,7 +35,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
       await _setBrightness(await _prefRepo.getBrightness(), emit);
       await _setMainlineModeParams(arMode: arMode, emit);
       if(super.isMainLine()){
-        await _setMainLineStateParams(arState: await _prefRepo.getArState(), emit );
+        await _setMainLineStateParams(arState: (await _prefRepo.getArState()).negateValue(), emit );
       }
   }
 
