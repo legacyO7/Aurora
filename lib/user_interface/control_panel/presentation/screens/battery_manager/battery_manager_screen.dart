@@ -1,8 +1,8 @@
 import 'package:another_xlider/another_xlider.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/batter_manager_bloc.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/batter_manager_state.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager_event.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_state.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/battery_manager_event.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 
 import 'package:aurora/utility/ar_widgets/colors.dart';

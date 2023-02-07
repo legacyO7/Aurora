@@ -1,6 +1,6 @@
 import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_widgets.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/theme_button.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';

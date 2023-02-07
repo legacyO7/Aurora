@@ -1,8 +1,8 @@
 import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_widgets.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/keyboard_settings/widgets/state_panel.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings_bloc.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings_event.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings_state.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_event.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_state.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

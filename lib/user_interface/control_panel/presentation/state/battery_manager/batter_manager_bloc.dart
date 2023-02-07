@@ -1,5 +1,5 @@
 import 'package:aurora/data/shared_preference/pref_repo.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager_event.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/battery_manager_event.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/constants.dart';
