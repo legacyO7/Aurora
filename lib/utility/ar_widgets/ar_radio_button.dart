@@ -22,12 +22,16 @@ class ArRadioButton extends StatelessWidget{
                 fillColor: MaterialStateColor.resolveWith((states) =>context.selectedColor))
         ),
         child: RadioMenuButton(
-          value: value, groupValue: true, onChanged: (bool? value) => onClick(value),
+          value: value,
+            groupValue: true,
+            onChanged: (bool? value) => onClick(value),
+          style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) =>
+          value? context.selectedColor.withAlpha(50):ArColors.greyDisabled!)),
           child: SizedBox(
               width: 80,
               child: Center(child: Text(title,
                 textAlign: TextAlign.end,
-                style: TextStyle(color:value?null: context.invertedColor,
+                style: TextStyle(
                   fontWeight: value?FontWeight.w700:FontWeight.normal
       )))))));
   }

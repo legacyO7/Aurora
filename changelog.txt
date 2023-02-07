@@ -1,5 +1,5 @@
 
 Changelogs:
 
-- added keyboard backlit state option, if using mainline
-- added terminal logger
+- improved ui
+- many under the hood changed
