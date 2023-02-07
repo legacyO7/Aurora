@@ -15,7 +15,7 @@ class ArRadioButton extends StatelessWidget{
     return Container(
       margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(border: Border.all(color: value?context.selectedColor:ArColors.transparent)),
-      width: 143,
+      width: 140,
       child: Theme(
         data: Theme.of(context).copyWith(
             radioTheme: RadioThemeData(
