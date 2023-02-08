@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:aurora/data/shared_preference/pref_repo.dart';
+import 'package:aurora/user_interface/control_panel/domain/uninstaller/disabler_repo.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
@@ -15,7 +17,7 @@ import 'package:path_provider/path_provider.dart';
 import 'setup_state.dart';
 
 class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
-  SetupBloc(this._homeRepo,this._prefRepo, this._setupWizardRepo,this._arButtonCubit) : super(SetupInitState()){
+  SetupBloc(this._homeRepo,this._prefRepo, this._setupWizardRepo,this._arButtonCubit, this._disablerRepo) : super(SetupInitState()){
     on<EventSWInit>((_, emit) => _initSetup(emit));
     on<SetupEventConfigure>((event, emit) => _allowConfigure(event.allow, emit));
     on<SetupEventOnCancel>((event, emit) => _onCancel(stepValue: event.stepValue,emit));
@@ -29,6 +31,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   final PrefRepo _prefRepo;
   final SetupRepo _setupWizardRepo;
   final ArButtonCubit _arButtonCubit;
+  final DisablerRepo _disablerRepo;
 
   String? _setupPath;
   String _terminalList = '';
@@ -74,7 +77,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
           Constants.globalConfig.setInstance(arMode: ARMODE.mainline);
           if(_homeRepo.checkFaustusFolder()){
             emit(SetupDisableFaustusState());
-            await super.execute("${Constants.kPolkit} ${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.globalConfig.kWorkingDirectory} disablefaustus");
+            await _disablerRepo.disableServices(disable: DISABLE.faustus);
           }
             emit(SetupMainlineCompatibleState());
 
@@ -166,8 +169,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
             if (pkexec) {
               _emitInstallFaustusTerminal(emit, stepValue: 0);
             }
-            await super.getOutput(command: "${!pkexec ? '' : Constants
-                .kPolkit} $_setupPath installpackages $_terminalList");
+            await super.execute("${!pkexec ? '' : Constants.kPolkit} $_setupPath installpackages $_terminalList");
             isSuccess = await _homeRepo.compatibilityChecker() != 1;
           } else {
             arSnackBar(text: "Fetching Data Failed", isPositive: false);
