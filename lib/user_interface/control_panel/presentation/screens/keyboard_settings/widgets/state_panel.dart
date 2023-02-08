@@ -18,6 +18,7 @@ Widget stateController({
          builder: (context, state){
            KeyboardSettingsBloc bloc= context.read<KeyboardSettingsBloc>();
           return Row(
+            mainAxisAlignment: MainAxisAlignment.start,
              children: [
 
                ArRadioButton(

@@ -53,17 +53,17 @@ class _MyHomePageState extends State<HomeScreen> with GlobalMixin {
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                              color: context.selectedColor,
+                              color: context.selectedColorWithAlpha,
                               width: 3.0
                           ),
                           borderRadius: const BorderRadius.all(
-                              Radius.circular(25.0)
+                              Radius.circular(15.0)
                           ),
-                          color: context.selectedColor
+                          color: context.selectedColorWithAlpha
                         ),
                         margin: const EdgeInsets.only(top: 10),
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Text(super.isMainLine()?"Mainline":"Faustus",style: TextStyle(color: context.invertedColor),),
+                        padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 2),
+                        child: Text(super.isMainLine()?"Mainline":"Faustus"),
                       )
                     ],
                   ),

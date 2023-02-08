@@ -35,7 +35,7 @@ class _ArButtonState extends State<ArButton> {
     width = widget.isSelected ? 120 : 100;
     return Container(
       margin: widget.edgeInsets,
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 5),
       child: widget.isLoading && widget.isSelected
           ? SizedBox(
               height: height,
@@ -60,8 +60,8 @@ class _ArButtonState extends State<ArButton> {
                         : ArColors.grey,),
                     color: widget.isEnabled
                 ? widget.isSelected
-                ? context.selectedColor.withAlpha(50)
-                    : ArColors.greyDisabled
+                ? context.selectedColorWithAlpha
+                    : null
                 : ArColors.grey,
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),

@@ -13,9 +13,8 @@ class ArRadioButton extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10,right: 10),
       decoration: BoxDecoration(border: Border.all(color: value?context.selectedColor:ArColors.transparent)),
-      width: 140,
       child: Theme(
         data: Theme.of(context).copyWith(
             radioTheme: RadioThemeData(
@@ -26,7 +25,7 @@ class ArRadioButton extends StatelessWidget{
             groupValue: true,
             onChanged: (bool? value) => onClick(value),
           style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) =>
-          value? context.selectedColor.withAlpha(50):ArColors.greyDisabled!)),
+          value? context.selectedColorWithAlpha:ArColors.greyDisabled!)),
           child: SizedBox(
               width: 80,
               child: Center(child: Text(title,

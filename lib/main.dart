@@ -1,10 +1,10 @@
 import 'package:aurora/data/di/di.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_event.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_state.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
@@ -52,7 +52,7 @@ class ArWindow with GlobalMixin{
   }
 }
 
-class Aurora extends StatelessWidget {
+class Aurora extends StatelessWidget with GlobalMixin{
   const Aurora({Key? key}) : super(key: key);
 
   @override
@@ -72,8 +72,8 @@ class Aurora extends StatelessWidget {
         builder: (_, state)=>
             MaterialApp(
               title: 'Aurora',
-              darkTheme: ThemeData.dark(),
-              theme: ThemeData.light(),
+              darkTheme: super.setTheme(context, light: false),
+              theme: super.setTheme(context),
               themeMode: state.arTheme,
               home: const SetupWizardScreen(),
             )
