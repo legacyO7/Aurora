@@ -68,6 +68,7 @@ class DisableButton extends StatelessWidget with GlobalMixin {
                 _navigate(context);
               });
         },
+        tooltip: "Disable Features",
         icon: const Icon(Icons.delete_outline));
   }
 

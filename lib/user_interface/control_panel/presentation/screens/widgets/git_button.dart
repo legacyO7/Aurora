@@ -10,6 +10,7 @@ class GitButton extends StatelessWidget{
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: () => context.read<HomeBloc>().add(HomeEventLaunch()),
+        tooltip: "HomePage",
         icon: const Icon(Icons.home));
   }
 
