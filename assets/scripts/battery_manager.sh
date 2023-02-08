@@ -2,6 +2,7 @@
 
 battery_threshold_path=/sys/class/power_supply/BAT1/charge_control_end_threshold
 service_path=/usr/lib/systemd/system/
+old_service_path=/etc/systemd/system/
 service=aurora-controller.service
 
 setthreshold() {
@@ -31,6 +32,11 @@ fi
 setaccess() {
   chmod -R o+rwx $battery_threshold_path
   chmod -R o+rwx $service_path
+
+   if [ -f $old_service_path$service ]; then
+      sudo systemctl disable $service
+      sudo rm $old_service_path$service
+   fi
 
   if [ -f $service_path$service ]; then
     sudo systemctl disable $service
