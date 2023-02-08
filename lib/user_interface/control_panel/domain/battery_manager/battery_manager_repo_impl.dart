@@ -20,8 +20,12 @@ class BatteryManagerRepoImpl implements BatteryManagerRepo{
   }
 
   @override
-  Future setBatteryChargeLimit({required int limit}) async{
-    await _terminalSource.execute("${Constants.globalConfig.kExecBatteryManagerPath} $limit");
+  Future setBatteryChargeLimit({required int limit, required bool serviceEnabled}) async{
+    if(serviceEnabled) {
+      await _terminalSource.execute("${Constants.globalConfig.kExecBatteryManagerPath} $limit");
+    }else{
+      await _terminalSource.execute("${Constants.kPolkit} ${Constants.globalConfig.kExecBatteryManagerPath} $limit");
+    }
     await _prefRepo.setThreshold(limit);
   }
 

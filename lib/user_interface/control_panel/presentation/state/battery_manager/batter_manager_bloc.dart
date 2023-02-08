@@ -30,7 +30,7 @@ class BatteryManagerBloc extends TerminalBaseBloc<BatteryManagerEvent,BatteryMan
 
   _finalizeBatteryLevel(int level,emit) async{
     _batteryLevel=level;
-    await _batteryManagerRepo.setBatteryChargeLimit(limit: level);
+    await _batteryManagerRepo.setBatteryChargeLimit(limit: level,serviceEnabled: await super.arServiceEnabled());
     emit(BatteryManagerInit(batteryLevel: _batteryLevel));
   }
 

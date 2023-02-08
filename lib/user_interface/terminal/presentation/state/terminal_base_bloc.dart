@@ -29,6 +29,7 @@ abstract class TerminalBaseBloc<Event,State> extends Bloc<Event,State> with Glob
     return await _terminalRepo.getOutput(command: command);
   }
 
+
   void dispose(){
     _terminalRepo.disposeStream();
   }
