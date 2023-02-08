@@ -45,7 +45,7 @@ mixin HomeMixin on HomeRepo implements GlobalMixin {
     }
 
     if(!checkFaustusFolder()) {
-      if(File(Constants.kBatteryThresholdPath).existsSync() && systemHasSystemd()) {
+      if(File(Constants.kBatteryThresholdPath).existsSync()) {
         return 3;
       } else {
         return 2;

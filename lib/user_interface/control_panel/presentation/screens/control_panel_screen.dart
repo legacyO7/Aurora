@@ -51,7 +51,6 @@ class _ControlPanelState extends State<ControlPanelScreen> with GlobalMixin{
                     child: const DisableButton())
               ],
             ),
-            if(super.systemHasSystemd())
             const Expanded(
               child:BatteryManagerScreen()
             ),
