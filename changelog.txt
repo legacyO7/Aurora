@@ -1,6 +1,6 @@
 
 Changelogs:
 
-- added keyboard states, if using mainline for backlit
-- improved ui
-- many under the hood changes
+- prompt user to switch to mainline
+- fixed minor bugs in faustus mode
+- updated dependencies
