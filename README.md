@@ -3,10 +3,16 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
 
-Aurora is an alternate to Aura Sync for linux to control the keyboard backlight and charging threshold settings. This utility acts as an interface for the Faustus Kernel Module to achieve these functions.
+Aurora is an alternate to Aura Sync for linux to control the keyboard backlight and charging threshold settings.This utility allows you to set battery charging threshold and control keyboard backlight color, brightness and modes.
 
 
-![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arsrceen_1.png)
+Aurora provides two modes
+
+- **Mainline** for kernel version 6.1 +
+- **Faustus** for kernel version < 6.1
+
+The modes will be auto-selected depending on the kernel version
+
 
 
 ## Installation
@@ -14,9 +20,24 @@ Aurora is an alternate to Aura Sync for linux to control the keyboard backlight 
 Aurora comes with an AppImage release which can be opened on any common linux distros.
 Find the latest release from [here](https://github.com/legacyO7/Aurora/releases).
 
+
+[PolKit](https://en.wikipedia.org/wiki/Polkit) is required to obtain root privileges
+
+
+
+### Mainline Mode
+
+![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arscreen_mainline_1.png)
+This doesn't require any further configurations
+
+### Faustus Mode
+
+![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arsrceen_1.png)
+
 #### Prerequisites
 
-- [PolKit](https://en.wikipedia.org/wiki/Polkit) to obtain root privileges `pkexec`
+
+- [PolKit](https://en.wikipedia.org/wiki/Polkit) to obtain root privileges
 - [faustus module](https://github.com/hackbnw/faustus)
 - If the module is not installed, `dkms openssl mokutil git make cmake` are required for installing the module
 
@@ -38,20 +59,16 @@ Secureboot enabled devices need to enroll MOK
 ##### - Manual
 
 - [Install Flutter SDK](https://docs.flutter.dev/get-started/install/linux)
-- Install additional requirements 
-`sudo apt-get install libgtk-3-0 libblkid1 liblzma5`
+- Install additional requirements
+  `libgtk-3-0 libblkid1 liblzma5`
 - Enable linux desktop
-`flutter config --enable-linux-desktop`
+  `flutter config --enable-linux-desktop`
 - Run the project
-`flutter run`
+  `flutter run`
 - Build the project
-`flutter build linux`
+  `flutter build linux`
 
 
-## Limitations
-- Although this utility comes with an AppImage, its functionality is only tested on debian-based distros. Aurora will work out of the box if the prerequisites are satisfied
-- Battery manager will not work on distros without systemd
- 
 
 ## Contributing
 
