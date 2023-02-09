@@ -10,5 +10,6 @@ abstract class HomeRepo{
   Future<int> compatibilityChecker();
   Future<bool> pkexecChecker();
   int convertVersionToInt(String version);
+  Future<bool> isKernelCompatible();
   String get packagesToInstall;
 }

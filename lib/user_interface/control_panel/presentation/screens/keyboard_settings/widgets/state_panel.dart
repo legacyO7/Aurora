@@ -10,39 +10,42 @@ Widget stateController({
      bool isVisible=true
    }){
 
-   return Column(
-     crossAxisAlignment: CrossAxisAlignment.start,
-     children: [
-       Text(title),
-       BlocBuilder<KeyboardSettingsBloc, KeyboardSettingsState>(
-         builder: (context, state){
-           KeyboardSettingsBloc bloc= context.read<KeyboardSettingsBloc>();
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-             children: [
+   return Visibility(
+     visible: isVisible,
+     child: Column(
+       crossAxisAlignment: CrossAxisAlignment.start,
+       children: [
+         Text(title),
+         BlocBuilder<KeyboardSettingsBloc, KeyboardSettingsState>(
+           builder: (context, state){
+             KeyboardSettingsBloc bloc= context.read<KeyboardSettingsBloc>();
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+               children: [
 
-               ArRadioButton(
-                 value: state.boot,
-                 onClick: (bool value)=> bloc.add(KeyboardSettingsEventSetState(boot: value)),
-                 title: "Boot",
-               ),
+                 ArRadioButton(
+                   value: state.boot,
+                   onClick: (bool value)=> bloc.add(KeyboardSettingsEventSetState(boot: value)),
+                   title: "Boot",
+                 ),
 
-               ArRadioButton(
-                 value: state.awake,
-                 onClick: (bool value)=> bloc.add(KeyboardSettingsEventSetState(awake: value)),
-                 title: "Awake",
-               ),
+                 ArRadioButton(
+                   value: state.awake,
+                   onClick: (bool value)=> bloc.add(KeyboardSettingsEventSetState(awake: value)),
+                   title: "Awake",
+                 ),
 
-               ArRadioButton(
-                 value: state.sleep,
-                 onClick: (bool value)=> bloc.add(KeyboardSettingsEventSetState(sleep: value)),
-                 title: "Sleep",
-               ),
+                 ArRadioButton(
+                   value: state.sleep,
+                   onClick: (bool value)=> bloc.add(KeyboardSettingsEventSetState(sleep: value)),
+                   title: "Sleep",
+                 ),
 
-           ]);
-         }
-        ),
-     ],
+             ]);
+           }
+          ),
+       ],
+     ),
    );
 
 }

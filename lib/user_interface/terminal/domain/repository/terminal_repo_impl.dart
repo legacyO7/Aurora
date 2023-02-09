@@ -50,7 +50,7 @@ class TerminalRepoImpl extends TerminalRepo{
 
     checkPermission({String path=''})async {
       path=' $path';
-      List<String> value = await getOutput(command: "$permissionChecker$path");
+      List<String> value = await getOutput(command: "$permissionChecker$path".trim());
       if(value.length>1) {
         return value[1].split(' ')[1].toLowerCase()=='true';
       }

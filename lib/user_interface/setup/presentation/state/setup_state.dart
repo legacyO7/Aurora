@@ -32,6 +32,10 @@ class SetupDisableFaustusState extends SetupState{
   SetupDisableFaustusState();
 }
 
+class SetupCompatibleKernel extends SetupState{
+  SetupCompatibleKernel();
+}
+
 class SetupBatteryManagerCompatibleState extends SetupState{
   SetupBatteryManagerCompatibleState();
 }

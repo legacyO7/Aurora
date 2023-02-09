@@ -50,9 +50,17 @@ mixin HomeMixin on HomeRepo implements GlobalMixin {
       } else {
         return 2;
       }
+    }else if(await isKernelCompatible()) {
+      return 5;
     }
 
     return 0;
+  }
+  
+  
+  @override
+  Future<bool> isKernelCompatible() async{
+    return (await _terminalRepo.getOutput(command: 'uname -r')).last.split(' ')[1].startsWith("6.1");
   }
 
 

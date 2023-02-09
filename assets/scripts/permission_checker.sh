@@ -13,7 +13,7 @@
     "/sys/devices/platform/faustus/kbbl/kbbl_flags"
     "/sys/devices/platform/faustus/kbbl/kbbl_set"
     "/sys/class/power_supply/BAT1/charge_control_end_threshold"
-    "/etc/systemd/system/"
+    "/usr/lib/systemd/system/"
     )
 
 
@@ -21,9 +21,6 @@
 
       if [ -w $file ]; then
         let "count+=1"
-
-      elif [ $file == "/etc/systemd/system/" ] && [ ! -d "/etc/systemd/system/" ]; then
-         let "count+=1"
       fi
 
     done
@@ -57,7 +54,7 @@ checkpackages(){
 
 if [ $# -ne 0 ];  then
 
-  if [ $1 == "checkpackages" ]; then
+  if [ "$1" == "checkpackages" ]; then
       checkpackages
   else
      permission_checker_file $1

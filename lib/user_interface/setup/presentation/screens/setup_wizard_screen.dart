@@ -2,6 +2,7 @@
 import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/theme_button.dart';
 import 'package:aurora/user_interface/home/presentation/screens/home_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/widgets/ar_kernel_compatible_dialog.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_state.dart';
@@ -87,6 +88,10 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
                         if(state is SetupDisableFaustusState) {
                           return const Text("disabling faustus module...");
+                        }
+
+                        if(state is SetupCompatibleKernel) {
+                          return const ArKernelCompatibleDialog();
                         }
 
                         if(state is SetupMainlineCompatibleState) {

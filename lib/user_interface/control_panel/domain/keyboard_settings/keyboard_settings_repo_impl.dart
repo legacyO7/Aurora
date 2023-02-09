@@ -27,7 +27,16 @@ class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
 
   @override
   Future setMainlineModeParams({required ArMode arMode}) async{
-    await _terminalSource.execute("${_globalConfig.kExecMainlinePath} mode 1 ${arMode.mode} ${arMode.color!.red} ${arMode.color!.green} ${arMode.color!.blue} ${arMode.speed}");
+    if(super.isMainLine()) {
+      await _terminalSource.execute(
+          "${_globalConfig.kExecMainlinePath} mode 1 ${arMode.mode} ${arMode
+              .color!.red} ${arMode.color!.green} ${arMode.color!.blue} ${arMode
+              .speed}");
+    }else{
+      await setMode(arMode: arMode);
+      await setSpeed(arMode: arMode);
+      await setColor(arMode: arMode);
+    }
   }
   
   @override
