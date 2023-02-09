@@ -30,7 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_bloc: ^8.1.1
+  flutter_bloc: ^8.1.2
   flex_color_picker: ^3.1.0
   get_it: ^7.2.0
   path_provider: ^2.0.12
@@ -40,13 +40,9 @@ dependencies:
   another_stepper: ^1.1.6
   package_info_plus: ^3.0.2
   dio: ^4.0.6
-  url_launcher: ^6.1.8
+  url_launcher: ^6.1.9
   animated_text_kit: ^4.2.2
   equatable: ^2.0.5
-  window_size:
-    git:
-      url: https://github.com/google/flutter-desktop-embedding
-      path: plugins/window_size
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -55,6 +51,7 @@ dependencies:
   bitsdojo_window: ^0.1.5
   google_fonts: ^4.0.3
   flutter_phoenix: ^1.1.0
+  window_manager: ^0.3.0
 
 dev_dependencies:
   flutter_test:

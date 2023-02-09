@@ -7,6 +7,7 @@ import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'home_repo.dart';
 
@@ -59,6 +60,14 @@ class HomeRepoImpl extends HomeRepo with HomeMixin, GlobalMixin{
     );
 
     return version;
+  }
+
+  @override
+  void setAppHeight(){
+    var window = WindowManager.instance;
+    window.setMinimumSize(Size(1000,super.isMainLine()?680:600));
+    window.show();
+    window.focus();
   }
 
 }

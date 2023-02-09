@@ -51,4 +51,6 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   Future<bool> compatibilityChecker() async=>
       (await _homeRepo.compatibilityChecker())==0&&( await _batteryManagerRepo.getBatteryCharge()!=100);
 
+  void setAppHeight()=>_homeRepo.setAppHeight();
+
 }

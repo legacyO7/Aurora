@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:window_size/window_size.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'user_interface/home/presentation/state/home_bloc.dart';
 
@@ -25,9 +25,24 @@ void main() async{
   await initDI();
   WidgetsFlutterBinding.ensureInitialized();
 
-  Size initialSize = ArWindow().setWindowSize();
-  setWindowMaxSize(initialSize);
-  setWindowMinSize(initialSize);
+  Size initialSize = const Size(1000,600);
+
+  await windowManager.ensureInitialized();
+
+  WindowOptions windowOptions = WindowOptions(
+    size: initialSize,
+    center: true,
+    backgroundColor: Colors.transparent,
+    skipTaskbar: false,
+    titleBarStyle: TitleBarStyle.hidden,
+    maximumSize:initialSize,
+    minimumSize: initialSize
+  );
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
+
 
   runApp(Phoenix(child: const Aurora()));
 
@@ -40,17 +55,6 @@ void main() async{
   });
 
   Constants.globalConfig.kTmpPath=(await getTemporaryDirectory()).path;
-}
-
-
-class ArWindow with GlobalMixin{
-  Size setWindowSize() {
-    if(super.isMainLineCompatible()) {
-      return const Size(1000,680);
-    } else {
-      return const Size(1000,600);
-    }
-  }
 }
 
 class Aurora extends StatelessWidget with GlobalMixin{

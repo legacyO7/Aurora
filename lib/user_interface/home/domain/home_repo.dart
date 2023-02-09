@@ -11,5 +11,6 @@ abstract class HomeRepo{
   Future<bool> pkexecChecker();
   int convertVersionToInt(String version);
   Future<bool> isKernelCompatible();
+  void setAppHeight();
   String get packagesToInstall;
 }

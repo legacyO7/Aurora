@@ -23,7 +23,9 @@ class _MyHomePageState extends State<HomeScreen> with GlobalMixin {
 
   @override
   void initState() {
-    context.read<HomeBloc>().add(HomeEventRequestAccess());
+    context.read<HomeBloc>()
+      ..add(HomeEventRequestAccess())
+      ..setAppHeight();
     super.initState();
   }
 
