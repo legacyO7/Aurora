@@ -1,6 +1,5 @@
 
 Changelogs:
 
-- prompt user to switch to mainline
-- fixed minor bugs in faustus mode
-- updated dependencies
+- secureboot status indicator
+- optimized settings
