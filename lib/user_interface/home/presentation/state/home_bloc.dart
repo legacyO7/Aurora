@@ -40,7 +40,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
 
   }
 
-  void _launchUrl({String? subPath}){
+  void _launchUrl({String? subPath})async{
     _homeRepo.launchArUrl(subPath: subPath);
   }
 
