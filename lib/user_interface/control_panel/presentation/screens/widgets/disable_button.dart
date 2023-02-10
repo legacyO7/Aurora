@@ -1,9 +1,6 @@
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_event.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_state.dart';
-import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
-import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
-import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_widgets.dart';
 import 'package:aurora/utility/ar_widgets/arwidgets.dart';
 import 'package:aurora/utility/global_mixin.dart';
@@ -57,7 +54,6 @@ class DisableButton extends StatelessWidget with GlobalMixin {
     return IconButton(
         onPressed: () async {
           await arDialog(
-              context: context,
               title: "Disable Services",
               subject: "Select the services to be disabled",
               optionalWidget: _selectorWindow(),
@@ -75,9 +71,5 @@ class DisableButton extends StatelessWidget with GlobalMixin {
   _navigate(BuildContext context)async{
     context.read<DisablerBloc>().add(DisableEventDispose());
     Navigator.pop(context);
-    if(!await context.read<HomeBloc>().compatibilityChecker()) {
-      context.read<HomeBloc>().add(HomeEventDispose());
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SetupWizardScreen()));
-    }
   }
 }

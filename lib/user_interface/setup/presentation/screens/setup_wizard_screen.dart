@@ -51,7 +51,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                     listener: (BuildContext context, state) {
                       if(state is SetupCompatibleState|| state is SetupMainlineCompatibleState){
                         Future.delayed(const Duration(milliseconds: 1000)).then((value) =>
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const HomeScreen()))
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomeScreen()))
                         );
                       }
                     },

@@ -51,8 +51,8 @@ class TerminalRepoImpl extends TerminalRepo{
     checkPermission({String path=''})async {
       path=' $path';
       List<String> value = await getOutput(command: "$permissionChecker$path".trim());
-      if(value.length>1) {
-        return value[1].split(' ')[1].toLowerCase()=='true';
+      if(value.isNotEmpty) {
+        return value.contains('true');
       }
       return false;
     }
@@ -92,7 +92,8 @@ class TerminalRepoImpl extends TerminalRepo{
     _terminalOut.clear();
     await execute(command);
 
-    return _terminalOut.sublist(_terminalOut.indexWhere((element) => element.contains(command)));
+    return _terminalOut.sublist(_terminalOut.indexWhere((element) => element.contains(command)))
+      .map((e) => e.split(' ').sublist(1).join(' ')).toList()..removeAt(0);
 
   }
 

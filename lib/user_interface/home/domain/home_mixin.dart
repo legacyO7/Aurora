@@ -19,15 +19,15 @@ mixin HomeMixin on HomeRepo implements GlobalMixin {
 
   @override
   Future<bool> pkexecChecker() async{
-    return (await _terminalRepo.getOutput(command: 'which pkexec')).length==2;
+    return (await _terminalRepo.getOutput(command: 'which pkexec')).length==1;
   }
 
   Future<String> listPackagesToInstall() async{
     var output=(await _terminalRepo.getOutput(command: "${Constants.globalConfig.kExecPermissionCheckerPath} checkpackages"));
-    if(output.isEmpty||!output.last.contains('stdout')) {
+    if(output.isEmpty) {
       return '';
     }else{
-      _packagesToInstall= output.last.split('stdout')[1].trim();
+      _packagesToInstall= output.last.trim();
       return _packagesToInstall;
     }
 
@@ -60,7 +60,7 @@ mixin HomeMixin on HomeRepo implements GlobalMixin {
   
   @override
   Future<bool> isKernelCompatible() async{
-    return (await _terminalRepo.getOutput(command: 'uname -r')).last.split(' ')[1].startsWith("6.1");
+    return (await _terminalRepo.getOutput(command: 'uname -r')).last.startsWith("6.1");
   }
 
 

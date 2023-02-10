@@ -2,6 +2,8 @@ import 'package:aurora/user_interface/control_panel/domain/uninstaller/disabler_
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_event.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_state.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
+import 'package:aurora/utility/constants.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 enum DISABLE {faustus, threshold, all, none}
 
@@ -39,6 +41,7 @@ class DisablerBloc extends TerminalBaseBloc<DisableEvent,DisableState> {
       }
       await _disablerRepo.disableServices(disable: disable);
       emit(DisableProcessCompletedState());
+      Phoenix.rebirth(Constants.kScaffoldKey.currentContext!);
     }
   }
 
