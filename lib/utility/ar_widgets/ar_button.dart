@@ -1,4 +1,5 @@
-import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
+import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:aurora/utility/ar_widgets/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,7 +35,7 @@ class _ArButtonState extends State<ArButton> {
     width = widget.isSelected ? 120 : 100;
     return Container(
       margin: widget.edgeInsets,
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 1),
+      padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 5),
       child: widget.isLoading && widget.isSelected
           ? SizedBox(
               height: height,
@@ -51,36 +52,26 @@ class _ArButtonState extends State<ArButton> {
               child: AnimatedContainer(
                 height: height,
                 width: width,
+                decoration: BoxDecoration(
+                    border: Border.all(color: widget.isEnabled
+                        ? widget.isSelected
+                        ? context.selectedColor
+                        : ArColors.greyDisabled!
+                        : ArColors.grey,),
+                    color: widget.isEnabled
+                ? widget.isSelected
+                ? context.selectedColorWithAlpha
+                    : null
+                : ArColors.grey,
+                ),
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                color: widget.isEnabled
-                    ? widget.isSelected
-                        ? context.read<KeyboardSettingsBloc>().selectedColor
-                        : ArColors.greyDisabled
-                    : ArColors.grey,
                 duration: const Duration(milliseconds: 500),
                 child: Center(
-                    child: Stack(
-                      children: <Widget>[
-                       if(widget.isSelected)
-                        Text(
-                          widget.title,
-                          style: TextStyle(
-                            foreground: Paint()
-                              ..style = PaintingStyle.stroke
-                              ..strokeWidth = 3
-                              ..color = ArColors.purpleDark,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          widget.title,
-                          style: const TextStyle(
-                            color: ArColors.white,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    )),
+                    child:
+                     Text(
+                       widget.title,
+                       textAlign: TextAlign.center,
+                     )),
               ),
             ),
     );

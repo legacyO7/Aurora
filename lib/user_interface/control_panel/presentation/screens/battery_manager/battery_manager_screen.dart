@@ -1,8 +1,10 @@
 import 'package:another_xlider/another_xlider.dart';
-import 'package:aurora/user_interface/control_panel/state/batter_manager_bloc.dart';
-import 'package:aurora/user_interface/control_panel/state/batter_manager_state.dart';
-import 'package:aurora/user_interface/control_panel/state/battery_manager_event.dart';
-import 'package:aurora/user_interface/control_panel/state/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_state.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/battery_manager_event.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
+import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
+
 import 'package:aurora/utility/ar_widgets/colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +45,7 @@ class _BatteryManagerScreenState extends State<BatteryManagerScreen> {
                      height: 80,
                      decoration:  BoxDecoration(
                          shape: BoxShape.circle,
-                         border: Border.all(color:  context.watch<KeyboardSettingsBloc>().selectedColor,width: 5),
+                         border: Border.all(color:  context.selectedColor,width: 5),
                          color: ArColors.white),
                      child: Center(
                        child: Text(state.batteryLevel.toString(),

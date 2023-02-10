@@ -34,15 +34,44 @@ class TerminalRepoImpl extends TerminalRepo{
   Future<bool> checkAccess() async{
 
     var permissionChecker=Constants.globalConfig.kExecPermissionCheckerPath!;
+
+    List<String> pathlist=[];
+    if(Constants.globalConfig.arMode==ARMODE.mainline){
+      pathlist.addAll([
+        Constants.kMainlineModuleStatePath,
+        Constants.kMainlineModuleModePath,
+        Constants.kMainlineBrightnessPath
+      ]);
+    }
     if (Constants.globalConfig.arMode==ARMODE.batterymanager) {
-      permissionChecker+=' ${Constants.kBatteryThresholdPath}';
+      pathlist.add(Constants.kBatteryThresholdPath);
     }
-    List<String> value = await getOutput(command: permissionChecker);
-    if(value.length>1) {
-      return value[1].split(' ')[1].toLowerCase()=='true';
+
+
+    checkPermission({String path=''})async {
+      path=' $path';
+      List<String> value = await getOutput(command: "$permissionChecker$path".trim());
+      if(value.isNotEmpty) {
+        return value.contains('true');
+      }
+      return false;
     }
-    return false;
+
+    if(pathlist.isEmpty){
+     return await checkPermission();
+    }else{
+      for( var element in pathlist){
+        if(!await checkPermission(path: element)) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+
   }
+
+
 
   @override
   clearTerminalOut(){
@@ -63,7 +92,8 @@ class TerminalRepoImpl extends TerminalRepo{
     _terminalOut.clear();
     await execute(command);
 
-    return _terminalOut.sublist(_terminalOut.indexWhere((element) => element.contains(command)));
+    return _terminalOut.sublist(_terminalOut.indexWhere((element) => element.contains(command)))
+      .map((e) => e.split(' ').sublist(1).join(' ')).toList()..removeAt(0);
 
   }
 

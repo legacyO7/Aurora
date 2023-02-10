@@ -14,7 +14,7 @@ class ArColors {
   static const Color purpleDark = Colors.deepPurple;
   static const Color blue = Colors.blue;
   static const Color cyan = Colors.cyan;
-  static Color? greyDisabled = Colors.grey[800];
+  static Color? greyDisabled = Colors.grey[600];
   static const Color green = Colors.green;
   static const Color transparent = Colors.transparent;
 }

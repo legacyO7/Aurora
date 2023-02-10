@@ -34,9 +34,9 @@ class _TerminalScreenState extends State<TerminalScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Theme.of(context).brightness==Brightness.dark?ArColors.black:ArColors.white,
       margin: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
       height: MediaQuery.of(context).size.height,
-      color: ArColors.black,
       child: SizedBox(
         child: BlocBuilder<TerminalBloc,TerminalState>(
           builder: (BuildContext context, state) {

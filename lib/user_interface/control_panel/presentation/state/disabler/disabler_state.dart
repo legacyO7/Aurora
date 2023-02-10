@@ -1,22 +1,24 @@
 import 'package:equatable/equatable.dart';
 
-abstract class UninstallState extends Equatable{
+abstract class DisableState extends Equatable{
 
 }
 
-class UninstallInitState extends UninstallState {
+class DisableInitState extends DisableState {
   final bool disableThreshold;
   final bool disableFaustusModule;
 
-  UninstallInitState({
-    this.disableThreshold = false,
-    this.disableFaustusModule = false});
 
-  UninstallInitState copyState({
+  DisableInitState({
+    this.disableThreshold = false,
+    this.disableFaustusModule = false
+  });
+
+  DisableInitState copyState({
     bool? disableThreshold,
     bool? disableFaustusModule
   }) {
-    return UninstallInitState(
+    return DisableInitState(
         disableThreshold: disableThreshold ?? this.disableThreshold,
         disableFaustusModule: disableFaustusModule ?? this.disableFaustusModule
     );
@@ -27,15 +29,15 @@ class UninstallInitState extends UninstallState {
 
 }
 
-class UninstallTerminalState extends UninstallState {
-  UninstallTerminalState();
+class DisableTerminalState extends DisableState {
+  DisableTerminalState();
 
   @override
   List<Object?> get props => [];
   
 }
 
-class UninstallProcessCompletedState extends UninstallState{
+class DisableProcessCompletedState extends DisableState{
   @override
   List<Object?> get props => [];
 }

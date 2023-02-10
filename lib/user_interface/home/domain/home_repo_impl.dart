@@ -3,13 +3,15 @@ import 'dart:io';
 import 'package:aurora/user_interface/home/domain/home_mixin.dart';
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'home_repo.dart';
 
-class HomeRepoImpl extends HomeRepo with HomeMixin{
+class HomeRepoImpl extends HomeRepo with HomeMixin, GlobalMixin{
 
   HomeRepoImpl(this._terminalSource);
 
@@ -60,15 +62,12 @@ class HomeRepoImpl extends HomeRepo with HomeMixin{
     return version;
   }
 
-
   @override
-  bool systemHasSystemd() {
-    return Directory(Constants.kServicePath).existsSync();
-  }
-
-  @override
-  Future<int> getBatteryCharge() async{
-    return int.parse((await File(Constants.kBatteryThresholdPath).readAsString()).toString().trim());
+  void setAppHeight(){
+    var window = WindowManager.instance;
+    window.setMinimumSize(Size(1000,super.isMainLine()?680:600));
+    window.show();
+    window.focus();
   }
 
 }

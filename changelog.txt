@@ -1,11 +1,5 @@
 
-Changelog:
+Changelogs:
 
-- fix installation crashes on some terminals
-- uses aurora terminal for package installation, if polkit is available
-- able to configure charging threshold even if faustus module is not installed
-- optimized uninstallation procedure
-- updated setup wizard ui
-- fix installation issues with fedora linux
-- display only required libraries to install
-- skip package installation if the required libraries are already installed
+- secureboot status indicator
+- optimized settings

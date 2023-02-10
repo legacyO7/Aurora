@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:aurora/data/shared_preference/pref_repo.dart';
+import 'package:aurora/user_interface/control_panel/domain/uninstaller/disabler_repo.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
@@ -10,12 +12,13 @@ import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_
 import 'package:aurora/utility/ar_widgets/arwidgets.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'setup_state.dart';
 
 class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
-  SetupBloc(this._homeRepo,this._prefRepo, this._setupWizardRepo,this._arButtonCubit) : super(SetupInitState()){
+  SetupBloc(this._homeRepo,this._prefRepo, this._setupWizardRepo,this._arButtonCubit, this._disablerRepo) : super(SetupInitState()){
     on<EventSWInit>((_, emit) => _initSetup(emit));
     on<SetupEventConfigure>((event, emit) => _allowConfigure(event.allow, emit));
     on<SetupEventOnCancel>((event, emit) => _onCancel(stepValue: event.stepValue,emit));
@@ -23,20 +26,26 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     on<SetupEventValidateRepo>((event, emit) => _validateRepo(value: event.url,emit));
     on<SetupEventOnUpdate>((event, emit) => _onUpdate(emit,ignoreUpdate: event.ignoreUpdate));
     on<SetupEventBatteryManagerMode>((event, emit) => _enterBatteryManagerMode(emit));
+    on<SetupEventCompatibleKernel>((event, emit) => _switchToMainline(emit, removeFaustus: event.removeFaustus));
   }
 
   final HomeRepo _homeRepo;
   final PrefRepo _prefRepo;
   final SetupRepo _setupWizardRepo;
   final ArButtonCubit _arButtonCubit;
+  final DisablerRepo _disablerRepo;
 
   String? _setupPath;
   String _terminalList = '';
 
   _initSetup(emit) async {
     await _homeRepo.getVersion();
+    Directory workingDir= Directory('${(await getTemporaryDirectory()).path}/legacy07.aurora');
+    if(workingDir.existsSync()){
+      workingDir.deleteSync(recursive: true);
+    }
     Constants.globalConfig.setInstance(
-      kWorkingDirectory: (await Directory('${(await getTemporaryDirectory()).path}/legacy07.aurora').create()).path,
+      kWorkingDirectory: (await workingDir.create()).path,
       kSecureBootEnabled: await _homeRepo.isSecureBootEnabled()
     );
 
@@ -71,8 +80,16 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
           emit(SetupBatteryManagerCompatibleState());
           break;
         case 4:
-          Constants.globalConfig.setInstance(arMode: ARMODE.faustus);
-          emit(SetupCompatibleState());
+          Constants.globalConfig.setInstance(arMode: ARMODE.mainline);
+          if(_homeRepo.checkFaustusFolder()){
+            emit(SetupDisableFaustusState());
+            await _disablerRepo.disableServices(disable: DISABLE.faustus);
+          }
+            emit(SetupMainlineCompatibleState());
+          break;
+
+        case 5:
+          emit(SetupCompatibleKernel());
           break;
 
         default:
@@ -93,6 +110,17 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
       }
     }else{
        await navigate();
+    }
+  }
+
+  Future _switchToMainline(emit,{required bool removeFaustus}) async{
+    if(removeFaustus){
+      emit(SetupDisableFaustusState());
+      await _disablerRepo.disableServices(disable: DISABLE.faustus);
+      Phoenix.rebirth(Constants.kScaffoldKey.currentState!.context);
+    }else{
+      Constants.globalConfig.setInstance(arMode: ARMODE.normal);
+      emit(SetupCompatibleState());
     }
   }
 
@@ -161,8 +189,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
             if (pkexec) {
               _emitInstallFaustusTerminal(emit, stepValue: 0);
             }
-            await super.getOutput(command: "${!pkexec ? '' : Constants
-                .kPolkit} $_setupPath installpackages $_terminalList");
+            await super.execute("${!pkexec ? '' : Constants.kPolkit} $_setupPath installpackages $_terminalList");
             isSuccess = await _homeRepo.compatibilityChecker() != 1;
           } else {
             arSnackBar(text: "Fetching Data Failed", isPositive: false);
@@ -171,7 +198,14 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
       } else {
           _emitInstallFaustusTerminal(emit,stepValue: 2);
           await super.execute("${Constants.globalConfig.kSecureBootEnabled! ? '' : Constants.kPolkit} $_setupPath installfaustus ${Constants.globalConfig.kFaustusGitUrl} $_terminalList");
-          isSuccess = await _homeRepo.compatibilityChecker()==0;
+          switch (await _homeRepo.compatibilityChecker()){
+            case 0:
+            case 5:
+              isSuccess=true;
+              break;
+            default:
+              isSuccess=false;
+          }
       }
 
       _arButtonCubit.setUnLoad();

@@ -30,3 +30,9 @@ class SetupEventValidateRepo implements SetupEvent {
   final String url;
   SetupEventValidateRepo({required this.url});
 }
+
+class SetupEventCompatibleKernel implements SetupEvent{
+  bool removeFaustus;
+  SetupEventCompatibleKernel({this.removeFaustus = false});
+}
+

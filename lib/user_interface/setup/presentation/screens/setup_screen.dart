@@ -1,6 +1,7 @@
 
 import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:another_stepper/widgets/another_stepper.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/widgets/ar_request_dialog.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/widgets/stepper_widget.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
@@ -54,25 +55,11 @@ class _SetupScreenState extends State<SetupScreen> {
           }
 
           if(state is SetupBatteryManagerCompatibleState){
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text("Faustus Module is missing. Proceed anyway??"),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  ArButton(title: "Okay",
-                      action: (){
-                        context.read<SetupBloc>().add(SetupEventBatteryManagerMode());
-                      }),
-                  ArButton(
-                      isSelected: true,
-                      edgeInsets: const EdgeInsets.only(left: 10),
-                      title: "Configure Faustus",
-                      action: ()=> configureFaustus()
-                  )
-                ],)
-              ],
+            return arRequestDialog(
+                title: "Faustus Module is missing. Proceed anyway??",
+              buttonTitle2: "Configure Faustus",
+              onClickButton1: ()=> context.read<SetupBloc>().add(SetupEventBatteryManagerMode()),
+              onClickButton2: ()=>configureFaustus()
             );
           }
 
@@ -108,7 +95,7 @@ class _SetupScreenState extends State<SetupScreen> {
                     ),
                   ),
                   Expanded(
-                    flex: 4,
+                    flex: 3,
                     child:state.child??placeholder(),
                   ),
                   BlocBuilder<ArButtonCubit,bool>(

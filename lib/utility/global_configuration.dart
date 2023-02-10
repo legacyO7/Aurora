@@ -1,4 +1,6 @@
-enum ARMODE {normal, faustus, batterymanager}
+
+
+enum ARMODE {normal, batterymanager, mainline}
 
 class GlobalConfig {
 
@@ -8,9 +10,11 @@ class GlobalConfig {
 
   //paths
    String? kExecFaustusPath;
+   String? kExecMainlinePath;
    String? kExecBatteryManagerPath;
    String? kWorkingDirectory;
    String? kExecPermissionCheckerPath;
+   String? kTmpPath;
 
   //url
    String? kAuroraGitRawYaml;
@@ -27,6 +31,7 @@ class GlobalConfig {
     this.arVersion,
     this.arChannel,
     this.kExecFaustusPath,
+    this.kExecMainlinePath,
     this.kExecBatteryManagerPath,
     this.kWorkingDirectory,
     this.kAuroraGitRawYaml,
@@ -34,6 +39,7 @@ class GlobalConfig {
     this.kSecureBootEnabled,
     this.kFaustusGitUrl,
     this.kExecPermissionCheckerPath,
+    this.kTmpPath,
     this.arMode=ARMODE.normal
   });
 
@@ -41,6 +47,7 @@ class GlobalConfig {
     arVersion,
     arChannel,
     kExecFaustusPath,
+    kExecMainlinePath,
     kExecBatteryManagerPath,
     kWorkingDirectory,
     kAuroraGitRawYaml,
@@ -48,20 +55,25 @@ class GlobalConfig {
     kSecureBootEnabled,
     kFaustusGitUrl,
     kExecPermissionCheckerPath,
-    arMode
+    arMode,
+    kTmpPath
   }){
 
-    this.arChannel= arChannel??"stable";
+    this.arChannel= arChannel??this.arChannel;
     this.arVersion=  arVersion??this.arVersion;
     this.kAuroraGitRawChangelog= kAuroraGitRawChangelog?? "https://raw.githubusercontent.com/legacyO7/Aurora/${arChannel??this.arChannel}/changelog.txt";
     this.kAuroraGitRawYaml= kAuroraGitRawYaml?? "https://raw.githubusercontent.com/legacyO7/Aurora/${arChannel??this.arChannel}/pubspec.yaml";
     this.kExecBatteryManagerPath=kExecBatteryManagerPath??this.kExecBatteryManagerPath;
     this.kExecFaustusPath= kExecFaustusPath??this.kExecFaustusPath;
+    this.kExecMainlinePath= kExecMainlinePath??this.kExecMainlinePath;
     this.kSecureBootEnabled= kSecureBootEnabled??this.kSecureBootEnabled;
     this.kWorkingDirectory= kWorkingDirectory??this.kWorkingDirectory;
     this.kFaustusGitUrl=kFaustusGitUrl??'https://github.com/legacyO7/faustus.git';
     this.kExecPermissionCheckerPath=kExecPermissionCheckerPath??this.kExecPermissionCheckerPath;
     this.arMode=arMode??this.arMode;
+    this.kTmpPath=kTmpPath??this.kTmpPath;
 
   }
+
+  
 }

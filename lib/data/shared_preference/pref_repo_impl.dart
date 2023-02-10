@@ -1,6 +1,9 @@
 
+import 'dart:convert';
+
+import 'package:aurora/data/model/ar_mode_model.dart';
+import 'package:aurora/data/model/ar_state_model.dart';
 import 'package:aurora/data/shared_preference/pref_constants.dart';
-import 'package:aurora/utility/ar_widgets/colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,23 +21,22 @@ class PrefRepoImpl extends PrefRepo{
   }
 
   @override
-  Future<Color> getColor() async {
-    return Color(int.parse((_sharedPreferences.getString(PrefConstants.color)??ArColors.blue.toString()).split('(0x')[1].split(')')[0],radix: 16));
-  }
-
-  @override
   Future<int> getBrightness() async {
     return (_sharedPreferences.getInt(PrefConstants.brightness))??0;
   }
 
   @override
-  Future<int> getMode() async {
-    return (_sharedPreferences.getInt(PrefConstants.mode))??0;
+  Future<ArMode> getArMode() async {
+    String mode= (_sharedPreferences.getString(PrefConstants.mode))??'';
+    if(mode.isEmpty) return ArMode();
+    return ArMode.fromJson(jsonDecode(mode));
   }
 
   @override
-  Future<int> getSpeed() async {
-    return (_sharedPreferences.getInt(PrefConstants.speed))??0;
+  Future<ArState> getArState() async {
+    String state= (_sharedPreferences.getString(PrefConstants.state))??'';
+    if(state.isEmpty) return ArState();
+    return ArState.fromJson(jsonDecode(state));
   }
 
   @override
@@ -43,13 +45,24 @@ class PrefRepoImpl extends PrefRepo{
   }
 
   @override
-  Future setVersion(String version) async {
-    await _sharedPreferences.setString(PrefConstants.version, version);
+  Future<ThemeMode> getTheme() async{
+    switch((_sharedPreferences.getString(PrefConstants.theme))??PrefConstants.theme){
+      case 'system':
+        return ThemeMode.system;
+      case 'dark':
+        return ThemeMode.dark;
+      case 'light':
+        return ThemeMode.light;
+
+      default:
+        return ThemeMode.system;
+    }
+
   }
 
   @override
-  Future setColor(String color) async {
-    await _sharedPreferences.setString(PrefConstants.color, color);
+  Future setVersion(String version) async {
+    await _sharedPreferences.setString(PrefConstants.version, version);
   }
 
   @override
@@ -58,17 +71,25 @@ class PrefRepoImpl extends PrefRepo{
   }
 
   @override
-  Future setMode(int mode) async {
-    await _sharedPreferences.setInt(PrefConstants.mode, mode);
+  Future setArMode({ required ArMode arMode}) async {
+    await _sharedPreferences.setString(PrefConstants.mode,
+        '{ "mode": ${arMode.mode}, "speed": ${arMode.speed}, "color": "${arMode.color}" }');
   }
 
+
   @override
-  Future setSpeed(int speed) async {
-    await _sharedPreferences.setInt(PrefConstants.speed, speed);
+  Future setArState({ required ArState arState }) async {
+    await _sharedPreferences.setString(PrefConstants.state,
+        '{ "boot": ${arState.boot}, "awake": ${arState.awake}, "sleep": ${arState.sleep} }');
   }
 
   @override
   Future setThreshold(int threshold) async {
     await _sharedPreferences.setInt(PrefConstants.threshold, threshold);
+  }
+
+  @override
+  Future setTheme(ThemeMode arTheme) async {
+    await _sharedPreferences.setString(PrefConstants.theme, arTheme.name);
   }
 }
