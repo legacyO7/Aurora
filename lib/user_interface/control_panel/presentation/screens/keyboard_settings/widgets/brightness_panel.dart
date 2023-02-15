@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 Widget brightnessController({required BuildContext context, required String title}) {
-  List<ButtonAttribute<int>> a = [
+  List<ButtonAttribute<int>> brightnessList = [
     ButtonAttribute(title: "Off", value: 0),
     ButtonAttribute(title: "Low", value: 1),
     ButtonAttribute(title: "Medium", value: 2),
@@ -22,7 +22,7 @@ Widget brightnessController({required BuildContext context, required String titl
             children: [
               Text(title),
               Row(
-                  children: a
+                  children: brightnessList
                       .map((e) => ArButton(
                           title: e.title,
                           isSelected: state.brightness == e.value,
