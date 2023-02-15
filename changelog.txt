@@ -1,5 +1,4 @@
 
 Changelogs:
 
-- secureboot status indicator
-- optimized settings
+- enable strobing mode for mainline

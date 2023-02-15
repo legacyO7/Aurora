@@ -18,15 +18,16 @@ class ModeController extends StatelessWidget with GlobalMixin{
   final bool isVisible;
   final String title;
 
-  final List<ButtonAttribute<int>> a=[
+  @override
+  Widget build(BuildContext context) {
+
+    final List<ButtonAttribute<int>> modeList=[
       ButtonAttribute(title: "Static",value: 0),
       ButtonAttribute(title: "Breathing",value: 1),
       ButtonAttribute(title: "Color Cycle",value: 2),
-      ButtonAttribute(title: "Strobing",value: 3)
-  ];
+      ButtonAttribute(title: "Strobing",value: super.isMainLine()?9:3)
+    ];
 
-  @override
-  Widget build(BuildContext context) {
     return  AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       height: isVisible?100:0,
@@ -38,11 +39,10 @@ class ModeController extends StatelessWidget with GlobalMixin{
               children: [
                 Text(title),
                 Row(
-                    children: a.map((e) =>
+                    children: modeList.map((e) =>
                         ArButton(
                             title: e.title,
                             isSelected: state.mode==e.value,
-                            isEnabled: !(super.isMainLine() && e.value==3),
                             action: () {
                               context.read<KeyboardSettingsBloc>().add(KeyboardSettingsEventSetMode(mode: e.value??0));
                             } )).toList()

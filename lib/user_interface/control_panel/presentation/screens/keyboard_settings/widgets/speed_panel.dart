@@ -13,7 +13,7 @@ Widget speedController({
   required String title,
   bool isVisible=true}) {
 
-  List<ButtonAttribute<int>> a=[
+  List<ButtonAttribute<int>> speedList=[
       ButtonAttribute(title: "Slow",value: 0),
       ButtonAttribute(title: "Medium",value: 1),
       ButtonAttribute(title: "Fast",value: 2),
@@ -30,7 +30,7 @@ Widget speedController({
            children: [
              Text(title),
              Row(
-                 children: a.map((e) =>
+                 children: speedList.map((e) =>
                      ArButton(
                          title: e.title,
                          isSelected: state.speed==e.value,
