@@ -42,7 +42,7 @@ permission_checker_file(){
 
 checkpackages(){
 
-  for package in dkms openssl mokutil git make cmak
+  for package in dkms openssl mokutil git make cmake
   do
     if ! command -v $package &> /dev/null
     then

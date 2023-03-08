@@ -32,6 +32,10 @@ class SetupDisableFaustusState extends SetupState{
   SetupDisableFaustusState();
 }
 
+class SetupMissingPkexec extends SetupState{
+  SetupMissingPkexec();
+}
+
 class SetupCompatibleKernel extends SetupState{
   SetupCompatibleKernel();
 }
