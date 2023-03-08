@@ -98,6 +98,10 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                           return const Text("using mainline kernel module, nothing to install");
                         }
 
+                        if(state is SetupMissingPkexec) {
+                          return const Text('polkit is missing. aurora cannot continue');
+                        }
+
                           return const Text("something is really wrong ;(");
 
                       },

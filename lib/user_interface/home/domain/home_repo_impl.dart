@@ -66,6 +66,10 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   @override
   Future<int> compatibilityChecker() async{
 
+    if(!await _terminalDelegate.pkexecChecker()){
+      return 6;
+    }
+
     if(isMainLineCompatible()){
       return 4;
     }
@@ -94,7 +98,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   }
 
   @override
-  bool checkFaustusFolder()=>Directory(Constants.kFaustusModulePath).existsSync();
+  bool checkFaustusFolder()=>!Directory(Constants.kFaustusModulePath).existsSync();
 
   Future _getAccess() async{
     await _terminalDelegate.execute("${Constants.kPolkit} ${super.isMainLine()? _globalConfig.kExecMainlinePath: _globalConfig
