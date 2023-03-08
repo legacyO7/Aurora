@@ -21,7 +21,7 @@ class _MyHomePageState extends State<HomeScreen> {
   @override
   void initState() {
     context.read<HomeBloc>()
-      ..add(HomeEventRequestAccess())
+      ..add(HomeEventInit())
       ..setAppHeight();
     super.initState();
   }

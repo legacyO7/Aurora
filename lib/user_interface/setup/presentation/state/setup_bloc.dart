@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/control_panel/domain/uninstaller/disabler_repo.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
@@ -13,7 +11,6 @@ import 'package:aurora/utility/ar_widgets/arwidgets.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'setup_state.dart';
 
@@ -35,19 +32,10 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   final ArButtonCubit _arButtonCubit;
   final DisablerRepo _disablerRepo;
 
-  String? _setupPath;
-  String _terminalList = '';
-
   _initSetup(emit) async {
+
     await _homeRepo.getVersion();
-    Directory workingDir= Directory('${(await getTemporaryDirectory()).path}/legacy07.aurora');
-    if(workingDir.existsSync()){
-      workingDir.deleteSync(recursive: true);
-    }
-    Constants.globalConfig.setInstance(
-      kWorkingDirectory: (await workingDir.create()).path,
-      kSecureBootEnabled: await _homeRepo.isSecureBootEnabled()
-    );
+    await _setupWizardRepo.initSetup();
 
     if(await _prefRepo.getVersion() !=Constants.globalConfig.arVersion && await _homeRepo.checkInternetAccess()){
       emit(SetupWhatsNewState(await _fetchChangelog()));
@@ -66,11 +54,6 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     bool isConnected=await _homeRepo.checkInternetAccess();
 
     navigate() async {
-
-      Constants.globalConfig.setInstance(
-          kExecPermissionCheckerPath: await _homeRepo.extractAsset(sourceFileName: Constants.kPermissionChecker)
-      );
-
       switch( await _homeRepo.compatibilityChecker()){
         case 0:
           Constants.globalConfig.setInstance(arMode: ARMODE.normal);
@@ -146,11 +129,8 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
   _allowConfigure(bool allow,emit) async{
     if(allow) {
-      await _homeRepo.extractAsset(sourceFileName: Constants.kFaustusInstaller);
-      _setupPath = "${await _homeRepo.extractAsset(
-          sourceFileName: Constants.kArSetup)} ${Constants.globalConfig
-        .kWorkingDirectory}";
-      if(_homeRepo.packagesToInstall.isNotEmpty) {
+      await _setupWizardRepo.loadSetupFiles();
+      if((await _homeRepo.compatibilityChecker())==1) {
         _emitInstallPackage(emit);
       }else{
         _emitInstallFaustus(emit);
@@ -174,30 +154,19 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
       var isSuccess=false;
       _arButtonCubit.setLoad();
 
-      bool pkexec=await _homeRepo.pkexecChecker();
-
-      if(Constants.globalConfig.kSecureBootEnabled! || !pkexec){
-        _terminalList = '" ${(await _setupWizardRepo.getTerminalList())} "';
-      }
 
       if (stepValue == 0 ) {
-        if(_homeRepo.packagesToInstall.isEmpty) {
+        if((await _homeRepo.compatibilityChecker())!=1) {
           isSuccess = true;
         }else {
-
-          if (_terminalList.isNotEmpty || pkexec) {
-            if (pkexec) {
-              _emitInstallFaustusTerminal(emit, stepValue: 0);
-            }
-            await super.execute("${!pkexec ? '' : Constants.kPolkit} $_setupPath installpackages $_terminalList");
-            isSuccess = await _homeRepo.compatibilityChecker() != 1;
-          } else {
-            arSnackBar(text: "Fetching Data Failed", isPositive: false);
+          if (await _setupWizardRepo.pkexecChecker()) {
+            _emitInstallFaustusTerminal(emit, stepValue: 0);
           }
+          await _setupWizardRepo.installPackages();
         }
       } else {
           _emitInstallFaustusTerminal(emit,stepValue: 2);
-          await super.execute("${Constants.globalConfig.kSecureBootEnabled! ? '' : Constants.kPolkit} $_setupPath installfaustus ${Constants.globalConfig.kFaustusGitUrl} $_terminalList");
+          await _setupWizardRepo.installFaustus();
           switch (await _homeRepo.compatibilityChecker()){
             case 0:
             case 5:
@@ -227,7 +196,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   }
 
   void _validateRepo(emit,{required String value}) {
-    bool isValid = value.isNotEmpty && value.startsWith('https') && value.endsWith('.git');
+    bool isValid = value.isNotEmpty && value.startsWith('http') && value.endsWith('.git');
     if (isValid) {
       Constants.globalConfig.setInstance(
           kFaustusGitUrl:value
@@ -236,7 +205,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     _emitInstallFaustus(emit,isValid: isValid);
   }
 
-  _emitInstallPackage(emit)=> emit(SetupIncompatibleState(stepValue: 0, child: packageInstaller(packagesToInstall: _homeRepo.packagesToInstall.split(' ')), isValid: true));
+  _emitInstallPackage(emit)  => emit(SetupIncompatibleState(stepValue: 0, child: packageInstaller(packagesToInstall:  _setupWizardRepo.missingPackagesList), isValid: true));
 
   _emitInstallFaustus(emit,{bool? isValid})=>  emit(SetupIncompatibleState(stepValue: 1, child: const FaustusInstaller(),isValid: isValid??true));
 
