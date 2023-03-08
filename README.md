@@ -36,8 +36,6 @@ This doesn't require any further configurations
 
 #### Prerequisites
 
-
-- [PolKit](https://en.wikipedia.org/wiki/Polkit) to obtain root privileges
 - [faustus module](https://github.com/hackbnw/faustus)
 - If the module is not installed, `dkms openssl mokutil git make cmake` are required for installing the module
 
