@@ -9,14 +9,6 @@ abstract class TerminalBaseBloc<Event,State> extends Bloc<Event,State> with Glob
 
   final TerminalRepo _terminalRepo = sl<TerminalRepo>();
 
-  Future execute(String command) async {
-    return await _terminalRepo.execute(command);
-  }
-
-  Future<bool> checkAccess() async {
-    return await _terminalRepo.checkAccess();
-  }
-
   void killProcess() {
     _terminalRepo.killProcess();
   }
@@ -24,11 +16,6 @@ abstract class TerminalBaseBloc<Event,State> extends Bloc<Event,State> with Glob
   void clearTerminalOutput(){
     _terminalRepo.clearTerminalOut();
   }
-
-  Future<List<String>> getOutput({required String command}) async{
-    return await _terminalRepo.getOutput(command: command);
-  }
-
 
   void dispose(){
     _terminalRepo.disposeStream();

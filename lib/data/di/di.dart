@@ -19,6 +19,8 @@ import 'package:aurora/user_interface/setup/domain/repository/setup_repo_impl.da
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/user_interface/terminal/data/source/terminal_source_impl.dart';
+import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
+import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate_impl.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo_impl.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
@@ -37,7 +39,7 @@ final sl = GetIt.I;
 Future initDI() async{
   sl.allowReassignment=true;
 
-  sl.registerLazySingleton(() => HomeBloc(sl(),sl(),sl()));
+  sl.registerLazySingleton(() => HomeBloc(sl(),sl()));
   sl.registerLazySingleton(() => DisablerBloc(sl()));
   sl.registerLazySingleton(() => TerminalBloc());
   sl.registerLazySingleton(() => KeyboardSettingsBloc(sl(),sl()));
@@ -47,12 +49,14 @@ Future initDI() async{
   sl.registerLazySingleton(() => ArButtonCubit());
 
   sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
-  sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl()));
+  sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(),sl()));
   sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
-  sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl()));
+  sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(),sl()));
   sl.registerLazySingleton<KeyboardSettingsRepo>(() => KeyboardSettingsRepoImpl(sl(),sl()));
   sl.registerLazySingleton<BatteryManagerRepo>(() => BatteryManagerRepoImpl(sl(),sl()));
-  sl.registerLazySingleton<DisablerRepo>(() => DisablerRepoImpl(sl(),sl(),sl()));
+  sl.registerLazySingleton<DisablerRepo>(() => DisablerRepoImpl(sl(),sl()));
+
+  sl.registerLazySingleton<TerminalDelegate>(() => TerminalDelegateImpl(sl(),sl()));
 
   sl.registerLazySingleton<SetupSource>(() => SetupSourceImpl(sl()));
   sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl()..clearLog());

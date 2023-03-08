@@ -1,23 +1,21 @@
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
-import 'package:aurora/user_interface/home/domain/home_repo.dart';
-import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
+import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/utility/constants.dart';
 
 import 'disabler_repo.dart';
 
 class DisablerRepoImpl implements DisablerRepo{
 
-  DisablerRepoImpl(this._terminalSource,this._homeRepo,this._prefRepo);
+  DisablerRepoImpl(this._terminalDelegate,this._prefRepo);
 
-  final TerminalSource _terminalSource;
-  final HomeRepo _homeRepo;
+  final TerminalDelegate _terminalDelegate;
   final PrefRepo _prefRepo;
 
   @override
   Future disableServices({required DISABLE disable}) async{
 
-      var command="${Constants.kPolkit} ${await _homeRepo.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.globalConfig.kWorkingDirectory} ";
+      var command="${Constants.kPolkit} ${await _terminalDelegate.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.globalConfig.kWorkingDirectory} ";
 
       switch(disable) {
         case DISABLE.faustus:
@@ -36,7 +34,7 @@ class DisablerRepoImpl implements DisablerRepo{
           break;
       }
 
-      await _terminalSource.execute(command);
+      await _terminalDelegate.execute(command);
       if(disable==DISABLE.all||disable==DISABLE.threshold){
         await _prefRepo.setThreshold(100);
       }
