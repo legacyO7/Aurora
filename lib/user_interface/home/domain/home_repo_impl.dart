@@ -74,10 +74,6 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
       return 4;
     }
 
-    if((await _terminalDelegate.listPackagesToInstall()).isNotEmpty) {
-      return 1;
-    }
-
     if(!checkFaustusFolder()) {
       if(File(Constants.kBatteryThresholdPath).existsSync()) {
         return 3;
@@ -87,6 +83,11 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     }else if(await _terminalDelegate.isKernelCompatible()) {
       return 5;
     }
+
+    if((await _terminalDelegate.listPackagesToInstall()).isNotEmpty) {
+      return 1;
+    }
+
 
     return 0;
   }
@@ -98,7 +99,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   }
 
   @override
-  bool checkFaustusFolder()=>!Directory(Constants.kFaustusModulePath).existsSync();
+  bool checkFaustusFolder()=>Directory(Constants.kFaustusModulePath).existsSync();
 
   Future _getAccess() async{
     await _terminalDelegate.execute("${Constants.kPolkit} ${super.isMainLine()? _globalConfig.kExecMainlinePath: _globalConfig
