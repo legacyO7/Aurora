@@ -25,7 +25,7 @@ class ModeController extends StatelessWidget with GlobalMixin{
       ButtonAttribute(title: "Static",value: 0),
       ButtonAttribute(title: "Breathing",value: 1),
       ButtonAttribute(title: "Color Cycle",value: 2),
-      ButtonAttribute(title: "Strobing",value: super.isMainLine()?9:3)
+      ButtonAttribute(title: "Strobing",value: 3)
     ];
 
     return  AnimatedContainer(

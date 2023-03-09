@@ -17,6 +17,9 @@ class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
   final TerminalDelegate _terminalDelegate;
   final PrefRepo _prefRepo;
 
+  final List<int> faustusKeys=[0,1,2,3];
+  final List<int> mainLineKeys=[0,1,2,9];
+
   final _globalConfig=Constants.globalConfig;
 
   @override
@@ -29,7 +32,7 @@ class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
   Future setMainlineModeParams({required ArMode arMode}) async{
     if(super.isMainLine()) {
       await _terminalDelegate.execute(
-          "${_globalConfig.kExecMainlinePath} mode 1 ${arMode.mode} ${arMode
+          "${_globalConfig.kExecMainlinePath} mode 1 ${mainLineKeys[arMode.mode!]} ${arMode
               .color!.red} ${arMode.color!.green} ${arMode.color!.blue} ${arMode
               .speed}");
     }else{
@@ -44,7 +47,7 @@ class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
     if(super.isMainLine()){
       await setMainlineModeParams(arMode: arMode);
     }else {
-      await _terminalDelegate.execute("${_globalConfig.kExecFaustusPath} mode ${arMode.mode} ");
+      await _terminalDelegate.execute("${_globalConfig.kExecFaustusPath} mode ${faustusKeys[arMode.mode!]} ");
     }
     await _prefRepo.setArMode(arMode: arMode);
   }
