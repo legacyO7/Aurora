@@ -1,15 +1,6 @@
-
 Changelogs:
 
-- ditch faustus module, if the mainline kernel supports keyboard backlight
-  Faustus module is no longer supported for kernel v6.1 and above. But keyboard backlit control for Asus TUF laptops has been added to mainline kernel. so faustus module is no longer required
-- added keyboard states, if on mainline
-- prompt user to switch to mainline
-- fixed minor bugs in faustus mode
-- updated dependencies
-- added secureboot status indicator
-- fixed annoying update reminder
-- added light theme for no good reason
-- improved UI
-- many changes under the hood changes
-- optimized settings
+- aurora stable versions will be available in fedora copr buildsystem
+- override package installation for mainline mode
+- updated workflow and dependencies
+- minor bug fixes

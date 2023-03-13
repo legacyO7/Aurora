@@ -23,6 +23,8 @@ class TerminalSourceImpl extends TerminalSource{
     _terminalSink = _tStreamController.sink;
     List<String> arguments=[];
 
+    command=command.trim();
+
     if(command.isNotEmpty) {
       arguments = command.split(' ');
       var exec=arguments[0];

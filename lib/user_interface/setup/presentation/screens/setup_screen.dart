@@ -78,6 +78,7 @@ class _SetupScreenState extends State<SetupScreen> {
                   text: 'Install Module',
                   stepValue: state.stepValue,
                   index: 2)
+
             ];
             return  Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -88,10 +89,8 @@ class _SetupScreenState extends State<SetupScreen> {
                       stepperDirection: Axis.horizontal,
                       activeBarColor: ArColors.purple,
                       activeIndex: state.stepValue,
-                      barThickness: 5,
                       inActiveBarColor: ArColors.grey,
                       inverted: true,
-                      gap: MediaQuery.of(context).size.width/7,
                     ),
                   ),
                   Expanded(
