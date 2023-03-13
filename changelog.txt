@@ -1,6 +1,6 @@
 Changelogs:
 
-- aurora stable versions will be available in fedora copr buildsystem
+- aurora stable versions will be available in fedora copr buildsystem. See installation section
 - override package installation for mainline mode
 - updated workflow and dependencies
 - minor bug fixes
