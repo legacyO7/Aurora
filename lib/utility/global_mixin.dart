@@ -2,13 +2,12 @@ import 'dart:io';
 
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:aurora/utility/ar_widgets/arwidgets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../data/di/di.dart';
+import 'ar_widgets/ar_enums.dart';
 import 'constants.dart';
-import 'global_configuration.dart';
 
 mixin GlobalMixin{
 

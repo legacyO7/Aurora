@@ -13,7 +13,7 @@ class HomeTopBar extends StatelessWidget with GlobalMixin {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(child: const ArWindowButtons()),
+        const Expanded(child: ArWindowButtons()),
         Expanded(
           child: Column(
             children: [

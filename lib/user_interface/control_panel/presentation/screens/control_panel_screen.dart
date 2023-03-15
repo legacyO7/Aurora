@@ -1,9 +1,9 @@
 import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_widgets.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/theme_button.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:aurora/utility/global_configuration.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

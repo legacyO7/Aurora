@@ -1,3 +1,4 @@
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:flutter/material.dart';
 
 import '../data/di/di.dart';
@@ -36,5 +37,8 @@ class Constants {
 
   //keys
   static GlobalKey<ScaffoldState> kScaffoldKey = GlobalKey<ScaffoldState>();
+
+  //build type
+  static const BuildType buildType= BuildType.debug;
 
 }

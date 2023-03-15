@@ -1,6 +1,7 @@
 import 'package:aurora/user_interface/terminal/domain/model/terminal_text.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_event.dart';
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 
 import 'terminal_state.dart';
 

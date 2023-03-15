@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
-import 'package:aurora/user_interface/terminal/domain/model/terminal_text.dart';
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';

@@ -67,6 +67,7 @@ class TerminalDelegateImpl implements TerminalDelegate {
     return (await _terminalRepo.getOutput(command: 'uname -r')).last.startsWith("6.1");
   }
   
+  @override
   String get listMissingPackages=>_packagesToInstall;
 
 }

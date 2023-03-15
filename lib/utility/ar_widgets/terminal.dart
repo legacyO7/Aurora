@@ -3,6 +3,8 @@ import 'package:aurora/utility/ar_widgets/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'ar_enums.dart';
+
 Widget arTerminal(TerminalText terminalText){
 
   Color commandColor(CommandStatus commandStatus) {
