@@ -42,7 +42,7 @@ class TerminalSourceImpl extends TerminalSource{
 
       try{
 
-          _inProgress=true;
+         _inProgress=true;
          process = await Process.start(
               exec,
               arguments,

@@ -26,9 +26,9 @@ class PrefRepoImpl extends PrefRepo{
   }
 
   @override
-  Future<ArMode> getArMode() async {
+  Future<ArMode?> getArMode() async {
     String mode= (_sharedPreferences.getString(PrefConstants.mode))??'';
-    if(mode.isEmpty) return ArMode();
+    if(mode.isEmpty) return null;
     return ArMode.fromJson(jsonDecode(mode));
   }
 
