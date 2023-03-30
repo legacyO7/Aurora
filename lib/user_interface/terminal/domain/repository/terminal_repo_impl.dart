@@ -92,8 +92,8 @@ class TerminalRepoImpl extends TerminalRepo{
     _terminalOut.clear();
     await execute(command);
 
-    return _terminalOut.sublist(_terminalOut.indexWhere((element) => element.contains(command)))
-      .map((e) => e.split(' ').sublist(1).join(' ')).toList()..removeAt(0);
+    return _terminalOut.length>1? (_terminalOut.sublist(_terminalOut.indexWhere((element) => element.contains(command)))
+      .map((e) => e.split(' ').sublist(1).join(' ')).toList()..removeAt(0)):[];
 
   }
 

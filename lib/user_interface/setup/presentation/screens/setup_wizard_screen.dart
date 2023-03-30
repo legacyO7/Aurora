@@ -99,7 +99,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                         }
 
                         if(state is SetupMissingPkexec) {
-                          return const Text('polkit is missing. aurora cannot continue');
+                          return const Text('polkit is missing. cannot continue');
                         }
 
                           return const Text("something is really wrong ;(");

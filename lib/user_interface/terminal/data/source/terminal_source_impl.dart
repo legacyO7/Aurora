@@ -23,7 +23,7 @@ class TerminalSourceImpl extends TerminalSource{
 
   @override
   Future execute(String command) async{
-    _commands.add(command);
+    _commands.add(command.trim());
     if(!_inProgress){
       await _execute(_commands.first);
     }
@@ -33,8 +33,6 @@ class TerminalSourceImpl extends TerminalSource{
   Future _execute(String command) async {
     _terminalSink = _tStreamController.sink;
     List<String> arguments=[];
-
-    command=command.trim();
 
     if(command.isNotEmpty) {
       arguments = command.split(' ');
@@ -54,19 +52,19 @@ class TerminalSourceImpl extends TerminalSource{
         getStdout();
         await getStdErr();
 
-        _commands.removeAt(0);
-        if(_commands.isNotEmpty){
-          await _execute(_commands.first);
-        }else {
-          _inProgress=false;
-        }
-
       } catch (e) {
         if (kDebugMode) {
           print("STDERR: ${e.toString()}");
         }else {
           await _logIt(e.toString());
         }
+        _inProgress=false;
+      }
+
+      _commands.removeAt(0);
+      if(_commands.isNotEmpty){
+        await _execute(_commands.first);
+      }else {
         _inProgress=false;
       }
     }

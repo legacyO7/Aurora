@@ -48,7 +48,13 @@ class TerminalDelegateImpl implements TerminalDelegate {
 
   @override
   Future<bool> pkexecChecker() async{
-    return (await _terminalRepo.getOutput(command: 'command -v pkexec')).length==1;
+    return await _terminalRepo.getOutput(command: 'type pkexec').then((value){
+      if(value.isEmpty) {
+        return false;
+      } else{
+          return !value.toString().contains('not found');
+        }
+    });
   }
 
   @override
