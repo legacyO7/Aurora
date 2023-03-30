@@ -18,8 +18,19 @@ class TerminalSourceImpl extends TerminalSource{
   final _tStreamController = BehaviorSubject<String>();
   late Sink<String>  _terminalSink;
 
+  final List<String> _commands=[];
+
+
   @override
-  Future execute(String command) async {
+  Future execute(String command) async{
+    _commands.add(command);
+    if(!_inProgress){
+      await _execute(_commands.first);
+    }
+  }
+
+
+  Future _execute(String command) async {
     _terminalSink = _tStreamController.sink;
     List<String> arguments=[];
 
@@ -33,21 +44,22 @@ class TerminalSourceImpl extends TerminalSource{
 
       try{
 
-        if(_inProgress){
-            return;
-        }else {
           _inProgress=true;
          process = await Process.start(
               exec,
               arguments,
               workingDirectory: Constants.globalConfig.kWorkingDirectory
           );
-        }
 
         getStdout();
         await getStdErr();
 
-        _inProgress=false;
+        _commands.removeAt(0);
+        if(_commands.isNotEmpty){
+          await _execute(_commands.first);
+        }else {
+          _inProgress=false;
+        }
 
       } catch (e) {
         if (kDebugMode) {
