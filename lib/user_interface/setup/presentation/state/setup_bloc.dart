@@ -77,6 +77,10 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
         case 6:
           emit(SetupMissingPkexec());
           break;
+          
+        case 7:
+          emit(SetupInCompatibleDevice());
+          break;
 
         default:
           if(isConnected) {

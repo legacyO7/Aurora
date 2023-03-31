@@ -4,6 +4,7 @@ import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -63,8 +64,27 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     ..focus();
   }
 
+  Future<bool> isDeviceConpatible() async{
+
+    bool checkDeviceInfo({required String info}){
+      return (info.toLowerCase().contains('asus'));
+    }
+
+    if(File(Constants.kVendorName).existsSync()){
+      return checkDeviceInfo(info: File(Constants.kVendorName).readAsLinesSync().toString());
+    }else if(File(Constants.kProductName).existsSync()){
+      return checkDeviceInfo(info: File(Constants.kProductName).readAsLinesSync().toString());
+    }
+    debugPrint("unknown device");
+    return true;
+  }
+
   @override
   Future<int> compatibilityChecker() async{
+
+    if(!await isDeviceConpatible()){
+      return 7;
+    }
 
     if(!await _terminalDelegate.pkexecChecker()){
       return 6;

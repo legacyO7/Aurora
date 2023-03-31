@@ -102,6 +102,10 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                           return const Text('polkit is missing. cannot continue');
                         }
 
+                        if(state is SetupInCompatibleDevice) {
+                          return const Text('this ain\'t ASUS. I have no business here!');
+                        }
+
                           return const Text("something is really wrong ;(");
 
                       },
