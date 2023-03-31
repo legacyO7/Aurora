@@ -1,7 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:aurora/utility/ar_widgets/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 Widget arTitle(){
 
@@ -10,8 +9,8 @@ Widget arTitle(){
       animatedTexts: [
         ColorizeAnimatedText(
           'Aurora',
-          textStyle: TextStyle(
-            fontSize: 7.w,
+          textStyle: const TextStyle(
+            fontSize: 50,
           ),
           colors: [
             ArColors.red,
