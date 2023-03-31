@@ -49,7 +49,7 @@ class TerminalSourceImpl extends TerminalSource{
               workingDirectory: Constants.globalConfig.kWorkingDirectory,
               runInShell: true,
               mode: ProcessStartMode.detachedWithStdio
-          ).timeout(const Duration(seconds: 2));
+          );
 
         getStdout();
         await getStdErr();
