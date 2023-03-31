@@ -21,10 +21,10 @@ packages:
     dependency: "direct main"
     description:
       name: another_xlider
-      sha256: "731f30f1a6a29506e02cc8b8ccd383de74c7bc8e5b59e9989b3d00beab26e803"
+      sha256: "95e8c9f812e76aa1b517f5c670088e1a86ba64e06bb84655c87e1df1877fa9bb"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   async:
     dependency: transitive
     description:

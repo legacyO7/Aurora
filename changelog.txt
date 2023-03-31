@@ -1,4 +1,6 @@
 
 Changelogs:
 
-- override package installation for mainline mode
+- fix polkit check
+- UI improvements
+- minor bugfixes
