@@ -7,7 +7,7 @@ import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart'
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_widgets.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
-import 'package:aurora/utility/ar_widgets/arwidgets.dart';
+import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 

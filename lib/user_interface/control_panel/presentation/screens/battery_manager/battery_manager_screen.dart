@@ -45,8 +45,6 @@ class _BatteryManagerScreenState extends State<BatteryManagerScreen> {
              handler: FlutterSliderHandler(
                  decoration: const BoxDecoration(),
                  child: Container(
-                     width: 80,
-                     height: 80,
                      decoration:  BoxDecoration(
                          shape: BoxShape.circle,
                          border: Border.all(color:  context.selectedColor,width: 5),

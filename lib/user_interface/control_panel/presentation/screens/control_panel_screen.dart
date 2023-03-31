@@ -46,7 +46,7 @@ class _ControlPanelState extends State<ControlPanelScreen> with GlobalMixin{
                 Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: context.selectedColor),
-                        borderRadius: const BorderRadius.only(bottomRight: Radius.circular(20),topRight: Radius.circular(20))
+                        borderRadius: const BorderRadius.only(bottomRight: Radius.circular(10))
                     ),
                     child: const DisableButton())
               ],
