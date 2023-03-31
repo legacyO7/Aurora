@@ -21,7 +21,11 @@ class UpdateWidget extends StatelessWidget{
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Text("A new update is available"),
-        changelogContainer(changelog: changelog),
+        Row(
+          children: [
+            changelogContainer(changelog: changelog),
+          ],
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
