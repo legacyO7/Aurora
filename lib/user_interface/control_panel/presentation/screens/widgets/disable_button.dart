@@ -2,7 +2,7 @@ import 'package:aurora/user_interface/control_panel/presentation/state/disabler/
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_event.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_state.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_widgets.dart';
-import 'package:aurora/utility/ar_widgets/arwidgets.dart';
+import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';

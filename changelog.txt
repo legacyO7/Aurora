@@ -1,6 +1,6 @@
+
 Changelogs:
 
-- rpm build is now available!
-- override package installation for mainline mode
-- updated workflow and dependencies
-- minor bug fixes
+- fix polkit check
+- UI improvements
+- minor bugfixes

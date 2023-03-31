@@ -2,10 +2,11 @@
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_state.dart';
-import 'package:aurora/utility/ar_widgets/arwidgets.dart';
+import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sizer/sizer.dart';
 
 
 Widget speedController({
@@ -21,7 +22,7 @@ Widget speedController({
 
  return AnimatedContainer(
    duration: const Duration(milliseconds: 300),
-   height: isVisible?100:0,
+   height: isVisible?9.h:0,
    child: SingleChildScrollView(
      child: BlocBuilder<KeyboardSettingsBloc,KeyboardSettingsState>(
        builder: (BuildContext context, state) {

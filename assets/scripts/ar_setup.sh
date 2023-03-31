@@ -79,6 +79,7 @@ disablefaustus(){
     printf "blacklist faustus\n" | sudo tee /etc/modprobe.d/faustus.conf
     sudo modprobe asus-nb-wmi
     sudo modprobe asus-wmi
+    sudo dkms remove faustus/0.2 --all
 }
 
 

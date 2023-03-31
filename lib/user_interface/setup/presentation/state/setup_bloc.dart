@@ -1,15 +1,14 @@
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/control_panel/domain/uninstaller/disabler_repo.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_widgets.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
-import 'package:aurora/utility/ar_widgets/arwidgets.dart';
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
+import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:aurora/utility/global_configuration.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 import 'setup_state.dart';
@@ -78,6 +77,10 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
         case 6:
           emit(SetupMissingPkexec());
           break;
+          
+        case 7:
+          emit(SetupInCompatibleDevice());
+          break;
 
         default:
           if(isConnected) {
@@ -117,6 +120,9 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   }
 
   Future<bool> _isUpdateAvailable()async{
+
+    if(BuildType.appimage!=Constants.buildType) return false;
+
     var liveVersion=  _homeRepo.convertVersionToInt(await _setupWizardRepo.getAuroraLiveVersion());
     var currentVersion= _homeRepo.convertVersionToInt(Constants.globalConfig.arVersion!);
 

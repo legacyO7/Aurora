@@ -45,7 +45,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const ThemeButton(),
-                setupSplash(),
+                arTitle(),
                 Flexible(
                   child: BlocListener <SetupBloc,SetupState>(
                     listener: (BuildContext context, state) {
@@ -99,7 +99,11 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                         }
 
                         if(state is SetupMissingPkexec) {
-                          return const Text('polkit is missing. aurora cannot continue');
+                          return const Text('polkit is missing. cannot continue');
+                        }
+
+                        if(state is SetupInCompatibleDevice) {
+                          return const Text('this ain\'t ASUS. I have no business here!');
                         }
 
                           return const Text("something is really wrong ;(");

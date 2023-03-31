@@ -1,14 +1,13 @@
 import 'dart:io';
 
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
-import 'package:aurora/utility/ar_widgets/arwidgets.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sizer/sizer.dart';
 
 import '../data/di/di.dart';
+import 'ar_widgets/ar_enums.dart';
 import 'constants.dart';
-import 'global_configuration.dart';
 
 mixin GlobalMixin{
 
@@ -30,9 +29,12 @@ mixin GlobalMixin{
 
   ThemeData setTheme(context,{bool light=true}) {
     return ThemeData(
+      fontFamily: 'Play',
       brightness: light ? Brightness.light : Brightness.dark,
-      textTheme: GoogleFonts.playTextTheme(Theme.of(context).textTheme).apply(
-        bodyColor: light?ArColors.black:ArColors.white,
+      textTheme:  TextTheme(
+        bodyMedium: TextStyle(fontSize: 2.1.w),
+      ).apply(
+        bodyColor: light?ArColors.black:ArColors.white
       )
     );
   }

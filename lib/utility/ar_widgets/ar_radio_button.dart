@@ -1,5 +1,6 @@
 import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import 'colors.dart';
 
@@ -27,7 +28,7 @@ class ArRadioButton extends StatelessWidget{
           style: ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) =>
           value? context.selectedColorWithAlpha:ArColors.greyDisabled!)),
           child: SizedBox(
-              width: 80,
+              width: 9.w,
               child: Center(child: Text(title,
                 textAlign: TextAlign.end,
                 style: TextStyle(

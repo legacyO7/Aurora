@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
-import 'package:aurora/utility/ar_widgets/snackbar.dart';
+import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:path_provider/path_provider.dart';
 

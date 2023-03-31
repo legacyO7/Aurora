@@ -8,7 +8,7 @@ import 'package:aurora/user_interface/control_panel/presentation/state/theme/the
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
-import 'package:aurora/utility/ar_widgets/arwidgets.dart';
+import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sizer/sizer.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'user_interface/home/presentation/state/home_bloc.dart';
@@ -75,13 +76,17 @@ class Aurora extends StatelessWidget with GlobalMixin{
       ],
       child: BlocBuilder<ThemeBloc,ThemeState>(
         builder: (_, state)=>
-            MaterialApp(
-              title: 'Aurora',
-              darkTheme: super.setTheme(context, light: false),
-              theme: super.setTheme(context),
-              themeMode: state.arTheme,
-              home: const SetupWizardScreen(),
+            Sizer(
+                builder: (context, orientation, deviceType) =>
+                  MaterialApp(
+                    title: 'Aurora',
+                    darkTheme: super.setTheme(context, light: false),
+                    theme: super.setTheme(context),
+                    themeMode: state.arTheme,
+                    home: const SetupWizardScreen(),
+                  )
             )
+
       ),
     );
   }

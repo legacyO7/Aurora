@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
-import 'package:aurora/user_interface/terminal/domain/model/terminal_text.dart';
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
@@ -18,12 +18,21 @@ class TerminalSourceImpl extends TerminalSource{
   final _tStreamController = BehaviorSubject<String>();
   late Sink<String>  _terminalSink;
 
+  final List<String> _commands=[];
+
+
   @override
-  Future execute(String command) async {
+  Future execute(String command) async{
+    _commands.add(command.trim());
+    if(!_inProgress){
+      await _execute(_commands.first);
+    }
+  }
+
+
+  Future _execute(String command) async {
     _terminalSink = _tStreamController.sink;
     List<String> arguments=[];
-
-    command=command.trim();
 
     if(command.isNotEmpty) {
       arguments = command.split(' ');
@@ -33,21 +42,15 @@ class TerminalSourceImpl extends TerminalSource{
 
       try{
 
-        if(_inProgress){
-            return;
-        }else {
-          _inProgress=true;
+         _inProgress=true;
          process = await Process.start(
               exec,
               arguments,
               workingDirectory: Constants.globalConfig.kWorkingDirectory
           );
-        }
 
         getStdout();
         await getStdErr();
-
-        _inProgress=false;
 
       } catch (e) {
         if (kDebugMode) {
@@ -55,6 +58,13 @@ class TerminalSourceImpl extends TerminalSource{
         }else {
           await _logIt(e.toString());
         }
+        _inProgress=false;
+      }
+
+      _commands.removeAt(0);
+      if(_commands.isNotEmpty){
+        await _execute(_commands.first);
+      }else {
         _inProgress=false;
       }
     }
