@@ -3,7 +3,7 @@ description: An Alternate to Aura Sync for linux.
 
 publish_to: 'none'
 
-version: 2.3.5-canary+1
+version: 2.3.6-canary+1
 
 environment:
   sdk: ">=2.17.6 <3.0.0"
