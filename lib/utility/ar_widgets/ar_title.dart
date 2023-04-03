@@ -9,7 +9,9 @@ Widget arTitle(BuildContext context){
       animatedTexts: [
         ColorizeAnimatedText(
           'Aurora',
-          textStyle: Theme.of(context).textTheme.headlineLarge!,
+          textStyle:  const TextStyle(
+            fontSize: 50,
+          ),
           colors: [
             ArColors.red,
             ArColors.pink,
