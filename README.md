@@ -20,7 +20,7 @@ The modes will be auto-selected depending on the kernel version
 Aurora comes with an AppImage release which can be opened on any common linux distros.
 Find the latest release from [here](https://github.com/legacyO7/Aurora/releases).
 
-Aurora stable versions are also available in Fedora copr buildsystem for x86_64 devices
+Aurora stable versions are also available in Fedora copr buildsystem
 ```
 sudo dnf copr enable legacy07/aurora
 sudo dnf install aurora
