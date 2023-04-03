@@ -29,7 +29,7 @@ dependencies:
   bitsdojo_window: ^0.1.5
   flutter_phoenix: ^1.1.1
   window_manager: ^0.3.1
-  sizer: ^2.0.15
+  responsive_sizer: ^3.1.1
 
 dev_dependencies:
   flutter_test:

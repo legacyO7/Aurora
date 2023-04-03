@@ -42,7 +42,7 @@ class _KeyboardSettingsScreenState extends State<KeyboardSettingsScreen> with Gl
                      brightnessController(title: "Brightness", context: context),
                      ModeController(title: "Mode", isVisible: context.watch<KeyboardSettingsBloc>().isModeBarVisible),
                      speedController(title: "Speed", context: context,isVisible: context.watch<KeyboardSettingsBloc>().isSpeedBarVisible),
-                     stateController(title: "State",isVisible: super.isMainLine())
+                     StateController(title: "State",isVisible: super.isMainLine())
                    ],
                  )
                ),

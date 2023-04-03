@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../data/di/di.dart';
 import 'ar_widgets/ar_enums.dart';
@@ -27,12 +27,14 @@ mixin GlobalMixin{
 
   }
 
-  ThemeData setTheme(context,{bool light=true}) {
+  ThemeData setTheme({bool light=true}) {
     return ThemeData(
       fontFamily: 'Play',
       brightness: light ? Brightness.light : Brightness.dark,
       textTheme:  TextTheme(
-        bodyMedium: TextStyle(fontSize: 2.1.w),
+        bodyMedium: TextStyle(fontSize: 13.sp),
+        headlineSmall:  TextStyle(fontSize: 13.5.sp),
+        headlineLarge:  TextStyle(fontSize: 22.sp,fontWeight: FontWeight.bold),
       ).apply(
         bodyColor: light?ArColors.black:ArColors.white
       )

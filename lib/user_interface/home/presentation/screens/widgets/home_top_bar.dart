@@ -3,7 +3,7 @@ import 'package:aurora/utility/ar_widgets/ar_top_buttons.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class HomeTopBar extends StatelessWidget with GlobalMixin {
   const HomeTopBar({super.key});
@@ -18,8 +18,8 @@ class HomeTopBar extends StatelessWidget with GlobalMixin {
         Expanded(
           child: Column(
             children: [
-              Text("Aurora",style: TextStyle(fontSize: 6.w,fontWeight: FontWeight.bold,color: context.selectedColor),),
-              Text("\tv${Constants.globalConfig.arVersion}",style: TextStyle(fontSize: 2.2.w,fontWeight: FontWeight.bold),),
+              Text("Aurora",style: Theme.of(context).textTheme.headlineLarge!.apply(color: context.selectedColor),),
+              Text("\tv${Constants.globalConfig.arVersion}",style: TextStyle(fontSize: 1.5.w,fontWeight: FontWeight.bold),),
               Container(
                 decoration: BoxDecoration(
                     border: Border.all(

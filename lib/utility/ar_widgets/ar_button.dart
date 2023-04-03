@@ -3,7 +3,7 @@ import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:aurora/utility/ar_widgets/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ArButton extends StatefulWidget {
   const ArButton({super.key, required this.title, required this.action, this.isSelected = false, this.isEnabled = true, this.isLoading = false,this.edgeInsets});
@@ -32,8 +32,8 @@ class _ArButtonState extends State<ArButton> {
 
   @override
   Widget build(BuildContext context) {
-    height = widget.isSelected ? 4.5.h : 4.h;
-    width = widget.isSelected ? 16.w : 15.w;
+    height = widget.isSelected ? 7.h : 6.h;
+    width = widget.isSelected ? 10.w : 11.w;
     return Container(
       margin: widget.edgeInsets,
       padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 5),

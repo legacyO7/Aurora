@@ -6,7 +6,7 @@ import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/ar_widgets/placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class FaustusInstaller extends StatefulWidget{
   const FaustusInstaller({super.key});
@@ -39,7 +39,7 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
          Color setColor()=> state.isValid? ArColors.green:ArColors.red;
          return Column(
            children: [
-             Text("Install Faustus Module",style: TextStyle(fontSize: 2.5.w),),
+             Text("Install Faustus Module",style: Theme.of(context).textTheme.headlineSmall),
              Container(
                decoration: BoxDecoration(
                  border: Border.all(
@@ -50,7 +50,7 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
                      Radius.circular(25.0)
                  ),
                ),
-               margin: EdgeInsets.all(3.w),
+               margin: EdgeInsets.all(2.w),
                padding: EdgeInsets.only(right: 2.w),
                child: Row(
                  mainAxisSize: MainAxisSize.min,
@@ -69,7 +69,7 @@ class _FaustusInstallerState extends State<FaustusInstaller>{
                          bottomLeft: Radius.circular(20),
                        ),
                      ),
-                     padding: EdgeInsets.symmetric(vertical: 1.7.h,horizontal: 10),
+                     padding: EdgeInsets.symmetric(vertical: 3.h,horizontal: 10),
                      margin: const EdgeInsets.only(right: 10),
                      child: const Text("Faustus Repo"),
 
