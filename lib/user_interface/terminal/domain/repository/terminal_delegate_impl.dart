@@ -48,7 +48,13 @@ class TerminalDelegateImpl implements TerminalDelegate {
 
   @override
   Future<bool> pkexecChecker() async{
-    return (await _terminalRepo.getOutput(command: 'command -v pkexec')).length==1;
+    return await _terminalRepo.getOutput(command: 'type pkexec').then((value){
+      if(value.isEmpty) {
+        return true;
+      } else{
+          return !value.toString().contains('not found');
+        }
+    });
   }
 
   @override
@@ -67,6 +73,7 @@ class TerminalDelegateImpl implements TerminalDelegate {
     return (await _terminalRepo.getOutput(command: 'uname -r')).last.startsWith("6.1");
   }
   
+  @override
   String get listMissingPackages=>_packagesToInstall;
 
 }

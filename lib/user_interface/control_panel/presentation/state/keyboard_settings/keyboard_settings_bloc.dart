@@ -31,7 +31,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
   ArMode arMode=ArMode(color: ArColors.accentColor,mode: 0,speed: 0);
 
   _initPanel(emit) async{
-      arMode= await _prefRepo.getArMode();
+      arMode= (await _prefRepo.getArMode())??arMode;
       await _setBrightness(await _prefRepo.getBrightness(), emit);
       await _setMainlineModeParams(arMode: arMode, emit);
       if(super.isMainLine()){

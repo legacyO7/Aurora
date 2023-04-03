@@ -24,6 +24,8 @@ git clone https://github.com/flutter/flutter.git ~/flutter
 export PATH=$HOME/.pub-cache/bin:$HOME/flutter/bin:$PATH
 
 flutter config --enable-linux-desktop
+
+sed -i "s/BuildType.debug/BuildType.rpm/g" lib/utility/constants.dart
 buildAurora
 
 }

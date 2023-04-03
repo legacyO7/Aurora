@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:aurora/utility/global_configuration.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'terminal_repo.dart';
@@ -92,8 +92,8 @@ class TerminalRepoImpl extends TerminalRepo{
     _terminalOut.clear();
     await execute(command);
 
-    return _terminalOut.sublist(_terminalOut.indexWhere((element) => element.contains(command)))
-      .map((e) => e.split(' ').sublist(1).join(' ')).toList()..removeAt(0);
+    return _terminalOut.length>1? (_terminalOut.sublist(_terminalOut.indexWhere((element) => element.contains(command)))
+      .map((e) => e.split(' ').sublist(1).join(' ')).toList()..removeAt(0)):[];
 
   }
 

@@ -17,7 +17,7 @@ migration:
       base_revision: f1875d570e39de09040c8f79aa13cc56baab8db1
     - platform: linux
       create_revision: f1875d570e39de09040c8f79aa13cc56baab8db1
-      base_revision: f1875d570e39de09040c8f79aa13cc56baab8db1
+      base_revision: f1875d5git 70e39de09040c8f79aa13cc56baab8db1
 
   # User provided section
 

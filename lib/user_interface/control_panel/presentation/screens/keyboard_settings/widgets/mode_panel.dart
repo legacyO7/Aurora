@@ -2,10 +2,11 @@
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_state.dart';
-import 'package:aurora/utility/ar_widgets/arwidgets.dart';
+import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/global_mixin.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 
 class ModeController extends StatelessWidget with GlobalMixin{
@@ -30,14 +31,14 @@ class ModeController extends StatelessWidget with GlobalMixin{
 
     return  AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      height: isVisible?100:0,
+      height: isVisible?13.h:0,
       child: SingleChildScrollView(
         child: BlocBuilder<KeyboardSettingsBloc,KeyboardSettingsState>(
           builder: (BuildContext context, state) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title),
+                Text(title,style: Theme.of(context).textTheme.headlineSmall,),
                 Row(
                     children: modeList.map((e) =>
                         ArButton(

@@ -1,4 +1,4 @@
-import 'package:aurora/utility/ar_widgets/arwidgets.dart';
+import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';

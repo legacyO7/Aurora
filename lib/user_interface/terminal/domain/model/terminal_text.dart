@@ -1,7 +1,7 @@
 
 
 
-enum CommandStatus { stderr, stdout, stdinp }
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 
 class TerminalText{
   String text;

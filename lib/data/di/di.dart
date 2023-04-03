@@ -24,7 +24,7 @@ import 'package:aurora/user_interface/terminal/domain/repository/terminal_delega
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo_impl.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
-import 'package:aurora/utility/ar_widgets/arwidgets.dart';
+import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/user_interface/setup/data/source/dio_client.dart';
 import 'package:aurora/utility/global_configuration.dart';
 import 'package:dio/dio.dart';

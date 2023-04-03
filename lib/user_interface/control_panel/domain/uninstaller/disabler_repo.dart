@@ -1,4 +1,4 @@
-import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 
 abstract class DisablerRepo{
   Future disableServices({required DISABLE disable});

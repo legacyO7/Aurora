@@ -5,6 +5,7 @@ import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../state/home_bloc.dart';
 import '../state/home_state.dart';
@@ -46,7 +47,7 @@ class _MyHomePageState extends State<HomeScreen> {
             Expanded(
               flex: 5,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 2.5.w),
                 child: BlocBuilder<HomeBloc,HomeState>
                   (builder: (context,state){
                   if(state is AccessGranted && (state.hasAccess)) {

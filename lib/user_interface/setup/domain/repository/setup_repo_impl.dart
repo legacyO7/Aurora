@@ -3,9 +3,8 @@ import 'dart:io';
 import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
-import 'package:aurora/utility/ar_widgets/snackbar.dart';
+import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:path_provider/path_provider.dart';
 
 class SetupRepoImpl extends SetupRepo{
   SetupRepoImpl(this._setupSource, this._terminalDelegate);
@@ -40,15 +39,15 @@ class SetupRepoImpl extends SetupRepo{
   
   @override
   Future initSetup() async{
-    Directory workingDir= Directory('${(await getTemporaryDirectory()).path}/legacy07.aurora');
+    Directory workingDir= Directory('${Directory.systemTemp.path}/legacy07.aurora');
     if(workingDir.existsSync()){
       workingDir.deleteSync(recursive: true);
     }
     _globalConfig
       ..setInstance(
-        kWorkingDirectory: (await workingDir.create()).path,
-        kSecureBootEnabled: await _terminalDelegate.isSecureBootEnabled())
+        kWorkingDirectory: (await workingDir.create()).path)
       ..setInstance(
+      kSecureBootEnabled: await _terminalDelegate.isSecureBootEnabled(),
       kExecPermissionCheckerPath: await _terminalDelegate.extractAsset(sourceFileName: Constants.kPermissionChecker));
   }
   

@@ -36,6 +36,10 @@ class SetupMissingPkexec extends SetupState{
   SetupMissingPkexec();
 }
 
+class SetupInCompatibleDevice extends SetupState{
+  SetupInCompatibleDevice();
+}
+
 class SetupCompatibleKernel extends SetupState{
   SetupCompatibleKernel();
 }

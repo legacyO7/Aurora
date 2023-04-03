@@ -1,6 +1,7 @@
 
 
-enum ARMODE {normal, batterymanager, mainline}
+
+import 'ar_widgets/ar_enums.dart';
 
 class GlobalConfig {
 
