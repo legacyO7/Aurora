@@ -37,7 +37,7 @@ class _BatteryManagerScreenState extends State<BatteryManagerScreen> {
          mainAxisAlignment: MainAxisAlignment.center,
          crossAxisAlignment: CrossAxisAlignment.start,
          children:  [
-           const Text("Charging threshold"),
+           Text("Charging threshold",style: Theme.of(context).textTheme.headlineSmall,),
            FlutterSlider(
              values: [state.batteryLevel.toDouble()],
              max: 100,

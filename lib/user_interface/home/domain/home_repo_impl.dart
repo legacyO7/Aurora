@@ -5,7 +5,6 @@ import 'package:aurora/user_interface/terminal/domain/repository/terminal_delega
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:window_manager/window_manager.dart';

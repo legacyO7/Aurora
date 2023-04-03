@@ -1,6 +1,6 @@
 import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'colors.dart';
 

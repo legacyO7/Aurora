@@ -45,7 +45,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const ThemeButton(),
-                arTitle(),
+                arTitle(context),
                 Flexible(
                   child: BlocListener <SetupBloc,SetupState>(
                     listener: (BuildContext context, state) {

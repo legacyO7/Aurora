@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sizer/sizer.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'user_interface/home/presentation/state/home_bloc.dart';
@@ -76,12 +76,12 @@ class Aurora extends StatelessWidget with GlobalMixin{
       ],
       child: BlocBuilder<ThemeBloc,ThemeState>(
         builder: (_, state)=>
-            Sizer(
+            ResponsiveSizer(
                 builder: (context, orientation, deviceType) =>
                   MaterialApp(
                     title: 'Aurora',
-                    darkTheme: super.setTheme(context, light: false),
-                    theme: super.setTheme(context),
+                    darkTheme: super.setTheme(light: false),
+                    theme: super.setTheme(),
                     themeMode: state.arTheme,
                     home: const SetupWizardScreen(),
                   )

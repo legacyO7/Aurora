@@ -2,9 +2,9 @@ import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_state.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 Widget brightnessController({required BuildContext context, required String title}) {
   List<ButtonAttribute<int>> brightnessList = [
@@ -15,13 +15,13 @@ Widget brightnessController({required BuildContext context, required String titl
   ];
 
   return SizedBox(
-    height: 9.h,
+    height: 13.h,
     child: BlocBuilder<KeyboardSettingsBloc, KeyboardSettingsState>(
       builder: (BuildContext context, state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title),
+              Text(title,style: Theme.of(context).textTheme.headlineSmall,),
               Row(
                   children: brightnessList
                       .map((e) => ArButton(
