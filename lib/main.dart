@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:aurora/data/di/di.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
@@ -15,7 +17,6 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -55,7 +56,7 @@ void main() async{
     appWindow.show();
   });
 
-  Constants.globalConfig.kTmpPath=(await getTemporaryDirectory()).path;
+  Constants.globalConfig.kTmpPath=Directory.systemTemp.path;
 }
 
 class Aurora extends StatelessWidget with GlobalMixin{
