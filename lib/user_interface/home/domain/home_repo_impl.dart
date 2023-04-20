@@ -69,10 +69,11 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
       return (info.toLowerCase().contains('asus'));
     }
 
-    if(File(Constants.kVendorName).existsSync()){
+    if(File(Constants.kProductName).existsSync()){
+      Constants.globalConfig.setInstance(deviceName: File(Constants.kProductName).readAsLinesSync().toString());
+      return checkDeviceInfo(info: Constants.globalConfig.deviceName);
+    } else if(File(Constants.kVendorName).existsSync()){
       return checkDeviceInfo(info: File(Constants.kVendorName).readAsLinesSync().toString());
-    }else if(File(Constants.kProductName).existsSync()){
-      return checkDeviceInfo(info: File(Constants.kProductName).readAsLinesSync().toString());
     }
     debugPrint("unknown device");
     return true;

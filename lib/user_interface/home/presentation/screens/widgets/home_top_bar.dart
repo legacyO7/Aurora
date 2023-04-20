@@ -38,7 +38,7 @@ class HomeTopBar extends StatelessWidget with GlobalMixin {
             ],
           ),
         ),
-        Expanded(child: Text(Constants.globalConfig.kSecureBootEnabled!? '': "SecureBoot Disabled",textAlign: TextAlign.end,))
+        Expanded(child: Text(Constants.globalConfig.deviceName,textAlign: TextAlign.end,))
       ],);
   }
 }

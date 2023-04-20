@@ -25,6 +25,7 @@ class GlobalConfig {
 
    //misc
    bool? kSecureBootEnabled = false;
+   String deviceName;
    ARMODE arMode;
 
 
@@ -41,7 +42,8 @@ class GlobalConfig {
     this.kFaustusGitUrl,
     this.kExecPermissionCheckerPath,
     this.kTmpPath,
-    this.arMode=ARMODE.normal
+    this.arMode=ARMODE.normal,
+    this.deviceName=''
   });
 
   setInstance({
@@ -57,7 +59,8 @@ class GlobalConfig {
     kFaustusGitUrl,
     kExecPermissionCheckerPath,
     arMode,
-    kTmpPath
+    kTmpPath,
+    deviceName
   }){
 
     this.arChannel= arChannel??this.arChannel;
@@ -73,7 +76,7 @@ class GlobalConfig {
     this.kExecPermissionCheckerPath=kExecPermissionCheckerPath??this.kExecPermissionCheckerPath;
     this.arMode=arMode??this.arMode;
     this.kTmpPath=kTmpPath??this.kTmpPath;
-
+    this.deviceName=deviceName??this.deviceName;
   }
 
   
