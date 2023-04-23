@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:async';
 
 import 'package:aurora/data/di/di.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
@@ -10,10 +10,11 @@ import 'package:aurora/user_interface/control_panel/presentation/state/theme/the
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
-import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -27,9 +28,11 @@ void main() async{
   await initDI();
   WidgetsFlutterBinding.ensureInitialized();
 
-  Size initialSize = const Size(1000,600);
+  ArLogger arLogger= sl<ArLogger>()..initialize();
 
+  Size initialSize = const Size(1000,600);
   await windowManager.ensureInitialized();
+
 
   WindowOptions windowOptions = WindowOptions(
     size: initialSize,
@@ -55,9 +58,20 @@ void main() async{
     appWindow.show();
   });
 
-  runApp(Phoenix(child: const Aurora()));
+  FlutterError.onError= (error){
+    arLogger.log(data: error.toString());
+  };
 
-  Constants.globalConfig.kTmpPath=Directory.systemTemp.path;
+  PlatformDispatcher.instance.onError = (error, stackTrace){
+    arLogger.log(data: error.toString(),stackTrace: stackTrace);
+    return true;
+  };
+
+  runZonedGuarded((){
+    runApp(Phoenix(child: const Aurora()));
+  },(error, stack) {
+      arLogger.log(data: error.toString(),stackTrace: stack);
+  });
 }
 
 class Aurora extends StatelessWidget with GlobalMixin{

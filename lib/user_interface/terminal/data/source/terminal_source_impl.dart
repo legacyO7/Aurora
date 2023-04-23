@@ -4,11 +4,15 @@ import 'dart:io';
 
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TerminalSourceImpl extends TerminalSource{
+  
+  final ArLogger _arLogger;
+  
+  TerminalSourceImpl(this._arLogger);
 
   late Process process;
   bool _inProgress=false;
@@ -55,11 +59,7 @@ class TerminalSourceImpl extends TerminalSource{
         await getStdErr();
 
       } catch (e) {
-        if (kDebugMode) {
-          print("STDERR: ${e.toString()}");
-        }else {
-          await _logIt(e.toString());
-        }
+        _arLogger.log(data: e.toString());
         _inProgress=false;
       }
 
@@ -86,13 +86,8 @@ class TerminalSourceImpl extends TerminalSource{
 
   _convertToList({required String lines, required CommandStatus commandStatus}){
     _lineSplitter.convert(lines).forEach((line) async{
-      if (kDebugMode) {
-        print("> ${commandStatus.name} $line");
-      }else {
-        await _logIt(line);
-      }
+      _arLogger.log(data: "> ${commandStatus.name} $line");
       _terminalSink.add("${commandStatus.name} $line");
-
     });
   }
 
@@ -124,15 +119,4 @@ class TerminalSourceImpl extends TerminalSource{
     _terminalSink.close();
   }
 
-  _logIt(String value) async{
-    File("${Constants.globalConfig.kTmpPath}/ar.log").writeAsString("> $value\n",mode: FileMode.append);
-  }
-
-  @override
-  Future clearLog() async{
-    var logFile=File("${Constants.globalConfig.kTmpPath}/ar.log");
-    if(logFile.existsSync()) {
-      logFile.deleteSync();
-    }
-  }
 }
