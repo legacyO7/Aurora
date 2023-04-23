@@ -63,7 +63,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     ..focus();
   }
 
-  Future<bool> isDeviceConpatible() async{
+  Future<bool> _isDeviceCompatible() async{
 
     bool checkDeviceInfo({required String info}){
       return (info.toLowerCase().contains('asus'));
@@ -82,7 +82,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   @override
   Future<int> compatibilityChecker() async{
 
-    if(!await isDeviceConpatible()){
+    if(!await _isDeviceCompatible()){
       return 7;
     }
 

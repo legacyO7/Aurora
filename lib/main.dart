@@ -40,13 +40,12 @@ void main() async{
     maximumSize:initialSize,
     minimumSize: initialSize
   );
+
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
   });
 
-
-  runApp(Phoenix(child: const Aurora()));
 
   doWhenWindowReady(() {
     appWindow.minSize = initialSize;
@@ -55,6 +54,8 @@ void main() async{
     appWindow.alignment = Alignment.center;
     appWindow.show();
   });
+
+  runApp(Phoenix(child: const Aurora()));
 
   Constants.globalConfig.kTmpPath=Directory.systemTemp.path;
 }
