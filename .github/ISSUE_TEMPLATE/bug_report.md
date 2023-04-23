@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
+title: Why do bad things happen to good people !?
 labels: ''
 assignees: ''
 
@@ -36,3 +36,6 @@ If applicable, add screenshots to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.
+
+**Aurora logfile**
+attach `/tmp/ar/log`
