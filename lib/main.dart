@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:aurora/data/di/di.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
@@ -10,6 +8,7 @@ import 'package:aurora/user_interface/control_panel/presentation/state/theme/the
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
+import 'package:aurora/utility/ar_bloc_observer.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/global_mixin.dart';
@@ -67,11 +66,8 @@ void main() async{
     return true;
   };
 
-  runZonedGuarded((){
-    runApp(Phoenix(child: const Aurora()));
-  },(error, stack) {
-      arLogger.log(data: error.toString(),stackTrace: stack);
-  });
+  Bloc.observer=AppBlocObserver();
+  runApp(Phoenix(child: const Aurora()));
 }
 
 class Aurora extends StatelessWidget with GlobalMixin{
