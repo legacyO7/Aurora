@@ -1,6 +1,7 @@
 
 Changelogs:
 
-- fix polkit check
-- UI improvements
-- minor bugfixes
+- improved battery manager
+- improved logging. provide /tmp/ar.log while reporting an issue
+- minor ui improvements
+- built using dart 3

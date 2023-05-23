@@ -99,5 +99,5 @@ legacy07.git@gmail.com
 - [hackbnw](https://github.com/hackbnw) (faustus module)
 
 ## Older Versions
-- [TUF-Aurora](https://github.com/legacyO7/TUF-Aurora) (deprecated)
+- [TUF-Aurora](https://github.com/legacyO7/TUF-Aurora) (abandoned)
 
