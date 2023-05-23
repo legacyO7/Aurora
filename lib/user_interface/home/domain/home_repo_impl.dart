@@ -92,7 +92,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     }
 
     if(isMainLineCompatible()){
-      if(await _thresholdPathExists()){
+      if(await _thresholdPathExists() && await _systemHasSystemd()){
         _globalConfig.setInstance(arMode: ARMODE.mainline);
       }else{
         _globalConfig.setInstance(arMode:  ARMODE.mainlineWithoutBatteryManager);
@@ -101,7 +101,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     }
 
     if(!checkFaustusFolder()) {
-      if(await _thresholdPathExists()) {
+      if(await _thresholdPathExists()&& await _systemHasSystemd()) {
         return 3;
       } else {
         return 2;
@@ -117,26 +117,6 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     _globalConfig.setInstance(arMode: ARMODE.normal);
     return 0;
   }
-
-  Future<bool> _thresholdPathExists() async{
-    Directory powerDir=Directory(Constants.kPowerSupplyPath);
-    String? thresholdPath;
-    if(powerDir.existsSync()){
-
-      await for(var file in powerDir.list()){
-        if(file.path.split('/').last.contains('BAT')){
-          thresholdPath='${file.path}/charge_control_end_threshold';
-          break;
-        }
-      }
-
-      if(thresholdPath!=null&&File(thresholdPath).existsSync()){
-        _globalConfig.setInstance(kThresholdPath: thresholdPath);
-      }
-    }
-    return _globalConfig.kThresholdPath!=null;
-  }
-
 
   @override
   int convertVersionToInt(String version) {
@@ -174,5 +154,29 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     }
     return checkAccess;
   }
+
+  Future<bool> _thresholdPathExists() async{
+    Directory powerDir=Directory(Constants.kPowerSupplyPath);
+    String? thresholdPath;
+    if(powerDir.existsSync()){
+
+      await for(var file in powerDir.list()){
+        if(file.path.split('/').last.contains('BAT')){
+          thresholdPath='${file.path}/charge_control_end_threshold';
+          break;
+        }
+      }
+
+      if(thresholdPath!=null&&File(thresholdPath).existsSync()){
+        _globalConfig.setInstance(kThresholdPath: thresholdPath);
+      }
+    }
+    return _globalConfig.kThresholdPath!=null;
+  }
+
+  Future<bool> _systemHasSystemd() async{
+    return (await _terminalDelegate.getOutput(command: Constants.kChecksystemd)).toString().contains('systemd');
+  }
+
 
 }

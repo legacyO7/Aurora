@@ -97,10 +97,9 @@ class TerminalRepoImpl extends TerminalRepo{
   @override
   Future<List<String>> getOutput({required String command}) async{
 
-    _terminalOut.clear();
     await execute(command);
 
-    return _terminalOut.length>1? (_terminalOut.sublist(_terminalOut.indexWhere((element) => element.contains(command)))
+    return _terminalOut.length>1? (_terminalOut.sublist(_terminalOut.lastIndexWhere((element) => element.contains(command)))
       .map((e) => e.split(' ').sublist(1).join(' ')).toList()..removeAt(0)):[];
 
   }
