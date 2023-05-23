@@ -118,7 +118,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
   Future<bool> _isUpdateAvailable()async{
 
-    if(BuildType.appimage!=Constants.buildType) return false;
+    if(BuildType.rpm==Constants.buildType) return false;
 
     var liveVersion=  _homeRepo.convertVersionToInt(await _setupWizardRepo.getAuroraLiveVersion());
     var currentVersion= _homeRepo.convertVersionToInt(Constants.globalConfig.arVersion!);
