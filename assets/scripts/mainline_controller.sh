@@ -7,12 +7,10 @@ brightness_path=/sys/class/leds/asus::kbd_backlight/brightness
 
 savemode(){
   echo $@ | tee $kbd_mode
-  echo "saved"
 }
 
 savestate(){
   echo $@ | tee $kbd_state
-  echo "saved"
 }
 
 setbrightness(){

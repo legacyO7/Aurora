@@ -32,7 +32,6 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   final DisablerRepo _disablerRepo;
 
   _initSetup(emit) async {
-
     await _homeRepo.getVersion();
     await _setupWizardRepo.initSetup();
 
@@ -55,14 +54,12 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     navigate() async {
       switch( await _homeRepo.compatibilityChecker()){
         case 0:
-          Constants.globalConfig.setInstance(arMode: ARMODE.normal);
           emit(SetupCompatibleState());
           break;
         case 3:
           emit(SetupBatteryManagerCompatibleState());
           break;
         case 4:
-          Constants.globalConfig.setInstance(arMode: ARMODE.mainline);
           if(_homeRepo.checkFaustusFolder()){
             emit(SetupDisableFaustusState());
             await _disablerRepo.disableServices(disable: DISABLE.faustus);
@@ -115,13 +112,13 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   }
 
   void _enterBatteryManagerMode(emit){
-    Constants.globalConfig.setInstance(arMode: ARMODE.batterymanager);
+    Constants.globalConfig.setInstance(arMode: ARMODE.batteryManager);
     emit(SetupCompatibleState());
   }
 
   Future<bool> _isUpdateAvailable()async{
 
-    if(BuildType.appimage!=Constants.buildType) return false;
+    if(BuildType.rpm==Constants.buildType) return false;
 
     var liveVersion=  _homeRepo.convertVersionToInt(await _setupWizardRepo.getAuroraLiveVersion());
     var currentVersion= _homeRepo.convertVersionToInt(Constants.globalConfig.arVersion!);

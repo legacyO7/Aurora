@@ -67,11 +67,53 @@ jobs:
       - name: Rename AppImage
         run: mv legacy07-latest-x86_64.AppImage aurora-linux-${{ steps.version_id.outputs.version }}.AppImage
 
+      - name: Pre-Build debian package
+        run: |
+          sed -i "s/BuildType.appimage/BuildType.deb/g" lib/utility/constants.dart
+          
+          dart pub global activate flutter_to_debian
+          
+          debVersion=$(cut -d- -f 1 <<< $(cider version))
+          
+          mkdir -p debian/gui
+          cp -rf assets/images/icon.png debian/gui
+          
+          cat > debian/gui/aurora.desktop <<'EOF'
+          [Desktop Entry]
+          Name=Aurora
+          GenericName=Aurora
+          Comment=A utility to control keyboard back-light and charging threshold for Asus TUF-gaming series laptop
+          Terminal=false
+          Type=Application
+          Categories=Utility;
+          EOF
+          
+          sed -i "s/aurora_ver/$debVersion/g" debian/debian.yaml
+
+
+      - name: Flutter build app
+        run: flutter build linux
+
+
+      - name: Build debian package
+        run: |
+          flutter_to_debian
+          mv debian/packages/Aurora_$(cut -d- -f 1 <<< $(cider version))_amd64.deb aurora_${{ steps.version_id.outputs.version }}_amd64.deb
+          ls
+
+      - name: Combine binaries
+        run: |
+          mkdir output
+          mv aurora-linux-${{ steps.version_id.outputs.version }}.AppImage output/
+          mv aurora_${{ steps.version_id.outputs.version }}_amd64.deb output/
+
       - name: Upload files to a GitHub release
         uses: svenstaro/upload-release-action@2.2.1
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: aurora-linux-${{ steps.version_id.outputs.version }}.AppImage
+          file: output/*
           release_name: aurora-${{ steps.version_id.outputs.version }}
           tag: ${{ steps.version_id.outputs.version }}
           body:   ${{join(steps.run_tests.outputs.*, '\n')}}${{ steps.changelog_id.outputs.changelog }}
+          overwrite: true
+          file_glob: true

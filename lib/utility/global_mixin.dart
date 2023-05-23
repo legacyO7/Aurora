@@ -11,7 +11,7 @@ import 'constants.dart';
 
 mixin GlobalMixin{
 
-  bool isMainLine()=>Constants.globalConfig.arMode==ARMODE.mainline;
+  bool isMainLine()=>Constants.globalConfig.arMode.name.contains(ARMODE.mainline.name);
 
   bool isMainLineCompatible()=>
       File(Constants.kMainlineModuleModePath).existsSync() &&

@@ -6,7 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ArButton extends StatefulWidget {
-  const ArButton({super.key, required this.title, required this.action, this.isSelected = false, this.isEnabled = true, this.isLoading = false,this.edgeInsets});
+  const ArButton({
+    super.key,
+    required this.title,
+    required this.action,
+    this.isSelected = false,
+    this.isEnabled = true,
+    this.isLoading = false,
+    this.edgeInsets
+  });
 
   final String title;
   final Function action;
@@ -33,10 +41,10 @@ class _ArButtonState extends State<ArButton> {
   @override
   Widget build(BuildContext context) {
     height = widget.isSelected ? 7.h : 6.h;
-    width = widget.isSelected ? 10.w : 11.w;
+    width = widget.isSelected ? 11.w : 10.w;
     return Container(
       margin: widget.edgeInsets,
-      padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 5),
+      padding: EdgeInsets.symmetric(vertical: 1.5.h,horizontal: .5.w),
       child: widget.isLoading && widget.isSelected
           ? SizedBox(
               height: height,

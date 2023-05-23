@@ -1,6 +1,4 @@
 
 Changelogs:
 
-- fix polkit check
-- UI improvements
-- minor bugfixes
+- available as debian package

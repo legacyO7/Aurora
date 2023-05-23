@@ -24,6 +24,7 @@ import 'package:aurora/user_interface/terminal/domain/repository/terminal_delega
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo_impl.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/user_interface/setup/data/source/dio_client.dart';
 import 'package:aurora/utility/global_configuration.dart';
@@ -55,16 +56,15 @@ Future initDI() async{
   sl.registerLazySingleton<KeyboardSettingsRepo>(() => KeyboardSettingsRepoImpl(sl(),sl()));
   sl.registerLazySingleton<BatteryManagerRepo>(() => BatteryManagerRepoImpl(sl(),sl()));
   sl.registerLazySingleton<DisablerRepo>(() => DisablerRepoImpl(sl(),sl()));
-
   sl.registerLazySingleton<TerminalDelegate>(() => TerminalDelegateImpl(sl(),sl()));
-
   sl.registerLazySingleton<SetupSource>(() => SetupSourceImpl(sl()));
-  sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl()..clearLog());
+  sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl(sl()));
 
   sl.registerLazySingleton<DioClient>(() => DioClientImpl(sl()));
 
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
   sl.registerLazySingleton<Dio>(() => Dio());
+  sl.registerLazySingleton<ArLogger>(() => ArLogger());
   sl.registerLazySingleton<GlobalConfig>(() => GlobalConfig());
 }

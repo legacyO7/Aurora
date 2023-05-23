@@ -8,14 +8,15 @@ import 'package:aurora/user_interface/control_panel/presentation/state/theme/the
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
+import 'package:aurora/utility/ar_bloc_observer.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
-import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -26,9 +27,11 @@ void main() async{
   await initDI();
   WidgetsFlutterBinding.ensureInitialized();
 
-  Size initialSize = const Size(1000,600);
+  ArLogger arLogger= sl<ArLogger>()..initialize();
 
+  Size initialSize = const Size(1000,600);
   await windowManager.ensureInitialized();
+
 
   WindowOptions windowOptions = WindowOptions(
     size: initialSize,
@@ -39,13 +42,12 @@ void main() async{
     maximumSize:initialSize,
     minimumSize: initialSize
   );
+
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
   });
 
-
-  runApp(Phoenix(child: const Aurora()));
 
   doWhenWindowReady(() {
     appWindow.minSize = initialSize;
@@ -55,7 +57,17 @@ void main() async{
     appWindow.show();
   });
 
-  Constants.globalConfig.kTmpPath=(await getTemporaryDirectory()).path;
+  FlutterError.onError= (error){
+    arLogger.log(data: error.toString());
+  };
+
+  PlatformDispatcher.instance.onError = (error, stackTrace){
+    arLogger.log(data: error.toString(),stackTrace: stackTrace);
+    return true;
+  };
+
+  Bloc.observer=AppBlocObserver();
+  runApp(Phoenix(child: const Aurora()));
 }
 
 class Aurora extends StatelessWidget with GlobalMixin{

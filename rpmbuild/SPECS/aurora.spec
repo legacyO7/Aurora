@@ -13,9 +13,6 @@ Requires:       bash
 A utility to control keyboard back-light and charging threshold for Asus TUF-gaming series laptop
 
 %prep
-echo RPM_BUILD_ROO === $RPM_BUILD_ROOT
-echo bindir === %{_bindir}
-echo datadir === %{_datadir}
 %setup -q
 
 %install
