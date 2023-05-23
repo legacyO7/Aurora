@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_configuration.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'terminal_repo.dart';
@@ -34,17 +35,24 @@ class TerminalRepoImpl extends TerminalRepo{
   Future<bool> checkAccess() async{
 
     var permissionChecker=Constants.globalConfig.kExecPermissionCheckerPath!;
+    GlobalConfig _globalConfig=Constants.globalConfig;
 
-    List<String> pathlist=[];
-    if(Constants.globalConfig.arMode==ARMODE.mainline){
-      pathlist.addAll([
+    List<String> pathList=[];
+    if(_globalConfig.arMode.name.contains(ARMODE.mainline.name)){
+      pathList.addAll([
         Constants.kMainlineModuleStatePath,
         Constants.kMainlineModuleModePath,
         Constants.kMainlineBrightnessPath
       ]);
+
+      if(_globalConfig.kThresholdPath!=null){
+        pathList.add(_globalConfig.kThresholdPath!);
+      }
+
     }
-    if (Constants.globalConfig.arMode==ARMODE.batterymanager) {
-      pathlist.add(Constants.kBatteryThresholdPath);
+
+    if (_globalConfig.arMode==ARMODE.batteryManager&&_globalConfig.kThresholdPath!=null) {
+      pathList.add(_globalConfig.kThresholdPath!);
     }
 
 
@@ -57,10 +65,10 @@ class TerminalRepoImpl extends TerminalRepo{
       return false;
     }
 
-    if(pathlist.isEmpty){
+    if(pathList.isEmpty){
      return await checkPermission();
     }else{
-      for( var element in pathlist){
+      for( var element in pathList){
         if(!await checkPermission(path: element)) {
           return false;
         }

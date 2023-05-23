@@ -16,6 +16,7 @@ class GlobalConfig {
    String? kWorkingDirectory;
    String? kExecPermissionCheckerPath;
    String? kTmpPath;
+   String? kThresholdPath;
 
   //url
    String? kAuroraGitRawYaml;
@@ -43,7 +44,8 @@ class GlobalConfig {
     this.kExecPermissionCheckerPath,
     this.kTmpPath,
     this.arMode=ARMODE.normal,
-    this.deviceName=''
+    this.deviceName='',
+    this.kThresholdPath
   });
 
   setInstance({
@@ -60,7 +62,8 @@ class GlobalConfig {
     kExecPermissionCheckerPath,
     arMode,
     kTmpPath,
-    deviceName
+    deviceName,
+    kThresholdPath
   }){
 
     this.arChannel= arChannel??this.arChannel;
@@ -77,6 +80,7 @@ class GlobalConfig {
     this.arMode=arMode??this.arMode;
     this.kTmpPath=kTmpPath??this.kTmpPath;
     this.deviceName=deviceName??this.deviceName;
+    this.kThresholdPath=kThresholdPath??this.kThresholdPath;
   }
 
   

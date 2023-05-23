@@ -26,7 +26,7 @@ class Constants {
   static const String kMainlineModuleStatePath = "/sys/class/leds/asus::kbd_backlight/kbd_rgb_state";
   static const String kMainlineBrightnessPath = "/sys/class/leds/asus::kbd_backlight/brightness";
   static const String kAssetsPath = "assets/scripts/";
-  static const String kBatteryThresholdPath = '/sys/class/power_supply/BAT1/charge_control_end_threshold';
+  static const String kPowerSupplyPath = '/sys/class/power_supply/';
   static const String kServicePath = '/etc/systemd/system/';
   static const String kProductName = '/sys/devices/virtual/dmi/id/product_name';
   static const String kVendorName = '/sys/devices/virtual/dmi/id/sys_vendor';

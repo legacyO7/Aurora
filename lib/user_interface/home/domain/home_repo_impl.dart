@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/cupertino.dart';
@@ -91,11 +92,16 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     }
 
     if(isMainLineCompatible()){
+      if(await _thresholdPathExists()){
+        _globalConfig.setInstance(arMode: ARMODE.mainline);
+      }else{
+        _globalConfig.setInstance(arMode:  ARMODE.mainlineWithoutBatteryManager);
+      }
       return 4;
     }
 
     if(!checkFaustusFolder()) {
-      if(File(Constants.kBatteryThresholdPath).existsSync()) {
+      if(await _thresholdPathExists()) {
         return 3;
       } else {
         return 2;
@@ -108,7 +114,27 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
       return 1;
     }
 
+    _globalConfig.setInstance(arMode: ARMODE.normal);
     return 0;
+  }
+
+  Future<bool> _thresholdPathExists() async{
+    Directory powerDir=Directory(Constants.kPowerSupplyPath);
+    String? thresholdPath;
+    if(powerDir.existsSync()){
+
+      await for(var file in powerDir.list()){
+        if(file.path.split('/').last.contains('BAT')){
+          thresholdPath='${file.path}/charge_control_end_threshold';
+          break;
+        }
+      }
+
+      if(thresholdPath!=null&&File(thresholdPath).existsSync()){
+        _globalConfig.setInstance(kThresholdPath: thresholdPath);
+      }
+    }
+    return _globalConfig.kThresholdPath!=null;
   }
 
 

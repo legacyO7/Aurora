@@ -16,7 +16,10 @@ class BatteryManagerRepoImpl implements BatteryManagerRepo{
 
   @override
   Future<int> getBatteryCharge() async{
-    return int.parse((await File(Constants.kBatteryThresholdPath).readAsString()).toString().trim());
+    if(Constants.globalConfig.kThresholdPath!=null) {
+      return int.parse((await File(Constants.globalConfig.kThresholdPath!).readAsString()).toString().trim());
+    }
+    return Constants.kMinimumChargeLevel;
   }
 
   @override

@@ -51,10 +51,11 @@ class _ControlPanelState extends State<ControlPanelScreen> with GlobalMixin{
                     child: const DisableButton())
               ],
             ),
+            if(Constants.globalConfig.arMode!=ARMODE.mainlineWithoutBatteryManager)
             const Expanded(
               child:BatteryManagerScreen()
             ),
-            if(Constants.globalConfig.arMode!=ARMODE.batterymanager)
+            if(Constants.globalConfig.arMode!=ARMODE.batteryManager)
              Expanded(
                 flex: super.isMainLine()?3:2,
                 child: const KeyboardSettingsScreen())
