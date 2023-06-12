@@ -7,25 +7,29 @@ abstract class DisableState extends Equatable{
 class DisableInitState extends DisableState {
   final bool disableThreshold;
   final bool disableFaustusModule;
+  final bool uninstallAurora;
 
 
   DisableInitState({
     this.disableThreshold = false,
-    this.disableFaustusModule = false
+    this.disableFaustusModule = false,
+    this.uninstallAurora=false
   });
 
   DisableInitState copyState({
     bool? disableThreshold,
-    bool? disableFaustusModule
+    bool? disableFaustusModule,
+    bool? uninstallAurora
   }) {
     return DisableInitState(
         disableThreshold: disableThreshold ?? this.disableThreshold,
-        disableFaustusModule: disableFaustusModule ?? this.disableFaustusModule
+        disableFaustusModule: disableFaustusModule ?? this.disableFaustusModule,
+        uninstallAurora: uninstallAurora??this.uninstallAurora
     );
   }
 
   @override
-  List<Object?> get props => [disableFaustusModule, disableThreshold];
+  List<Object?> get props => [disableFaustusModule, disableThreshold, uninstallAurora];
 
 }
 

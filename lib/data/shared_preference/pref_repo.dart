@@ -17,5 +17,6 @@ abstract class PrefRepo{
   Future setArState({ required ArState arState });
   Future setThreshold(int threshold);
   Future setTheme(ThemeMode arTheme);
+  Future nukePref();
 
 }
