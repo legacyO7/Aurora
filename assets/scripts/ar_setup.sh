@@ -87,6 +87,7 @@ disablethreshold(){
 }
 
 uninstall(){
+  sudo rm -rf /opt/aurora
   sudo rm -rf /usr/bin/aurora
   sudo rm -f /usr/share/applications/aurora.desktop
 }

@@ -2,5 +2,6 @@
 Changelogs:
 
 - optimized terminal op.
-- added option for complete uninstallation of aurora from within the package. Since Aurora doesn't expose its binary in the known system paths, package managers might not be able to uninstall the package.
+- migrated to /opt for rhel distros
+- added option for complete uninstallation of aurora from within the package.
 - periodic dependency updates
