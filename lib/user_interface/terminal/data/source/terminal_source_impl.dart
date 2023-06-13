@@ -9,9 +9,9 @@ import 'package:aurora/utility/constants.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TerminalSourceImpl extends TerminalSource{
-  
+
   final ArLogger _arLogger;
-  
+
   TerminalSourceImpl(this._arLogger);
 
   late Process process;
@@ -23,6 +23,7 @@ class TerminalSourceImpl extends TerminalSource{
   late Sink<String>  _terminalSink;
 
   final List<String> _commands=[];
+  String _command='';
 
 
   @override
@@ -35,19 +36,22 @@ class TerminalSourceImpl extends TerminalSource{
 
 
   Future _execute(String command) async {
+
     _terminalSink = _tStreamController.sink;
     List<String> arguments=[];
 
     if(command.isNotEmpty) {
-      arguments = command.split(' ');
-      var exec=arguments[0];
-      arguments.removeAt(0);
-      _convertToList(lines:  "\$ $command",commandStatus: CommandStatus.stdinp);
 
-      try{
+      if(command!=_command) {
+        _command = command;
+        arguments = command.split(' ');
+        var exec = arguments[0];
+        arguments.removeAt(0);
+        _convertToList(lines: "\$ $command", commandStatus: CommandStatus.stdinp);
 
-         _inProgress=true;
-         process = await Process.start(
+        try {
+          _inProgress = true;
+          process = await Process.start(
               exec,
               arguments,
               workingDirectory: Constants.globalConfig.kWorkingDirectory,
@@ -55,12 +59,12 @@ class TerminalSourceImpl extends TerminalSource{
               mode: ProcessStartMode.detachedWithStdio
           );
 
-        getStdout();
-        await getStdErr();
-
-      } catch (e) {
-        _arLogger.log(data: e.toString());
-        _inProgress=false;
+          getStdout();
+          await getStdErr();
+        } catch (e) {
+          _arLogger.log(data: e.toString());
+          _inProgress = false;
+        }
       }
 
       _commands.removeAt(0);
