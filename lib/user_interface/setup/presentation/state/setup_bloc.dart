@@ -9,6 +9,7 @@ import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 import 'setup_state.dart';
@@ -104,7 +105,10 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     if(removeFaustus){
       emit(SetupDisableFaustusState());
       await _disablerRepo.disableServices(disable: DISABLE.faustus);
-      Phoenix.rebirth(Constants.kScaffoldKey.currentState!.context);
+      BuildContext context=Constants.kScaffoldKey.currentState!.context;
+      if(context.mounted) {
+        Phoenix.rebirth(context);
+      }
     }else{
       Constants.globalConfig.setInstance(arMode: ARMODE.normal);
       emit(SetupCompatibleState());

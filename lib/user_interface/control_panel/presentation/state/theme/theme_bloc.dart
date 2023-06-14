@@ -41,6 +41,4 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState>{
     await _prefRepo.setTheme(_arTheme);
   }
 
-  ThemeMode get arTheme => _arTheme;
-
 }

@@ -1,4 +1,4 @@
-import 'package:aurora/data/di/di.dart';
+import 'package:aurora/utility/warmup.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
@@ -8,65 +8,22 @@ import 'package:aurora/user_interface/control_panel/presentation/state/theme/the
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
-import 'package:aurora/utility/ar_bloc_observer.dart';
-import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/global_mixin.dart';
-import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:window_manager/window_manager.dart';
 
 import 'user_interface/home/presentation/state/home_bloc.dart';
 
 
 void main() async{
-  await initDI();
+  WarmUp warmUp=WarmUp();
+  await warmUp.initDI();
   WidgetsFlutterBinding.ensureInitialized();
-
-  ArLogger arLogger= sl<ArLogger>()..initialize();
-
-  Size initialSize = const Size(1000,600);
-  await windowManager.ensureInitialized();
-
-
-  WindowOptions windowOptions = WindowOptions(
-    size: initialSize,
-    center: true,
-    backgroundColor: Colors.transparent,
-    skipTaskbar: false,
-    titleBarStyle: TitleBarStyle.hidden,
-    maximumSize:initialSize,
-    minimumSize: initialSize
-  );
-
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.show();
-    await windowManager.focus();
-  });
-
-
-  doWhenWindowReady(() {
-    appWindow.minSize = initialSize;
-    appWindow.maxSize = initialSize;
-    appWindow.size = initialSize;
-    appWindow.alignment = Alignment.center;
-    appWindow.show();
-  });
-
-  FlutterError.onError= (error){
-    arLogger.log(data: error.toString());
-  };
-
-  PlatformDispatcher.instance.onError = (error, stackTrace){
-    arLogger.log(data: error.toString(),stackTrace: stackTrace);
-    return true;
-  };
-
-  Bloc.observer=AppBlocObserver();
+  await warmUp.setWindow();
+  warmUp.errorRecorder();
   runApp(Phoenix(child: const Aurora()));
 }
 
@@ -92,8 +49,8 @@ class Aurora extends StatelessWidget with GlobalMixin{
                 builder: (context, orientation, deviceType) =>
                   MaterialApp(
                     title: 'Aurora',
-                    darkTheme: super.setTheme(light: false),
-                    theme: super.setTheme(),
+                    darkTheme: super.darkTheme(),
+                    theme: super.lightTheme(),
                     themeMode: state.arTheme,
                     home: const SetupWizardScreen(),
                   )

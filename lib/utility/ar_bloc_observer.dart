@@ -1,7 +1,7 @@
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../data/di/di.dart';
+import 'warmup.dart';
 
 class AppBlocObserver extends BlocObserver{
 

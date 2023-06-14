@@ -35,24 +35,24 @@ class TerminalRepoImpl extends TerminalRepo{
   Future<bool> checkAccess() async{
 
     var permissionChecker=Constants.globalConfig.kExecPermissionCheckerPath!;
-    GlobalConfig _globalConfig=Constants.globalConfig;
+    GlobalConfig globalConfig=Constants.globalConfig;
 
     List<String> pathList=[];
-    if(_globalConfig.arMode.name.contains(ARMODE.mainline.name)){
+    if(globalConfig.arMode.name.contains(ARMODE.mainline.name)){
       pathList.addAll([
         Constants.kMainlineModuleStatePath,
         Constants.kMainlineModuleModePath,
         Constants.kMainlineBrightnessPath
       ]);
 
-      if(_globalConfig.kThresholdPath!=null){
-        pathList.add(_globalConfig.kThresholdPath!);
+      if(globalConfig.kThresholdPath!=null){
+        pathList.add(globalConfig.kThresholdPath!);
       }
 
     }
 
-    if (_globalConfig.arMode==ARMODE.batteryManager&&_globalConfig.kThresholdPath!=null) {
-      pathList.add(_globalConfig.kThresholdPath!);
+    if (globalConfig.arMode==ARMODE.batteryManager&&globalConfig.kThresholdPath!=null) {
+      pathList.add(globalConfig.kThresholdPath!);
     }
 
 
