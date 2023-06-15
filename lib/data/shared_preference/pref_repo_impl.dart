@@ -92,4 +92,9 @@ class PrefRepoImpl extends PrefRepo{
   Future setTheme(ThemeMode arTheme) async {
     await _sharedPreferences.setString(PrefConstants.theme, arTheme.name);
   }
+
+  @override
+  Future nukePref() async{
+    await _sharedPreferences.clear();
+  }
 }

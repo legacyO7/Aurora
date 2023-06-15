@@ -29,6 +29,10 @@ class DisablerRepoImpl implements DisablerRepo{
         case DISABLE.threshold:
             command+='disablethreshold';
             break;
+
+        case DISABLE.uninstall:
+            command+='uninstall';
+            break;
         case DISABLE.none:
           // TODO: Handle this case.
           break;
@@ -37,6 +41,9 @@ class DisablerRepoImpl implements DisablerRepo{
       await _terminalDelegate.execute(command);
       if(disable==DISABLE.all||disable==DISABLE.threshold){
         await _prefRepo.setThreshold(100);
+      }
+      if(disable==DISABLE.uninstall){
+        await _prefRepo.nukePref();
       }
 
   }

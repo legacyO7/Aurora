@@ -30,6 +30,8 @@ If applicable, add screenshots to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.
+1. Product Name
+2. Kernel Version
 
 **Aurora logfile**
 attach `/tmp/ar/log`

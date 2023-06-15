@@ -49,3 +49,5 @@ app.*.map.json
 /AppDir/
 /appimage-build/
 /legacy07-latest-x86_64.AppImage.zsync
+/debian/opt/
+/debian/usr/

@@ -1,8 +1,5 @@
 
 Changelogs:
 
-- improved battery manager
-- improved logging. provide /tmp/ar.log while reporting an issue
-- minor ui improvements
-- built using dart 3
-- now available as debian package. This is not fully tested and may not work in all cases
+- fixed crashes on debian build
+- minor tweaks

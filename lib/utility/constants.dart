@@ -1,7 +1,7 @@
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:flutter/material.dart';
 
-import '../data/di/di.dart';
+import 'warmup.dart';
 import 'global_configuration.dart';
 
 class Constants {

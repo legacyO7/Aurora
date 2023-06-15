@@ -25,7 +25,7 @@ jobs:
           channel: 'stable'
 
       - name: Install Linux build tools
-        run: sudo apt-get update && sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev squashfs-tools libfuse2
+        run: sudo apt-get update && sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev squashfs-tools libfuse2 dpkg-deb
 
       - name: Enable desktop
         run: flutter config --enable-linux-desktop
@@ -67,45 +67,16 @@ jobs:
       - name: Rename AppImage
         run: mv legacy07-latest-x86_64.AppImage aurora-linux-${{ steps.version_id.outputs.version }}.AppImage
 
-      - name: Pre-Build debian package
-        run: |
-          sed -i "s/BuildType.appimage/BuildType.deb/g" lib/utility/constants.dart
-          
-          dart pub global activate flutter_to_debian
-          
-          debVersion=$(cut -d- -f 1 <<< $(cider version))
-          
-          mkdir -p debian/gui
-          cp -rf assets/images/icon.png debian/gui
-          
-          cat > debian/gui/aurora.desktop <<'EOF'
-          [Desktop Entry]
-          Name=Aurora
-          GenericName=Aurora
-          Comment=A utility to control keyboard back-light and charging threshold for Asus TUF-gaming series laptop
-          Terminal=false
-          Type=Application
-          Categories=Utility;
-          EOF
-          
-          sed -i "s/aurora_ver/$debVersion/g" debian/debian.yaml
-
-
-      - name: Flutter build app
-        run: flutter build linux
-
-
       - name: Build debian package
         run: |
-          flutter_to_debian
-          mv debian/packages/Aurora_$(cut -d- -f 1 <<< $(cider version))_amd64.deb aurora_${{ steps.version_id.outputs.version }}_amd64.deb
-          ls
+          sed -i "s/BuildType.appimage/BuildType.deb/g" lib/utility/constants.dart      
+          ./aurora_builder deb    
 
       - name: Combine binaries
         run: |
           mkdir output
           mv aurora-linux-${{ steps.version_id.outputs.version }}.AppImage output/
-          mv aurora_${{ steps.version_id.outputs.version }}_amd64.deb output/
+          mv debian.deb output/aurora_${{ steps.version_id.outputs.version }}_amd64.deb
 
       - name: Upload files to a GitHub release
         uses: svenstaro/upload-release-action@2.2.1

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+rm -rf /usr/bin/aurora
+ln -s /opt/aurora/aurora /usr/bin/aurora
+
+exit 0

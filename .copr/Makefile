@@ -1,2 +1,2 @@
 srpm:
-	./aurora_copr $(outdir)
+	./aurora_builder $(outdir)

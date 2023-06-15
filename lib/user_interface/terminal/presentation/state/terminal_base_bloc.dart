@@ -1,4 +1,4 @@
-import 'package:aurora/data/di/di.dart';
+import 'package:aurora/utility/warmup.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
