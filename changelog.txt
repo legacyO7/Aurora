@@ -1,7 +1,5 @@
 
 Changelogs:
 
-- optimized terminal op.
-- migrated to /opt for rhel distros
-- added option for complete uninstallation of aurora from within the package.
-- periodic dependency updates
+- fixed crashes on debian build
+- minor tweaks

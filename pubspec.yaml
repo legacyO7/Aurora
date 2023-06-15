@@ -3,7 +3,7 @@ description: An Alternate to Aura Sync for linux.
 
 publish_to: 'none'
 
-version: 2.6.10-canary+1
+version: 2.6.11-canary+1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -21,7 +21,7 @@ dependencies:
   another_xlider: ^3.0.1
   another_stepper: ^1.2.2
   package_info_plus: ^3.1.2
-  dio: ^5.2.1
+  dio: ^5.2.1+1
   url_launcher: ^6.1.11
   animated_text_kit: ^4.2.2
   equatable: ^2.0.5

@@ -56,7 +56,6 @@ patchelf --set-rpath '$ORIGIN' libwindow_manager_plugin.so
 patchelf --set-rpath '$ORIGIN' liburl_launcher_linux_plugin.so
 patchelf --set-rpath '$ORIGIN' libbitsdojo_window_linux_plugin.so
 cd ../../../../../../
-ls
 
 }
 
