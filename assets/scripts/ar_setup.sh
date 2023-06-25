@@ -26,7 +26,13 @@ checkos(){
 
 
 checkpackages(){
-  packages_to_install=($($tmpdir/permission_checker.sh checkpackages))
+    for package in dkms openssl mokutil git make cmake
+    do
+      if ! command -v $package &> /dev/null
+      then
+           packages_to_install="$packages_to_install $package"
+      fi
+    done
 }
 
 executeinterminal(){

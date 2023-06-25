@@ -13,8 +13,6 @@ class TerminalDelegateImpl implements TerminalDelegate {
 
   final TerminalSource _terminalSource;
   final TerminalRepo _terminalRepo;
-  
-  String  _packagesToInstall='';
 
   @override
   Future<String> extractAsset({required String sourceFileName}) async {
@@ -30,9 +28,8 @@ class TerminalDelegateImpl implements TerminalDelegate {
     return await _terminalSource.execute(command);
   }
 
-  @override
-  Future<bool> checkAccess() async {
-    return await _terminalRepo.checkAccess();
+  Future writetoFile({required String path, required String content}) async{
+    await File(path).writeAsString(content);
   }
 
 
@@ -57,23 +54,10 @@ class TerminalDelegateImpl implements TerminalDelegate {
     });
   }
 
-  @override
-  Future<String> listPackagesToInstall() async{
-    var output=(await _terminalRepo.getOutput(command: "${Constants.globalConfig.kExecPermissionCheckerPath} checkpackages"));
-    if(output.isEmpty) {
-      return '';
-    }else{
-      _packagesToInstall= output.last.trim();
-      return _packagesToInstall;
-    }
-  }
 
   @override
   Future<bool> isKernelCompatible() async{
     return (await _terminalRepo.getOutput(command: 'uname -r')).last.startsWith("6.1");
   }
-  
-  @override
-  String get listMissingPackages=>_packagesToInstall;
 
 }

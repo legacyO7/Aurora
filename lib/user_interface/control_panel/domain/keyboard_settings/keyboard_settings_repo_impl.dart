@@ -24,17 +24,16 @@ class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
 
   @override
   Future setMainlineStateParams({required int boot, required int awake, required int sleep}) async{
-    await _terminalDelegate.execute("${_globalConfig.kExecMainlinePath} state 1 $boot $awake $sleep 0");
+    await _terminalDelegate.writetoFile(path: Constants.kMainlineModuleStatePath,content: "1 $boot $awake $sleep 0");
     await _prefRepo.setArState(arState:ArState(awake: awake==1,sleep: sleep==1,boot: boot==1));
   }
 
   @override
   Future setMainlineModeParams({required ArMode arMode}) async{
     if(super.isMainLine()) {
-      await _terminalDelegate.execute(
-          "${_globalConfig.kExecMainlinePath} mode 1 ${mainLineKeys[arMode.mode!]} ${arMode
-              .color!.red} ${arMode.color!.green} ${arMode.color!.blue} ${arMode
-              .speed}");
+      await _terminalDelegate.writetoFile(
+        path: Constants.kMainlineModuleModePath,
+        content: "1 ${mainLineKeys[arMode.mode!]} ${arMode.color!.red} ${arMode.color!.green} ${arMode.color!.blue} ${arMode.speed}");
     }else{
       await setMode(arMode: arMode);
       await setSpeed(arMode: arMode);
@@ -82,7 +81,10 @@ class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
 
   @override
   Future setBrightness(int brightness) async {
-    await _terminalDelegate.execute("${super.isMainLine()?_globalConfig.kExecMainlinePath: _globalConfig.kExecFaustusPath} brightness $brightness ");
+    await _terminalDelegate.writetoFile(
+        path: "${super.isMainLine()?Constants.kMainlineBrightnessPath: _globalConfig.kExecFaustusPath}",
+        content:  brightness.toString()
+    );
     _prefRepo.setBrightness(brightness);
   }
 

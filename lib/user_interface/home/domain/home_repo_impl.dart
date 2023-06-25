@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aurora/data/shared_preference/pref_repo.dart';
+import 'package:aurora/user_interface/control_panel/data/permission_manager.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
@@ -14,10 +15,11 @@ import 'home_repo.dart';
 
 class HomeRepoImpl extends HomeRepo with GlobalMixin{
 
-  HomeRepoImpl(this._terminalDelegate,this._prefRepo);
+  HomeRepoImpl(this._terminalDelegate,this._prefRepo, this._permissionManager);
 
   final TerminalDelegate _terminalDelegate;
   final PrefRepo _prefRepo;
+  final PermissionManager _permissionManager;
 
   final _globalConfig=Constants.globalConfig;
 
@@ -110,11 +112,11 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
       return 5;
     }
 
-    if((await _terminalDelegate.listPackagesToInstall()).isNotEmpty) {
+    if((await _permissionManager.listPackagesToInstall()).isNotEmpty) {
       return 1;
     }
 
-    _globalConfig.setInstance(arMode: ARMODE.normal);
+    _globalConfig.setInstance(arMode: ARMODE.faustus);
     return 0;
   }
 
@@ -127,20 +129,22 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   bool checkFaustusFolder()=>Directory(Constants.kFaustusModulePath).existsSync();
 
   Future _getAccess() async{
-    await _terminalDelegate.execute("${Constants.kPolkit} ${super.isMainLine()? _globalConfig.kExecMainlinePath: _globalConfig
-        .kExecFaustusPath} init ${_globalConfig.kWorkingDirectory} ${await _prefRepo.getThreshold()}");
+
+    if(super.isMainLine()){
+      await _permissionManager.setPermissions();
+    }
+
+    await _terminalDelegate.execute("${Constants.kPolkit} ${_globalConfig.kExecFaustusPath} init ${_globalConfig.kWorkingDirectory} ${await _prefRepo.getThreshold()}");
   }
 
   Future<bool> _checkAccess() async{
-    return await _terminalDelegate.checkAccess();
+    return await _permissionManager.validatePaths();
   }
 
   @override
   Future loadScripts() async{
     _globalConfig.kExecBatteryManagerPath= await _terminalDelegate.extractAsset(sourceFileName:Constants.kBatteryManager);
-    if(super.isMainLine()){
-      _globalConfig.kExecMainlinePath= await _terminalDelegate.extractAsset(sourceFileName: Constants.kMainline);
-    }else {
+    if(!super.isMainLine()) {
       _globalConfig.kExecFaustusPath=await _terminalDelegate.extractAsset(sourceFileName: Constants.kFaustus);
     }
   }

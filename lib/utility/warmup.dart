@@ -1,4 +1,6 @@
 
+import 'package:aurora/user_interface/control_panel/data/permission_manager.dart';
+import 'package:aurora/user_interface/control_panel/data/permission_manager_impl.dart';
 import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo.dart';
 import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo_impl.dart';
 import 'package:aurora/user_interface/control_panel/domain/keyboard_settings/keyboard_settings_repo.dart';
@@ -58,15 +60,16 @@ class WarmUp {
     sl.registerLazySingleton(() => ArButtonCubit());
 
     sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
-    sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl()));
+    sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl()));
     sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
-    sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl()));
+    sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl(), sl()));
     sl.registerLazySingleton<KeyboardSettingsRepo>(() => KeyboardSettingsRepoImpl(sl(), sl()));
     sl.registerLazySingleton<BatteryManagerRepo>(() => BatteryManagerRepoImpl(sl(), sl()));
     sl.registerLazySingleton<DisablerRepo>(() => DisablerRepoImpl(sl(), sl()));
     sl.registerLazySingleton<TerminalDelegate>(() => TerminalDelegateImpl(sl(), sl()));
     sl.registerLazySingleton<SetupSource>(() => SetupSourceImpl(sl()));
     sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl(sl()));
+    sl.registerLazySingleton<PermissionManager>(() => PermissionManagerImpl(sl()));
 
     sl.registerLazySingleton<DioClient>(() => DioClientImpl(sl()));
 

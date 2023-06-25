@@ -31,55 +31,6 @@ class TerminalRepoImpl extends TerminalRepo{
     return await _terminalSource.execute(command);
   }
 
-  @override
-  Future<bool> checkAccess() async{
-
-    var permissionChecker=Constants.globalConfig.kExecPermissionCheckerPath!;
-    GlobalConfig globalConfig=Constants.globalConfig;
-
-    List<String> pathList=[];
-    if(globalConfig.arMode.name.contains(ARMODE.mainline.name)){
-      pathList.addAll([
-        Constants.kMainlineModuleStatePath,
-        Constants.kMainlineModuleModePath,
-        Constants.kMainlineBrightnessPath
-      ]);
-
-      if(globalConfig.kThresholdPath!=null){
-        pathList.add(globalConfig.kThresholdPath!);
-      }
-
-    }
-
-    if (globalConfig.arMode==ARMODE.batteryManager&&globalConfig.kThresholdPath!=null) {
-      pathList.add(globalConfig.kThresholdPath!);
-    }
-
-
-    checkPermission({String path=''})async {
-      path=' $path';
-      List<String> value = await getOutput(command: "$permissionChecker$path".trim());
-      if(value.isNotEmpty) {
-        return value.contains('true');
-      }
-      return false;
-    }
-
-    if(pathList.isEmpty){
-     return await checkPermission();
-    }else{
-      for( var element in pathList){
-        if(!await checkPermission(path: element)) {
-          return false;
-        }
-      }
-      return true;
-    }
-
-
-  }
-
-
 
   @override
   clearTerminalOut(){

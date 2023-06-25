@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aurora/user_interface/control_panel/data/permission_manager.dart';
 import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
@@ -7,10 +8,11 @@ import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
 
 class SetupRepoImpl extends SetupRepo{
-  SetupRepoImpl(this._setupSource, this._terminalDelegate);
+  SetupRepoImpl(this._setupSource, this._terminalDelegate,this._permissionManager);
 
   final SetupSource _setupSource;
   final TerminalDelegate _terminalDelegate;
+  final PermissionManager _permissionManager;
 
   final _globalConfig=Constants.globalConfig;
   String _setupPath='';
@@ -82,8 +84,7 @@ class SetupRepoImpl extends SetupRepo{
   }
 
   @override
-  List<String> get missingPackagesList => _terminalDelegate.listMissingPackages.split(' ');
-  
+  List<String> get missingPackagesList => _permissionManager.listMissingPackages;
   
 
 }
