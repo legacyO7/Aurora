@@ -49,8 +49,8 @@ class SetupRepoImpl extends SetupRepo{
       ..setInstance(
         kWorkingDirectory: (await workingDir.create()).path)
       ..setInstance(
-      kSecureBootEnabled: await _terminalDelegate.isSecureBootEnabled(),
-      kExecPermissionCheckerPath: await _terminalDelegate.extractAsset(sourceFileName: Constants.kPermissionChecker));
+      kSecureBootEnabled: await _terminalDelegate.isSecureBootEnabled()
+      );
   }
   
   @override

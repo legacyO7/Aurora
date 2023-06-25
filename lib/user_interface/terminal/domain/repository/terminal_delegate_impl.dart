@@ -28,11 +28,6 @@ class TerminalDelegateImpl implements TerminalDelegate {
     return await _terminalSource.execute(command);
   }
 
-  Future writetoFile({required String path, required String content}) async{
-    await File(path).writeAsString(content);
-  }
-
-
   @override
   Future<List<String>> getOutput({required String command}) async{
     return await _terminalRepo.getOutput(command: command);

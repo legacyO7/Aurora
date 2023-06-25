@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/control_panel/data/permission_manager.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
@@ -15,10 +14,9 @@ import 'home_repo.dart';
 
 class HomeRepoImpl extends HomeRepo with GlobalMixin{
 
-  HomeRepoImpl(this._terminalDelegate,this._prefRepo, this._permissionManager);
+  HomeRepoImpl(this._terminalDelegate, this._permissionManager);
 
   final TerminalDelegate _terminalDelegate;
-  final PrefRepo _prefRepo;
   final PermissionManager _permissionManager;
 
   final _globalConfig=Constants.globalConfig;
@@ -26,6 +24,11 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   @override
   List<String> readFile({required String path}){
     return (File(path).readAsLinesSync());
+  }
+
+  @override
+  Future writeToFile({required String path, required String content}) async{
+    await File(path).writeAsString(content);
   }
 
   @override
@@ -129,12 +132,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   bool checkFaustusFolder()=>Directory(Constants.kFaustusModulePath).existsSync();
 
   Future _getAccess() async{
-
-    if(super.isMainLine()){
       await _permissionManager.setPermissions();
-    }
-
-    await _terminalDelegate.execute("${Constants.kPolkit} ${_globalConfig.kExecFaustusPath} init ${_globalConfig.kWorkingDirectory} ${await _prefRepo.getThreshold()}");
   }
 
   Future<bool> _checkAccess() async{
@@ -144,9 +142,6 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   @override
   Future loadScripts() async{
     _globalConfig.kExecBatteryManagerPath= await _terminalDelegate.extractAsset(sourceFileName:Constants.kBatteryManager);
-    if(!super.isMainLine()) {
-      _globalConfig.kExecFaustusPath=await _terminalDelegate.extractAsset(sourceFileName: Constants.kFaustus);
-    }
   }
 
   @override

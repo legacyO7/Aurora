@@ -15,6 +15,11 @@ class BatteryManagerRepoImpl implements BatteryManagerRepo{
   final PrefRepo _prefRepo;
 
   @override
+  Future initBatteryManager() async{
+    await setBatteryChargeLimit(limit: (await _prefRepo.getThreshold())??await getBatteryCharge());
+  }
+
+  @override
   Future<int> getBatteryCharge() async{
     if(Constants.globalConfig.kThresholdPath!=null) {
       return int.parse((await File(Constants.globalConfig.kThresholdPath!).readAsString()).toString().trim());
@@ -23,13 +28,19 @@ class BatteryManagerRepoImpl implements BatteryManagerRepo{
   }
 
   @override
-  Future setBatteryChargeLimit({required int limit, required bool serviceEnabled}) async{
-    if(serviceEnabled) {
+  Future setBatteryChargeLimit({required int limit}) async{
+    if(await arServiceEnabled()) {
       await _terminalDelegate.execute("${Constants.globalConfig.kExecBatteryManagerPath} $limit");
     }else{
       await _terminalDelegate.execute("${Constants.kPolkit} ${Constants.globalConfig.kExecBatteryManagerPath} $limit");
     }
     await _prefRepo.setThreshold(limit);
+  }
+
+  Future<bool> arServiceEnabled() async{
+    return (await _terminalDelegate.getOutput(command: Constants.kArServiceStatus))
+        .toString().contains('aurora-controller.service; enabled');
+
   }
 
 }

@@ -16,6 +16,7 @@ class PermissionManagerImpl implements PermissionManager{
   List<String> _deniedList=[];
   List<String> missingPackages=[];
 
+  @override
   Future setPermissions() async{
     await _terminalDelegate.execute("${Constants.kPolkit} chmod -R o+rwx ${_deniedList.join(' ')}");
   }
@@ -25,11 +26,9 @@ class PermissionManagerImpl implements PermissionManager{
     if(paths.isNotEmpty) {
       for (var file in paths) {
         if (!File(file).statSync().modeString().endsWith('rwx')) {
-          print('$file requrires permission');
           _deniedList.add(file);
         }
       }
-      print(_deniedList);
     }
   }
 
@@ -59,14 +58,13 @@ class PermissionManagerImpl implements PermissionManager{
     
     if (globalConfig.arMode==ARMODE.faustus) {
       pathList.addAll([
-        '${Constants.kFaustusModulePath}leds/asus::kbd_backlight/brightness',
-        "${Constants.kFaustusModulePath}kbbl/kbbl_red",
-        "${Constants.kFaustusModulePath}kbbl/kbbl_green",
-        "${Constants.kFaustusModulePath}kbbl/kbbl_blue",
-        "${Constants.kFaustusModulePath}kbbl/kbbl_mode",
-        "${Constants.kFaustusModulePath}kbbl/kbbl_speed",
-        "${Constants.kFaustusModulePath}kbbl/kbbl_flags",
-        "${Constants.kFaustusModulePath}kbbl/kbbl_set"
+        Constants.kFaustusModuleBrightnessPath,
+        Constants.kFaustusModuleRedPath,
+        Constants.kFaustusModuleGreenPath,
+        Constants.kFaustusModuleBluePath,
+        Constants.kFaustusModuleSpeedPath,
+        Constants.kFaustusModuleModePath,
+        Constants.kFaustusModuleFlagsPath,
       ]);
     }
     
@@ -82,7 +80,6 @@ class PermissionManagerImpl implements PermissionManager{
   Future<List<String>> listPackagesToInstall() async{
     for(var package in _checkInstalledPackages) {
       if((await _terminalDelegate.getOutput(command: "command -v $package")).isEmpty){
-        print("package $package not installed");
         missingPackages.add(package);
       }
     }

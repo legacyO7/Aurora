@@ -9,12 +9,9 @@ class Constants {
   static final GlobalConfig globalConfig=sl<GlobalConfig>();
 
   //files
-  static const String kFaustus = 'faustus_controller.sh';
-  static const String kMainline = 'mainline_controller.sh';
   static const String kBatteryManager = 'battery_manager.sh';
   static const String kArSetup = 'ar_setup.sh';
   static const String kFaustusInstaller = 'install_faustus.sh';
-  static const String kPermissionChecker = 'permission_checker.sh';
 
   //commands
   static const String kPolkit = 'pkexec --disable-internal-agent';
@@ -23,6 +20,15 @@ class Constants {
 
   //paths
   static const String kFaustusModulePath = "/sys/devices/platform/faustus/";
+  static const String kFaustusModuleBrightnessPath = '${kFaustusModulePath}leds/asus::kbd_backlight/brightness';
+  static const String kFaustusModuleRedPath = "${kFaustusModulePath}kbbl/kbbl_red";
+  static const String kFaustusModuleGreenPath = "${kFaustusModulePath}kbbl/kbbl_green";
+  static const String kFaustusModuleBluePath = "${kFaustusModulePath}kbbl/kbbl_blue";
+  static const String kFaustusModuleModePath = "${kFaustusModulePath}kbbl/kbbl_mode";
+  static const String kFaustusModuleSpeedPath = "${kFaustusModulePath}kbbl/kbbl_speed";
+  static const String kFaustusModuleFlagsPath = "${kFaustusModulePath}kbbl/kbbl_flags";
+  static const String kFaustusModuleSetPath = "${kFaustusModulePath}kbbl/kbbl_set";
+
   static const String kMainlineModuleModePath = "/sys/class/leds/asus::kbd_backlight/kbd_rgb_mode";
   static const String kMainlineModuleStatePath = "/sys/class/leds/asus::kbd_backlight/kbd_rgb_state";
   static const String kMainlineBrightnessPath = "/sys/class/leds/asus::kbd_backlight/brightness";

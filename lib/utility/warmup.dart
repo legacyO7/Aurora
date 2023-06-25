@@ -60,7 +60,7 @@ class WarmUp {
     sl.registerLazySingleton(() => ArButtonCubit());
 
     sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
-    sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl()));
+    sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl()));
     sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
     sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl(), sl()));
     sl.registerLazySingleton<KeyboardSettingsRepo>(() => KeyboardSettingsRepoImpl(sl(), sl()));

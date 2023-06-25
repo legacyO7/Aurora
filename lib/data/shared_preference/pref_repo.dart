@@ -8,7 +8,7 @@ abstract class PrefRepo{
   Future<int> getBrightness();
   Future<ArMode?> getArMode();
   Future<ArState> getArState();
-  Future<int> getThreshold();
+  Future<int?> getThreshold();
   Future<ThemeMode> getTheme();
 
   Future setVersion(String version);

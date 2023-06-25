@@ -10,4 +10,5 @@ abstract class HomeRepo{
   void setAppHeight();
   Future loadScripts();
   Future<bool> requestAccess();
+  Future writeToFile({required String path, required String content});
 }

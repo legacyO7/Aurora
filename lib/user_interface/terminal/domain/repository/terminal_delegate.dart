@@ -6,6 +6,4 @@ abstract class TerminalDelegate {
   Future<bool> isSecureBootEnabled();
   Future<bool> pkexecChecker();
   Future<bool> isKernelCompatible();
-  Future writetoFile({required String path, required String content});
-
 }
