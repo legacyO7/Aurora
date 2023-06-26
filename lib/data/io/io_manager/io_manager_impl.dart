@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:aurora/user_interface/home/data/io_manager.dart';
+import 'io_manager.dart';
+
 
 class IOManagerImpl implements IOManager{
 

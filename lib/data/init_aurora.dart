@@ -1,7 +1,7 @@
 
 import 'package:args/args.dart';
-import 'package:aurora/user_interface/control_panel/data/permission_manager.dart';
-import 'package:aurora/user_interface/control_panel/data/permission_manager_impl.dart';
+import 'package:aurora/data/io/service_manager/service_manager.dart';
+import 'package:aurora/data/io/service_manager/service_manager_impl.dart';
 import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo.dart';
 import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo_impl.dart';
 import 'package:aurora/user_interface/control_panel/domain/keyboard_settings/keyboard_settings_repo.dart';
@@ -12,8 +12,6 @@ import 'package:aurora/user_interface/control_panel/presentation/state/battery_m
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
-import 'package:aurora/user_interface/home/data/io_manager.dart';
-import 'package:aurora/user_interface/home/data/io_manager_impl.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo_impl.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
@@ -45,6 +43,10 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'io/io_manager/io_manager.dart';
+import 'io/io_manager/io_manager_impl.dart';
+import 'io/permission_manager/permission_manager.dart';
+import 'io/permission_manager/permission_manager_impl.dart';
 import 'shared_preference/pref_repo.dart';
 import 'shared_preference/pref_repo_impl.dart';
 
@@ -69,13 +71,14 @@ class InitAurora {
     sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
     sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl(), sl()));
     sl.registerLazySingleton<KeyboardSettingsRepo>(() => KeyboardSettingsRepoImpl(sl(), sl()));
-    sl.registerLazySingleton<BatteryManagerRepo>(() => BatteryManagerRepoImpl(sl(), sl()));
-    sl.registerLazySingleton<DisablerRepo>(() => DisablerRepoImpl(sl(), sl()));
+    sl.registerLazySingleton<BatteryManagerRepo>(() => BatteryManagerRepoImpl(sl(), sl(),sl(),sl(),sl()));
+    sl.registerLazySingleton<DisablerRepo>(() => DisablerRepoImpl(sl(), sl(),sl(),sl(),sl()));
     sl.registerLazySingleton<TerminalDelegate>(() => TerminalDelegateImpl(sl(), sl()));
     sl.registerLazySingleton<SetupSource>(() => SetupSourceImpl(sl()));
     sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl(sl()));
-    sl.registerLazySingleton<PermissionManager>(() => PermissionManagerImpl(sl()));
+    sl.registerLazySingleton<PermissionManager>(() => PermissionManagerImpl(sl(),sl()));
     sl.registerLazySingleton<IOManager>(() => IOManagerImpl());
+    sl.registerLazySingleton<ServiceManager>(() => ServiceManagerImpl(sl()));
 
     sl.registerLazySingleton<DioClient>(() => DioClientImpl(sl()));
 

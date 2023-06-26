@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:aurora/data/io/io_manager/io_manager.dart';
+import 'package:aurora/data/io/permission_manager/permission_manager.dart';
+import 'package:aurora/data/io/service_manager/service_manager.dart';
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/utility/constants.dart';
@@ -8,11 +11,14 @@ import 'battery_manager_repo.dart';
 
 class BatteryManagerRepoImpl implements BatteryManagerRepo{
 
-  BatteryManagerRepoImpl(this._terminalDelegate, this._prefRepo);
+  BatteryManagerRepoImpl(this._terminalDelegate, this._prefRepo, this._ioManager,this._permissionManager,this._serviceManager);
 
 
   final TerminalDelegate _terminalDelegate;
   final PrefRepo _prefRepo;
+  final IOManager _ioManager;
+  final PermissionManager _permissionManager;
+  final ServiceManager _serviceManager;
 
   @override
   Future initBatteryManager() async{
@@ -29,18 +35,15 @@ class BatteryManagerRepoImpl implements BatteryManagerRepo{
 
   @override
   Future setBatteryChargeLimit({required int limit}) async{
-    if(await arServiceEnabled()) {
-      await _terminalDelegate.execute("${Constants.globalConfig.kExecBatteryManagerPath} $limit");
-    }else{
-      await _terminalDelegate.execute("${Constants.kPolkit} ${Constants.globalConfig.kExecBatteryManagerPath} $limit");
+    if(!await _terminalDelegate.arServiceEnabled()){
+      await _permissionManager.setPermissions();
     }
     await _prefRepo.setThreshold(limit);
-  }
-
-  Future<bool> arServiceEnabled() async{
-    return (await _terminalDelegate.getOutput(command: Constants.kArServiceStatus))
-        .toString().contains('aurora-controller.service; enabled');
-
+    await _ioManager.writeToFile(
+        path: Constants.globalConfig.kThresholdPath!,
+        content: '$limit'
+    );
+    await _serviceManager.updateService();
   }
 
 }

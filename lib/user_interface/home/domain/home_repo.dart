@@ -8,7 +8,6 @@ abstract class HomeRepo{
   Future<int> compatibilityChecker();
   int convertVersionToInt(String version);
   void setAppHeight();
-  Future loadScripts();
   Future<bool> requestAccess();
   Future writeToFile({required String path, required String content});
 }

@@ -88,9 +88,6 @@ disablefaustus(){
     sudo dkms remove faustus/0.2 --all
 }
 
-disablethreshold(){
-  sudo $1/battery_manager.sh disablethreshold
-}
 
 uninstall(){
   sudo rm -rf /opt/aurora
@@ -118,18 +115,10 @@ if [ $# -ne 0 ]
       setterminallist $@
       executeinterminal "sudo $tmpdir/install_faustus.sh $tmpdir $git_faustus"
     ;;
-    disablethreshold)
-      disablethreshold $1
-    ;;
     disablefaustus)
       disablefaustus
     ;;
-    disablethresholdfaustus)
-      disablethreshold $1
-      disablefaustus
-    ;;
     uninstall)
-      disablethreshold $1
       disablefaustus
       uninstall
     ;;

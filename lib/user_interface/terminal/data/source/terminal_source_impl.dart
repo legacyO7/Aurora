@@ -47,6 +47,9 @@ class TerminalSourceImpl extends TerminalSource{
         arguments = command.split(' ');
         var exec = arguments[0];
         arguments.removeAt(0);
+
+        arguments=_validateArgs(arguments);
+
         _convertToList(lines: "\$ $command", commandStatus: CommandStatus.stdinp);
 
         try {
@@ -73,6 +76,45 @@ class TerminalSourceImpl extends TerminalSource{
       }else {
         _inProgress=false;
       }
+    }
+  }
+
+  List<String> _validateArgs(List<String> args){
+
+    List<String> foundDelimters=[];
+
+    for (var element in ['"',"'"]) {
+      if(_command.contains(element)){
+        foundDelimters.add(element);
+      }
+    }
+
+    if(foundDelimters.isEmpty){
+      return args;
+    }else {
+      List<String> newArg = [];
+      for (var delimiter in foundDelimters) {
+        if (_command.contains(delimiter)) {
+          for (int i = 0; i < args.length; i++) {
+            if (args[i].contains("'")) {
+              String concatItem = args[i];
+              int j = i + 1;
+              while (j < args.length && !args[j].contains(delimiter)) {
+                concatItem += ' ${args[j]}';
+                j++;
+              }
+              if (j < args.length) {
+                concatItem += ' ${args[j]}';
+                i = j;
+              }
+              newArg.add(concatItem.trim().replaceAll("'", '').replaceAll('"', ''));
+            } else {
+              newArg.add(args[i].trim());
+            }
+          }
+        }
+      }
+      return newArg;
     }
   }
 

@@ -17,7 +17,6 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   }
 
   Future _initHome(emit) async{
-    await _homeRepo.loadScripts();
     await _requestAccess(emit);
   }
 

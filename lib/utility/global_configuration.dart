@@ -10,7 +10,6 @@ class GlobalConfig {
    String? arChannel;
 
   //paths
-   String? kExecBatteryManagerPath;
    String? kWorkingDirectory;
    String? kTmpPath;
    String? kThresholdPath;
@@ -30,7 +29,6 @@ class GlobalConfig {
   GlobalConfig({
     this.arVersion,
     this.arChannel,
-    this.kExecBatteryManagerPath,
     this.kWorkingDirectory,
     this.kAuroraGitRawYaml,
     this.kAuroraGitRawChangelog,
@@ -62,7 +60,6 @@ class GlobalConfig {
     this.arVersion=  arVersion??this.arVersion;
     this.kAuroraGitRawChangelog= kAuroraGitRawChangelog?? "https://raw.githubusercontent.com/legacyO7/Aurora/${arChannel??this.arChannel}/changelog.txt";
     this.kAuroraGitRawYaml= kAuroraGitRawYaml?? "https://raw.githubusercontent.com/legacyO7/Aurora/${arChannel??this.arChannel}/pubspec.yaml";
-    this.kExecBatteryManagerPath=kExecBatteryManagerPath??this.kExecBatteryManagerPath;
     this.kSecureBootEnabled= kSecureBootEnabled??this.kSecureBootEnabled;
     this.kWorkingDirectory= kWorkingDirectory??this.kWorkingDirectory;
     this.kFaustusGitUrl=kFaustusGitUrl??'https://github.com/legacyO7/faustus.git';

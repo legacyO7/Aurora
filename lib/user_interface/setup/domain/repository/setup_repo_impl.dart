@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:aurora/user_interface/control_panel/data/permission_manager.dart';
+import 'package:aurora/data/io/permission_manager/permission_manager.dart';
 import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
