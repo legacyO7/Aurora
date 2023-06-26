@@ -1,4 +1,5 @@
 
+import 'package:args/args.dart';
 import 'package:aurora/user_interface/control_panel/data/permission_manager.dart';
 import 'package:aurora/user_interface/control_panel/data/permission_manager_impl.dart';
 import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo.dart';
@@ -32,6 +33,7 @@ import 'package:aurora/utility/ar_bloc_observer.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/user_interface/setup/data/source/dio_client.dart';
+import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dio/dio.dart';
@@ -129,6 +131,13 @@ class InitAurora {
     };
 
     Bloc.observer=AppBlocObserver();
+  }
+
+  void initParser(List<String> args){
+    var parser = ArgParser();
+    parser.addFlag('log',defaultsTo: false);
+    var result = parser.parse(args);
+    Constants.isLoggingEnabled=result['log'];
   }
 
 }

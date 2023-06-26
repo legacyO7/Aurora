@@ -18,12 +18,13 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'user_interface/home/presentation/state/home_bloc.dart';
 
 
-void main() async{
-  InitAurora warmUp=InitAurora();
-  await warmUp.initDI();
+void main(List<String> args) async{
+  InitAurora initAurora=InitAurora();
+  await initAurora.initDI();
+  initAurora.initParser(args);
   WidgetsFlutterBinding.ensureInitialized();
-  await warmUp.setWindow();
-  warmUp.errorRecorder();
+  await initAurora.setWindow();
+  initAurora.errorRecorder();
   runApp(Phoenix(child: const Aurora()));
 }
 

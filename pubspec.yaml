@@ -30,6 +30,7 @@ dependencies:
   flutter_phoenix: ^1.1.1
   window_manager: ^0.3.4
   responsive_sizer: ^3.1.1
+  args: ^2.4.2
 
 dev_dependencies:
   flutter_test:

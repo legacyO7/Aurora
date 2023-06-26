@@ -49,5 +49,8 @@ class Constants {
 
   //build type
   static const BuildType buildType= BuildType.debug;
+  
+  //flags
+  static bool isLoggingEnabled=false;
 
 }
