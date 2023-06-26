@@ -119,25 +119,28 @@ class InitAurora {
 
   void errorRecorder(){
 
-    ArLogger arLogger= sl<ArLogger>()..initialize();
+    if(Constants.isLoggingEnabled) {
+      ArLogger arLogger = sl<ArLogger>()
+        ..initialize();
 
-    FlutterError.onError= (error){
-      arLogger.log(data: error.toString());
-    };
+      FlutterError.onError = (error) {
+        arLogger.log(data: error.toString());
+      };
 
-    PlatformDispatcher.instance.onError = (error, stackTrace){
-      arLogger.log(data: error.toString(),stackTrace: stackTrace);
-      return true;
-    };
+      PlatformDispatcher.instance.onError = (error, stackTrace) {
+        arLogger.log(data: error.toString(), stackTrace: stackTrace);
+        return true;
+      };
 
-    Bloc.observer=AppBlocObserver();
+      Bloc.observer = AppBlocObserver();
+    }
   }
 
   void initParser(List<String> args){
     var parser = ArgParser();
     parser.addFlag('log',defaultsTo: false);
     var result = parser.parse(args);
-    Constants.isLoggingEnabled=result['log'];
+    Constants.isLoggingEnabled=!result['log'];
   }
 
 }
