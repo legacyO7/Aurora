@@ -30,6 +30,7 @@ import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.d
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo_impl.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/utility/ar_bloc_observer.dart';
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/user_interface/setup/data/source/dio_client.dart';
@@ -119,7 +120,7 @@ class InitAurora {
 
   void errorRecorder(){
 
-    if(Constants.isLoggingEnabled) {
+    if(Constants.isLoggingEnabled|| Constants.buildType==BuildType.appimage) {
       ArLogger arLogger = sl<ArLogger>()
         ..initialize();
 
@@ -140,7 +141,7 @@ class InitAurora {
     var parser = ArgParser();
     parser.addFlag('log',defaultsTo: false);
     var result = parser.parse(args);
-    Constants.isLoggingEnabled=!result['log'];
+    Constants.isLoggingEnabled=result['log'];
   }
 
 }
