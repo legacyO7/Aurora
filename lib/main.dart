@@ -1,4 +1,4 @@
-import 'package:aurora/utility/warmup.dart';
+import 'package:aurora/data/init_aurora.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
@@ -19,7 +19,7 @@ import 'user_interface/home/presentation/state/home_bloc.dart';
 
 
 void main() async{
-  WarmUp warmUp=WarmUp();
+  InitAurora warmUp=InitAurora();
   await warmUp.initDI();
   WidgetsFlutterBinding.ensureInitialized();
   await warmUp.setWindow();

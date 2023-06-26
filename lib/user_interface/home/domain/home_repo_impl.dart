@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aurora/user_interface/control_panel/data/permission_manager.dart';
+import 'package:aurora/user_interface/home/data/io_manager.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
@@ -14,10 +15,11 @@ import 'home_repo.dart';
 
 class HomeRepoImpl extends HomeRepo with GlobalMixin{
 
-  HomeRepoImpl(this._terminalDelegate, this._permissionManager);
+  HomeRepoImpl(this._terminalDelegate, this._permissionManager, this._ioManager);
 
   final TerminalDelegate _terminalDelegate;
   final PermissionManager _permissionManager;
+  final IOManager _ioManager;
 
   final _globalConfig=Constants.globalConfig;
 
@@ -28,7 +30,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
 
   @override
   Future writeToFile({required String path, required String content}) async{
-    await File(path).writeAsString(content);
+    await _ioManager.writeToFile(path: path, content: content);
   }
 
   @override
