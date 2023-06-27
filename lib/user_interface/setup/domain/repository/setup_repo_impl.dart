@@ -6,8 +6,9 @@ import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_mixin.dart';
 
-class SetupRepoImpl extends SetupRepo{
+class SetupRepoImpl extends SetupRepo with GlobalMixin{
   SetupRepoImpl(this._setupSource, this._terminalDelegate,this._permissionManager);
 
   final SetupSource _setupSource;
@@ -45,12 +46,15 @@ class SetupRepoImpl extends SetupRepo{
     if(workingDir.existsSync()){
       workingDir.deleteSync(recursive: true);
     }
-    _globalConfig
-      ..setInstance(
-        kWorkingDirectory: (await workingDir.create()).path)
-      ..setInstance(
-      kSecureBootEnabled: await _terminalDelegate.isSecureBootEnabled()
+
+    if(!isMainLineCompatible()) {
+      _globalConfig
+        ..setInstance(
+          kWorkingDirectory: (await workingDir.create()).path)
+        ..setInstance(
+          kSecureBootEnabled: await _terminalDelegate.isSecureBootEnabled()
       );
+    }
   }
   
   @override
