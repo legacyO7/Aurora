@@ -1,12 +1,5 @@
 #!/bin/sh
 
-aurora=/usr/bin/aurora
-
-rm -rf $aurora
-
-cat > $aurora <<'EOF'
-#!/bin/sh
-
 aurora_bin=/opt/aurora/aurora
 pre_cmd=''
 post_cmd=''
@@ -37,7 +30,3 @@ echo "usage: --log          -       enables logging
 else
     runAurora
 fi
-EOF
-chmod +x $aurora
-
-exit 0
