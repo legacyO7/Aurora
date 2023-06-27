@@ -111,6 +111,14 @@ class PermissionManagerImpl implements PermissionManager{
       ]);
     }
 
+    if(await File("${Constants.globalConfig.kTmpPath}/ar.log").exists()){
+      pathList.add("${Constants.globalConfig.kTmpPath}/ar.log");
+    }
+
+    if(await File("${Constants.globalConfig.kWorkingDirectory}").exists()){
+      pathList.add("${Constants.globalConfig.kWorkingDirectory}");
+    }
+
     return await checkPermissions(paths: pathList);
   }
 

@@ -50,6 +50,7 @@ class DisablerBloc extends TerminalBaseBloc<DisableEvent,DisableState> {
       if(state_.uninstallAurora){
         exit(0);
       }
+
       Phoenix.rebirth(Constants.kScaffoldKey.currentContext!);
     }
   }

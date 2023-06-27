@@ -19,49 +19,59 @@ class DisablerRepoImpl implements DisablerRepo{
   final PermissionManager _permissionManager;
   final ServiceManager _serviceManager;
 
+  Future<String> getFaustusDisableCommand() async=> "${Constants.kPolkit} ${await _terminalDelegate.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.globalConfig.kWorkingDirectory} ";
+
+
   @override
   Future disableServices({required DISABLE disable}) async{
-    
+
+    List<String> disableCommands=[];
+
       switch(disable) {
         case DISABLE.faustus:
-            await _disableFaustus();
+            disableCommands.add("${await getFaustusDisableCommand()}disablefaustus");
             break;
 
         case DISABLE.all:
-            await _disableFaustus();
-            await _disableBatteryManager();
+            disableCommands.addAll([
+              "${await getFaustusDisableCommand()}disablefaustus",
+              "systemctl disable ${Constants.kServiceName}"
+            ]);
             break;
 
         case DISABLE.threshold:
-            await _disableBatteryManager();
+            disableCommands.add("systemctl disable ${Constants.kServiceName}");
             break;
 
         case DISABLE.uninstall:
-            await _disableFaustus(uninstall: true);
+            disableCommands.add("${await getFaustusDisableCommand()}uninstall");
             break;
         case DISABLE.none:
           // TODO: Handle this case.
           break;
       }
-      
-      if(disable==DISABLE.all||disable==DISABLE.threshold){
-        await _prefRepo.setThreshold(100);
+
+      await _runDisableCommand(disableCommands);
+
+      if(!await _terminalDelegate.arServiceEnabled()) {
+        if (disable == DISABLE.all || disable == DISABLE.threshold) {
+          await _disableBatteryManager();
+          await _prefRepo.setThreshold(100);
+        }
       }
 
-      if(disable==DISABLE.uninstall){
-        await _prefRepo.nukePref();
-      }
+        if (disable == DISABLE.uninstall) {
+          await _prefRepo.nukePref();
+        }
 
   }
-  
-  Future _disableFaustus({bool uninstall = false}) async{
-    var command="${Constants.kPolkit} ${await _terminalDelegate.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.globalConfig.kWorkingDirectory} ${uninstall?'uninstall':'disablefaustus'}";
-    await _terminalDelegate.execute(command);
+
+  Future _runDisableCommand(List<String> commands) async{
+    await _permissionManager.runWithPrivileges(commands);
   }
   
+
   Future _disableBatteryManager() async{
-
-    await _permissionManager.runWithPrivileges(["systemctl disable ${Constants.kServiceName}"]);
     await _ioManager.writeToFile(
         filePath: Constants.globalConfig.kThresholdPath!,
         content: '100'

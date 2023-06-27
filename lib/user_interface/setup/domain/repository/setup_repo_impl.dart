@@ -42,19 +42,19 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin{
   
   @override
   Future initSetup() async{
-    Directory workingDir= Directory('${Directory.systemTemp.path}/legacy07.aurora');
-    if(workingDir.existsSync()){
-      workingDir.deleteSync(recursive: true);
-    }
+    try {
+      Directory workingDir = Directory('${Directory.systemTemp.path}/legacy07.aurora');
+      if (workingDir.existsSync()) {
+        workingDir.deleteSync(recursive: true);
+      }
 
-    if(!isMainLineCompatible()) {
-      _globalConfig
-        ..setInstance(
-          kWorkingDirectory: (await workingDir.create()).path)
-        ..setInstance(
-          kSecureBootEnabled: await _terminalDelegate.isSecureBootEnabled()
-      );
-    }
+      if (!isMainLineCompatible()) {
+        _globalConfig..setInstance(
+            kWorkingDirectory: (await workingDir.create()).path)..setInstance(
+            kSecureBootEnabled: await _terminalDelegate.isSecureBootEnabled()
+        );
+      }
+    }catch(_){}
   }
   
   @override
