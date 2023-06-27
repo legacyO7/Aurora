@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aurora/data/io/io_manager/io_manager.dart';
 import 'package:aurora/data/io/permission_manager/permission_manager.dart';
 import 'package:aurora/data/io/service_manager/service_manager.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
@@ -9,10 +10,14 @@ import 'package:aurora/utility/global_configuration.dart';
 
 class PermissionManagerImpl implements PermissionManager{
   
-  PermissionManagerImpl(this._terminalDelegate,this._serviceManager);
+  PermissionManagerImpl(this._terminalDelegate,this._serviceManager, this._ioManager);
   
   final TerminalDelegate _terminalDelegate;
   final ServiceManager _serviceManager;
+  final IOManager _ioManager;
+
+
+
   final List<String> _checkInstalledPackages=['dkms', 'openssl','mokutil','git','make','cmake'];
 
   List<String> _deniedList=[];
@@ -54,7 +59,7 @@ class PermissionManagerImpl implements PermissionManager{
     _deniedList=[];
     if(paths.isNotEmpty) {
       for (var file in paths) {
-        if (! (await File(file).stat()).modeString().endsWith('rwx')) {
+        if (!(await _ioManager.getFileStat(file)).endsWith('rwx')) {
           _deniedList.add(file);
         }
       }

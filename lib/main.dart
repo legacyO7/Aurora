@@ -24,7 +24,7 @@ void main(List<String> args) async{
   initAurora.initParser(args);
   WidgetsFlutterBinding.ensureInitialized();
   await initAurora.setWindow();
-  initAurora.errorRecorder();
+  await initAurora.errorRecorder();
   runApp(Phoenix(child: const Aurora()));
 }
 

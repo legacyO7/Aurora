@@ -63,7 +63,7 @@ class DisablerRepoImpl implements DisablerRepo{
 
     await _permissionManager.runWithPrivileges(["systemctl disable ${Constants.kServiceName}"]);
     await _ioManager.writeToFile(
-        path: Constants.globalConfig.kThresholdPath!,
+        filePath: Constants.globalConfig.kThresholdPath!,
         content: '100'
     );
     await _serviceManager.deleteService();

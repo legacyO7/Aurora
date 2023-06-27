@@ -4,6 +4,7 @@ import 'package:aurora/data/io/io_manager/io_manager.dart';
 import 'package:aurora/data/io/permission_manager/permission_manager.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,11 +16,12 @@ import 'home_repo.dart';
 
 class HomeRepoImpl extends HomeRepo with GlobalMixin{
 
-  HomeRepoImpl(this._terminalDelegate, this._permissionManager, this._ioManager);
-
+  HomeRepoImpl(this._terminalDelegate, this._permissionManager, this._ioManager, this._arLogger);
+  
   final TerminalDelegate _terminalDelegate;
   final PermissionManager _permissionManager;
   final IOManager _ioManager;
+  final ArLogger _arLogger;
 
   final _globalConfig=Constants.globalConfig;
 
@@ -30,7 +32,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
 
   @override
   Future writeToFile({required String path, required String content}) async{
-    await _ioManager.writeToFile(path: path, content: content);
+    await _ioManager.writeToFile(filePath: path, content: content);
   }
 
   @override
@@ -71,7 +73,8 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     ..focus();
   }
 
-  Future<bool> _isDeviceCompatible() async{
+  @override
+  Future<bool> isDeviceCompatible() async{
 
     bool checkDeviceInfo({required String info}){
       return (info.toLowerCase().contains('asus'));
@@ -90,7 +93,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   @override
   Future<int> compatibilityChecker() async{
 
-    if(!await _isDeviceCompatible()){
+    if(!await isDeviceCompatible()){
       return 7;
     }
 
@@ -99,7 +102,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     }
 
     if(isMainLineCompatible()){
-      if(await _thresholdPathExists() && await _systemHasSystemd()){
+      if(await thresholdPathExists() && await systemHasSystemd()){
         _globalConfig.setInstance(arMode: ARMODE.mainline);
       }else{
         _globalConfig.setInstance(arMode:  ARMODE.mainlineWithoutBatteryManager);
@@ -108,7 +111,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     }
 
     if(!checkFaustusFolder()) {
-      if(await _thresholdPathExists()&& await _systemHasSystemd()) {
+      if(await thresholdPathExists()&& await systemHasSystemd()) {
         return 3;
       } else {
         return 2;
@@ -151,7 +154,8 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     return checkAccess;
   }
 
-  Future<bool> _thresholdPathExists() async{
+  @override
+  Future<bool> thresholdPathExists() async{
     Directory powerDir=Directory(Constants.kPowerSupplyPath);
     String? thresholdPath;
     if(powerDir.existsSync()){
@@ -170,8 +174,20 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     return _globalConfig.kThresholdPath!=null;
   }
 
-  Future<bool> _systemHasSystemd() async{
+  @override
+  Future<bool> systemHasSystemd() async{
     return (await _terminalDelegate.getOutput(command: Constants.kChecksystemd)).toString().contains('systemd');
+  }
+
+  @override
+  Future initLog() async{
+   _arLogger.log(data: "Build Version          : ${await getVersion()}");
+   _arLogger.log(data: "Build Type             : ${Constants.buildType.name}");
+   _arLogger.log(data: "Compatible Device      : ${await isDeviceCompatible()}");
+   _arLogger.log(data: "Compatible Kernel      : ${await _terminalDelegate.isKernelCompatible()}");
+   _arLogger.log(data: "Mainline Mode          : ${isMainLineCompatible()}");
+   _arLogger.log(data: "System has systemd     : ${await systemHasSystemd()}");
+   _arLogger.log(data: "Threshold Path Exists  : ${await thresholdPathExists()}");
   }
 
 

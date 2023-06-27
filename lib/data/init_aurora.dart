@@ -67,7 +67,7 @@ class InitAurora {
     sl.registerLazySingleton(() => ArButtonCubit());
 
     sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
-    sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl()));
+    sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl(),sl()));
     sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
     sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl(), sl()));
     sl.registerLazySingleton<KeyboardSettingsRepo>(() => KeyboardSettingsRepoImpl(sl(), sl()));
@@ -76,7 +76,7 @@ class InitAurora {
     sl.registerLazySingleton<TerminalDelegate>(() => TerminalDelegateImpl(sl(), sl()));
     sl.registerLazySingleton<SetupSource>(() => SetupSourceImpl(sl()));
     sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl(sl()));
-    sl.registerLazySingleton<PermissionManager>(() => PermissionManagerImpl(sl(),sl()));
+    sl.registerLazySingleton<PermissionManager>(() => PermissionManagerImpl(sl(),sl(),sl()));
     sl.registerLazySingleton<IOManager>(() => IOManagerImpl());
     sl.registerLazySingleton<ServiceManager>(() => ServiceManagerImpl(sl()));
 
@@ -85,7 +85,7 @@ class InitAurora {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
     sl.registerLazySingleton<Dio>(() => Dio());
-    sl.registerLazySingleton<ArLogger>(() => ArLogger());
+    sl.registerLazySingleton<ArLogger>(() => ArLogger(sl()));
     sl.registerLazySingleton<GlobalConfig>(() => GlobalConfig());
   }
 
@@ -121,11 +121,13 @@ class InitAurora {
 
   }
 
-  void errorRecorder(){
+  Future errorRecorder() async {
 
     if(Constants.isLoggingEnabled|| Constants.buildType==BuildType.appimage) {
-      ArLogger arLogger = sl<ArLogger>()
-        ..initialize();
+
+      await sl<HomeRepo>().initLog();
+
+      ArLogger arLogger = sl<ArLogger>()..initialize();
 
       FlutterError.onError = (error) {
         arLogger.log(data: error.toString());

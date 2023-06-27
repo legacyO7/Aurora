@@ -40,7 +40,7 @@ class BatteryManagerRepoImpl implements BatteryManagerRepo{
     }
     await _prefRepo.setThreshold(limit);
     await _ioManager.writeToFile(
-        path: Constants.globalConfig.kThresholdPath!,
+        filePath: Constants.globalConfig.kThresholdPath!,
         content: '$limit'
     );
     await _serviceManager.updateService();

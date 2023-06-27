@@ -10,4 +10,8 @@ abstract class HomeRepo{
   void setAppHeight();
   Future<bool> requestAccess();
   Future writeToFile({required String path, required String content});
+  Future<bool> isDeviceCompatible();
+  Future<bool> thresholdPathExists();
+  Future<bool> systemHasSystemd();
+  Future initLog();
 }
