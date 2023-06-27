@@ -30,7 +30,7 @@ class ArLogger with GlobalMixin{
       print(data.trim());
     }else {
       await _ioManager.writeToFile(
-          filePath: _logFile.path,
+          filePath: _logFile,
           content: data,
           fileMode: FileMode.append);
     }

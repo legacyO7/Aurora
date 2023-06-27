@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aurora/data/io/io_manager/io_manager.dart';
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/utility/constants.dart';
 
@@ -7,11 +8,12 @@ import 'service_manager.dart';
 
 class ServiceManagerImpl implements ServiceManager {
 
-  ServiceManagerImpl(this._prefRepo);
+  ServiceManagerImpl(this._prefRepo,this._ioManager);
 
   final File serviceFile = File(Constants.kServicePath + Constants.kServiceName);
 
   final PrefRepo _prefRepo;
+  final IOManager _ioManager;
 
   @override
   Future createService() async {
@@ -37,7 +39,7 @@ WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target s
 
   @override
   Future updateService() async {
-    List<String> serviceContent=await serviceFile.readAsLines();
+    List<String> serviceContent=await  _ioManager.readFile(serviceFile);
     int threshold=await _prefRepo.getThreshold() ?? Constants.kMinimumChargeLevel;
     serviceContent=serviceContent.map((content){
       if(content.startsWith('ExecStart')){

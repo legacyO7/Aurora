@@ -78,7 +78,7 @@ class InitAurora {
     sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl(sl()));
     sl.registerLazySingleton<PermissionManager>(() => PermissionManagerImpl(sl(),sl(),sl()));
     sl.registerLazySingleton<IOManager>(() => IOManagerImpl());
-    sl.registerLazySingleton<ServiceManager>(() => ServiceManagerImpl(sl()));
+    sl.registerLazySingleton<ServiceManager>(() => ServiceManagerImpl(sl(),sl()));
 
     sl.registerLazySingleton<DioClient>(() => DioClientImpl(sl()));
 
@@ -125,9 +125,8 @@ class InitAurora {
 
     if(Constants.isLoggingEnabled|| Constants.buildType==BuildType.appimage) {
 
-      await sl<HomeRepo>().initLog();
-
       ArLogger arLogger = sl<ArLogger>()..initialize();
+      await sl<HomeRepo>().initLog();
 
       FlutterError.onError = (error) {
         arLogger.log(data: error.toString());

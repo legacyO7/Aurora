@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:aurora/data/io/io_manager/io_manager.dart';
 import 'package:aurora/data/io/permission_manager/permission_manager.dart';
 import 'package:aurora/data/io/service_manager/service_manager.dart';
@@ -28,7 +26,7 @@ class BatteryManagerRepoImpl implements BatteryManagerRepo{
   @override
   Future<int> getBatteryCharge() async{
     if(Constants.globalConfig.kThresholdPath!=null) {
-      return int.parse((await File(Constants.globalConfig.kThresholdPath!).readAsString()).toString().trim());
+      return int.parse((await _ioManager.readFile(Constants.globalConfig.kThresholdPath!)).first.toString().trim());
     }
     return Constants.kMinimumChargeLevel;
   }

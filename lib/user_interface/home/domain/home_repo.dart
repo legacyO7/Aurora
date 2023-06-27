@@ -1,6 +1,5 @@
 
 abstract class HomeRepo{
-  List<String?> readFile({required String path});
   Future<bool> checkInternetAccess();
   bool checkFaustusFolder();
   Future launchArUrl({String? subPath});

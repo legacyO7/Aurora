@@ -17,7 +17,7 @@ import 'home_repo.dart';
 class HomeRepoImpl extends HomeRepo with GlobalMixin{
 
   HomeRepoImpl(this._terminalDelegate, this._permissionManager, this._ioManager, this._arLogger);
-  
+
   final TerminalDelegate _terminalDelegate;
   final PermissionManager _permissionManager;
   final IOManager _ioManager;
@@ -25,10 +25,6 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
 
   final _globalConfig=Constants.globalConfig;
 
-  @override
-  List<String> readFile({required String path}){
-    return (File(path).readAsLinesSync());
-  }
 
   @override
   Future writeToFile({required String path, required String content}) async{
@@ -81,10 +77,10 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     }
 
     if(File(Constants.kProductName).existsSync()){
-      Constants.globalConfig.setInstance(deviceName: File(Constants.kProductName).readAsLinesSync().toString());
+      Constants.globalConfig.setInstance(deviceName: ( await _ioManager.readFile(Constants.kProductName)).toString());
       return checkDeviceInfo(info: Constants.globalConfig.deviceName);
     } else if(File(Constants.kVendorName).existsSync()){
-      return checkDeviceInfo(info: File(Constants.kVendorName).readAsLinesSync().toString());
+      return checkDeviceInfo(info:  ( await _ioManager.readFile(Constants.kVendorName)).toString());
     }
     debugPrint("unknown device");
     return true;
