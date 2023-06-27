@@ -17,7 +17,7 @@ The modes will be auto-selected depending on the kernel version
 
 ## Installation
 
-Aurora comes with an AppImage release which can be opened on any common linux distros.
+Aurora comes with an AppImage and debian build release.
 Find the latest release from [here](https://github.com/legacyO7/Aurora/releases).
 
 Aurora stable versions are also available in Fedora copr buildsystem

@@ -1,8 +1,10 @@
 
 Changelogs:
 
+- improved battery manager
+- improved logging. provide /tmp/ar.log while reporting an issue
 - optimized terminal op.
-- native packages will be installed in /opt and exposes the binary to known paths, allowing the app to be opened directly from the terminal
+- native packages will be installed in /opt and exposes the binary to known paths, allowing the app to open directly from terminal
 - added option for complete uninstallation of aurora from within the app
 - periodic dependency updates
 - fixed crashes on debian build
