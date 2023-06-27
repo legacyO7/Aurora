@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 aurora_bin=/opt/aurora/aurora
 pre_cmd=''

@@ -69,11 +69,13 @@ builddeb(){
 
 echo BUILDING DEB...
 rm -rf debian/opt
-rm -rf debian/usr/share/applications
+rm -rf debian/usr
 
 mkdir -p debian/opt
+mkdir -p debian/usr/bin/
 mkdir -p debian/usr/share/applications
 cp -rf build/linux/x64/release/bundle debian/opt
+cp scripts/exec debian/usr/bin/aurora
 mv debian/opt/bundle debian/opt/aurora
 cat > debian/usr/share/applications/aurora.desktop <<'EOF'
 [Desktop Entry]
@@ -91,8 +93,10 @@ dpkg-deb --build --root-owner-group debian
 
 buildrpm(){
 
+echo BUILDING RPM...
 mkdir -p rpmbuild/SOURCES
 cp -rf build/linux/x64/release/bundle rpmbuild/SOURCES/
+cp scripts/exec rpmbuild/SOURCES/bundle
 cd rpmbuild/SOURCES
 mv  bundle aurora-$arversion
 tar --create --file aurora-"$arversion".tar.gz aurora-$arversion

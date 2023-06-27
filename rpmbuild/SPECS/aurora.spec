@@ -15,11 +15,16 @@ A utility to control keyboard back-light and charging threshold for Asus TUF-gam
 %prep
 %setup -q
 
+%pre
+rm -rf /usr/bin/aurora
+
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p  $RPM_BUILD_ROOT/opt/%{name}
+mkdir -p  $RPM_BUILD_ROOT/%{_bindir}
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/applications/
 cp %{name} $RPM_BUILD_ROOT/opt/%{name}
+cp exec $RPM_BUILD_ROOT/%{_bindir}/%{name}
 cp -R lib $RPM_BUILD_ROOT/opt/%{name}
 cp -R data $RPM_BUILD_ROOT/opt/%{name}
 
@@ -36,41 +41,6 @@ EOF
 
 
 %post
-rm -rf  %{_bindir}/%{name}
-cat > %{_bindir}/%{name} <<'EOF'
-#!/bin/sh
-
-aurora_bin=/opt/aurora/aurora
-pre_cmd=''
-post_cmd=''
-
-
-runAurora(){
-    $pre_cmd $aurora_bin $post_cmd
-}
-
-
-if [ $# -ne 0 ];  then
-
-   if [[ "$@" == *"--log"* ]]; then
-    post_cmd='--log'
-   fi
-
-   if [[ "$@" == *"--with-root"* ]]; then
-    pre_cmd="pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY"
-   fi
-
-   if [[ "$@" == *"--help"* ]]; then
-echo "usage: --log          -       enables logging
-       --with-root    -       runs with eleavated privilages
-       --help         -       helps!"
-   else
-    runAurora
-   fi
-else
-    runAurora
-fi
-EOF
 chmod +x %{_bindir}/%{name}
 
 %clean
