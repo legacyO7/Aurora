@@ -5,13 +5,13 @@ import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../data/di/di.dart';
+import 'warmup.dart';
 import 'ar_widgets/ar_enums.dart';
 import 'constants.dart';
 
 mixin GlobalMixin{
 
-  bool isMainLine()=>Constants.globalConfig.arMode==ARMODE.mainline;
+  bool isMainLine()=>Constants.globalConfig.arMode.name.contains(ARMODE.mainline.name);
 
   bool isMainLineCompatible()=>
       File(Constants.kMainlineModuleModePath).existsSync() &&
@@ -27,7 +27,7 @@ mixin GlobalMixin{
 
   }
 
-  ThemeData setTheme({bool light=true}) {
+  ThemeData _setTheme([bool light=true]) {
     return ThemeData(
       fontFamily: 'Play',
       brightness: light ? Brightness.light : Brightness.dark,
@@ -40,6 +40,10 @@ mixin GlobalMixin{
       )
     );
   }
+
+
+  ThemeData lightTheme()=> _setTheme();
+  ThemeData darkTheme()=> _setTheme(false);
 
 
 }

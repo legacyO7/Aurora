@@ -1,7 +1,7 @@
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_state.dart';
-import 'package:aurora/utility/ar_widgets/ar_radio_button.dart';
+import 'package:aurora/utility/ar_widgets/ar_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,23 +33,23 @@ class StateController extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
 
-                      ArRadioButton(
-                        value: state.boot,
-                        onClick: (bool value)=> bloc.add(KeyboardSettingsEventSetState(boot: value)),
-                        title: "Boot",
-                      ),
+                      ArButton(title: "Boot",
+                          isSelected: state.boot,
+                          action: (){
+                            bloc.add(KeyboardSettingsEventSetState(boot: state.boot));
+                          }),
 
-                      ArRadioButton(
-                        value: state.awake,
-                        onClick: (bool value)=> bloc.add(KeyboardSettingsEventSetState(awake: value)),
-                        title: "Awake",
-                      ),
+                      ArButton(title: "Awake",
+                          isSelected: state.awake,
+                          action: (){
+                            bloc.add(KeyboardSettingsEventSetState(awake: state.awake));
+                          }),
 
-                      ArRadioButton(
-                        value: state.sleep,
-                        onClick: (bool value)=> bloc.add(KeyboardSettingsEventSetState(sleep: value)),
-                        title: "Sleep",
-                      ),
+                      ArButton(title:  "Sleep",
+                          isSelected: state.sleep,
+                          action: (){
+                            bloc.add(KeyboardSettingsEventSetState(sleep: state.sleep));
+                          }),
 
                     ]);
               }

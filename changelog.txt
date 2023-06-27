@@ -1,6 +1,9 @@
 
 Changelogs:
 
-- fix polkit check
-- UI improvements
-- minor bugfixes
+- optimized terminal op.
+- native packages will be installed in /opt and exposes the binary to known paths, allowing the app to be opened directly from the terminal
+- added option for complete uninstallation of aurora from within the app
+- periodic dependency updates
+- fixed crashes on debian build
+- minor tweaks

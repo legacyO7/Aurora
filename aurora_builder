@@ -1,0 +1,118 @@
+#!/bin/bash
+
+arg=$1
+arversion='0.0.0'
+
+
+checkFlutter() {
+if command -v flutter &> /dev/null
+    then
+         echo installed
+         buildAurora
+    else
+        installFlutter
+fi
+}
+
+installFlutter(){
+
+echo installing flutter
+
+dnf -y install patchelf rpmdevtools rpmlint gtk3-devel xz-libs git cmake ninja-build clang desktop-file-utils glibc
+
+git clone https://github.com/flutter/flutter.git ~/flutter
+export PATH=$HOME/.pub-cache/bin:$HOME/flutter/bin:$PATH
+
+flutter config --enable-linux-desktop
+
+sed -i "s/BuildType.debug/BuildType.rpm/g" lib/utility/constants.dart
+buildAurora
+
+}
+
+
+buildAurora(){
+echo building aurora
+flutter clean
+flutter pub get
+flutter build linux
+elf
+getversion
+
+if [ "$arg" == "deb"  ]; then
+  builddeb
+else
+  buildrpm
+fi
+
+}
+
+
+elf(){
+
+cd build/linux/x64/release/bundle/lib
+patchelf --set-rpath '$ORIGIN' libscreen_retriever_plugin.so
+patchelf --set-rpath '$ORIGIN' libwindow_manager_plugin.so
+patchelf --set-rpath '$ORIGIN' liburl_launcher_linux_plugin.so
+patchelf --set-rpath '$ORIGIN' libbitsdojo_window_linux_plugin.so
+cd ../../../../../../
+
+}
+
+
+getversion(){
+flutter pub global activate cider
+arversion=$(cut -d- -f 1 <<< $(cider version))
+}
+
+builddeb(){
+
+echo BUILDING DEB...
+rm -rf debian/opt
+rm -rf debian/usr/share/applications
+
+mkdir -p debian/opt
+mkdir -p debian/usr/share/applications
+cp -rf build/linux/x64/release/bundle debian/opt
+mv debian/opt/bundle debian/opt/aurora
+cat > debian/usr/share/applications/aurora.desktop <<'EOF'
+[Desktop Entry]
+Name=Aurora
+Comment=A utility to control keyboard back-light and charging threshold for Asus TUF-gaming series laptop
+Exec=/usr/bin/aurora
+Icon=/opt/aurora/data/flutter_assets/assets/images/icon.png
+Terminal=false
+Type=Application
+Categories=Utility;
+EOF
+sed -i "s/aurora_ver/$arversion/g" debian/DEBIAN/control
+dpkg-deb --build --root-owner-group debian
+}
+
+buildrpm(){
+
+mkdir -p rpmbuild/SOURCES
+cp -rf build/linux/x64/release/bundle rpmbuild/SOURCES/
+cd rpmbuild/SOURCES
+mv  bundle aurora-$arversion
+tar --create --file aurora-"$arversion".tar.gz aurora-$arversion
+
+cd ..
+sed -i "s/aurora_ver/$arversion/g" SPECS/aurora.spec
+cd ..
+
+rm -rf build
+mv rpmbuild build
+cp -rf build ~/
+rpmbuild -bs build/SPECS/aurora.spec
+
+cp -r $HOME/build/SRPMS/* $arg
+
+}
+
+if [ $# -eq 0 ]
+  then
+    echo "Nop. that's not how it works"
+  else
+    checkFlutter
+fi

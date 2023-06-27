@@ -1,4 +1,4 @@
-import 'package:aurora/data/di/di.dart';
+import 'package:aurora/utility/warmup.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
@@ -9,53 +9,22 @@ import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.d
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
-import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:window_manager/window_manager.dart';
 
 import 'user_interface/home/presentation/state/home_bloc.dart';
 
 
 void main() async{
-  await initDI();
+  WarmUp warmUp=WarmUp();
+  await warmUp.initDI();
   WidgetsFlutterBinding.ensureInitialized();
-
-  Size initialSize = const Size(1000,600);
-
-  await windowManager.ensureInitialized();
-
-  WindowOptions windowOptions = WindowOptions(
-    size: initialSize,
-    center: true,
-    backgroundColor: Colors.transparent,
-    skipTaskbar: false,
-    titleBarStyle: TitleBarStyle.hidden,
-    maximumSize:initialSize,
-    minimumSize: initialSize
-  );
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
-    await windowManager.show();
-    await windowManager.focus();
-  });
-
-
+  await warmUp.setWindow();
+  warmUp.errorRecorder();
   runApp(Phoenix(child: const Aurora()));
-
-  doWhenWindowReady(() {
-    appWindow.minSize = initialSize;
-    appWindow.maxSize = initialSize;
-    appWindow.size = initialSize;
-    appWindow.alignment = Alignment.center;
-    appWindow.show();
-  });
-
-  Constants.globalConfig.kTmpPath=(await getTemporaryDirectory()).path;
 }
 
 class Aurora extends StatelessWidget with GlobalMixin{
@@ -80,8 +49,8 @@ class Aurora extends StatelessWidget with GlobalMixin{
                 builder: (context, orientation, deviceType) =>
                   MaterialApp(
                     title: 'Aurora',
-                    darkTheme: super.setTheme(light: false),
-                    theme: super.setTheme(),
+                    darkTheme: super.darkTheme(),
+                    theme: super.lightTheme(),
                     themeMode: state.arTheme,
                     home: const SetupWizardScreen(),
                   )

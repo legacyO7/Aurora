@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_configuration.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'terminal_repo.dart';
@@ -34,17 +35,24 @@ class TerminalRepoImpl extends TerminalRepo{
   Future<bool> checkAccess() async{
 
     var permissionChecker=Constants.globalConfig.kExecPermissionCheckerPath!;
+    GlobalConfig globalConfig=Constants.globalConfig;
 
-    List<String> pathlist=[];
-    if(Constants.globalConfig.arMode==ARMODE.mainline){
-      pathlist.addAll([
+    List<String> pathList=[];
+    if(globalConfig.arMode.name.contains(ARMODE.mainline.name)){
+      pathList.addAll([
         Constants.kMainlineModuleStatePath,
         Constants.kMainlineModuleModePath,
         Constants.kMainlineBrightnessPath
       ]);
+
+      if(globalConfig.kThresholdPath!=null){
+        pathList.add(globalConfig.kThresholdPath!);
+      }
+
     }
-    if (Constants.globalConfig.arMode==ARMODE.batterymanager) {
-      pathlist.add(Constants.kBatteryThresholdPath);
+
+    if (globalConfig.arMode==ARMODE.batteryManager&&globalConfig.kThresholdPath!=null) {
+      pathList.add(globalConfig.kThresholdPath!);
     }
 
 
@@ -57,10 +65,10 @@ class TerminalRepoImpl extends TerminalRepo{
       return false;
     }
 
-    if(pathlist.isEmpty){
+    if(pathList.isEmpty){
      return await checkPermission();
     }else{
-      for( var element in pathlist){
+      for( var element in pathList){
         if(!await checkPermission(path: element)) {
           return false;
         }
@@ -89,10 +97,9 @@ class TerminalRepoImpl extends TerminalRepo{
   @override
   Future<List<String>> getOutput({required String command}) async{
 
-    _terminalOut.clear();
     await execute(command);
 
-    return _terminalOut.length>1? (_terminalOut.sublist(_terminalOut.indexWhere((element) => element.contains(command)))
+    return _terminalOut.length>1? (_terminalOut.sublist(_terminalOut.lastIndexWhere((element) => element.contains(command)))
       .map((e) => e.split(' ').sublist(1).join(' ')).toList()..removeAt(0)):[];
 
   }

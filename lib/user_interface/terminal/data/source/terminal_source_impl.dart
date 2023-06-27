@@ -4,11 +4,15 @@ import 'dart:io';
 
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TerminalSourceImpl extends TerminalSource{
+
+  final ArLogger _arLogger;
+
+  TerminalSourceImpl(this._arLogger);
 
   late Process process;
   bool _inProgress=false;
@@ -19,6 +23,7 @@ class TerminalSourceImpl extends TerminalSource{
   late Sink<String>  _terminalSink;
 
   final List<String> _commands=[];
+  String _command='';
 
 
   @override
@@ -31,19 +36,22 @@ class TerminalSourceImpl extends TerminalSource{
 
 
   Future _execute(String command) async {
+
     _terminalSink = _tStreamController.sink;
     List<String> arguments=[];
 
     if(command.isNotEmpty) {
-      arguments = command.split(' ');
-      var exec=arguments[0];
-      arguments.removeAt(0);
-      _convertToList(lines:  "\$ $command",commandStatus: CommandStatus.stdinp);
 
-      try{
+      if(command!=_command) {
+        _command = command;
+        arguments = command.split(' ');
+        var exec = arguments[0];
+        arguments.removeAt(0);
+        _convertToList(lines: "\$ $command", commandStatus: CommandStatus.stdinp);
 
-         _inProgress=true;
-         process = await Process.start(
+        try {
+          _inProgress = true;
+          process = await Process.start(
               exec,
               arguments,
               workingDirectory: Constants.globalConfig.kWorkingDirectory,
@@ -51,16 +59,12 @@ class TerminalSourceImpl extends TerminalSource{
               mode: ProcessStartMode.detachedWithStdio
           );
 
-        getStdout();
-        await getStdErr();
-
-      } catch (e) {
-        if (kDebugMode) {
-          print("STDERR: ${e.toString()}");
-        }else {
-          await _logIt(e.toString());
+          getStdout();
+          await getStdErr();
+        } catch (e) {
+          _arLogger.log(data: e.toString());
+          _inProgress = false;
         }
-        _inProgress=false;
       }
 
       _commands.removeAt(0);
@@ -86,13 +90,8 @@ class TerminalSourceImpl extends TerminalSource{
 
   _convertToList({required String lines, required CommandStatus commandStatus}){
     _lineSplitter.convert(lines).forEach((line) async{
-      if (kDebugMode) {
-        print("> ${commandStatus.name} $line");
-      }else {
-        await _logIt(line);
-      }
+      _arLogger.log(data: "> ${commandStatus.name} $line");
       _terminalSink.add("${commandStatus.name} $line");
-
     });
   }
 
@@ -124,15 +123,4 @@ class TerminalSourceImpl extends TerminalSource{
     _terminalSink.close();
   }
 
-  _logIt(String value) async{
-    File("${Constants.globalConfig.kTmpPath}/ar.log").writeAsString("> $value\n",mode: FileMode.append);
-  }
-
-  @override
-  Future clearLog() async{
-    var logFile=File("${Constants.globalConfig.kTmpPath}/ar.log");
-    if(logFile.existsSync()) {
-      logFile.deleteSync();
-    }
-  }
 }

@@ -1,0 +1,8 @@
+Package: Aurora
+Version: aurora_ver
+Architecture: amd64
+Essential: no
+Priority: optional
+Depends:
+Maintainer: legacyO7
+Description:  An Alternate to Aura Sync for linux

@@ -3,6 +3,5 @@ abstract class TerminalSource{
   killProcess();
   bool isInProgress();
   void disposeStream();
-  Future clearLog();
   Stream<String> get terminalOutStream;
 }

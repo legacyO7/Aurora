@@ -82,6 +82,17 @@ disablefaustus(){
     sudo dkms remove faustus/0.2 --all
 }
 
+disablethreshold(){
+  sudo $1/battery_manager.sh disablethreshold
+}
+
+uninstall(){
+  sudo rm -rf /opt/aurora
+  sudo rm -rf /usr/bin/aurora
+  sudo rm -rf /usr/local/lib/Aurora
+  sudo rm -f /usr/share/applications/aurora.desktop
+}
+
 
 if [ $# -ne 0 ]
   then
@@ -102,14 +113,19 @@ if [ $# -ne 0 ]
       executeinterminal "sudo $tmpdir/install_faustus.sh $tmpdir $git_faustus"
     ;;
     disablethreshold)
-      sudo $1/battery_manager.sh disablethreshold
+      disablethreshold $1
     ;;
     disablefaustus)
       disablefaustus
     ;;
     disablethresholdfaustus)
-      sudo $1/battery_manager.sh disablethreshold
+      disablethreshold $1
       disablefaustus
+    ;;
+    uninstall)
+      disablethreshold $1
+      disablefaustus
+      uninstall
     ;;
     esac
 fi
