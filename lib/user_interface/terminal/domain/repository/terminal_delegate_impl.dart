@@ -52,7 +52,14 @@ class TerminalDelegateImpl implements TerminalDelegate {
 
   @override
   Future<bool> isKernelCompatible() async{
-    return (await _terminalRepo.getOutput(command: 'uname -r')).last.startsWith("6.1");
+    try {
+      return (int.tryParse((await _terminalRepo.getOutput(command: 'uname -r')).last
+          .split('-')
+          .first
+          .replaceAll('.', '')) ?? 0) >= 610;
+    }catch(_){
+      return false;
+    }
   }
 
   @override
