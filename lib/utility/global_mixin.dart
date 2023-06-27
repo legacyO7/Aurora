@@ -11,6 +11,8 @@ mixin GlobalMixin{
 
   bool isMainLine()=>Constants.globalConfig.arMode.name.contains(ARMODE.mainline.name);
 
+  bool canLog()=> Constants.isLoggingEnabled || Constants.buildType==BuildType.appimage;
+
   bool isMainLineCompatible()=>
       File(Constants.kMainlineModuleModePath).existsSync() &&
       File(Constants.kMainlineModuleStatePath).existsSync() &&

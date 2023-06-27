@@ -18,10 +18,12 @@ class ArLogger with GlobalMixin{
 
 
   void log({required dynamic data, StackTrace? stackTrace}) {
-    _log.add("$data\n ${stackTrace??''}");
-    if(!_logging){
-      _logging=true;
-      _logBuffer(data: _log.first);
+    if(canLog()) {
+      _log.add("$data\n ${stackTrace ?? ''}");
+      if (!_logging) {
+        _logging = true;
+        _logBuffer(data: _log.first);
+      }
     }
   }
 

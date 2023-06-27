@@ -9,14 +9,15 @@ import 'package:aurora/user_interface/control_panel/domain/keyboard_settings/key
 import 'package:aurora/user_interface/control_panel/domain/uninstaller/disabler_repo.dart';
 import 'package:aurora/user_interface/control_panel/domain/uninstaller/disabler_repo_impl.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_bloc.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo_impl.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
-import 'package:aurora/user_interface/setup/data/repository/setup_source_impl.dart';
 import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
+import 'package:aurora/user_interface/setup/data/repository/setup_source_impl.dart';
+import 'package:aurora/user_interface/setup/data/source/dio_client.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo_impl.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
@@ -28,12 +29,11 @@ import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.d
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo_impl.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/utility/ar_bloc_observer.dart';
-import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
-import 'package:aurora/user_interface/setup/data/source/dio_client.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
+import 'package:aurora/utility/global_mixin.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -52,7 +52,7 @@ import 'shared_preference/pref_repo_impl.dart';
 
 final sl = GetIt.I;
 
-class InitAurora {
+class InitAurora with GlobalMixin {
 
   Future initDI() async {
     sl.allowReassignment = true;
@@ -123,7 +123,7 @@ class InitAurora {
 
   Future errorRecorder() async {
 
-    if(Constants.isLoggingEnabled|| Constants.buildType==BuildType.appimage) {
+    if(canLog()){
 
       ArLogger arLogger = sl<ArLogger>()..initialize();
       await sl<HomeRepo>().initLog();
