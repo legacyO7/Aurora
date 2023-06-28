@@ -1,5 +1,8 @@
-
 Changelogs:
 
-- fixed crashes on debian build
-- minor tweaks
+- Improved app performance and reliability by leveraging Dart's built-in I/O capabilities.
+- Enhanced security by eliminating reliance on external shell commands.
+- Added support for command-line arguments in the app. Refer README for usage
+- Added optional logging functionality to the app. By default, logging is now disabled to minimize resource consumption and improve performance. Introduced a new command-line argument (--log) to enable logging functionality.
+- Aurora v3 focuses more on mainline mode and deprecates support for the faustus kernel module due to limited usage and reduced maintenance feasibility.
+Note: For users still relying on the faustus kernel module, it is recommended to continue using Aurora v2 if they encounter any issues with v3

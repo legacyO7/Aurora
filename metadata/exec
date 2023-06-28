@@ -22,7 +22,7 @@ if [ $# -ne 0 ];  then
 
    if [[ "$@" == *"--help"* ]]; then
 echo "usage: --log          -       enables logging
-       --with-root    -       runs with eleavated privilages
+       --with-root    -       runs with elevated privileges
        --help         -       helps!"
    else
     runAurora
