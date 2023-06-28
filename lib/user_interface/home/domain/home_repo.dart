@@ -1,6 +1,5 @@
 
 abstract class HomeRepo{
-  List<String?> readFile({required String path});
   Future<bool> checkInternetAccess();
   bool checkFaustusFolder();
   Future launchArUrl({String? subPath});
@@ -8,6 +7,10 @@ abstract class HomeRepo{
   Future<int> compatibilityChecker();
   int convertVersionToInt(String version);
   void setAppHeight();
-  Future loadScripts();
   Future<bool> requestAccess();
+  Future writeToFile({required String path, required String content});
+  Future<bool> isDeviceCompatible();
+  Future<bool> thresholdPathExists();
+  Future<bool> systemHasSystemd();
+  Future initLog();
 }

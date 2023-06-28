@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:aurora/data/model/ar_mode_model.dart';
 import 'package:aurora/data/model/ar_state_model.dart';
 import 'package:aurora/data/shared_preference/pref_constants.dart';
-import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,8 +39,8 @@ class PrefRepoImpl extends PrefRepo{
   }
 
   @override
-  Future<int> getThreshold() async{
-    return (_sharedPreferences.getInt(PrefConstants.threshold))??Constants.kMinimumChargeLevel;
+  Future<int?> getThreshold() async{
+    return (_sharedPreferences.getInt(PrefConstants.threshold));
   }
 
   @override

@@ -9,7 +9,7 @@ import 'batter_manager_state.dart';
 
 class BatteryManagerBloc extends TerminalBaseBloc<BatteryManagerEvent,BatteryManagerInit>{
   BatteryManagerBloc(this._batteryManagerRepo):super(const BatteryManagerInit()){
-    on<BatteryManagerEventInit>((_, emit) => _getBatteryLevel(emit));
+    on<BatteryManagerEventInit>((_, emit) => _initThreshold(emit));
     on<BatteryManagerEventOnSlide>((event, emit) => _setBatteryLevel(event.value,emit));
     on<BatteryManagerEventOnSlideEnd>((event, emit) => _finalizeBatteryLevel(event.value,emit));
   }
@@ -18,7 +18,12 @@ class BatteryManagerBloc extends TerminalBaseBloc<BatteryManagerEvent,BatteryMan
 
   int _batteryLevel=Constants.kMinimumChargeLevel;
 
-  Future _getBatteryLevel(emit) async {
+  Future _initThreshold(emit) async {
+    await _batteryManagerRepo.initBatteryManager();
+    await _getThreshold(emit);
+  }
+  
+  Future _getThreshold(emit) async {
     _batteryLevel= await _batteryManagerRepo.getBatteryCharge();
     emit(BatteryManagerInit(batteryLevel: _batteryLevel));
   }
@@ -30,7 +35,7 @@ class BatteryManagerBloc extends TerminalBaseBloc<BatteryManagerEvent,BatteryMan
 
   _finalizeBatteryLevel(int level,emit) async{
     _batteryLevel=level;
-    await _batteryManagerRepo.setBatteryChargeLimit(limit: level,serviceEnabled: await super.arServiceEnabled());
+    await _batteryManagerRepo.setBatteryChargeLimit(limit: level);
     emit(BatteryManagerInit(batteryLevel: _batteryLevel));
   }
 

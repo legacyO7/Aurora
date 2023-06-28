@@ -27,11 +27,6 @@ sudo dnf install aurora
 
 ```
 
-
-[PolKit](https://en.wikipedia.org/wiki/Polkit) is required to obtain root privileges
-
-
-
 ### Mainline Mode
 
 ![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arscreen_mainline_1.png)
@@ -58,6 +53,17 @@ By default, Aurora uses [this fork](https://github.com/legacyO7/faustus.git) tha
 ![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arsrceen_3.png)
 
 Secureboot enabled devices need to enroll MOK
+
+
+## Command-Line Arguments
+
+```
+usage: 
+--log          -       enables logging
+--with-root    -       runs with elevated privileges
+```
+
+Appimage builds doesnt support ``--with-root`` argument
 
 ## Build and Run
 

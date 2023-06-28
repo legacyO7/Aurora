@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:flutter/services.dart';
 
 class TerminalDelegateImpl implements TerminalDelegate {
 
@@ -13,28 +13,22 @@ class TerminalDelegateImpl implements TerminalDelegate {
 
   final TerminalSource _terminalSource;
   final TerminalRepo _terminalRepo;
-  
-  String  _packagesToInstall='';
 
   @override
-  Future<String> extractAsset({required String sourceFileName}) async {
-    final byteData = await rootBundle.load('${Constants.kAssetsPath}/$sourceFileName');
-    var destinationFileName = "${Constants.globalConfig.kWorkingDirectory}/$sourceFileName";
-    await File(destinationFileName).writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-    await _terminalSource.execute("chmod +x $destinationFileName");
-    return destinationFileName;
+  void setWorkingDirectory() async{
+
+    Constants.globalConfig.setInstance(
+      kWorkingDirectory: Constants.buildType==BuildType.debug?
+      '${Directory.current.path}/assets/scripts/':
+      Constants.installedDir
+    );
+
   }
 
   @override
   Future execute(String command) async {
     return await _terminalSource.execute(command);
   }
-
-  @override
-  Future<bool> checkAccess() async {
-    return await _terminalRepo.checkAccess();
-  }
-
 
   @override
   Future<List<String>> getOutput({required String command}) async{
@@ -57,23 +51,24 @@ class TerminalDelegateImpl implements TerminalDelegate {
     });
   }
 
+
   @override
-  Future<String> listPackagesToInstall() async{
-    var output=(await _terminalRepo.getOutput(command: "${Constants.globalConfig.kExecPermissionCheckerPath} checkpackages"));
-    if(output.isEmpty) {
-      return '';
-    }else{
-      _packagesToInstall= output.last.trim();
-      return _packagesToInstall;
+  Future<bool> isKernelCompatible() async{
+    try {
+      return (int.tryParse((await _terminalRepo.getOutput(command: 'uname -r')).last
+          .split('-')
+          .first
+          .replaceAll('.', '')) ?? 0) >= 610;
+    }catch(_){
+      return false;
     }
   }
 
   @override
-  Future<bool> isKernelCompatible() async{
-    return (await _terminalRepo.getOutput(command: 'uname -r')).last.startsWith("6.1");
+  Future<bool> arServiceEnabled() async{
+    return (await _terminalRepo.getOutput(command: Constants.kArServiceStatus))
+        .toString().contains('aurora-controller.service; enabled');
+
   }
-  
-  @override
-  String get listMissingPackages=>_packagesToInstall;
 
 }

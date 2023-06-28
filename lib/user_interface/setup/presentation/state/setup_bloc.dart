@@ -110,7 +110,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
         Phoenix.rebirth(context);
       }
     }else{
-      Constants.globalConfig.setInstance(arMode: ARMODE.normal);
+      Constants.globalConfig.setInstance(arMode: ARMODE.faustus);
       emit(SetupCompatibleState());
     }
   }

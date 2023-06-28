@@ -1,5 +1,6 @@
 import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:aurora/utility/ar_widgets/ar_top_buttons.dart';
+import 'package:aurora/utility/ar_widgets/colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,14 @@ class HomeTopBar extends StatelessWidget with GlobalMixin {
             ],
           ),
         ),
-        Expanded(child: Text(Constants.globalConfig.deviceName,textAlign: TextAlign.end,))
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(Constants.globalConfig.deviceName,textAlign: TextAlign.end,),
+            if(Constants.isLoggingEnabled)
+            const Text("logging enabled", style: TextStyle(color: ArColors.orange,fontWeight: FontWeight.bold),textAlign: TextAlign.end,),
+          ],
+        )
       ],);
   }
 }

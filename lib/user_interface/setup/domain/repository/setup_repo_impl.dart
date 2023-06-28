@@ -1,16 +1,17 @@
-import 'dart:io';
-
+import 'package:aurora/data/io/permission_manager/permission_manager.dart';
 import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_mixin.dart';
 
-class SetupRepoImpl extends SetupRepo{
-  SetupRepoImpl(this._setupSource, this._terminalDelegate);
+class SetupRepoImpl extends SetupRepo with GlobalMixin{
+  SetupRepoImpl(this._setupSource, this._terminalDelegate,this._permissionManager);
 
   final SetupSource _setupSource;
   final TerminalDelegate _terminalDelegate;
+  final PermissionManager _permissionManager;
 
   final _globalConfig=Constants.globalConfig;
   String _setupPath='';
@@ -39,22 +40,19 @@ class SetupRepoImpl extends SetupRepo{
   
   @override
   Future initSetup() async{
-    Directory workingDir= Directory('${Directory.systemTemp.path}/legacy07.aurora');
-    if(workingDir.existsSync()){
-      workingDir.deleteSync(recursive: true);
-    }
-    _globalConfig
-      ..setInstance(
-        kWorkingDirectory: (await workingDir.create()).path)
-      ..setInstance(
-      kSecureBootEnabled: await _terminalDelegate.isSecureBootEnabled(),
-      kExecPermissionCheckerPath: await _terminalDelegate.extractAsset(sourceFileName: Constants.kPermissionChecker));
+    try {
+      _terminalDelegate.setWorkingDirectory();
+      if (!isMainLineCompatible()) {
+        _globalConfig.setInstance(
+            kSecureBootEnabled: await _terminalDelegate.isSecureBootEnabled()
+        );
+      }
+    }catch(_){}
   }
   
   @override
   Future loadSetupFiles() async{
-    await _terminalDelegate.extractAsset(sourceFileName: Constants.kFaustusInstaller);
-    _setupPath = "${await _terminalDelegate.extractAsset(sourceFileName: Constants.kArSetup)} ${_globalConfig.kWorkingDirectory}";
+    _setupPath = "${_globalConfig.kWorkingDirectory!+Constants.kArSetup} ${_globalConfig.kWorkingDirectory}";
     if(_globalConfig.kSecureBootEnabled! || !await _terminalDelegate.pkexecChecker()){
       _terminalList = '" ${(await getTerminalList())} "';
     }
@@ -82,8 +80,7 @@ class SetupRepoImpl extends SetupRepo{
   }
 
   @override
-  List<String> get missingPackagesList => _terminalDelegate.listMissingPackages.split(' ');
-  
+  List<String> get missingPackagesList => _permissionManager.listMissingPackages;
   
 
 }

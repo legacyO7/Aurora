@@ -1,8 +1,10 @@
 import 'dart:io';
 
-import 'package:aurora/data/shared_preference/pref_repo.dart';
+import 'package:aurora/data/io/io_manager/io_manager.dart';
+import 'package:aurora/data/io/permission_manager/permission_manager.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,16 +16,19 @@ import 'home_repo.dart';
 
 class HomeRepoImpl extends HomeRepo with GlobalMixin{
 
-  HomeRepoImpl(this._terminalDelegate,this._prefRepo);
+  HomeRepoImpl(this._terminalDelegate, this._permissionManager, this._ioManager, this._arLogger);
 
   final TerminalDelegate _terminalDelegate;
-  final PrefRepo _prefRepo;
+  final PermissionManager _permissionManager;
+  final IOManager _ioManager;
+  final ArLogger _arLogger;
 
   final _globalConfig=Constants.globalConfig;
 
+
   @override
-  List<String> readFile({required String path}){
-    return (File(path).readAsLinesSync());
+  Future writeToFile({required String path, required String content}) async{
+    await _ioManager.writeToFile(filePath: path, content: content);
   }
 
   @override
@@ -64,17 +69,18 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     ..focus();
   }
 
-  Future<bool> _isDeviceCompatible() async{
+  @override
+  Future<bool> isDeviceCompatible() async{
 
     bool checkDeviceInfo({required String info}){
       return (info.toLowerCase().contains('asus'));
     }
 
     if(File(Constants.kProductName).existsSync()){
-      Constants.globalConfig.setInstance(deviceName: File(Constants.kProductName).readAsLinesSync().toString());
+      Constants.globalConfig.setInstance(deviceName: ( await _ioManager.readFile(Constants.kProductName)).toString());
       return checkDeviceInfo(info: Constants.globalConfig.deviceName);
     } else if(File(Constants.kVendorName).existsSync()){
-      return checkDeviceInfo(info: File(Constants.kVendorName).readAsLinesSync().toString());
+      return checkDeviceInfo(info:  ( await _ioManager.readFile(Constants.kVendorName)).toString());
     }
     debugPrint("unknown device");
     return true;
@@ -83,7 +89,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   @override
   Future<int> compatibilityChecker() async{
 
-    if(!await _isDeviceCompatible()){
+    if(!await isDeviceCompatible()){
       return 7;
     }
 
@@ -92,7 +98,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     }
 
     if(isMainLineCompatible()){
-      if(await _thresholdPathExists() && await _systemHasSystemd()){
+      if(await thresholdPathExists() && await systemHasSystemd()){
         _globalConfig.setInstance(arMode: ARMODE.mainline);
       }else{
         _globalConfig.setInstance(arMode:  ARMODE.mainlineWithoutBatteryManager);
@@ -101,7 +107,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     }
 
     if(!checkFaustusFolder()) {
-      if(await _thresholdPathExists()&& await _systemHasSystemd()) {
+      if(await thresholdPathExists()&& await systemHasSystemd()) {
         return 3;
       } else {
         return 2;
@@ -110,11 +116,11 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
       return 5;
     }
 
-    if((await _terminalDelegate.listPackagesToInstall()).isNotEmpty) {
+    if((await _permissionManager.listPackagesToInstall()).isNotEmpty) {
       return 1;
     }
 
-    _globalConfig.setInstance(arMode: ARMODE.normal);
+    _globalConfig.setInstance(arMode: ARMODE.faustus);
     return 0;
   }
 
@@ -127,22 +133,11 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   bool checkFaustusFolder()=>Directory(Constants.kFaustusModulePath).existsSync();
 
   Future _getAccess() async{
-    await _terminalDelegate.execute("${Constants.kPolkit} ${super.isMainLine()? _globalConfig.kExecMainlinePath: _globalConfig
-        .kExecFaustusPath} init ${_globalConfig.kWorkingDirectory} ${await _prefRepo.getThreshold()}");
+      await _permissionManager.setPermissions();
   }
 
   Future<bool> _checkAccess() async{
-    return await _terminalDelegate.checkAccess();
-  }
-
-  @override
-  Future loadScripts() async{
-    _globalConfig.kExecBatteryManagerPath= await _terminalDelegate.extractAsset(sourceFileName:Constants.kBatteryManager);
-    if(super.isMainLine()){
-      _globalConfig.kExecMainlinePath= await _terminalDelegate.extractAsset(sourceFileName: Constants.kMainline);
-    }else {
-      _globalConfig.kExecFaustusPath=await _terminalDelegate.extractAsset(sourceFileName: Constants.kFaustus);
-    }
+    return await _permissionManager.validatePaths() && await _terminalDelegate.arServiceEnabled();
   }
 
   @override
@@ -155,7 +150,8 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     return checkAccess;
   }
 
-  Future<bool> _thresholdPathExists() async{
+  @override
+  Future<bool> thresholdPathExists() async{
     Directory powerDir=Directory(Constants.kPowerSupplyPath);
     String? thresholdPath;
     if(powerDir.existsSync()){
@@ -174,8 +170,23 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     return _globalConfig.kThresholdPath!=null;
   }
 
-  Future<bool> _systemHasSystemd() async{
+  @override
+  Future<bool> systemHasSystemd() async{
     return (await _terminalDelegate.getOutput(command: Constants.kChecksystemd)).toString().contains('systemd');
+  }
+
+  @override
+  Future initLog() async{
+
+    _terminalDelegate.setWorkingDirectory();
+
+   _arLogger.log(data: "Build Version          : ${await getVersion()}");
+   _arLogger.log(data: "Build Type             : ${Constants.buildType.name}");
+   _arLogger.log(data: "Compatible Device      : ${await isDeviceCompatible()}");
+   _arLogger.log(data: "Compatible Kernel      : ${await _terminalDelegate.isKernelCompatible()}");
+   _arLogger.log(data: "Mainline Mode          : ${isMainLineCompatible()}");
+   _arLogger.log(data: "System has systemd     : ${await systemHasSystemd()}");
+   _arLogger.log(data: "Threshold Path Exists  : ${await thresholdPathExists()}");
   }
 
 

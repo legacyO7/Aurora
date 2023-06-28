@@ -28,11 +28,6 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
     super.initState();
   }
 
-  @override
-  dispose() {
-    super.dispose();
-  }
-
 
   @override
   Widget build(BuildContext context) {

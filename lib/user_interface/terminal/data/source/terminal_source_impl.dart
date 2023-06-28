@@ -23,7 +23,6 @@ class TerminalSourceImpl extends TerminalSource{
   late Sink<String>  _terminalSink;
 
   final List<String> _commands=[];
-  String _command='';
 
 
   @override
@@ -42,11 +41,12 @@ class TerminalSourceImpl extends TerminalSource{
 
     if(command.isNotEmpty) {
 
-      if(command!=_command) {
-        _command = command;
         arguments = command.split(' ');
         var exec = arguments[0];
         arguments.removeAt(0);
+
+        arguments=_validateArgs(arguments);
+
         _convertToList(lines: "\$ $command", commandStatus: CommandStatus.stdinp);
 
         try {
@@ -65,7 +65,7 @@ class TerminalSourceImpl extends TerminalSource{
           _arLogger.log(data: e.toString());
           _inProgress = false;
         }
-      }
+
 
       _commands.removeAt(0);
       if(_commands.isNotEmpty){
@@ -73,6 +73,45 @@ class TerminalSourceImpl extends TerminalSource{
       }else {
         _inProgress=false;
       }
+    }
+  }
+
+  List<String> _validateArgs(List<String> args){
+
+    List<String> foundDelimters=[];
+
+    for (var element in ['"',"'"]) {
+      if(args.any((argElements) => argElements.contains(element))){
+        foundDelimters.add(element);
+      }
+    }
+
+    if(foundDelimters.isEmpty){
+      return args;
+    }else {
+      List<String> newArg = [];
+      for (var delimiter in foundDelimters) {
+        if (args.any((argElements) => argElements.contains(delimiter))) {
+          for (int i = 0; i < args.length; i++) {
+            if (args[i].contains("'")) {
+              String concatItem = args[i];
+              int j = i + 1;
+              while (j < args.length && !args[j].contains(delimiter)) {
+                concatItem += ' ${args[j]}';
+                j++;
+              }
+              if (j < args.length) {
+                concatItem += ' ${args[j]}';
+                i = j;
+              }
+              newArg.add(concatItem.trim().replaceAll("'", '').replaceAll('"', ''));
+            } else {
+              newArg.add(args[i].trim());
+            }
+          }
+        }
+      }
+      return newArg;
     }
   }
 

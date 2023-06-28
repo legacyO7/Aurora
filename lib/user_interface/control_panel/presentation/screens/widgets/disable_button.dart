@@ -1,6 +1,8 @@
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_event.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_state.dart';
+import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
+import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_widgets.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
@@ -69,15 +71,18 @@ class DisableButton extends StatelessWidget with GlobalMixin {
                 context.read<DisablerBloc>().add(DisableEventSubmitDisableServices());
               },
               onCancel: (){
-                _navigate(context);
+                _navigate(context,restart: false);
               });
         },
         tooltip: "Disable Features",
         icon: const Icon(Icons.delete_outline));
   }
 
-  _navigate(BuildContext context)async{
-    context.read<DisablerBloc>().add(DisableEventDispose());
-    Navigator.pop(context);
+  _navigate(BuildContext context,{bool restart=true})async{
+    if(restart) {
+      context.read<DisablerBloc>().add(DisableEventDispose());
+      context.read<HomeBloc>().add(HomeEventDispose());
+    }
+      Navigator.pop(context);
   }
 }

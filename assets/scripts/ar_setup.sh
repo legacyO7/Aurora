@@ -26,7 +26,13 @@ checkos(){
 
 
 checkpackages(){
-  packages_to_install=($($tmpdir/permission_checker.sh checkpackages))
+    for package in dkms openssl mokutil git make cmake
+    do
+      if ! command -v $package &> /dev/null
+      then
+           packages_to_install="$packages_to_install $package"
+      fi
+    done
 }
 
 executeinterminal(){
@@ -82,9 +88,6 @@ disablefaustus(){
     sudo dkms remove faustus/0.2 --all
 }
 
-disablethreshold(){
-  sudo $1/battery_manager.sh disablethreshold
-}
 
 uninstall(){
   sudo rm -rf /opt/aurora
@@ -112,18 +115,10 @@ if [ $# -ne 0 ]
       setterminallist $@
       executeinterminal "sudo $tmpdir/install_faustus.sh $tmpdir $git_faustus"
     ;;
-    disablethreshold)
-      disablethreshold $1
-    ;;
     disablefaustus)
       disablefaustus
     ;;
-    disablethresholdfaustus)
-      disablethreshold $1
-      disablefaustus
-    ;;
     uninstall)
-      disablethreshold $1
       disablefaustus
       uninstall
     ;;
