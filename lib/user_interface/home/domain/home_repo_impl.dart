@@ -177,6 +177,9 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
 
   @override
   Future initLog() async{
+
+    _terminalDelegate.setWorkingDirectory();
+
    _arLogger.log(data: "Build Version          : ${await getVersion()}");
    _arLogger.log(data: "Build Type             : ${Constants.buildType.name}");
    _arLogger.log(data: "Compatible Device      : ${await isDeviceCompatible()}");

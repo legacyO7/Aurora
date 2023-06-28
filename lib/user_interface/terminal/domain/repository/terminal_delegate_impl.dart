@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:flutter/services.dart';
 
 class TerminalDelegateImpl implements TerminalDelegate {
 
@@ -15,12 +15,14 @@ class TerminalDelegateImpl implements TerminalDelegate {
   final TerminalRepo _terminalRepo;
 
   @override
-  Future<String> extractAsset({required String sourceFileName}) async {
-    final byteData = await rootBundle.load('${Constants.kAssetsPath}/$sourceFileName');
-    var destinationFileName = "${Constants.globalConfig.kWorkingDirectory}/$sourceFileName";
-    await File(destinationFileName).writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-    await _terminalSource.execute("chmod +x $destinationFileName");
-    return destinationFileName;
+  void setWorkingDirectory() async{
+
+    Constants.globalConfig.setInstance(
+      kWorkingDirectory: Constants.buildType==BuildType.debug?
+      '${Directory.current.path}/assets/scripts/':
+      Constants.installedDir
+    );
+
   }
 
   @override

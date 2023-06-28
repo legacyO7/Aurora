@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:aurora/data/io/permission_manager/permission_manager.dart';
 import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
@@ -43,14 +41,9 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin{
   @override
   Future initSetup() async{
     try {
-      Directory workingDir = Directory('${Directory.systemTemp.path}/legacy07.aurora');
-      if (workingDir.existsSync()) {
-        workingDir.deleteSync(recursive: true);
-      }
-
+      _terminalDelegate.setWorkingDirectory();
       if (!isMainLineCompatible()) {
-        _globalConfig..setInstance(
-            kWorkingDirectory: (await workingDir.create()).path)..setInstance(
+        _globalConfig.setInstance(
             kSecureBootEnabled: await _terminalDelegate.isSecureBootEnabled()
         );
       }
@@ -59,8 +52,7 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin{
   
   @override
   Future loadSetupFiles() async{
-    await _terminalDelegate.extractAsset(sourceFileName: Constants.kFaustusInstaller);
-    _setupPath = "${await _terminalDelegate.extractAsset(sourceFileName: Constants.kArSetup)} ${_globalConfig.kWorkingDirectory}";
+    _setupPath = "${_globalConfig.kWorkingDirectory!+Constants.kArSetup} ${_globalConfig.kWorkingDirectory}";
     if(_globalConfig.kSecureBootEnabled! || !await _terminalDelegate.pkexecChecker()){
       _terminalList = '" ${(await getTerminalList())} "';
     }

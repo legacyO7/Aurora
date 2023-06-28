@@ -37,6 +37,7 @@ class Constants {
   static const String kOldServicePath = '/etc/systemd/system/';
   static const String kProductName = '/sys/devices/virtual/dmi/id/product_name';
   static const String kVendorName = '/sys/devices/virtual/dmi/id/sys_vendor';
+  static const String installedDir = '/opt/aurora/data/flutter_assets/assets/scripts/';
 
   //url
   static const String kAuroraGitUrl = "https://github.com/legacyO7/Aurora";

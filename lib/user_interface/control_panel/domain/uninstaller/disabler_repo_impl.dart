@@ -19,7 +19,7 @@ class DisablerRepoImpl implements DisablerRepo{
   final PermissionManager _permissionManager;
   final ServiceManager _serviceManager;
 
-  Future<String> getFaustusDisableCommand() async=> "${Constants.kPolkit} ${await _terminalDelegate.extractAsset(sourceFileName: Constants.kArSetup)} ${Constants.globalConfig.kWorkingDirectory} ";
+  Future<String> getFaustusDisableCommand() async=> "${Constants.kPolkit} ${Constants.globalConfig.kWorkingDirectory!+Constants.kArSetup} ${Constants.globalConfig.kWorkingDirectory} ";
 
 
   @override
