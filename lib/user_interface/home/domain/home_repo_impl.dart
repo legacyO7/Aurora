@@ -5,6 +5,7 @@ import 'package:aurora/data/io/permission_manager/permission_manager.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
+import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/cupertino.dart';
@@ -133,7 +134,20 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   bool checkFaustusFolder()=>Directory(Constants.kFaustusModulePath).existsSync();
 
   Future _getAccess() async{
-      await _permissionManager.setPermissions();
+     int statusCode = await _permissionManager.setPermissions();
+     if(statusCode!=0&&(statusCode!=-1&&statusCode!=127) && isInstalledPackage() ){
+       selfElevate();
+     }
+  }
+
+  void selfElevate() async{
+    if(await _ioManager.checkIfExists(filePath: Constants.installedBinary, fileType: FileSystemEntityType.file)) {
+      arSnackBar(text: "Getting privileges failed. Let me elevate myself");
+      Future.delayed(const Duration(seconds: 1)).then((value) async {
+        await _terminalDelegate.execute("${Constants.installedBinary} --with-root");
+        exit(0);
+      });
+    }
   }
 
   Future<bool> _checkAccess() async{
@@ -187,6 +201,9 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
    _arLogger.log(data: "Mainline Mode          : ${isMainLineCompatible()}");
    _arLogger.log(data: "System has systemd     : ${await systemHasSystemd()}");
    _arLogger.log(data: "Threshold Path Exists  : ${await thresholdPathExists()}");
+
+    await _terminalDelegate.execute("chown \$(logname) ${Constants.globalConfig.kTmpPath}/ar.log");
+
   }
 
 

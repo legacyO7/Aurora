@@ -24,12 +24,12 @@ class PermissionManagerImpl implements PermissionManager{
   List<String> missingPackages=[];
 
   @override
-  Future runWithPrivileges(List<String> commands) async{
-    return await _terminalDelegate.execute("${Constants.kPolkit} sh -c '${commands.join('; ')}'");
+  Future<int> runWithPrivileges(List<String> commands) async{
+    return await _terminalDelegate.getStatusCode("${Constants.kPolkit} sh -c '${commands.join('; ')}'");
   }
 
   @override
-  Future setPermissions() async{
+  Future<int> setPermissions() async{
     List<String> commands=[];
     if(_deniedList.isNotEmpty){
       commands.add("chmod -R o+rwx ${_deniedList.join(' ')}");
@@ -42,11 +42,13 @@ class PermissionManagerImpl implements PermissionManager{
     }
     commands.add("systemctl enable ${Constants.kServiceName}");
 
-    await runWithPrivileges(commands);
+    var statusCode= await runWithPrivileges(commands);
 
     if(await checkPermissions(paths: _deniedList)) {
       await _doPostPermission();
     }
+
+    return statusCode;
   }
 
   Future _doPostPermission() async{
