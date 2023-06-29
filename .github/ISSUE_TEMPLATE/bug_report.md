@@ -34,4 +34,4 @@ Add any other context about the problem here.
 2. Kernel Version
 
 **Aurora logfile**
-attach `/tmp/ar/log`
+attach `/tmp/ar.log`
