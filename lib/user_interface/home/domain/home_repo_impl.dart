@@ -134,19 +134,21 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   bool checkFaustusFolder()=>Directory(Constants.kFaustusModulePath).existsSync();
 
   Future _getAccess() async{
-     int statusCode = await _permissionManager.setPermissions();
-     if(statusCode!=0&&(statusCode!=-1&&statusCode!=127) && isInstalledPackage() ){
-       selfElevate();
-     }
+     await _permissionManager.setPermissions();
   }
 
-  void selfElevate() async{
-    if(await _ioManager.checkIfExists(filePath: Constants.installedBinary, fileType: FileSystemEntityType.file)) {
-      arSnackBar(text: "Getting privileges failed. Let me elevate myself");
-      Future.delayed(const Duration(seconds: 1)).then((value) async {
+  @override
+  Future<bool> canElevate() async{
+    return await _ioManager.checkIfExists(filePath: Constants.installedBinary, fileType: FileSystemEntityType.file) && isInstalledPackage();
+  }
+
+  @override
+  Future selfElevate() async{
+    if(await canElevate()) {
         await _terminalDelegate.execute("${Constants.installedBinary} --with-root");
         exit(0);
-      });
+    }else{
+      arSnackBar(text: "Something went wrong",isPositive: false);
     }
   }
 
@@ -202,7 +204,9 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
    _arLogger.log(data: "System has systemd     : ${await systemHasSystemd()}");
    _arLogger.log(data: "Threshold Path Exists  : ${await thresholdPathExists()}");
 
-    await _terminalDelegate.execute("chown \$(logname) ${Constants.globalConfig.kTmpPath}/ar.log");
+    if(await  _ioManager.checkIfExists(filePath: "${Constants.globalConfig.kTmpPath}/ar.log", fileType: FileSystemEntityType.file)) {
+      await _terminalDelegate.execute("chown \$(logname) ${Constants.globalConfig.kTmpPath}/ar.log");
+    }
 
   }
 

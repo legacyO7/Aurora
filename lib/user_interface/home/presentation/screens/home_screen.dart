@@ -50,8 +50,12 @@ class _MyHomePageState extends State<HomeScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 2.5.w),
                 child: BlocBuilder<HomeBloc,HomeState>
                   (builder: (context,state){
-                  if(state is AccessGranted && (state.hasAccess)) {
-                    return const ControlPanelScreen();
+                  if(state is AccessGranted) {
+                    if(state.hasAccess) {
+                      return const ControlPanelScreen();
+                    }else{
+                      return grantAccess(context,runAsRoot: true);
+                    }
                   } else {
                     return grantAccess(context);
                   }
