@@ -17,6 +17,7 @@ class HomeTopBar extends StatelessWidget with GlobalMixin {
       children: [
         const Expanded(child: ArWindowButtons()),
         Expanded(
+          flex: 2,
           child: Column(
             children: [
               Text("Aurora",style: Theme.of(context).textTheme.headlineLarge!.apply(color: context.selectedColor),),
