@@ -12,16 +12,16 @@ runAurora(){
 
 if [ $# -ne 0 ];  then
 
-   if [[ "$@" == *"--log"* ]]; then
-    post_cmd='--log'
-   fi
+  for arg; do
+      [[ ! $arg == '--with-root' ]] && args+=("$arg") || pre_cmd="pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY sh -c "
+  done
 
-   if [[ "$@" == *"--with-root"* ]]; then
-    pre_cmd="pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY sh -c "
-   fi
+  post_cmd="${args[@]}"
+
 
    if [[ "$@" == *"--help"* ]]; then
 echo "usage: --log          -       enables logging
+       --version      -       displays app version
        --with-root    -       runs with elevated privileges
        --help         -       helps!"
    else

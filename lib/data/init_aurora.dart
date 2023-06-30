@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:args/args.dart';
 import 'package:aurora/data/io/service_manager/service_manager.dart';
 import 'package:aurora/data/io/service_manager/service_manager_impl.dart';
@@ -141,11 +143,42 @@ class InitAurora with GlobalMixin {
     }
   }
 
-  void initParser(List<String> args){
+  Future initParser(List<String> args) async{
     var parser = ArgParser();
     parser.addFlag('log',defaultsTo: false);
-    var result = parser.parse(args);
-    Constants.isLoggingEnabled=result['log'];
+    parser.addFlag('version');
+    ArgResults? result;
+    try {
+      result = parser.parse(args);
+    }catch(_){
+      stderr.writeln("unknown argument");
+      exit(0);
+    }
+    await validateArgs(result);
+  }
+
+
+  Future validateArgs(ArgResults results) async{
+
+    List<String> cliArgs=['version'];
+    List<String> appArgs=['log'];
+
+    Map<String, Function> argExecutables={
+      'version': () async => stdout.writeln(await sl<HomeRepo>().getVersion()),
+      'log': () => Constants.isLoggingEnabled=results.wasParsed('log')
+    };
+
+
+    for (var arg in [...cliArgs,...appArgs]){
+      if(results.wasParsed(arg)){
+        await argExecutables[arg]!.call();
+      }
+    }
+
+    if(!results.arguments.any((element) => appArgs.contains(element.replaceAll('-', '')))){
+      exit(0);
+    }
+
   }
 
 }
