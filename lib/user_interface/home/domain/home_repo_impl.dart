@@ -5,6 +5,7 @@ import 'package:aurora/data/io/permission_manager/permission_manager.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
+import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/cupertino.dart';
@@ -133,7 +134,22 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   bool checkFaustusFolder()=>Directory(Constants.kFaustusModulePath).existsSync();
 
   Future _getAccess() async{
-      await _permissionManager.setPermissions();
+     await _permissionManager.setPermissions();
+  }
+
+  @override
+  Future<bool> canElevate() async{
+    return await _ioManager.checkIfExists(filePath: Constants.installedBinary, fileType: FileSystemEntityType.file) && isInstalledPackage();
+  }
+
+  @override
+  Future selfElevate() async{
+    if(await canElevate()) {
+        await _terminalDelegate.execute("${Constants.installedBinary} --with-root");
+        exit(0);
+    }else{
+      arSnackBar(text: "Something went wrong",isPositive: false);
+    }
   }
 
   Future<bool> _checkAccess() async{
@@ -187,6 +203,11 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
    _arLogger.log(data: "Mainline Mode          : ${isMainLineCompatible()}");
    _arLogger.log(data: "System has systemd     : ${await systemHasSystemd()}");
    _arLogger.log(data: "Threshold Path Exists  : ${await thresholdPathExists()}");
+
+    if(await  _ioManager.checkIfExists(filePath: "${Constants.globalConfig.kTmpPath}/ar.log", fileType: FileSystemEntityType.file)) {
+      await _terminalDelegate.execute("chown \$(logname) ${Constants.globalConfig.kTmpPath}/ar.log");
+    }
+
   }
 
 

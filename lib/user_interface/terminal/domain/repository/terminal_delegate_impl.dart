@@ -20,7 +20,7 @@ class TerminalDelegateImpl implements TerminalDelegate {
     Constants.globalConfig.setInstance(
       kWorkingDirectory: Constants.buildType==BuildType.debug?
       '${Directory.current.path}/assets/scripts/':
-      Constants.installedDir
+       Constants.installedDir
     );
 
   }
@@ -33,6 +33,11 @@ class TerminalDelegateImpl implements TerminalDelegate {
   @override
   Future<List<String>> getOutput({required String command}) async{
     return await _terminalRepo.getOutput(command: command);
+  }
+
+  @override
+  Future<int> getStatusCode(String command) async{
+    return await _terminalRepo.getStatusCode(command: command);
   }
 
   @override

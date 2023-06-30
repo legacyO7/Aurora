@@ -1,12 +1,12 @@
 #!/bin/bash
 
 aurora_bin=/opt/aurora/aurora
-pre_cmd=''
+pre_cmd='bash -c '
 post_cmd=''
 
 
 runAurora(){
-    $pre_cmd $aurora_bin $post_cmd
+  $pre_cmd "killall aurora; $aurora_bin $post_cmd"
 }
 
 
@@ -17,7 +17,7 @@ if [ $# -ne 0 ];  then
    fi
 
    if [[ "$@" == *"--with-root"* ]]; then
-    pre_cmd="pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY"
+    pre_cmd="pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY sh -c "
    fi
 
    if [[ "$@" == *"--help"* ]]; then

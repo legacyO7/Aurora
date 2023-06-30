@@ -7,5 +7,8 @@ class HomeStateInit extends HomeState{}
 
 class AccessGranted extends HomeState{
   bool hasAccess;
-  AccessGranted({this.hasAccess=false});
+  bool runAsRoot;
+  AccessGranted({this.hasAccess=false,this.runAsRoot=false});
 }
+
+class HomeStateCannotElevate extends HomeState{}

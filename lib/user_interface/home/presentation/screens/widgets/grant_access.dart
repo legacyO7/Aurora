@@ -6,11 +6,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 
-Widget grantAccess(BuildContext context){
-  return Center(
-    child: ArButton(title: "Grant Access",
-        isSelected: true,
-        action: ()=> context.read<HomeBloc>().add(HomeEventRequestAccess())
-    ),
+Widget grantAccess(BuildContext context,{bool runAsRoot=false}){
+  return Column(
+    children: [
+      Expanded(
+        flex: 7,
+        child: Center(
+          child: ArButton(title: "Grant Access",
+              isSelected: true,
+              action: ()=> context.read<HomeBloc>().add(HomeEventRequestAccess())
+          ),
+        ),
+      ),
+      if(runAsRoot)
+      Expanded(child:  Center(
+        child: ArButton(title: "Run App With Elevated Privileges",
+            animate: false,
+            action: ()=> context.read<HomeBloc>().add(HomeEventRunAsRoot())
+        ),
+      ),)
+    ],
   );
 }

@@ -46,10 +46,12 @@ class ArLogger with GlobalMixin{
   }
 
   void initialize(){
+    try{
     Constants.globalConfig.setInstance(kTmpPath: Directory.systemTemp.path);
     _logFile=File("${Constants.globalConfig.kTmpPath}/ar.log");
     if(_logFile.existsSync()) {
       _logFile.deleteSync();
-    }
+      }
+    }catch(_){}
   }
 }

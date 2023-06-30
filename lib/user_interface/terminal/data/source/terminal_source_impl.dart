@@ -37,23 +37,16 @@ class TerminalSourceImpl extends TerminalSource{
   Future _execute(String command) async {
 
     _terminalSink = _tStreamController.sink;
-    List<String> arguments=[];
 
     if(command.isNotEmpty) {
-
-        arguments = command.split(' ');
-        var exec = arguments[0];
-        arguments.removeAt(0);
-
-        arguments=_validateArgs(arguments);
 
         _convertToList(lines: "\$ $command", commandStatus: CommandStatus.stdinp);
 
         try {
           _inProgress = true;
           process = await Process.start(
-              exec,
-              arguments,
+              'bash',
+              ['-c', command],
               workingDirectory: Constants.globalConfig.kWorkingDirectory,
               runInShell: true,
               mode: ProcessStartMode.detachedWithStdio
@@ -61,11 +54,11 @@ class TerminalSourceImpl extends TerminalSource{
 
           getStdout();
           await getStdErr();
+
         } catch (e) {
           _arLogger.log(data: e.toString());
           _inProgress = false;
         }
-
 
       _commands.removeAt(0);
       if(_commands.isNotEmpty){
@@ -76,49 +69,10 @@ class TerminalSourceImpl extends TerminalSource{
     }
   }
 
-  List<String> _validateArgs(List<String> args){
-
-    List<String> foundDelimters=[];
-
-    for (var element in ['"',"'"]) {
-      if(args.any((argElements) => argElements.contains(element))){
-        foundDelimters.add(element);
-      }
-    }
-
-    if(foundDelimters.isEmpty){
-      return args;
-    }else {
-      List<String> newArg = [];
-      for (var delimiter in foundDelimters) {
-        if (args.any((argElements) => argElements.contains(delimiter))) {
-          for (int i = 0; i < args.length; i++) {
-            if (args[i].contains("'")) {
-              String concatItem = args[i];
-              int j = i + 1;
-              while (j < args.length && !args[j].contains(delimiter)) {
-                concatItem += ' ${args[j]}';
-                j++;
-              }
-              if (j < args.length) {
-                concatItem += ' ${args[j]}';
-                i = j;
-              }
-              newArg.add(concatItem.trim().replaceAll("'", '').replaceAll('"', ''));
-            } else {
-              newArg.add(args[i].trim());
-            }
-          }
-        }
-      }
-      return newArg;
-    }
-  }
-
   getStdout() async{
-    await for (var line in process.stdout) {
-      _convertToList(lines: utf8.decode(line),commandStatus: CommandStatus.stdout);
-    }
+    process.stdout.transform(utf8.decoder).listen((data) {
+      _convertToList(lines: data ,commandStatus: CommandStatus.stdout);
+    });
   }
 
   getStdErr() async{

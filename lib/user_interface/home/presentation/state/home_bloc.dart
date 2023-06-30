@@ -12,6 +12,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   HomeBloc(this._homeRepo,this._batteryManagerRepo) : super(HomeStateInit()){
     on<HomeEventInit>((_, emit) => _initHome(emit));
     on<HomeEventRequestAccess>((_, emit) => _requestAccess(emit));
+    on<HomeEventRunAsRoot>((_, __) => _selfElevate());
     on<HomeEventLaunch>((event, __) => _launchUrl(subPath: event.url));
     on<HomeEventDispose>((_, emit) => _dispose(emit));
   }
@@ -20,8 +21,17 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
     await _requestAccess(emit);
   }
 
+  Future _selfElevate() async{
+    await _homeRepo.selfElevate();
+  }
+
   Future _requestAccess(emit) async {
-    emit(AccessGranted(hasAccess: await _homeRepo.requestAccess()));
+    bool hasAccess =await _homeRepo.requestAccess();
+    if((!hasAccess && await _homeRepo.canElevate()) || hasAccess) {
+      emit(AccessGranted(hasAccess: hasAccess));
+    }else {
+      emit(HomeStateCannotElevate());
+    }
   }
 
   void _launchUrl({String? subPath})async{

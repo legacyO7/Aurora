@@ -8,6 +8,8 @@ abstract class HomeRepo{
   int convertVersionToInt(String version);
   void setAppHeight();
   Future<bool> requestAccess();
+  Future<bool> canElevate();
+  Future selfElevate();
   Future writeToFile({required String path, required String content});
   Future<bool> isDeviceCompatible();
   Future<bool> thresholdPathExists();

@@ -53,6 +53,18 @@ class TerminalRepoImpl extends TerminalRepo{
   }
 
   @override
+  Future<int> getStatusCode({required String command}) async{
+
+    try {
+      List<String> output = await getOutput(command: '$command; echo \$?');
+      return int.tryParse(output.last)??-1;
+    }catch(_){
+      return -1;
+    }
+
+  }
+
+  @override
   bool isInProgress() =>_terminalSource.isInProgress();
 
   @override

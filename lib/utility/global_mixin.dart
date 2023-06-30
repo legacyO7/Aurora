@@ -13,6 +13,8 @@ mixin GlobalMixin{
 
   bool canLog()=> Constants.isLoggingEnabled || Constants.buildType==BuildType.debug;
 
+  bool isInstalledPackage() => Constants.buildType==BuildType.deb||Constants.buildType==BuildType.rpm;
+
   bool isMainLineCompatible()=>
       File(Constants.kMainlineModuleModePath).existsSync() &&
       File(Constants.kMainlineModuleStatePath).existsSync() &&
