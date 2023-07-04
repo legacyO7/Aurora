@@ -175,7 +175,7 @@ class InitAurora with GlobalMixin {
       }
     }
 
-    if(!results.arguments.any((element) => appArgs.contains(element.replaceAll('-', '')))){
+    if(results.arguments.isNotEmpty&&(!results.arguments.any((element) => appArgs.contains(element.replaceAll('-', ''))))){
       exit(0);
     }
 

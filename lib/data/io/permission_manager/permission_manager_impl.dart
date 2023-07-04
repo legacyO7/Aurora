@@ -89,11 +89,10 @@ class PermissionManagerImpl implements PermissionManager{
         Constants.kMainlineModuleModePath,
         Constants.kMainlineBrightnessPath
       ]);
+    }
 
-      if(globalConfig.kThresholdPath!=null){
-        pathList.add(globalConfig.kThresholdPath!);
-      }
-
+    if(globalConfig.kThresholdPath!=null){
+      pathList.add(globalConfig.kThresholdPath!);
     }
 
     if (globalConfig.arMode==ARMODE.batteryManager&&globalConfig.kThresholdPath!=null) {
@@ -110,6 +109,7 @@ class PermissionManagerImpl implements PermissionManager{
         Constants.kFaustusModuleSpeedPath,
         Constants.kFaustusModuleModePath,
         Constants.kFaustusModuleFlagsPath,
+        Constants.kFaustusModuleSetPath
       ]);
     }
 
