@@ -21,7 +21,7 @@ class IOManagerImpl implements IOManager{
 
   @override
   Future<bool> checkIfExists({required dynamic filePath, required FileSystemEntityType fileType}) async{
-    FileSystemEntity fileInQuestion=await _parseFileSystemEntity(filePath);
+    FileSystemEntity fileInQuestion=await _parseFileSystemEntity(_parseFilePath(filePath));
     return (await fileInQuestion.exists() && (await fileInQuestion.stat()).type==fileType);
   }
 

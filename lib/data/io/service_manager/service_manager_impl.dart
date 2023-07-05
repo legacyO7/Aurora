@@ -49,7 +49,8 @@ WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target s
       }
     }).toList();
 
-    await serviceFile.writeAsString(serviceContent.join('\n'));
+
+    await _ioManager.writeToFile(filePath: serviceFile, content: serviceContent.join('\n'));
   }
 
   @override
