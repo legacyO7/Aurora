@@ -40,13 +40,15 @@ class HomeTopBar extends StatelessWidget with GlobalMixin {
             ],
           ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(Constants.globalConfig.deviceName,textAlign: TextAlign.end,),
-            if(Constants.isLoggingEnabled)
-            const Text("logging enabled", style: TextStyle(color: ArColors.orange,fontWeight: FontWeight.bold),textAlign: TextAlign.end,),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(Constants.globalConfig.deviceName,textAlign: TextAlign.end,),
+              if(Constants.isLoggingEnabled)
+              const Text("logging enabled", style: TextStyle(color: ArColors.orange,fontWeight: FontWeight.bold),textAlign: TextAlign.end,),
+            ],
+          ),
         )
       ],);
   }

@@ -22,7 +22,11 @@ class IOManagerImpl implements IOManager{
   @override
   Future<List<String>> readFile(dynamic filePath) async{
     try{
-        return await _convertPathToFile(filePath).readAsLines();
+        if(await checkIfExists(filePath: filePath, fileType: FileSystemEntityType.file)){
+          return await _convertPathToFile(filePath).readAsLines();
+        }else{
+          return [];
+        }
     }
     catch(e){
       return [];
