@@ -39,6 +39,7 @@ class Constants {
   static const String kVendorName = '/sys/devices/virtual/dmi/id/sys_vendor';
   static const String installedDir = '/opt/aurora/data/flutter_assets/assets/scripts/';
   static const String installedBinary = '/usr/bin/aurora';
+  static const String selfLinker = '/proc/self/exe';
 
   //url
   static const String kAuroraGitUrl = "https://github.com/legacyO7/Aurora";

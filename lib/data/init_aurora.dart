@@ -2,6 +2,8 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:aurora/data/io/file_manager/file_manager.dart';
+import 'package:aurora/data/io/file_manager/file_manager_impl.dart';
 import 'package:aurora/data/io/service_manager/service_manager.dart';
 import 'package:aurora/data/io/service_manager/service_manager_impl.dart';
 import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo.dart';
@@ -69,9 +71,9 @@ class InitAurora with GlobalMixin {
     sl.registerLazySingleton(() => ArButtonCubit());
 
     sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
-    sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl(),sl()));
+    sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl(),sl(),sl()));
     sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
-    sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl(), sl()));
+    sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl(), sl(),sl()));
     sl.registerLazySingleton<KeyboardSettingsRepo>(() => KeyboardSettingsRepoImpl(sl(), sl()));
     sl.registerLazySingleton<BatteryManagerRepo>(() => BatteryManagerRepoImpl(sl(), sl(),sl(),sl(),sl()));
     sl.registerLazySingleton<DisablerRepo>(() => DisablerRepoImpl(sl(), sl(),sl(),sl(),sl()));
@@ -81,6 +83,7 @@ class InitAurora with GlobalMixin {
     sl.registerLazySingleton<PermissionManager>(() => PermissionManagerImpl(sl(),sl(),sl()));
     sl.registerLazySingleton<IOManager>(() => IOManagerImpl());
     sl.registerLazySingleton<ServiceManager>(() => ServiceManagerImpl(sl(),sl()));
+    sl.registerLazySingleton<FileManager>(() => FileManagerImpl(sl()));
 
     sl.registerLazySingleton<DioClient>(() => DioClientImpl(sl()));
 

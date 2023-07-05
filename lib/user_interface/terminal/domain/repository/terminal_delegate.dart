@@ -7,6 +7,4 @@ abstract class TerminalDelegate {
   Future<bool> pkexecChecker();
   Future<bool> isKernelCompatible();
   Future<bool> arServiceEnabled();
-  void setWorkingDirectory();
-
 }

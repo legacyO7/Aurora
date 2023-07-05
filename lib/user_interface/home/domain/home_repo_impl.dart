@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aurora/data/io/file_manager/file_manager.dart';
 import 'package:aurora/data/io/io_manager/io_manager.dart';
 import 'package:aurora/data/io/permission_manager/permission_manager.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
@@ -17,12 +18,13 @@ import 'home_repo.dart';
 
 class HomeRepoImpl extends HomeRepo with GlobalMixin{
 
-  HomeRepoImpl(this._terminalDelegate, this._permissionManager, this._ioManager, this._arLogger);
+  HomeRepoImpl(this._terminalDelegate, this._permissionManager, this._ioManager, this._arLogger,this._fileManager);
 
   final TerminalDelegate _terminalDelegate;
   final PermissionManager _permissionManager;
   final IOManager _ioManager;
   final ArLogger _arLogger;
+  final FileManager _fileManager;
 
   final _globalConfig=Constants.globalConfig;
 
@@ -188,7 +190,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   @override
   Future initLog() async{
 
-    _terminalDelegate.setWorkingDirectory();
+    _fileManager.setWorkingDirectory();
 
    _arLogger.log(data: "Build Version          : ${await getVersion()}");
    _arLogger.log(data: "Build Type             : ${Constants.buildType.name}");

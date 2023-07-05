@@ -15,6 +15,8 @@ mixin GlobalMixin{
 
   bool isInstalledPackage() => Constants.buildType==BuildType.deb||Constants.buildType==BuildType.rpm;
 
+  bool isFallbackedWorkingDirectory()=>Constants.globalConfig.kWorkingDirectory=='/tmp';
+
   bool isMainLineCompatible()=>
       File(Constants.kMainlineModuleModePath).existsSync() &&
       File(Constants.kMainlineModuleStatePath).existsSync() &&
