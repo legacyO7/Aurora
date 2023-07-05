@@ -35,7 +35,7 @@ class PermissionManagerImpl implements PermissionManager{
       commands.add("chmod -R o+rwx ${_deniedList.join(' ')}");
     }
 
-    if(File(Constants.kServicePath+Constants.kServiceName).existsSync()){
+    if(await _ioManager.checkIfExists(filePath: Constants.kServicePath+Constants.kServiceName, fileType: FileSystemEntityType.file)){
       commands.add("systemctl disable ${Constants.kServiceName}");
     }else{
       await _serviceManager.createService();
