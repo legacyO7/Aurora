@@ -197,6 +197,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
    _arLogger.log(data: "Mainline Mode          : ${isMainLineCompatible()}");
    _arLogger.log(data: "System has systemd     : ${await systemHasSystemd()}");
    _arLogger.log(data: "Threshold Path Exists  : ${await thresholdPathExists()}");
+   _arLogger.log(data: "Working Directory      : ${Constants.globalConfig.kWorkingDirectory}");
 
     if(await  _ioManager.checkIfExists(filePath: "${Constants.globalConfig.kTmpPath}/ar.log", fileType: FileSystemEntityType.file)) {
       await _terminalDelegate.execute("chown \$(logname) ${Constants.globalConfig.kTmpPath}/ar.log");
