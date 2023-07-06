@@ -10,9 +10,9 @@ import 'package:rxdart/rxdart.dart';
 
 class TerminalSourceImpl extends TerminalSource{
 
-  final ArLogger _arLogger;
+  final ArLogger _arLogger = ArLogger();
 
-  TerminalSourceImpl(this._arLogger);
+  TerminalSourceImpl();
 
   late Process process;
   bool _inProgress=false;

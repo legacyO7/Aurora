@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
+
 import 'io_manager.dart';
 
 
@@ -26,25 +28,26 @@ class IOManagerImpl implements IOManager{
   }
 
   @override
-  Future writeToFile({required dynamic filePath, required String content, FileMode fileMode=FileMode.write}) async{
-    try{
-      await File(_parseFilePath(filePath)).writeAsString(content,mode: fileMode);
-    }
-    catch(_){}
+  Future writeToFile({required dynamic filePath, required String content, FileMode fileMode=FileMode.write, bool allowEmptyContent=false}) async{
+    await ArLogger.arTry(() async{
+      if(content.isNotEmpty||allowEmptyContent) {
+        await File(_parseFilePath(filePath)).writeAsString(content,mode: fileMode);
+      }else{
+        stderr.writeln("blocked empty content from writing");
+      }
+    });
   }
 
   @override
   Future<List<String>> readFile(dynamic filePath) async{
-    try{
+    return await ArLogger.arTry(() async{
         if(await checkIfExists(filePath: filePath, fileType: FileSystemEntityType.file)){
-          return File(_parseFilePath(filePath)).readAsLines();
+          return await File(_parseFilePath(filePath)).readAsLines();
         }else{
           return [];
         }
-    }
-    catch(e){
-      return [];
-    }
+    });
+
   }
 
   @override

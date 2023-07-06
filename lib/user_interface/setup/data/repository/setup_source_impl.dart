@@ -1,7 +1,7 @@
 import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
-import 'package:aurora/utility/constants.dart';
 import 'package:aurora/user_interface/setup/data/source/dio_client.dart';
-import 'package:flutter/foundation.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
+import 'package:aurora/utility/constants.dart';
 
 class SetupSourceImpl extends SetupSource{
   
@@ -20,22 +20,18 @@ class SetupSourceImpl extends SetupSource{
 
   @override
   Future<String> getAuroraLiveVersion() async{
-    try{
+    await ArLogger.arTry(() async {
       return (await _dioClient.fetch(url: Constants.globalConfig.kAuroraGitRawYaml!)).data.toString();
-    }catch(e){
-      debugPrint(e.toString());
-      return '';
-    }
+    });
+    return '';
   }
 
   @override
   Future<String> getChangelog() async{
-    try{
+    await ArLogger.arTry(() async {
       return (await _dioClient.fetch(url: Constants.globalConfig.kAuroraGitRawChangelog!)).data.toString();
-    }catch(e){
-      debugPrint(e.toString());
-      return '';
-    }
+    });
+    return '';
   }
 
 }

@@ -18,12 +18,11 @@ import 'home_repo.dart';
 
 class HomeRepoImpl extends HomeRepo with GlobalMixin{
 
-  HomeRepoImpl(this._terminalDelegate, this._permissionManager, this._ioManager, this._arLogger,this._fileManager);
+  HomeRepoImpl(this._terminalDelegate, this._permissionManager, this._ioManager, this._fileManager);
 
   final TerminalDelegate _terminalDelegate;
   final PermissionManager _permissionManager;
   final IOManager _ioManager;
-  final ArLogger _arLogger;
   final FileManager _fileManager;
 
   final _globalConfig=Constants.globalConfig;
@@ -190,16 +189,18 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   @override
   Future initLog() async{
 
+    final ArLogger arLogger=ArLogger();
+
     _fileManager.setWorkingDirectory();
 
-   _arLogger.log(data: "Build Version          : ${await getVersion()}");
-   _arLogger.log(data: "Build Type             : ${Constants.buildType.name}");
-   _arLogger.log(data: "Compatible Device      : ${await isDeviceCompatible()}");
-   _arLogger.log(data: "Compatible Kernel      : ${await _terminalDelegate.isKernelCompatible()}");
-   _arLogger.log(data: "Mainline Mode          : ${isMainLineCompatible()}");
-   _arLogger.log(data: "System has systemd     : ${await systemHasSystemd()}");
-   _arLogger.log(data: "Threshold Path Exists  : ${await thresholdPathExists()}");
-   _arLogger.log(data: "Working Directory      : ${Constants.globalConfig.kWorkingDirectory}");
+   arLogger.log(data: "Build Version          : ${await getVersion()}");
+   arLogger.log(data: "Build Type             : ${Constants.buildType.name}");
+   arLogger.log(data: "Compatible Device      : ${await isDeviceCompatible()}");
+   arLogger.log(data: "Compatible Kernel      : ${await _terminalDelegate.isKernelCompatible()}");
+   arLogger.log(data: "Mainline Mode          : ${isMainLineCompatible()}");
+   arLogger.log(data: "System has systemd     : ${await systemHasSystemd()}");
+   arLogger.log(data: "Threshold Path Exists  : ${await thresholdPathExists()}");
+   arLogger.log(data: "Working Directory      : ${Constants.globalConfig.kWorkingDirectory}");
 
     if(await  _ioManager.checkIfExists(filePath: "${Constants.globalConfig.kTmpPath}/ar.log", fileType: FileSystemEntityType.file)) {
       await _terminalDelegate.execute("chown \$(logname) ${Constants.globalConfig.kTmpPath}/ar.log");
