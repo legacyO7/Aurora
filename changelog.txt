@@ -2,3 +2,5 @@ Changelogs:
 
 - Fixed permission issues with faustus module
 - Fixed app crash on debug mode
+- Fixed invalid working directory
+- Fixed app not recognizing certain devices
