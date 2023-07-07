@@ -60,6 +60,7 @@ Secureboot enabled devices need to enroll MOK
 ```
 usage: 
 --log          -       enables logging
+--version      -       displays app version
 --with-root    -       runs with elevated privileges
 ```
 

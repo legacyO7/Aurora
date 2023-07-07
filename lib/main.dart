@@ -21,7 +21,7 @@ import 'user_interface/home/presentation/state/home_bloc.dart';
 void main(List<String> args) async{
   InitAurora initAurora=InitAurora();
   await initAurora.initDI();
-  initAurora.initParser(args);
+  await initAurora.initParser(args);
   WidgetsFlutterBinding.ensureInitialized();
   await initAurora.setWindow();
   await initAurora.errorRecorder();

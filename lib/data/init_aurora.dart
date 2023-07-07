@@ -1,5 +1,9 @@
 
+import 'dart:io';
+
 import 'package:args/args.dart';
+import 'package:aurora/data/io/file_manager/file_manager.dart';
+import 'package:aurora/data/io/file_manager/file_manager_impl.dart';
 import 'package:aurora/data/io/service_manager/service_manager.dart';
 import 'package:aurora/data/io/service_manager/service_manager_impl.dart';
 import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo.dart';
@@ -69,23 +73,23 @@ class InitAurora with GlobalMixin {
     sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
     sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl(),sl()));
     sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
-    sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl(), sl()));
+    sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl(), sl(),sl()));
     sl.registerLazySingleton<KeyboardSettingsRepo>(() => KeyboardSettingsRepoImpl(sl(), sl()));
     sl.registerLazySingleton<BatteryManagerRepo>(() => BatteryManagerRepoImpl(sl(), sl(),sl(),sl(),sl()));
     sl.registerLazySingleton<DisablerRepo>(() => DisablerRepoImpl(sl(), sl(),sl(),sl(),sl()));
     sl.registerLazySingleton<TerminalDelegate>(() => TerminalDelegateImpl(sl(), sl()));
     sl.registerLazySingleton<SetupSource>(() => SetupSourceImpl(sl()));
-    sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl(sl()));
+    sl.registerLazySingleton<TerminalSource>(() => TerminalSourceImpl());
     sl.registerLazySingleton<PermissionManager>(() => PermissionManagerImpl(sl(),sl(),sl()));
     sl.registerLazySingleton<IOManager>(() => IOManagerImpl());
     sl.registerLazySingleton<ServiceManager>(() => ServiceManagerImpl(sl(),sl()));
+    sl.registerLazySingleton<FileManager>(() => FileManagerImpl(sl()));
 
     sl.registerLazySingleton<DioClient>(() => DioClientImpl(sl()));
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
     sl.registerLazySingleton<Dio>(() => Dio());
-    sl.registerLazySingleton<ArLogger>(() => ArLogger(sl()));
     sl.registerLazySingleton<GlobalConfig>(() => GlobalConfig());
   }
 
@@ -125,11 +129,11 @@ class InitAurora with GlobalMixin {
 
     if(canLog()){
 
-      ArLogger arLogger = sl<ArLogger>()..initialize();
+      ArLogger arLogger = ArLogger()..initialize();
       await sl<HomeRepo>().initLog();
 
-      FlutterError.onError = (error) {
-        arLogger.log(data: error.toString());
+      FlutterError.onError = (error) async {
+        await arLogger.log(data: error.toString());
       };
 
       PlatformDispatcher.instance.onError = (error, stackTrace) {
@@ -141,11 +145,42 @@ class InitAurora with GlobalMixin {
     }
   }
 
-  void initParser(List<String> args){
+  Future initParser(List<String> args) async{
     var parser = ArgParser();
     parser.addFlag('log',defaultsTo: false);
-    var result = parser.parse(args);
-    Constants.isLoggingEnabled=result['log'];
+    parser.addFlag('version');
+    ArgResults? result;
+    try {
+      result = parser.parse(args);
+    }catch(_){
+      stderr.writeln("unknown argument");
+      exit(0);
+    }
+    await validateArgs(result);
+  }
+
+
+  Future validateArgs(ArgResults results) async{
+
+    List<String> cliArgs=['version'];
+    List<String> appArgs=['log'];
+
+    Map<String, Function> argExecutables={
+      'version': () async => stdout.writeln(await sl<HomeRepo>().getVersion()),
+      'log': () => Constants.isLoggingEnabled=results.wasParsed('log')
+    };
+
+
+    for (var arg in [...cliArgs,...appArgs]){
+      if(results.wasParsed(arg)){
+        await argExecutables[arg]!.call();
+      }
+    }
+
+    if(results.arguments.isNotEmpty&&(!results.arguments.any((element) => appArgs.contains(element.replaceAll('-', ''))))){
+      exit(0);
+    }
+
   }
 
 }

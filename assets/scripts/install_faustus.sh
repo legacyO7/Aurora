@@ -47,6 +47,8 @@ echo "Installing faustus"
                 sudo rmmod asus_nb_wmi
                 sudo rmmod asus_wmi
 
+                sudo ln -s /sys/kernel/btf/vmlinux  /usr/lib/modules/`uname -r`/build/vmlinux
+
                 make
                 sudo modprobe sparse-keymap wmi video
 

@@ -35,7 +35,7 @@ class PermissionManagerImpl implements PermissionManager{
       commands.add("chmod -R o+rwx ${_deniedList.join(' ')}");
     }
 
-    if(File(Constants.kServicePath+Constants.kServiceName).existsSync()){
+    if(await _ioManager.checkIfExists(filePath: Constants.kServicePath+Constants.kServiceName, fileType: FileSystemEntityType.file)){
       commands.add("systemctl disable ${Constants.kServiceName}");
     }else{
       await _serviceManager.createService();
@@ -89,11 +89,10 @@ class PermissionManagerImpl implements PermissionManager{
         Constants.kMainlineModuleModePath,
         Constants.kMainlineBrightnessPath
       ]);
+    }
 
-      if(globalConfig.kThresholdPath!=null){
-        pathList.add(globalConfig.kThresholdPath!);
-      }
-
+    if(globalConfig.kThresholdPath!=null){
+      pathList.add(globalConfig.kThresholdPath!);
     }
 
     if (globalConfig.arMode==ARMODE.batteryManager&&globalConfig.kThresholdPath!=null) {
@@ -110,6 +109,7 @@ class PermissionManagerImpl implements PermissionManager{
         Constants.kFaustusModuleSpeedPath,
         Constants.kFaustusModuleModePath,
         Constants.kFaustusModuleFlagsPath,
+        Constants.kFaustusModuleSetPath
       ]);
     }
 

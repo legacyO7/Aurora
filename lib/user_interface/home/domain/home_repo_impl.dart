@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aurora/data/io/file_manager/file_manager.dart';
 import 'package:aurora/data/io/io_manager/io_manager.dart';
 import 'package:aurora/data/io/permission_manager/permission_manager.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
@@ -17,12 +18,12 @@ import 'home_repo.dart';
 
 class HomeRepoImpl extends HomeRepo with GlobalMixin{
 
-  HomeRepoImpl(this._terminalDelegate, this._permissionManager, this._ioManager, this._arLogger);
+  HomeRepoImpl(this._terminalDelegate, this._permissionManager, this._ioManager, this._fileManager);
 
   final TerminalDelegate _terminalDelegate;
   final PermissionManager _permissionManager;
   final IOManager _ioManager;
-  final ArLogger _arLogger;
+  final FileManager _fileManager;
 
   final _globalConfig=Constants.globalConfig;
 
@@ -77,14 +78,8 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
       return (info.toLowerCase().contains('asus'));
     }
 
-    if(File(Constants.kProductName).existsSync()){
-      Constants.globalConfig.setInstance(deviceName: ( await _ioManager.readFile(Constants.kProductName)).toString());
-      return checkDeviceInfo(info: Constants.globalConfig.deviceName);
-    } else if(File(Constants.kVendorName).existsSync()){
-      return checkDeviceInfo(info:  ( await _ioManager.readFile(Constants.kVendorName)).toString());
-    }
-    debugPrint("unknown device");
-    return true;
+    Constants.globalConfig.setInstance(deviceName: ( await _ioManager.readFile(Constants.kProductName)).join(''));
+    return(checkDeviceInfo(info: [...await _ioManager.readFile(Constants.kVendorName),Constants.globalConfig.deviceName].toString()));
   }
 
   @override
@@ -194,15 +189,18 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   @override
   Future initLog() async{
 
-    _terminalDelegate.setWorkingDirectory();
+    final ArLogger arLogger=ArLogger();
 
-   _arLogger.log(data: "Build Version          : ${await getVersion()}");
-   _arLogger.log(data: "Build Type             : ${Constants.buildType.name}");
-   _arLogger.log(data: "Compatible Device      : ${await isDeviceCompatible()}");
-   _arLogger.log(data: "Compatible Kernel      : ${await _terminalDelegate.isKernelCompatible()}");
-   _arLogger.log(data: "Mainline Mode          : ${isMainLineCompatible()}");
-   _arLogger.log(data: "System has systemd     : ${await systemHasSystemd()}");
-   _arLogger.log(data: "Threshold Path Exists  : ${await thresholdPathExists()}");
+    _fileManager.setWorkingDirectory();
+
+   arLogger.log(data: "Build Version          : ${await getVersion()}");
+   arLogger.log(data: "Build Type             : ${Constants.buildType.name}");
+   arLogger.log(data: "Compatible Device      : ${await isDeviceCompatible()}");
+   arLogger.log(data: "Compatible Kernel      : ${await _terminalDelegate.isKernelCompatible()}");
+   arLogger.log(data: "Mainline Mode          : ${isMainLineCompatible()}");
+   arLogger.log(data: "System has systemd     : ${await systemHasSystemd()}");
+   arLogger.log(data: "Threshold Path Exists  : ${await thresholdPathExists()}");
+   arLogger.log(data: "Working Directory      : ${Constants.globalConfig.kWorkingDirectory}");
 
     if(await  _ioManager.checkIfExists(filePath: "${Constants.globalConfig.kTmpPath}/ar.log", fileType: FileSystemEntityType.file)) {
       await _terminalDelegate.execute("chown \$(logname) ${Constants.globalConfig.kTmpPath}/ar.log");

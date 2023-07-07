@@ -1,29 +1,15 @@
-import 'dart:io';
-
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
-import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
 
 class TerminalDelegateImpl implements TerminalDelegate {
-
 
   TerminalDelegateImpl(this._terminalSource,this._terminalRepo);
 
   final TerminalSource _terminalSource;
   final TerminalRepo _terminalRepo;
 
-  @override
-  void setWorkingDirectory() async{
-
-    Constants.globalConfig.setInstance(
-      kWorkingDirectory: Constants.buildType==BuildType.debug?
-      '${Directory.current.path}/assets/scripts/':
-       Constants.installedDir
-    );
-
-  }
 
   @override
   Future execute(String command) async {

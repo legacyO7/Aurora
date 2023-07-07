@@ -1,5 +1,4 @@
 Changelogs:
 
-- Added option to run the app with elevated privileges from within the app
-- Optimized terminal operations
-- Bugfixes and UX improvements
+- Fixed permission issues with faustus module
+- Fixed app crash on debug mode

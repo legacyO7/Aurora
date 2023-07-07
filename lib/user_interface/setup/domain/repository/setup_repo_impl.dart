@@ -1,3 +1,4 @@
+import 'package:aurora/data/io/file_manager/file_manager.dart';
 import 'package:aurora/data/io/permission_manager/permission_manager.dart';
 import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
@@ -7,11 +8,12 @@ import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 
 class SetupRepoImpl extends SetupRepo with GlobalMixin{
-  SetupRepoImpl(this._setupSource, this._terminalDelegate,this._permissionManager);
+  SetupRepoImpl(this._setupSource, this._terminalDelegate,this._permissionManager,this._fileManager);
 
   final SetupSource _setupSource;
   final TerminalDelegate _terminalDelegate;
   final PermissionManager _permissionManager;
+  final FileManager _fileManager;
 
   final _globalConfig=Constants.globalConfig;
   String _setupPath='';
@@ -41,7 +43,7 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin{
   @override
   Future initSetup() async{
     try {
-      _terminalDelegate.setWorkingDirectory();
+      _fileManager.setWorkingDirectory();
       if (!isMainLineCompatible()) {
         _globalConfig.setInstance(
             kSecureBootEnabled: await _terminalDelegate.isSecureBootEnabled()

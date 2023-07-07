@@ -4,9 +4,7 @@ import 'package:aurora/user_interface/control_panel/presentation/state/disabler/
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_widgets.dart';
-import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
-import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -36,13 +34,13 @@ class DisableButton extends StatelessWidget with GlobalMixin {
                   onChange: (_)=>context.read<DisablerBloc>().add(DisableEventCheckDisableServices(disableThreshold: !state.disableThreshold))
               ),
 
-              if(!super.isMainLine())
+              if(!super.isMainLine()&&!super.isFallbackedWorkingDirectory())
               ArCheckbox(
                   text: "Disable faustus module",
                   isSelected: state.disableFaustusModule,
                   onChange: (_)=>context.read<DisablerBloc>().add(DisableEventCheckDisableServices(disableFaustusModule: !state.disableFaustusModule))
               ),
-              if(BuildType.appimage!=Constants.buildType)
+              if(super.isInstalledPackage()&&!super.isFallbackedWorkingDirectory())
               ArCheckbox(
                   text: "Uninstall Aurora",
                   isSelected: state.uninstallAurora,
