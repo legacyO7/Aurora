@@ -3,6 +3,7 @@ import 'package:aurora/data/io/permission_manager/permission_manager.dart';
 import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
@@ -49,7 +50,9 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin{
             kSecureBootEnabled: await _terminalDelegate.isSecureBootEnabled()
         );
       }
-    }catch(_){}
+    }catch(e,stackTrace){
+      ArLogger.log(data: e,stackTrace: stackTrace);
+    }
   }
   
   @override

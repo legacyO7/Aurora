@@ -23,31 +23,40 @@ class IOManagerImpl implements IOManager{
 
   @override
   Future<bool> checkIfExists({required dynamic filePath, required FileSystemEntityType fileType}) async{
-    FileSystemEntity fileInQuestion=await _parseFileSystemEntity(_parseFilePath(filePath));
-    return (await fileInQuestion.exists() && (await fileInQuestion.stat()).type==fileType);
+    try {
+      FileSystemEntity fileInQuestion = await _parseFileSystemEntity(_parseFilePath(filePath));
+      return (await fileInQuestion.exists() && (await fileInQuestion.stat()).type == fileType);
+    }catch(e,stackTrace){
+      ArLogger.log(data: e,stackTrace: stackTrace);
+      return false;
+    }
   }
 
   @override
   Future writeToFile({required dynamic filePath, required String content, FileMode fileMode=FileMode.write, bool allowEmptyContent=false}) async{
-    await ArLogger.arTry(() async{
-      if(content.isNotEmpty||allowEmptyContent) {
-        await File(_parseFilePath(filePath)).writeAsString(content,mode: fileMode);
-      }else{
+    try {
+      if (content.isNotEmpty || allowEmptyContent) {
+        return await File(_parseFilePath(filePath)).writeAsString(content, mode: fileMode);
+      } else {
         stderr.writeln("blocked empty content from writing");
       }
-    });
+    }catch(e,stackTrace) {
+      ArLogger.log(data: e,stackTrace: stackTrace);
+    }
   }
 
   @override
   Future<List<String>> readFile(dynamic filePath) async{
-    return await ArLogger.arTry(() async{
-        if(await checkIfExists(filePath: filePath, fileType: FileSystemEntityType.file)){
-          return await File(_parseFilePath(filePath)).readAsLines();
-        }else{
-          return [];
-        }
-    });
-
+    try {
+      if (await checkIfExists(filePath: filePath, fileType: FileSystemEntityType.file)) {
+        return await File(_parseFilePath(filePath)).readAsLines();
+      } else {
+        return [];
+      }
+    }catch(e,stackTrace){
+      ArLogger.log(data: e,stackTrace: stackTrace);
+      return [];
+    }
   }
 
   @override

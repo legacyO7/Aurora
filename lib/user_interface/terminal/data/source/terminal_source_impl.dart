@@ -10,8 +10,6 @@ import 'package:rxdart/rxdart.dart';
 
 class TerminalSourceImpl extends TerminalSource{
 
-  final ArLogger _arLogger = ArLogger();
-
   TerminalSourceImpl();
 
   late Process process;
@@ -55,8 +53,8 @@ class TerminalSourceImpl extends TerminalSource{
           getStdout();
           await getStdErr();
 
-        } catch (e) {
-          _arLogger.log(data: e.toString());
+        } catch(e,stackTrace) {
+          ArLogger.log(data: e,stackTrace: stackTrace);
           _inProgress = false;
         }
 
@@ -83,7 +81,7 @@ class TerminalSourceImpl extends TerminalSource{
 
   _convertToList({required String lines, required CommandStatus commandStatus}){
     _lineSplitter.convert(lines).forEach((line) async{
-      _arLogger.log(data: "> ${commandStatus.name} $line");
+      ArLogger.log(data: "> ${commandStatus.name} $line");
       _terminalSink.add("${commandStatus.name} $line");
     });
   }
@@ -95,8 +93,9 @@ class TerminalSourceImpl extends TerminalSource{
       if(_inProgress) {
         process.kill();
       }
-    }catch(e){
+    }catch(e,stackTrace){
       _convertToList(lines: e.toString(),commandStatus: CommandStatus.stderr);
+      ArLogger.log(data: e,stackTrace: stackTrace);
     }
     finally{
       _convertToList(lines: "process terminated",commandStatus: CommandStatus.stderr);

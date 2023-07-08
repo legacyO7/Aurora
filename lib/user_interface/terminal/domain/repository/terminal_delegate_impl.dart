@@ -1,6 +1,7 @@
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/user_interface/terminal/domain/repository/terminal_repo.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/constants.dart';
 
 class TerminalDelegateImpl implements TerminalDelegate {
@@ -50,7 +51,8 @@ class TerminalDelegateImpl implements TerminalDelegate {
           .split('-')
           .first
           .replaceAll('.', '')) ?? 0) >= 610;
-    }catch(_){
+    }catch(e,stackTrace){
+      ArLogger.log(data: e,stackTrace: stackTrace);
       return false;
     }
   }

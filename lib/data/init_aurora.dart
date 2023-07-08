@@ -91,6 +91,8 @@ class InitAurora with GlobalMixin {
     sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
     sl.registerLazySingleton<Dio>(() => Dio());
     sl.registerLazySingleton<GlobalConfig>(() => GlobalConfig());
+
+    ArLogger();
   }
 
 
@@ -129,15 +131,15 @@ class InitAurora with GlobalMixin {
 
     if(canLog()){
 
-      ArLogger arLogger = ArLogger()..initialize();
+      ArLogger.initialize();
       await sl<HomeRepo>().initLog();
 
       FlutterError.onError = (error) async {
-        await arLogger.log(data: error.toString());
+        await ArLogger.log(data: error.toString());
       };
 
       PlatformDispatcher.instance.onError = (error, stackTrace) {
-        arLogger.log(data: error.toString(), stackTrace: stackTrace);
+        ArLogger.log(data: error ,stackTrace: stackTrace);
         return true;
       };
 
@@ -152,8 +154,9 @@ class InitAurora with GlobalMixin {
     ArgResults? result;
     try {
       result = parser.parse(args);
-    }catch(_){
+    }catch(e,stackTrace){
       stderr.writeln("unknown argument");
+      ArLogger.log(data: e,stackTrace: stackTrace);
       exit(0);
     }
     await validateArgs(result);
