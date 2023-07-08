@@ -38,7 +38,8 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     try {
       final result = await InternetAddress.lookup('www.google.com');
         return (result.isNotEmpty && result[0].rawAddress.isNotEmpty);
-    } on SocketException catch (_) {
+    } on SocketException catch (e,stackTrace) {
+      ArLogger.log(data: e,stackTrace: stackTrace);
       return false;
     }
   }
@@ -189,18 +190,16 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   @override
   Future initLog() async{
 
-    final ArLogger arLogger=ArLogger();
-
     _fileManager.setWorkingDirectory();
 
-   arLogger.log(data: "Build Version          : ${await getVersion()}");
-   arLogger.log(data: "Build Type             : ${Constants.buildType.name}");
-   arLogger.log(data: "Compatible Device      : ${await isDeviceCompatible()}");
-   arLogger.log(data: "Compatible Kernel      : ${await _terminalDelegate.isKernelCompatible()}");
-   arLogger.log(data: "Mainline Mode          : ${isMainLineCompatible()}");
-   arLogger.log(data: "System has systemd     : ${await systemHasSystemd()}");
-   arLogger.log(data: "Threshold Path Exists  : ${await thresholdPathExists()}");
-   arLogger.log(data: "Working Directory      : ${Constants.globalConfig.kWorkingDirectory}");
+   ArLogger.log(data: "Build Version          : ${await getVersion()}");
+   ArLogger.log(data: "Build Type             : ${Constants.buildType.name}");
+   ArLogger.log(data: "Compatible Device      : ${await isDeviceCompatible()}");
+   ArLogger.log(data: "Compatible Kernel      : ${await _terminalDelegate.isKernelCompatible()}");
+   ArLogger.log(data: "Mainline Mode          : ${isMainLineCompatible()}");
+   ArLogger.log(data: "System has systemd     : ${await systemHasSystemd()}");
+   ArLogger.log(data: "Threshold Path Exists  : ${await thresholdPathExists()}");
+   ArLogger.log(data: "Working Directory      : ${Constants.globalConfig.kWorkingDirectory}");
 
     if(await  _ioManager.checkIfExists(filePath: "${Constants.globalConfig.kTmpPath}/ar.log", fileType: FileSystemEntityType.file)) {
       await _terminalDelegate.execute("chown \$(logname) ${Constants.globalConfig.kTmpPath}/ar.log");

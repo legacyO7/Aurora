@@ -3,6 +3,8 @@ import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'ar_logger.dart';
+
 Future<dynamic> arDialog({required String title, required String subject, bool? isWarning = false, required VoidCallback onConfirm, Widget? optionalWidget, VoidCallback? onCancel}) {
   return showDialog(
       barrierDismissible: false,
@@ -62,7 +64,8 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
                 IconButton(onPressed: () async {
                     try {
                       await widget.onCancel!();
-                    } catch (_) {
+                    } catch(e,stackTrace) {
+                      ArLogger.log(data: e,stackTrace: stackTrace);
                     } finally {
                       context.read<ArButtonCubit>().setUnLoad();
                     }
@@ -87,7 +90,9 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
                       context.read<ArButtonCubit>().setLoad();
                       try {
                         await widget.onConfirm();
-                      } catch (_) {}
+                      } catch(e,stackTrace) {
+                        ArLogger.log(data: e,stackTrace: stackTrace);
+                      }
                       finally{
                         context.read<ArButtonCubit>().setUnLoad();
                       }

@@ -20,18 +20,22 @@ class SetupSourceImpl extends SetupSource{
 
   @override
   Future<String> getAuroraLiveVersion() async{
-    await ArLogger.arTry(() async {
+    try {
       return (await _dioClient.fetch(url: Constants.globalConfig.kAuroraGitRawYaml!)).data.toString();
-    });
-    return '';
+    }catch(e,stackTrace){
+      ArLogger.log(data: e,stackTrace: stackTrace);
+      return 'version: 0.0.0-unknwon+0';
+    }
   }
 
   @override
   Future<String> getChangelog() async{
-    await ArLogger.arTry(() async {
+    try{
       return (await _dioClient.fetch(url: Constants.globalConfig.kAuroraGitRawChangelog!)).data.toString();
-    });
-    return '';
+    }catch(e,stackTrace){
+      ArLogger.log(data: e,stackTrace: stackTrace);
+      return 'unable to get changelog';
+    }
   }
 
 }

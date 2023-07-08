@@ -1,3 +1,4 @@
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:dio/dio.dart';
 
 
@@ -17,8 +18,9 @@ class DioClientImpl extends DioClient{
   })async{
     try {
       return await _dio.get(url).timeout(const Duration(seconds: 15));
-    }catch(e){
-      throw Exception(e);
+    }catch(e,stackTrace){
+      ArLogger.log(data: e,stackTrace: stackTrace);
+      rethrow;
     }
   }
 

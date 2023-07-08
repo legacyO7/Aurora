@@ -24,21 +24,13 @@ class ArLogger with GlobalMixin{
   final List<String> _log=[];
   bool _logging=false;
 
-  static T arTry<T>(T Function() tryBlock) {
-    try {
-      return tryBlock();
-    } catch (error, stackTrace) {
-      _instance!.log(data: error,stackTrace: stackTrace);
-    }
-    throw ('error');
-  }
 
-  Future log({required dynamic data, StackTrace? stackTrace})async {
-    if(canLog()) {
-      _log.add("$data\n ${stackTrace ?? ''}");
-      if (!_logging) {
-        _logging = true;
-        await _logBuffer(data: _log.first);
+  static Future log({required dynamic data, StackTrace? stackTrace})async {
+    if(_instance!.canLog()) {
+      _instance!._log.add("$data\n ${stackTrace ?? ''}");
+      if (!_instance!._logging) {
+        _instance!._logging = true;
+        await _instance!._logBuffer(data: _instance!._log.first);
       }
     }
   }
@@ -61,13 +53,15 @@ class ArLogger with GlobalMixin{
     }
   }
 
-  void initialize(){
+  static void initialize(){
     try{
     Constants.globalConfig.setInstance(kTmpPath: Directory.systemTemp.path);
-    _logFile=File("${Constants.globalConfig.kTmpPath}/ar.log");
-    if(_logFile.existsSync()) {
-      _logFile.deleteSync();
+    _instance!._logFile=File("${Constants.globalConfig.kTmpPath}/ar.log");
+    if(_instance!._logFile.existsSync()) {
+      _instance!._logFile.deleteSync();
       }
-    }catch(_){}
+    }catch(e,stackTrace){
+      ArLogger.log(data: e,stackTrace: stackTrace);
+    }
   }
 }

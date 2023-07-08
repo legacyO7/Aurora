@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'terminal_repo.dart';
@@ -58,7 +59,8 @@ class TerminalRepoImpl extends TerminalRepo{
     try {
       List<String> output = await getOutput(command: '$command; echo \$?');
       return int.tryParse(output.last)??-1;
-    }catch(_){
+    }catch(e,stackTrace){
+      ArLogger.log(data: e,stackTrace: stackTrace);
       return -1;
     }
 
