@@ -127,7 +127,7 @@ class InitAurora with GlobalMixin {
 
   }
 
-  Future errorRecorder() async {
+  Future initLogger() async {
 
     if(canLog()){
 
