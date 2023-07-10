@@ -1,11 +1,13 @@
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_event.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_state.dart';
+import 'package:aurora/utility/ar_widgets/ar_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ThemeButton extends StatefulWidget{
-  const ThemeButton({super.key});
+  const ThemeButton({super.key,this.aasText=false});
+  final bool aasText;
 
   @override
   State<StatefulWidget> createState() {
@@ -47,11 +49,17 @@ class _ThemeButtonState extends State<ThemeButton>{
     return BlocBuilder<ThemeBloc, ThemeState>(
           builder:(context, state){
             setIcon(state.arTheme);
-            return IconButton(
+            return widget.aasText?
+            ArButton(
+                title: "Theme: $tooltipText",
+                action: ()=>context.read<ThemeBloc>().add(ThemeEventSwitch()),
+                animate: false,
+            ):
+            IconButton(
                   onPressed: () {
                     context.read<ThemeBloc>().add(ThemeEventSwitch());
                     },
-                  tooltip: tooltipText,
+                  tooltip:  tooltipText,
                   icon: icon
 
       );

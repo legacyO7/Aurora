@@ -1,3 +1,4 @@
+import 'package:aurora/user_interface/home/presentation/screens/widgets/privileged_run_button.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
@@ -19,11 +20,8 @@ Widget grantAccess(BuildContext context,{bool runAsRoot=false}){
         ),
       ),
       if(runAsRoot)
-      Expanded(child:  Center(
-        child: ArButton(title: "Run App With Elevated Privileges",
-            animate: false,
-            action: ()=> context.read<HomeBloc>().add(HomeEventRunAsRoot())
-        ),
+      const Expanded(child:  Center(
+        child: PrivilegedRunButton()
       ),)
     ],
   );

@@ -59,8 +59,8 @@ class DisableButton extends StatelessWidget with GlobalMixin {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-        onPressed: () async {
+    return ArButton(
+        action: () async {
           await arDialog(
               title: "Disable Services",
               subject: "Select the services to be disabled",
@@ -72,8 +72,9 @@ class DisableButton extends StatelessWidget with GlobalMixin {
                 _navigate(context,restart: false);
               });
         },
-        tooltip: "Disable Features",
-        icon: const Icon(Icons.delete_outline));
+        title: "Disable Features",
+        animate: false,
+    );
   }
 
   _navigate(BuildContext context,{bool restart=true})async{
