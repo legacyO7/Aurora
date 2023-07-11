@@ -6,6 +6,7 @@ import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart'
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TerminalSourceImpl extends TerminalSource{
@@ -38,7 +39,9 @@ class TerminalSourceImpl extends TerminalSource{
 
     if(command.isNotEmpty) {
 
+      if(kDebugMode) {
         _convertToList(lines: "\$ $command", commandStatus: CommandStatus.stdinp);
+      }
 
         try {
           _inProgress = true;
@@ -54,7 +57,7 @@ class TerminalSourceImpl extends TerminalSource{
           await getStdErr();
 
         } catch(e,stackTrace) {
-          ArLogger.log(data: e,stackTrace: stackTrace);
+          await ArLogger.log(data: e,stackTrace: stackTrace);
           _inProgress = false;
         }
 
@@ -81,7 +84,7 @@ class TerminalSourceImpl extends TerminalSource{
 
   _convertToList({required String lines, required CommandStatus commandStatus}){
     _lineSplitter.convert(lines).forEach((line) async{
-      ArLogger.log(data: "> ${commandStatus.name} $line");
+      await ArLogger.log(data: "> ${commandStatus.name} $line");
       _terminalSink.add("${commandStatus.name} $line");
     });
   }
