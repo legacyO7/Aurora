@@ -1,4 +1,5 @@
 import 'package:aurora/data/init_aurora.dart';
+import 'package:aurora/data/io/permission_manager/permission_manager.dart';
 import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
@@ -12,8 +13,9 @@ import 'home_state.dart';
 class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   final HomeRepo _homeRepo;
   final BatteryManagerRepo _batteryManagerRepo;
+  final PermissionManager _permissionManager;
 
-  HomeBloc(this._homeRepo,this._batteryManagerRepo) : super(HomeStateInit(loggingEnabled: Constants.isLoggingEnabled)){
+  HomeBloc(this._homeRepo,this._batteryManagerRepo,this._permissionManager) : super(HomeStateInit(loggingEnabled: Constants.isLoggingEnabled)){
     on<HomeEventInit>((_, emit) => _initHome(emit));
     on<HomeEventRequestAccess>((_, emit) => _requestAccess(emit));
     on<HomeEventRunAsRoot>((_, __) => _selfElevate());
@@ -24,6 +26,8 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   }
 
   Future _initHome(emit) async{
+    await _permissionManager.validatePaths();
+    emit(state.setState(deniedList: _permissionManager.deniedList));
     await _requestAccess(emit);
   }
 
@@ -34,9 +38,9 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   Future _requestAccess(emit) async {
     bool hasAccess =await _homeRepo.requestAccess();
     if((!hasAccess && await _homeRepo.canElevate()) || hasAccess) {
-      emit(AccessGranted(hasAccess: hasAccess,loggingEnabled: Constants.isLoggingEnabled));
+      emit(AccessGranted(state, hasAccess: hasAccess));
     }else {
-      emit(HomeStateCannotElevate());
+      emit(HomeStateCannotElevate(state));
     }
   }
 
@@ -52,10 +56,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
     if(!kDebugMode) {
       InitAurora().initLogger();
     }
-    HomeState state_=state;
-    if(state_ is AccessGranted) {
-      emit(AccessGranted(hasAccess: state_.hasAccess,loggingEnabled: Constants.isLoggingEnabled));
-    }
+      emit(state.setState(loggingEnabled: Constants.isLoggingEnabled));
   }
 
   void _launchUrl({String? subPath})async{
@@ -70,5 +71,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
       (await _homeRepo.compatibilityChecker())==0&&( await _batteryManagerRepo.getBatteryCharge()!=100);
 
   void setAppHeight()=>_homeRepo.setAppHeight();
+
+  List<String> get deniedList=>_permissionManager.deniedList;
 
 }

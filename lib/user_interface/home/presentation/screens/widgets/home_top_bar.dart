@@ -2,7 +2,7 @@ import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_state.dart';
 import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:aurora/utility/ar_widgets/ar_top_buttons.dart';
-import 'package:aurora/utility/ar_widgets/colors.dart';
+import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';

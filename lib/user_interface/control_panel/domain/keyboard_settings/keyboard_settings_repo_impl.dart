@@ -4,7 +4,7 @@ import 'package:aurora/data/model/ar_mode_model.dart';
 import 'package:aurora/data/model/ar_state_model.dart';
 import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
-import 'package:aurora/utility/ar_widgets/colors.dart';
+import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 

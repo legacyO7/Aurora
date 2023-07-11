@@ -9,7 +9,7 @@ class PrivilegedRunButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      ArButton(title: "Run App With Elevated Privileges",
+      ArButton(title: "Run With Elevated Privileges",
           animate: false,
           action: ()=> context.read<HomeBloc>().add(HomeEventRunAsRoot())
       );

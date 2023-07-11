@@ -61,7 +61,7 @@ class InitAurora with GlobalMixin {
   Future initDI() async {
     sl.allowReassignment = true;
 
-    sl.registerLazySingleton(() => HomeBloc(sl(), sl()));
+    sl.registerLazySingleton(() => HomeBloc(sl(), sl(),sl()));
     sl.registerLazySingleton(() => DisablerBloc(sl()));
     sl.registerLazySingleton(() => TerminalBloc());
     sl.registerLazySingleton(() => KeyboardSettingsBloc(sl(), sl()));

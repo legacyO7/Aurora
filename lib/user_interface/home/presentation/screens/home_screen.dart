@@ -58,14 +58,15 @@ class _MyHomePageState extends State<HomeScreen> {
                   },
                   child: BlocBuilder<HomeBloc,HomeState>
                     (builder: (context,state){
+                      print(state);
                     if(state is AccessGranted) {
                       if(state.hasAccess) {
                         return const ControlPanelScreen();
                       }else{
-                        return grantAccess(context,runAsRoot: true);
+                        return grantAccess(context,runAsRoot: true,deniedList: state.deniedList);
                       }
                     }else {
-                      return grantAccess(context);
+                      return grantAccess(context,deniedList: state.deniedList);
                     }
                   }),
                 ),

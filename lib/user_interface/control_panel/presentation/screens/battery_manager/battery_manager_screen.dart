@@ -9,7 +9,7 @@ import 'package:aurora/user_interface/control_panel/presentation/state/battery_m
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 
-import 'package:aurora/utility/ar_widgets/colors.dart';
+import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
