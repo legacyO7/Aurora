@@ -19,22 +19,35 @@ class DisablerRepoImpl implements DisablerRepo{
   final PermissionManager _permissionManager;
   final ServiceManager _serviceManager;
 
-  Future<String> getFaustusDisableCommand() async=> "${Constants.kPolkit} ${Constants.globalConfig.kWorkingDirectory!+Constants.kArSetup} ${Constants.globalConfig.kWorkingDirectory} ";
-
 
   @override
   Future disableServices({required DISABLE disable}) async{
 
     List<String> disableCommands=[];
+    List<String> disableFaustusCommandList=[
+      'modprobe -r faustus',
+      'printf "blacklist faustus\\n" | sudo tee /etc/modprobe.d/faustus.conf',
+      'sudo modprobe asus-nb-wmi',
+      'sudo modprobe asus-wmi',
+      'sudo dkms remove faustus/0.2 --all'
+    ];
+
+    List<String> uninstallAuroraCommandList=[
+      'sudo rm -rf /opt/aurora',
+      'sudo rm -rf /usr/bin/aurora',
+      'sudo rm -rf /usr/local/lib/Aurora',
+      'sudo rm -f /usr/share/applications/aurora.desktop'
+    ];
+
 
       switch(disable) {
         case DISABLE.faustus:
-            disableCommands.add("${await getFaustusDisableCommand()}disablefaustus");
+            disableCommands.addAll(disableFaustusCommandList);
             break;
 
         case DISABLE.all:
             disableCommands.addAll([
-              "${await getFaustusDisableCommand()}disablefaustus",
+              ...disableFaustusCommandList,
               "systemctl disable ${Constants.kServiceName}"
             ]);
             break;
@@ -44,7 +57,7 @@ class DisablerRepoImpl implements DisablerRepo{
             break;
 
         case DISABLE.uninstall:
-            disableCommands.add("${await getFaustusDisableCommand()}uninstall");
+            disableCommands.addAll([...disableFaustusCommandList,...uninstallAuroraCommandList]);
             break;
         case DISABLE.none:
           // TODO: Handle this case.

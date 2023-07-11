@@ -3,6 +3,7 @@ import 'package:aurora/user_interface/control_panel/domain/battery_manager/batte
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/foundation.dart';
 
@@ -18,6 +19,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
     on<HomeEventRunAsRoot>((_, __) => _selfElevate());
     on<HomeEventLaunch>((event, __) => _launchUrl(subPath: event.url));
     on<HomeEventEnableLogging>((_, emit) => _enableLogging(emit));
+    on<HomeEventEnforceFaustus>((_, emit) => _enforceFaustus(emit));
     on<HomeEventDispose>((_, emit) => _dispose(emit));
   }
 
@@ -35,6 +37,13 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
       emit(AccessGranted(hasAccess: hasAccess,loggingEnabled: Constants.isLoggingEnabled));
     }else {
       emit(HomeStateCannotElevate());
+    }
+  }
+
+  Future _enforceFaustus(emit) async{
+    if(await _homeRepo.enforceFaustus()==0){
+      Constants.globalConfig.setInstance(arMode: ARMODE.faustus);
+      emit(HomeStateRebirth());
     }
   }
 

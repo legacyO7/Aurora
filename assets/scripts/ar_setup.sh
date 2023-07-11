@@ -78,25 +78,6 @@ setterminallist(){
   clear
 }
 
-disablefaustus(){
-    #disable faustus
-    echo -e "\033[1;34m Halting faustus\033[0m"
-    sudo modprobe -r faustus
-    printf "blacklist faustus\n" | sudo tee /etc/modprobe.d/faustus.conf
-    sudo modprobe asus-nb-wmi
-    sudo modprobe asus-wmi
-    sudo dkms remove faustus/0.2 --all
-}
-
-
-uninstall(){
-  sudo rm -rf /opt/aurora
-  sudo rm -rf /usr/bin/aurora
-  sudo rm -rf /usr/local/lib/Aurora
-  sudo rm -f /usr/share/applications/aurora.desktop
-}
-
-
 if [ $# -ne 0 ]
   then
     case "$2" in
@@ -114,13 +95,6 @@ if [ $# -ne 0 ]
       shift
       setterminallist $@
       executeinterminal "sudo $tmpdir/install_faustus.sh $tmpdir $git_faustus"
-    ;;
-    disablefaustus)
-      disablefaustus
-    ;;
-    uninstall)
-      disablefaustus
-      uninstall
     ;;
     esac
 fi

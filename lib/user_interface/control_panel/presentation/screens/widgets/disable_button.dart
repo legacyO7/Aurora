@@ -9,6 +9,7 @@ import 'package:aurora/utility/global_mixin.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class DisableButton extends StatelessWidget with GlobalMixin {
   const DisableButton({super.key});
@@ -81,6 +82,7 @@ class DisableButton extends StatelessWidget with GlobalMixin {
     if(restart) {
       context.read<DisablerBloc>().add(DisableEventDispose());
       context.read<HomeBloc>().add(HomeEventDispose());
+      Phoenix.rebirth(context);
     }
       Navigator.pop(context);
   }

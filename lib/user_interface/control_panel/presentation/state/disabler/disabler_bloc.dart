@@ -5,8 +5,6 @@ import 'package:aurora/user_interface/control_panel/presentation/state/disabler/
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_state.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
-import 'package:aurora/utility/constants.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 
 
@@ -50,8 +48,6 @@ class DisablerBloc extends TerminalBaseBloc<DisableEvent,DisableState> {
       if(state_.uninstallAurora){
         exit(0);
       }
-
-      Phoenix.rebirth(Constants.kScaffoldKey.currentContext!);
     }
   }
 

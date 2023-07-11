@@ -16,3 +16,5 @@ class AccessGranted extends HomeState{
 class HomeStateCannotElevate extends HomeState{}
 
 class HomeStateLoggingEnabled extends HomeState{}
+
+class HomeStateRebirth extends HomeState{}

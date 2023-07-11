@@ -1,7 +1,7 @@
 export 'ar_button.dart';
 export 'button_cubit.dart';
 export 'ar_checkbox.dart';
-export 'dialog.dart';
+export 'ar_dialog.dart';
 export 'ar_snackbar.dart';
 export 'ar_terminal.dart';
 export 'colors.dart';

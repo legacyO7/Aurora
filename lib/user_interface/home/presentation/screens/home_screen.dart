@@ -5,6 +5,7 @@ import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../state/home_bloc.dart';
@@ -48,18 +49,26 @@ class _MyHomePageState extends State<HomeScreen> {
               flex: 5,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 2.5.w),
-                child: BlocBuilder<HomeBloc,HomeState>
-                  (builder: (context,state){
-                  if(state is AccessGranted) {
-                    if(state.hasAccess) {
-                      return const ControlPanelScreen();
-                    }else{
-                      return grantAccess(context,runAsRoot: true);
+                child: BlocListener<HomeBloc, HomeState>(
+                  listener: (context, state){
+                    if(state is HomeStateRebirth){
+                      context.read<HomeBloc>().add(HomeEventDispose());
+                      Phoenix.rebirth(context);
                     }
-                  } else {
-                    return grantAccess(context);
-                  }
-                }),
+                  },
+                  child: BlocBuilder<HomeBloc,HomeState>
+                    (builder: (context,state){
+                    if(state is AccessGranted) {
+                      if(state.hasAccess) {
+                        return const ControlPanelScreen();
+                      }else{
+                        return grantAccess(context,runAsRoot: true);
+                      }
+                    }else {
+                      return grantAccess(context);
+                    }
+                  }),
+                ),
               ),
             )
           ],
