@@ -1,43 +1,42 @@
 
-class H {
-  HomeState homeState;
-
-  H(this.homeState);
-}
+enum HomeStates {init, accessGranted, cannotElevate, rebirth}
 
 class HomeState{
-  bool loggingEnabled;
-  List<String> deniedList;
 
-  HomeState({this.loggingEnabled=false, this.deniedList=const[]});
+  final HomeStates state;
 
-  HomeState setState({bool? loggingEnabled, List<String>? deniedList}){
-    return HomeState(
-      loggingEnabled: loggingEnabled??this.loggingEnabled,
-      deniedList: deniedList??this.deniedList,
-    );
-  }
+  final bool loggingEnabled;
+  final List<String> deniedList;
+  final bool hasAccess;
+  final bool runAsRoot;
+
+  const HomeState._({
+    this.state=HomeStates.init,
+    this.loggingEnabled=false,
+    this.deniedList=const[],
+    this.hasAccess=false,
+    this.runAsRoot=false
+  });
+
+  const HomeState.init(): this._();
+
+  const HomeState.accessGranted({
+    bool hasAccess=false,
+    bool runAsRoot=false
+  }):this._(hasAccess: hasAccess,runAsRoot: runAsRoot,state: HomeStates.accessGranted);
+
+  const HomeState.rebirth():this._(state: HomeStates.rebirth);
+
+  HomeState setState({
+    bool? loggingEnabled,
+    List<String>? deniedList,
+    HomeStates? state
+  })=>HomeState._(
+    state: state??this.state,
+    loggingEnabled: loggingEnabled??this.loggingEnabled,
+    deniedList: deniedList??this.deniedList,
+    runAsRoot: runAsRoot,
+    hasAccess: hasAccess
+  );
 
 }
-
-class HomeStateInit extends HomeState{
-  HomeStateInit({super.loggingEnabled,super.deniedList});
-}
-
-class AccessGranted extends HomeState{
-  bool hasAccess;
-  bool runAsRoot;
-  HomeState homeState;
-  AccessGranted(this.homeState,{this.hasAccess=false,this.runAsRoot=false}):
-        super(deniedList: homeState.deniedList,loggingEnabled: homeState.loggingEnabled);
-}
-
-class HomeStateCannotElevate extends HomeState{
-  HomeState homeState;
-  HomeStateCannotElevate(this.homeState):
-        super(deniedList: homeState.deniedList,loggingEnabled: homeState.loggingEnabled);
-}
-
-class HomeStateLoggingEnabled extends HomeState{}
-
-class HomeStateRebirth extends HomeState{}

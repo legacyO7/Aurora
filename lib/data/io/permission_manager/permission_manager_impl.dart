@@ -98,7 +98,7 @@ class PermissionManagerImpl implements PermissionManager{
     }
     
     
-    if (globalConfig.arMode!=ARMODE.faustus) {
+    if (globalConfig.arMode==ARMODE.faustus) {
       pathList.addAll([
         Constants.kFaustusModuleBrightnessPath,
         Constants.kFaustusModuleRedPath,

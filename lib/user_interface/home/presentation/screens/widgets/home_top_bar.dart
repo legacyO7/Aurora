@@ -49,7 +49,7 @@ class HomeTopBar extends StatelessWidget with GlobalMixin {
             children: [
               Text(Constants.globalConfig.deviceName,textAlign: TextAlign.end,),
                 BlocBuilder<HomeBloc, HomeState>(builder: (context,state){
-                  if((state is HomeStateInit && state.loggingEnabled) || (state is AccessGranted && state.loggingEnabled) ) {
+                  if(state.loggingEnabled) {
                     return const Text("logging enabled", style: TextStyle(color: ArColors.orange,fontWeight: FontWeight.bold),textAlign: TextAlign.end,);
                   }
                   return const SizedBox();

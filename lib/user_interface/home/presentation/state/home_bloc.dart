@@ -15,7 +15,8 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   final BatteryManagerRepo _batteryManagerRepo;
   final PermissionManager _permissionManager;
 
-  HomeBloc(this._homeRepo,this._batteryManagerRepo,this._permissionManager) : super(HomeStateInit(loggingEnabled: Constants.isLoggingEnabled)){
+  HomeBloc(this._homeRepo,this._batteryManagerRepo,this._permissionManager) :
+        super(const HomeState.init()){
     on<HomeEventInit>((_, emit) => _initHome(emit));
     on<HomeEventRequestAccess>((_, emit) => _requestAccess(emit));
     on<HomeEventRunAsRoot>((_, __) => _selfElevate());
@@ -38,16 +39,16 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   Future _requestAccess(emit) async {
     bool hasAccess =await _homeRepo.requestAccess();
     if((!hasAccess && await _homeRepo.canElevate()) || hasAccess) {
-      emit(AccessGranted(state, hasAccess: hasAccess));
+      emit(HomeState.accessGranted(hasAccess: hasAccess));
     }else {
-      emit(HomeStateCannotElevate(state));
+      emit(state.setState(state: HomeStates.cannotElevate));
     }
   }
 
   Future _enforceFaustus(emit) async{
     if(await _homeRepo.enforceFaustus()==0){
       Constants.globalConfig.setInstance(arMode: ARMODE.faustus);
-      emit(HomeStateRebirth());
+      emit(const HomeState.rebirth());
     }
   }
 
@@ -56,7 +57,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
     if(!kDebugMode) {
       InitAurora().initLogger();
     }
-      emit(state.setState(loggingEnabled: Constants.isLoggingEnabled));
+    emit(state.setState(loggingEnabled: Constants.isLoggingEnabled));
   }
 
   void _launchUrl({String? subPath})async{
@@ -64,7 +65,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   }
 
   void _dispose(emit){
-    emit(HomeStateInit(loggingEnabled: Constants.isLoggingEnabled));
+    emit(const HomeState.init());
   }
 
   Future<bool> compatibilityChecker() async=>

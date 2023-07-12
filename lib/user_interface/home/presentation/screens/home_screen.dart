@@ -51,15 +51,14 @@ class _MyHomePageState extends State<HomeScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 2.5.w),
                 child: BlocListener<HomeBloc, HomeState>(
                   listener: (context, state){
-                    if(state is HomeStateRebirth){
+                    if(state.state == HomeStates.rebirth){
                       context.read<HomeBloc>().add(HomeEventDispose());
                       Phoenix.rebirth(context);
                     }
                   },
                   child: BlocBuilder<HomeBloc,HomeState>
                     (builder: (context,state){
-                      print(state);
-                    if(state is AccessGranted) {
+                    if(state.state==HomeStates.accessGranted) {
                       if(state.hasAccess) {
                         return const ControlPanelScreen();
                       }else{
