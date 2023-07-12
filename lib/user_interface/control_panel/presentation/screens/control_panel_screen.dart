@@ -1,5 +1,6 @@
 import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_widgets.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/drawer/ar_drawer.dart';
+import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
@@ -41,12 +42,13 @@ class _ControlPanelState extends State<ControlPanelScreen> with GlobalMixin{
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                      decoration: BoxDecoration(
-                          border: Border.all()
-                      ),
-                      child: IconButton(onPressed: ()=>_openEndDrawer(), icon: const Icon(Icons.settings))),
-
+                  IconButton(
+                      onPressed: ()=>_openEndDrawer(),
+                      icon: const Icon(Icons.settings),
+                      hoverColor: ArColors.transparent,
+                      highlightColor: ArColors.transparent,
+                      splashColor: ArColors.transparent,
+                  ),
                 ],
               ),
 

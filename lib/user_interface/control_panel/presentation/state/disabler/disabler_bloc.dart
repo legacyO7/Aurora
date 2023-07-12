@@ -5,12 +5,12 @@ import 'package:aurora/user_interface/control_panel/presentation/state/disabler/
 import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_state.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
+import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 
 
 
-class DisablerBloc extends TerminalBaseBloc<DisableEvent,DisableState> {
-  DisablerBloc(this._disablerRepo) :
-        super(DisableInitState(disableFaustusModule: false, disableThreshold: false,uninstallAurora: false)){
+class DisablerBloc extends TerminalBaseBloc<DisableEvent,DBoi> {
+  DisablerBloc(this._disablerRepo) : super(const DBoi.init()){
     on<DisableEventCheckDisableServices>((event, emit) => _setDisableService(event,emit));
     on<DisableEventSubmitDisableServices>((_, emit) => _disableServices(emit));
     on<DisableEventDispose>((_, emit) => _dispose(emit));
@@ -19,40 +19,39 @@ class DisablerBloc extends TerminalBaseBloc<DisableEvent,DisableState> {
   final DisablerRepo _disablerRepo;
 
   void _setDisableService(DisableEventCheckDisableServices event, emit) {
-    final state_ =state;
-    if(state_ is DisableInitState) {
-      emit(state_.copyState(
+      emit(state.setState(
         disableThreshold: event.disableThreshold,
         disableFaustusModule: event.disableFaustusModule,
         uninstallAurora: event.uninstallAurora
       ));
-    }
   }
 
   Future _disableServices(emit) async{
-    final state_ = state;
-    if(state_ is DisableInitState && (state_.disableThreshold || state_.disableFaustusModule || state_.uninstallAurora )){
-      emit(DisableTerminalState());
       DISABLE disable=DISABLE.none;
-      if(state_.uninstallAurora){
+      if(state.uninstallAurora){
         disable=DISABLE.uninstall;
-      }else if(state_.disableFaustusModule && state_.disableThreshold){
+      }else if(state.disableFaustusModule && state.disableThreshold){
        disable=DISABLE.all;
-      }else if(state_.disableFaustusModule){
+      }else if(state.disableFaustusModule){
         disable=DISABLE.faustus;
-      }else if(state_.disableThreshold){
+      }else if(state.disableThreshold){
         disable=DISABLE.threshold;
       }
-      await _disablerRepo.disableServices(disable: disable);
-      emit(DisableProcessCompletedState());
-      if(state_.uninstallAurora){
-        exit(0);
+
+      emit(state.setState(state: DBoiStates.terminal));
+      if(await _disablerRepo.disableServices(disable: disable)) {
+        emit(const DBoi.completed());
+        if(state.uninstallAurora){
+          exit(0);
+        }
+      } else{
+        arSnackBar(text: "Something went wrong",isPositive: false);
+        emit(state.setState(state: DBoiStates.init));
       }
-    }
   }
 
   void _dispose(emit){
-    emit(DisableInitState(disableFaustusModule: false,disableThreshold: false));
+    emit(const DBoi.init());
   }
 
 }

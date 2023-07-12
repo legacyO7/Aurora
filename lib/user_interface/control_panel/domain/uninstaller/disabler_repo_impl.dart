@@ -21,7 +21,7 @@ class DisablerRepoImpl implements DisablerRepo{
 
 
   @override
-  Future disableServices({required DISABLE disable}) async{
+  Future<bool> disableServices({required DISABLE disable}) async{
 
     List<String> disableCommands=[];
     List<String> disableFaustusCommandList=[
@@ -64,7 +64,7 @@ class DisablerRepoImpl implements DisablerRepo{
           break;
       }
 
-      await _runDisableCommand(disableCommands);
+      bool isSuccess= await _runDisableCommand(disableCommands);
 
       if(!await _terminalDelegate.arServiceEnabled()) {
         if (disable == DISABLE.all || disable == DISABLE.threshold) {
@@ -77,10 +77,11 @@ class DisablerRepoImpl implements DisablerRepo{
           await _prefRepo.nukePref();
         }
 
+        return isSuccess;
   }
 
-  Future _runDisableCommand(List<String> commands) async{
-    await _permissionManager.runWithPrivileges(commands);
+  Future<bool> _runDisableCommand(List<String> commands) async{
+    return await _permissionManager.runWithPrivileges(commands)==0;
   }
   
 

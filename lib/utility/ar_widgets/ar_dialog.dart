@@ -54,10 +54,14 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        IntrinsicWidth(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 15),
+        Flexible(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 2.h),
+            padding:  EdgeInsets.symmetric(vertical: 4.h,horizontal: 3.w),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -88,31 +92,36 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
                   Flexible(
                       flex: 2,
                       child: Text(widget.subject)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 4.h),
-                    child: Center(child: widget.optionalWidget ?? Container()),
+                  Flexible(
+                    flex: 5,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 1.h),
+                      child: Center(child: widget.optionalWidget ?? Container()),
+                    ),
                   ),
-                  Center(
-                    child: BlocBuilder<ArButtonCubit,bool>(
-                      builder: (BuildContext context, state) {
-                        return ArButton(
-                          title: "Okay",
-                          isLoading: state,
-                          animate: false,
-                          isSelected: true,
-                          action: () async {
-                            context.read<ArButtonCubit>().setLoad();
-                            try {
-                              await widget.onConfirm();
-                            } catch(e,stackTrace) {
-                              ArLogger.log(data: e,stackTrace: stackTrace);
-                            }
-                            finally{
-                              context.read<ArButtonCubit>().setUnLoad();
-                            }
-                          },
-                        );
-                      }
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 2.h),
+                    child: Center(
+                      child: BlocBuilder<ArButtonCubit,bool>(
+                        builder: (BuildContext context, state) {
+                          return ArButton(
+                            title: "Okay",
+                            isLoading: state,
+                            isSelected: true,
+                            action: () async {
+                              context.read<ArButtonCubit>().setLoad();
+                              try {
+                                await widget.onConfirm();
+                              } catch(e,stackTrace) {
+                                ArLogger.log(data: e,stackTrace: stackTrace);
+                              }
+                              finally{
+                                context.read<ArButtonCubit>().setUnLoad();
+                              }
+                            },
+                          );
+                        }
+                      ),
                     ),
                   ),
                 ],
