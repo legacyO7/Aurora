@@ -35,6 +35,8 @@ class _ArButtonState extends State<ArButton> {
   late double height;
   late double width;
 
+  bool isHovered=false;
+
   @override
   void initState() {
     super.initState();
@@ -59,6 +61,11 @@ class _ArButtonState extends State<ArButton> {
                 color: context.read<KeyboardSettingsBloc>().selectedColor,
               ))
           : InkWell(
+              onHover: (value){
+                setState(() {
+                  isHovered=value;
+                });
+              },
               onTap: () async {
                 if (widget.isEnabled) {
                   await widget.action();
@@ -68,12 +75,13 @@ class _ArButtonState extends State<ArButton> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    border: Border.all(color: widget.isEnabled
-                        ? widget.isSelected
+                    border: Border.all(
+                      color: widget.isEnabled
+                        ? widget.isSelected || isHovered
                         ? context.selectedColor
                         : ArColors.greyDisabled!
                         : ArColors.grey,),
-                    color: widget.isEnabled
+                      color: widget.isEnabled
                         ? widget.isSelected
                         ? context.selectedColorWithAlpha
                         : null
