@@ -5,7 +5,7 @@ import 'package:aurora/data/shared_preference/pref_repo.dart';
 import 'package:aurora/user_interface/control_panel/domain/keyboard_settings/keyboard_settings_repo.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
-import 'package:aurora/utility/ar_widgets/colors.dart';
+import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:flutter/material.dart';
 
 import 'keyboard_settings_state.dart';

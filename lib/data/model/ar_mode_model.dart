@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:aurora/utility/ar_widgets/colors.dart';
+import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 
 class ArMode{
   int? mode;

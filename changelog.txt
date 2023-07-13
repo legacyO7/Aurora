@@ -1,6 +1,6 @@
 Changelogs:
 
-- Fixed permission issues with faustus module
-- Fixed app crash on debug mode
-- Fixed invalid working directory
-- Fixed app not recognizing certain devices
+- Added Settings Panel
+- Option to enforce faustus in mainline mode. This will force aurora to run in faustus mode, even if mainline mode is compatible. ( Settings > Enforce faustus )
+- Logging can be enabled or disabled anytime from Settings
+- Fixed minor bugs

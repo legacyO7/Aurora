@@ -60,7 +60,7 @@ class TerminalDelegateImpl implements TerminalDelegate {
   @override
   Future<bool> arServiceEnabled() async{
     return (await _terminalRepo.getOutput(command: Constants.kArServiceStatus))
-        .toString().contains('aurora-controller.service; enabled');
+        .toString().contains('enabled');
 
   }
 

@@ -1,7 +1,7 @@
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_state.dart';
-import 'package:aurora/utility/ar_widgets/colors.dart';
+import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/ar_widgets/placeholder.dart';
 import 'package:flutter/material.dart';

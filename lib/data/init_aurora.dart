@@ -13,7 +13,6 @@ import 'package:aurora/user_interface/control_panel/domain/keyboard_settings/key
 import 'package:aurora/user_interface/control_panel/domain/uninstaller/disabler_repo.dart';
 import 'package:aurora/user_interface/control_panel/domain/uninstaller/disabler_repo_impl.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_bloc.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
@@ -47,6 +46,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 
+import '../user_interface/control_panel/presentation/state/disable_services/disable_bloc.dart';
 import 'io/io_manager/io_manager.dart';
 import 'io/io_manager/io_manager_impl.dart';
 import 'io/permission_manager/permission_manager.dart';
@@ -61,7 +61,7 @@ class InitAurora with GlobalMixin {
   Future initDI() async {
     sl.allowReassignment = true;
 
-    sl.registerLazySingleton(() => HomeBloc(sl(), sl()));
+    sl.registerLazySingleton(() => HomeBloc(sl(), sl(),sl()));
     sl.registerLazySingleton(() => DisablerBloc(sl()));
     sl.registerLazySingleton(() => TerminalBloc());
     sl.registerLazySingleton(() => KeyboardSettingsBloc(sl(), sl()));
@@ -127,7 +127,7 @@ class InitAurora with GlobalMixin {
 
   }
 
-  Future errorRecorder() async {
+  Future initLogger() async {
 
     if(canLog()){
 

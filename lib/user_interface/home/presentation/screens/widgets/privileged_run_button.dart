@@ -4,16 +4,13 @@ import 'package:aurora/utility/ar_widgets/ar_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class GitButton extends StatelessWidget{
-  const GitButton({super.key});
+class PrivilegedRunButton extends StatelessWidget {
+  const PrivilegedRunButton({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return ArButton(
-        action: () => context.read<HomeBloc>().add(HomeEventLaunch()),
-        title: "Visit Home",
-        animate: false,
-    );
-  }
-
+  Widget build(BuildContext context) =>
+      ArButton(title: "Run With Elevated Privileges",
+          animate: false,
+          action: ()=> context.read<HomeBloc>().add(HomeEventRunAsRoot())
+      );
 }

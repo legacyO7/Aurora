@@ -15,7 +15,7 @@ class Constants {
 
   //commands
   static const String kPolkit = 'pkexec --disable-internal-agent';
-  static const String kArServiceStatus = 'systemctl status aurora-controller.service';
+  static const String kArServiceStatus = 'systemctl is-enabled aurora-controller.service';
   static const String kChecksystemd = 'ps --no-headers -o comm 1';
 
   //paths

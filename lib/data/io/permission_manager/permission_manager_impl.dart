@@ -16,8 +16,6 @@ class PermissionManagerImpl implements PermissionManager{
   final ServiceManager _serviceManager;
   final IOManager _ioManager;
 
-
-
   final List<String> _checkInstalledPackages=['dkms', 'openssl','mokutil','git','make','cmake'];
 
   List<String> _deniedList=[];
@@ -94,11 +92,6 @@ class PermissionManagerImpl implements PermissionManager{
     if(globalConfig.kThresholdPath!=null){
       pathList.add(globalConfig.kThresholdPath!);
     }
-
-    if (globalConfig.arMode==ARMODE.batteryManager&&globalConfig.kThresholdPath!=null) {
-      pathList.add(globalConfig.kThresholdPath!);
-    }
-    
     
     if (globalConfig.arMode==ARMODE.faustus) {
       pathList.addAll([
@@ -137,6 +130,9 @@ class PermissionManagerImpl implements PermissionManager{
 
   @override
   List<String> get listMissingPackages=>missingPackages;
+
+  @override
+  List<String> get deniedList=>_deniedList;
 
 
 }

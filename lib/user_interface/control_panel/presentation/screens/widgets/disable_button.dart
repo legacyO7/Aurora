@@ -1,29 +1,27 @@
-import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_event.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_state.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/disable_services/disable_bloc.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_widgets.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/global_mixin.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class DisableButton extends StatelessWidget with GlobalMixin {
   const DisableButton({super.key});
 
   Widget _selectorWindow() {
-    return BlocListener<DisablerBloc,Equatable>(
+    return BlocListener<DisablerBloc,DisableState>(
       listener: (BuildContext context, state) {
-        if(state is DisableProcessCompletedState) {
+        if(state.state == DisableStateStates.completed) {
           _navigate(context);
         }
       },
-      child: BlocBuilder<DisablerBloc, Equatable>
+      child: BlocBuilder<DisablerBloc, DisableState>
         (builder: (BuildContext context, state) {
 
-        if (state is DisableInitState) {
+        if (state.state == DisableStateStates.init) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -48,7 +46,7 @@ class DisableButton extends StatelessWidget with GlobalMixin {
               ),
             ],
           );
-        } else if (state is DisableTerminalState) {
+        } else if (state .state ==DisableStateStates.terminal) {
           return const TerminalScreen();
         }
 
@@ -59,8 +57,8 @@ class DisableButton extends StatelessWidget with GlobalMixin {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-        onPressed: () async {
+    return ArButton(
+        action: () async {
           await arDialog(
               title: "Disable Services",
               subject: "Select the services to be disabled",
@@ -72,14 +70,16 @@ class DisableButton extends StatelessWidget with GlobalMixin {
                 _navigate(context,restart: false);
               });
         },
-        tooltip: "Disable Features",
-        icon: const Icon(Icons.delete_outline));
+        title: "Disable Features",
+        animate: false,
+    );
   }
 
   _navigate(BuildContext context,{bool restart=true})async{
     if(restart) {
       context.read<DisablerBloc>().add(DisableEventDispose());
       context.read<HomeBloc>().add(HomeEventDispose());
+      Phoenix.rebirth(context);
     }
       Navigator.pop(context);
   }

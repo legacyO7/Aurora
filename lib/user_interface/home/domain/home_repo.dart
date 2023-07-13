@@ -1,5 +1,5 @@
 
-abstract class HomeRepo{
+abstract class HomeRepo {
   Future<bool> checkInternetAccess();
   bool checkFaustusFolder();
   Future launchArUrl({String? subPath});
@@ -15,4 +15,5 @@ abstract class HomeRepo{
   Future<bool> thresholdPathExists();
   Future<bool> systemHasSystemd();
   Future initLog();
+  Future<int> enforceFaustus();
 }
