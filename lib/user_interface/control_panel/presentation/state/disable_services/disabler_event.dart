@@ -1,4 +1,6 @@
-abstract class DisableEvent{}
+part of 'disable_bloc.dart';
+
+sealed class DisableEvent{}
 
 class DisableEventCheckDisableServices extends DisableEvent{
   final bool? disableThreshold;

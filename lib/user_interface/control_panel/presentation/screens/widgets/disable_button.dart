@@ -1,6 +1,4 @@
-import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_bloc.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_event.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/disabler/disabler_state.dart';
+import 'package:aurora/user_interface/control_panel/presentation/state/disable_services/disable_bloc.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_widgets.dart';
@@ -14,16 +12,16 @@ class DisableButton extends StatelessWidget with GlobalMixin {
   const DisableButton({super.key});
 
   Widget _selectorWindow() {
-    return BlocListener<DisablerBloc,DBoi>(
+    return BlocListener<DisablerBloc,DisableState>(
       listener: (BuildContext context, state) {
-        if(state.state == DBoiStates.completed) {
+        if(state.state == DisableStateStates.completed) {
           _navigate(context);
         }
       },
-      child: BlocBuilder<DisablerBloc, DBoi>
+      child: BlocBuilder<DisablerBloc, DisableState>
         (builder: (BuildContext context, state) {
 
-        if (state.state == DBoiStates.init) {
+        if (state.state == DisableStateStates.init) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -48,7 +46,7 @@ class DisableButton extends StatelessWidget with GlobalMixin {
               ),
             ],
           );
-        } else if (state .state ==DBoiStates.terminal) {
+        } else if (state .state ==DisableStateStates.terminal) {
           return const TerminalScreen();
         }
 

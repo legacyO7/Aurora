@@ -193,6 +193,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
         'modprobe -r asus_wmi',
         'modprobe -r asus_nb_wmi',
         'printf "blacklist asus_wmi\\n blacklist asus_nb_wmi\\n" | sudo tee /etc/modprobe.d/faustus.conf',
+        'modprobe faustus || echo faustus aint available'
     ]);
   }
 

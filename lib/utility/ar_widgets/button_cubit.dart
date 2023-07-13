@@ -7,3 +7,10 @@ class ArButtonCubit extends Cubit<bool>{
   setUnLoad()=>emit(false);
   
 }
+
+class ArButtonHoverCubit extends Cubit<bool>{
+  ArButtonHoverCubit():super(false);
+
+  setHover(hover)=>emit(hover);
+
+}

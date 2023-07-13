@@ -1,35 +1,37 @@
 
-enum DBoiStates {init, terminal, completed}
+part of 'disable_bloc.dart';
 
-class DBoi{
+enum DisableStateStates {init, terminal, completed}
 
-  final DBoiStates state;
+class DisableState{
+
+  final DisableStateStates state;
   final bool disableThreshold;
   final bool disableFaustusModule;
   final bool uninstallAurora;
 
-  const DBoi._({
-    this.state=DBoiStates.init,
+  const DisableState._({
+    this.state=DisableStateStates.init,
     this.disableThreshold=false,
     this.disableFaustusModule=false,
     this.uninstallAurora=false
   });
 
-  const DBoi.init():this._();
+  const DisableState.init():this._();
 
-  const DBoi.completed():this._(state: DBoiStates.completed);
+  const DisableState.completed():this._(state: DisableStateStates.completed);
 
-  DBoi setState({
+
+  DisableState setState({
     bool? disableThreshold,
     bool? disableFaustusModule,
     bool? uninstallAurora,
-    DBoiStates? state
-  })=>DBoi._(
+    DisableStateStates? state
+  })=>DisableState._(
       disableThreshold: disableThreshold??this.disableThreshold,
       disableFaustusModule: disableFaustusModule??this.disableFaustusModule,
       uninstallAurora:uninstallAurora??this.uninstallAurora,
       state: state??this.state
     );
-
 
 }

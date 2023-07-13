@@ -92,11 +92,6 @@ class PermissionManagerImpl implements PermissionManager{
     if(globalConfig.kThresholdPath!=null){
       pathList.add(globalConfig.kThresholdPath!);
     }
-
-    if (globalConfig.arMode==ARMODE.batteryManager&&globalConfig.kThresholdPath!=null) {
-      pathList.add(globalConfig.kThresholdPath!);
-    }
-    
     
     if (globalConfig.arMode==ARMODE.faustus) {
       pathList.addAll([

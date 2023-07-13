@@ -92,11 +92,12 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
                   Flexible(
                       flex: 2,
                       child: Text(widget.subject)),
+                  widget.optionalWidget==null?const SizedBox(height: 10):
                   Flexible(
                     flex: 5,
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
-                      child: Center(child: widget.optionalWidget ?? Container()),
+                      child: Center(child: widget.optionalWidget),
                     ),
                   ),
                   Padding(
