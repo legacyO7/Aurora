@@ -1,4 +1,3 @@
-import 'package:aurora/data/init_aurora.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_bloc.dart';
@@ -14,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import 'shared/data/di/init_aurora.dart';
 import 'user_interface/control_panel/presentation/state/disable_services/disable_bloc.dart';
 import 'user_interface/home/presentation/state/home_bloc.dart';
 
@@ -49,6 +49,7 @@ class Aurora extends StatelessWidget with GlobalMixin{
             ResponsiveSizer(
                 builder: (context, orientation, deviceType) =>
                   MaterialApp(
+                    debugShowCheckedModeBanner: false,
                     title: 'Aurora',
                     darkTheme: super.darkTheme(),
                     theme: super.lightTheme(),

@@ -1,5 +1,5 @@
-import 'package:aurora/data/model/ar_mode_model.dart';
-import 'package:aurora/data/model/ar_state_model.dart';
+import 'package:aurora/shared/data/model/ar_mode_model.dart';
+import 'package:aurora/shared/data/model/ar_state_model.dart';
 import 'package:flutter/material.dart';
 
 abstract class PrefRepo{

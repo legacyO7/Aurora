@@ -1,18 +1,13 @@
-import 'package:aurora/data/io/io_manager/io_manager.dart';
-import 'package:aurora/data/io/permission_manager/permission_manager.dart';
-import 'package:aurora/data/io/service_manager/service_manager.dart';
-import 'package:aurora/data/shared_preference/pref_repo.dart';
-import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
+import 'package:aurora/shared/shared.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
 
 import 'disabler_repo.dart';
 
-class DisablerRepoImpl implements DisablerRepo{
+class DisablerRepoImpl extends DisablerRepo with TerminalMixin{
 
-  DisablerRepoImpl(this._terminalDelegate,this._prefRepo,this._serviceManager,this._permissionManager,this._ioManager);
+  DisablerRepoImpl(this._prefRepo,this._serviceManager,this._permissionManager,this._ioManager);
 
-  final TerminalDelegate _terminalDelegate;
   final PrefRepo _prefRepo;
 
   final IOManager _ioManager;
@@ -66,7 +61,7 @@ class DisablerRepoImpl implements DisablerRepo{
 
       bool isSuccess= await _runDisableCommand(disableCommands);
 
-      if(!await _terminalDelegate.arServiceEnabled()) {
+      if(!await super.arServiceEnabled()) {
         if (disable == DISABLE.all || disable == DISABLE.threshold) {
           await _disableBatteryManager();
           await _prefRepo.setThreshold(100);

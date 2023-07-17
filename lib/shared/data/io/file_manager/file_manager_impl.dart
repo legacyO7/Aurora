@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:aurora/data/io/file_manager/file_manager.dart';
-import 'package:aurora/data/io/io_manager/io_manager.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/shared/shared.dart';
+
 
 class FileManagerImpl extends FileManager{
 

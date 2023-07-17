@@ -1,18 +1,17 @@
-import 'package:aurora/data/io/file_manager/file_manager.dart';
-import 'package:aurora/data/io/permission_manager/permission_manager.dart';
+import 'package:aurora/shared/shared.dart';
+
 import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
-import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 
-class SetupRepoImpl extends SetupRepo with GlobalMixin{
-  SetupRepoImpl(this._setupSource, this._terminalDelegate,this._permissionManager,this._fileManager);
+class SetupRepoImpl extends SetupRepo with GlobalMixin, TerminalMixin{
+  SetupRepoImpl(this._setupSource,this._terminalRepo,this._permissionManager,this._fileManager);
 
   final SetupSource _setupSource;
-  final TerminalDelegate _terminalDelegate;
+  final TerminalRepo _terminalRepo;
   final PermissionManager _permissionManager;
   final FileManager _fileManager;
 
@@ -47,7 +46,7 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin{
       _fileManager.setWorkingDirectory();
       if (!isMainLineCompatible()) {
         _globalConfig.setInstance(
-            kSecureBootEnabled: await _terminalDelegate.isSecureBootEnabled()
+            kSecureBootEnabled: await super.isSecureBootEnabled()
         );
       }
     }catch(e,stackTrace){
@@ -58,7 +57,7 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin{
   @override
   Future loadSetupFiles() async{
     _setupPath = "${_globalConfig.kWorkingDirectory!+Constants.kArSetup} ${_globalConfig.kWorkingDirectory}";
-    if(_globalConfig.kSecureBootEnabled! || !await _terminalDelegate.pkexecChecker()){
+    if(_globalConfig.kSecureBootEnabled! || !await super.pkexecChecker()){
       _terminalList = '" ${(await getTerminalList())} "';
     }
   }
@@ -66,7 +65,7 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin{
   @override
   Future installPackages() async{
     if (_terminalList.isNotEmpty || _pkexec) {
-      await _terminalDelegate.execute("${!_pkexec ? '' : Constants.kPolkit} $_setupPath installpackages $_terminalList");
+      await _terminalRepo.execute("${!_pkexec ? '' : Constants.kPolkit} $_setupPath installpackages $_terminalList");
     } else {
       arSnackBar(text: "Fetching Data Failed", isPositive: false);
     }
@@ -74,14 +73,14 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin{
 
   @override
   Future<bool> pkexecChecker() async{
-    _pkexec= await _terminalDelegate.pkexecChecker();
+    _pkexec= await super.pkexecChecker();
     return _pkexec;
   }
 
 
   @override
   Future installFaustus() async{
-    await _terminalDelegate.execute("${_globalConfig.kSecureBootEnabled! ? '' : Constants.kPolkit} $_setupPath installfaustus ${Constants.globalConfig.kFaustusGitUrl} $_terminalList");
+    await _terminalRepo.execute("${_globalConfig.kSecureBootEnabled! ? '' : Constants.kPolkit} $_setupPath installfaustus ${Constants.globalConfig.kFaustusGitUrl} $_terminalList");
   }
 
   @override

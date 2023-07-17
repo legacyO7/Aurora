@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:aurora/user_interface/terminal/data/source/terminal_source.dart';
+import 'package:aurora/shared/shared.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'terminal_repo.dart';
 
 class TerminalRepoImpl extends TerminalRepo{
 
@@ -44,7 +43,7 @@ class TerminalRepoImpl extends TerminalRepo{
   }
 
   @override
-  Future<List<String>> getOutput({required String command}) async{
+  Future<List<String>> getOutput(String command) async{
 
     await execute(command);
 
@@ -54,10 +53,9 @@ class TerminalRepoImpl extends TerminalRepo{
   }
 
   @override
-  Future<int> getStatusCode({required String command}) async{
-
+  Future<int> getStatusCode(String command) async{
     try {
-      List<String> output = await getOutput(command: '$command; echo \$?');
+      List<String> output = await getOutput('$command; echo \$?');
       return int.tryParse(output.last)??-1;
     }catch(e,stackTrace){
       ArLogger.log(data: e,stackTrace: stackTrace);

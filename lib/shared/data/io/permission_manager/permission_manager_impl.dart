@@ -1,18 +1,17 @@
 import 'dart:io';
 
-import 'package:aurora/data/io/io_manager/io_manager.dart';
-import 'package:aurora/data/io/permission_manager/permission_manager.dart';
-import 'package:aurora/data/io/service_manager/service_manager.dart';
-import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
+import 'package:aurora/shared/shared.dart';
+
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
+
 
 class PermissionManagerImpl implements PermissionManager{
   
   PermissionManagerImpl(this._terminalDelegate,this._serviceManager, this._ioManager);
   
-  final TerminalDelegate _terminalDelegate;
+  final TerminalRepo _terminalDelegate;
   final ServiceManager _serviceManager;
   final IOManager _ioManager;
 
@@ -120,7 +119,7 @@ class PermissionManagerImpl implements PermissionManager{
   @override
   Future<List<String>> listPackagesToInstall() async{
     for(var package in _checkInstalledPackages) {
-      if((await _terminalDelegate.getOutput(command: "command -v $package")).isEmpty){
+      if((await _terminalDelegate.getOutput("command -v $package")).isEmpty){
         missingPackages.add(package);
       }
     }

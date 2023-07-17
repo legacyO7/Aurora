@@ -1,12 +1,12 @@
 
 import 'dart:convert';
 
-import 'package:aurora/data/model/ar_mode_model.dart';
-import 'package:aurora/data/model/ar_state_model.dart';
-import 'package:aurora/data/shared_preference/pref_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/ar_mode_model.dart';
+import '../model/ar_state_model.dart';
+import 'pref_constants.dart';
 import 'pref_repo.dart';
 
 class PrefRepoImpl extends PrefRepo{

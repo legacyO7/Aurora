@@ -1,18 +1,13 @@
-import 'package:aurora/data/io/io_manager/io_manager.dart';
-import 'package:aurora/data/io/permission_manager/permission_manager.dart';
-import 'package:aurora/data/io/service_manager/service_manager.dart';
-import 'package:aurora/data/shared_preference/pref_repo.dart';
-import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
+import 'package:aurora/shared/shared.dart';
 import 'package:aurora/utility/constants.dart';
 
 import 'battery_manager_repo.dart';
 
-class BatteryManagerRepoImpl implements BatteryManagerRepo{
+class BatteryManagerRepoImpl extends BatteryManagerRepo with TerminalMixin{
 
-  BatteryManagerRepoImpl(this._terminalDelegate, this._prefRepo, this._ioManager,this._permissionManager,this._serviceManager);
+  BatteryManagerRepoImpl( this._prefRepo, this._ioManager,this._permissionManager,this._serviceManager);
 
 
-  final TerminalDelegate _terminalDelegate;
   final PrefRepo _prefRepo;
   final IOManager _ioManager;
   final PermissionManager _permissionManager;
@@ -33,7 +28,7 @@ class BatteryManagerRepoImpl implements BatteryManagerRepo{
 
   @override
   Future setBatteryChargeLimit({required int limit}) async{
-    if(!await _terminalDelegate.arServiceEnabled()){
+    if(!await super.arServiceEnabled()){
       await _permissionManager.setPermissions();
     }
     await _prefRepo.setThreshold(limit);

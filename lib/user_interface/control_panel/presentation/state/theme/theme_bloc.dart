@@ -1,4 +1,4 @@
-import 'package:aurora/data/shared_preference/pref_repo.dart';
+import 'package:aurora/shared/shared.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_event.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_state.dart';
 import 'package:flutter/material.dart';

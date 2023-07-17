@@ -1,5 +1,5 @@
-import 'package:aurora/data/init_aurora.dart';
-import 'package:aurora/data/io/permission_manager/permission_manager.dart';
+import 'package:aurora/shared/shared.dart';
+
 import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';

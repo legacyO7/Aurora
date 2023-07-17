@@ -1,9 +1,7 @@
 import 'dart:io';
 
-import 'package:aurora/data/io/file_manager/file_manager.dart';
-import 'package:aurora/data/io/io_manager/io_manager.dart';
-import 'package:aurora/data/io/permission_manager/permission_manager.dart';
-import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
+import 'package:aurora/shared/shared.dart';
+
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
@@ -16,15 +14,14 @@ import 'package:window_manager/window_manager.dart';
 
 import 'home_repo.dart';
 
-class HomeRepoImpl extends HomeRepo with GlobalMixin{
+class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
 
-  HomeRepoImpl(this._terminalDelegate, this._permissionManager, this._ioManager, this._fileManager);
+  HomeRepoImpl(this._terminalRepo, this._permissionManager, this._ioManager, this._fileManager);
 
-  final TerminalDelegate _terminalDelegate;
+  final TerminalRepo _terminalRepo;
   final PermissionManager _permissionManager;
   final IOManager _ioManager;
   final FileManager _fileManager;
-
   final _globalConfig=Constants.globalConfig;
 
 
@@ -90,7 +87,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
       return 7;
     }
 
-    if(!await _terminalDelegate.pkexecChecker()){
+    if(!await super.pkexecChecker()){
       return 6;
     }
 
@@ -109,7 +106,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
       } else {
         return 2;
       }
-    }else if(await _terminalDelegate.isKernelCompatible()) {
+    }else if(await super.isKernelCompatible()) {
       return 5;
     }
 
@@ -141,15 +138,15 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
   @override
   Future selfElevate() async{
     if(await canElevate()) {
-        await _terminalDelegate.execute("${Constants.installedBinary} --with-root");
+        await _terminalRepo.execute("${Constants.installedBinary} --with-root");
         exit(0);
     }else{
-      arSnackBar(text: "Something went wrong",isPositive: false);
+      arSnackBar(text: "Can't elevate at this point",isPositive: false);
     }
   }
 
   Future<bool> _checkAccess() async{
-    return await _permissionManager.validatePaths() && await _terminalDelegate.arServiceEnabled();
+    return await _permissionManager.validatePaths() && await super.arServiceEnabled();
   }
 
   @override
@@ -184,7 +181,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
 
   @override
   Future<bool> systemHasSystemd() async{
-    return (await _terminalDelegate.getOutput(command: Constants.kChecksystemd)).toString().contains('systemd');
+    return (await _terminalRepo.getOutput(Constants.kChecksystemd)).toString().contains('systemd');
   }
 
   @override
@@ -205,14 +202,14 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
    ArLogger.log(data: "Build Version          : ${await getVersion()}");
    ArLogger.log(data: "Build Type             : ${Constants.buildType.name}");
    ArLogger.log(data: "Compatible Device      : ${await isDeviceCompatible()}");
-   ArLogger.log(data: "Compatible Kernel      : ${await _terminalDelegate.isKernelCompatible()}");
+   ArLogger.log(data: "Compatible Kernel      : ${await super.isKernelCompatible()}");
    ArLogger.log(data: "Mainline Mode          : ${isMainLineCompatible()}");
    ArLogger.log(data: "System has systemd     : ${await systemHasSystemd()}");
    ArLogger.log(data: "Threshold Path Exists  : ${await thresholdPathExists()}");
    ArLogger.log(data: "Working Directory      : ${Constants.globalConfig.kWorkingDirectory}");
 
     if(await  _ioManager.checkIfExists(filePath: "${Constants.globalConfig.kTmpPath}/ar.log", fileType: FileSystemEntityType.file)) {
-      await _terminalDelegate.execute("chown \$(logname) ${Constants.globalConfig.kTmpPath}/ar.log");
+      await _terminalRepo.execute("chown \$(logname) ${Constants.globalConfig.kTmpPath}/ar.log");
     }
 
   }

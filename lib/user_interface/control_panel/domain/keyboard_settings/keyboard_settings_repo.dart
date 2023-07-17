@@ -1,4 +1,4 @@
-import 'package:aurora/data/model/ar_mode_model.dart';
+import 'package:aurora/shared/shared.dart';
 
 abstract class KeyboardSettingsRepo{
   Future setMode({required ArMode arMode});

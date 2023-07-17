@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
+import 'package:aurora/shared/shared.dart';
 
 import 'io_manager.dart';
 

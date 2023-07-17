@@ -6,7 +6,7 @@ abstract class TerminalRepo{
   bool isInProgress();
   Stream<List<String>> get terminalOutStream;
   void disposeStream();
-  Future<List<String>> getOutput({required String command});
-  Future<int> getStatusCode({required String command});
+  Future<List<String>> getOutput(String command);
+  Future<int> getStatusCode(String command);
   void clearTerminalOut();
 }

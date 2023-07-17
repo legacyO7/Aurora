@@ -1,10 +1,7 @@
 import 'dart:io';
-
-import 'package:aurora/data/io/io_manager/io_manager.dart';
-import 'package:aurora/data/shared_preference/pref_repo.dart';
+import 'package:aurora/shared/shared.dart';
 import 'package:aurora/utility/constants.dart';
 
-import 'service_manager.dart';
 
 class ServiceManagerImpl implements ServiceManager {
 

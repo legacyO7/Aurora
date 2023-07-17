@@ -1,4 +1,6 @@
-import 'package:aurora/data/shared_preference/pref_repo.dart';
+
+import 'package:aurora/shared/shared.dart';
+
 import 'package:aurora/user_interface/control_panel/domain/uninstaller/disabler_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
