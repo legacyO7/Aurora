@@ -31,7 +31,7 @@ class ArDrawer extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             GitButton(),
-            ThemeButton(aasText: true),
+            ThemeButton(asText: true),
             DisableButton(),
             PrivilegedRunButton(),
             EnforceWidget(),

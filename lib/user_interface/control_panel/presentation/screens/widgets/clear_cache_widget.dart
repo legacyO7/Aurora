@@ -10,7 +10,10 @@ class ClearCacheWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return ArButton(title: "Clear Cache", action: (){
+    return ArButton(
+        title: "Clear Cache",
+        animate: false,
+        action: (){
       arAlert(
           content: "Settings will be restored back to default",
           actions: [

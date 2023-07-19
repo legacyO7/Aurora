@@ -29,12 +29,15 @@ mixin GlobalMixin{
     return ThemeData(
       fontFamily: 'Play',
       brightness: light ? Brightness.light : Brightness.dark,
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: ArColors.transparent,
+        foregroundColor:light?ArColors.black:ArColors.white, ),
       textTheme:  TextTheme(
         bodyMedium: TextStyle(fontSize: 13.sp),
         headlineSmall:  TextStyle(fontSize: 13.5.sp),
         headlineLarge:  TextStyle(fontSize: 22.sp,fontWeight: FontWeight.bold),
       ).apply(
-        bodyColor: light?ArColors.black:ArColors.white
+        bodyColor: light?ArColors.black:ArColors.white,
       )
     );
   }

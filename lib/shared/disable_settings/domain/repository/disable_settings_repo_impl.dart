@@ -46,6 +46,7 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin{
         case DisableEnum.mainline:
             disableCommands.addAll(disableMainlineCommandList);
             break;
+
         case DisableEnum.faustus:
             disableCommands.addAll(disableFaustusCommandList);
             break;

@@ -1,4 +1,5 @@
 
+import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/clear_cache_widget.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/theme_button.dart';
 import 'package:aurora/user_interface/home/presentation/screens/home_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
@@ -8,12 +9,13 @@ import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart'
 import 'package:aurora/user_interface/setup/presentation/state/setup_state.dart';
 import 'package:aurora/utility/ar_widgets/ar_top_buttons.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_mixin.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
-class SetupWizardScreen extends StatefulWidget {
+class SetupWizardScreen extends StatefulWidget with GlobalMixin {
   const SetupWizardScreen({Key? key}) : super(key: key);
 
   @override
@@ -40,7 +42,6 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const ThemeButton(),
                 arTitle(context),
                 Flexible(
                   child: BlocListener <SetupBloc,SetupState>(
@@ -122,9 +123,36 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
             top: 0,
             left: 0,
             child:
-          ArWindowButtons(),)
+          ArWindowButtons(),),
+
+           Positioned(
+            top: 0,
+            right: 0,
+            child:IconButton(onPressed: ()=>_showDropdown(context), icon: const Icon(Icons.settings)),)
         ],
       ),
     );
+  }
+
+  void _showDropdown(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return  const AlertDialog(
+          alignment: Alignment.topRight,
+          actionsPadding: EdgeInsets.zero,
+          actionsAlignment: MainAxisAlignment.start,
+          actions: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+              ThemeButton(asText: true),
+              ClearCacheWidget(),
+            ],)
+              ],
+        );});
   }
 }
