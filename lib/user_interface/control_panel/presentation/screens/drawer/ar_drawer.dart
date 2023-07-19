@@ -1,4 +1,5 @@
 import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_widgets.dart';
+import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/clear_cache_widget.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/enforce_widget.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/logger_button.dart';
 import 'package:aurora/user_interface/home/presentation/screens/widgets/privileged_run_button.dart';
@@ -35,6 +36,7 @@ class ArDrawer extends StatelessWidget {
             PrivilegedRunButton(),
             EnforceWidget(),
             LoggerButton(),
+            ClearCacheWidget()
           ],
         ),
       ),

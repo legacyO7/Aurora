@@ -60,6 +60,10 @@ class SetupAskNetworkAccessState extends SetupState{
   SetupAskNetworkAccessState();
 }
 
+class SetupRebirth extends SetupState{
+  SetupRebirth();
+}
+
 class SetupIncompatibleState extends SetupState{
   final int stepValue;
   final Widget? child;

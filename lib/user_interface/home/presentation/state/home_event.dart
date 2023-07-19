@@ -19,4 +19,5 @@ class HomeEventLaunch extends HomeEvent{
   String? url;
   HomeEventLaunch({this.url});
 }
+
 class HomeEventDispose extends HomeEvent{}

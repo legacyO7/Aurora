@@ -11,8 +11,6 @@ import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 import 'setup_state.dart';
 
@@ -26,6 +24,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     on<SetupEventOnUpdate>((event, emit) => _onUpdate(emit,ignoreUpdate: event.ignoreUpdate));
     on<SetupEventBatteryManagerMode>((event, emit) => _enterBatteryManagerMode(emit));
     on<SetupEventCompatibleKernel>((event, emit) => _switchToMainline(emit, removeFaustus: event.removeFaustus));
+    on<SetupEventClearCache>((_, emit) => _clearCache(emit));
   }
 
   final HomeRepo _homeRepo;
@@ -109,10 +108,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     if(removeFaustus){
       emit(SetupDisableFaustusState());
       await _disablerRepo.disableServices(disable: DisableEnum.faustus);
-      BuildContext context=Constants.kScaffoldKey.currentState!.context;
-      if(context.mounted) {
-        Phoenix.rebirth(context);
-      }
+      emit(SetupRebirth());
     }else{
       _globalConfig.setInstance(arMode: ArModeEnum.faustus);
       emit(SetupCompatibleState());
@@ -219,6 +215,11 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
       );
     }
     _emitInstallFaustus(emit,isValid: isValid);
+  }
+
+  Future _clearCache(emit) async{
+    await _prefRepo.nukePref();
+    emit(SetupRebirth());
   }
 
   _emitInstallPackage(emit)  => emit(SetupIncompatibleState(stepValue: 0, child: packageInstaller(packagesToInstall:  _setupWizardRepo.missingPackagesList), isValid: true));

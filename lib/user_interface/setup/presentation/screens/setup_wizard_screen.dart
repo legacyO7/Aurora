@@ -11,6 +11,7 @@ import 'package:aurora/utility/constants.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class SetupWizardScreen extends StatefulWidget {
   const SetupWizardScreen({Key? key}) : super(key: key);
@@ -48,6 +49,9 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                         Future.delayed(const Duration(milliseconds: 1000)).then((value) =>
                             Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomeScreen()))
                         );
+                      }
+                      if(state is SetupRebirth){
+                        Phoenix.rebirth(context);
                       }
                     },
                     child: BlocBuilder<SetupBloc,SetupState>(
@@ -99,6 +103,10 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
                         if(state is SetupInCompatibleDevice) {
                           return const Text('this ain\'t ASUS. I have no business here!');
+                        }
+
+                        if(state is SetupRebirth) {
+                          return const Text('Restarting...');
                         }
 
                           return const Text("something is really wrong ;(");
