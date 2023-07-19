@@ -16,12 +16,15 @@ import 'home_repo.dart';
 
 class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
 
-  HomeRepoImpl(this._terminalRepo, this._permissionManager, this._ioManager, this._fileManager);
+  HomeRepoImpl(this._terminalRepo, this._permissionManager, this._ioManager, this._fileManager, this._prefRepo, this._disableSettingsRepo);
 
   final TerminalRepo _terminalRepo;
   final PermissionManager _permissionManager;
   final IOManager _ioManager;
   final FileManager _fileManager;
+  final PrefRepo _prefRepo;
+  final DisableSettingsRepo _disableSettingsRepo;
+
   final _globalConfig=Constants.globalConfig;
 
 
@@ -76,8 +79,13 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
       return (info.toLowerCase().contains('asus'));
     }
 
-    Constants.globalConfig.setInstance(deviceName: ( await _ioManager.readFile(Constants.kProductName)).join(''));
-    return(checkDeviceInfo(info: [...await _ioManager.readFile(Constants.kVendorName),Constants.globalConfig.deviceName].toString()));
+    _globalConfig.setInstance(deviceName: ( await _ioManager.readFile(Constants.kProductName)).join(''));
+    return(checkDeviceInfo(info: [...await _ioManager.readFile(Constants.kVendorName),_globalConfig.deviceName].toString()));
+  }
+  
+  Future<bool> _isFaustusEnforced() async{
+    _globalConfig.setInstance(isFaustusEnforced: await _prefRepo.isFaustusEnforced());
+    return _globalConfig.isFaustusEnforced;
   }
 
   @override
@@ -93,20 +101,20 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
 
     if(isMainLineCompatible()){
       if(await thresholdPathExists() && await systemHasSystemd()){
-        _globalConfig.setInstance(arMode: ARMODE.mainline);
+        _globalConfig.setInstance(arMode: ArModeEnum.mainline);
       }else{
-        _globalConfig.setInstance(arMode:  ARMODE.mainlineWithoutBatteryManager);
+        _globalConfig.setInstance(arMode:  ArModeEnum.mainlineWithoutBatteryManager);
       }
       return 4;
     }
 
     if(!checkFaustusFolder()) {
-      if(await thresholdPathExists()&& await systemHasSystemd()) {
+      if(await thresholdPathExists() && !await _isFaustusEnforced() && await systemHasSystemd()) {
         return 3;
       } else {
         return 2;
       }
-    }else if(await super.isKernelCompatible()) {
+    }else if(await super.isKernelCompatible() && !await _isFaustusEnforced()) {
       return 5;
     }
 
@@ -114,7 +122,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
       return 1;
     }
 
-    _globalConfig.setInstance(arMode: ARMODE.faustus);
+    _globalConfig.setInstance(arMode: ArModeEnum.faustus);
     return 0;
   }
 
@@ -185,13 +193,22 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
   }
 
   @override
-  Future<int> enforceFaustus() async{
-    return _permissionManager.runWithPrivileges([
-        'modprobe -r asus_wmi',
-        'modprobe -r asus_nb_wmi',
-        'printf "blacklist asus_wmi\\n blacklist asus_nb_wmi\\n" | sudo tee /etc/modprobe.d/faustus.conf',
-        'modprobe faustus || echo faustus aint available'
-    ]);
+  Future<bool> enforcement(Enforcement enforce) async{
+    bool isSuccess=false;
+    if(enforce==Enforcement.faustus){
+      isSuccess= await _disableSettingsRepo.disableServices(disable: DisableEnum.mainline);
+    }
+    if(enforce==Enforcement.mainline){
+      isSuccess= await _disableSettingsRepo.disableServices(disable: DisableEnum.faustus);
+    }
+
+    if(isSuccess) {
+      bool isFaustusEnforced=enforce==Enforcement.faustus;
+      await _prefRepo.setFaustusEnforcement(isFaustusEnforced);
+      await compatibilityChecker();
+    }
+
+    return isSuccess;
   }
 
   @override

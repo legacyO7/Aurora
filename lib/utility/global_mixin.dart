@@ -9,9 +9,9 @@ import 'constants.dart';
 
 mixin GlobalMixin{
 
-  bool isMainLine()=>Constants.globalConfig.arMode.name.contains(ARMODE.mainline.name);
+  bool isMainLine()=>Constants.globalConfig.arMode.name.contains(ArModeEnum.mainline.name);
 
-  bool canLog()=> Constants.isLoggingEnabled || Constants.buildType==BuildType.debug;
+  bool canLog()=> Constants.globalConfig.isLoggingEnabled || Constants.buildType==BuildType.debug;
 
   bool isInstalledPackage() => Constants.buildType==BuildType.deb||Constants.buildType==BuildType.rpm;
 

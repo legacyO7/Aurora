@@ -9,6 +9,7 @@ abstract class PrefRepo{
   Future<ArMode?> getArMode();
   Future<ArState> getArState();
   Future<int?> getThreshold();
+  Future<bool> isFaustusEnforced();
   Future<ThemeMode> getTheme();
 
   Future setVersion(String version);
@@ -17,6 +18,7 @@ abstract class PrefRepo{
   Future setArState({ required ArState arState });
   Future setThreshold(int threshold);
   Future setTheme(ThemeMode arTheme);
+  Future setFaustusEnforcement(bool enforced);
   Future nukePref();
 
 }

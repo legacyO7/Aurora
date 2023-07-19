@@ -1,3 +1,4 @@
+import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,14 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'ar_logger.dart';
 
-Future<dynamic> arDialog({required String title, required String subject, bool? isWarning = false, required VoidCallback onConfirm, Widget? optionalWidget, VoidCallback? onCancel}) {
+Future<dynamic> arDialog({
+  required String title,
+  required String subject,
+  bool? isWarning = false,
+  required VoidCallback onConfirm,
+  Widget? optionalWidget,
+  VoidCallback? onCancel
+}) {
   return showDialog(
       barrierDismissible: false,
       context: Constants.kScaffoldKey.currentState!.context,
@@ -92,12 +100,13 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
                   Flexible(
                       flex: 2,
                       child: Text(widget.subject)),
-                  widget.optionalWidget==null?const SizedBox(height: 10):
                   Flexible(
-                    flex: 5,
+                    flex: context.watch<ArButtonCubit>().state||widget.optionalWidget!=null? 5:0,
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
-                      child: Center(child: widget.optionalWidget),
+                      child: Center(child:
+                      context.watch<ArButtonCubit>().state? const TerminalScreen():
+                      widget.optionalWidget??const SizedBox(height: 10,)),
                     ),
                   ),
                   Padding(
@@ -112,12 +121,9 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
                             action: () async {
                               context.read<ArButtonCubit>().setLoad();
                               try {
-                                await widget.onConfirm();
+                                 await widget.onConfirm();
                               } catch(e,stackTrace) {
                                 ArLogger.log(data: e,stackTrace: stackTrace);
-                              }
-                              finally{
-                                context.read<ArButtonCubit>().setUnLoad();
                               }
                             },
                           );

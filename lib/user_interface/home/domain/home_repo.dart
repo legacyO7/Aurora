@@ -1,4 +1,6 @@
 
+import 'package:aurora/utility/ar_widgets/ar_enums.dart';
+
 abstract class HomeRepo {
   Future<bool> checkInternetAccess();
   bool checkFaustusFolder();
@@ -15,5 +17,5 @@ abstract class HomeRepo {
   Future<bool> thresholdPathExists();
   Future<bool> systemHasSystemd();
   Future initLog();
-  Future<int> enforceFaustus();
+  Future<bool> enforcement(Enforcement enforce);
 }

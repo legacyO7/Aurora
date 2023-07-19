@@ -1,7 +1,6 @@
 
 import 'package:aurora/shared/shared.dart';
 
-import 'package:aurora/user_interface/control_panel/domain/uninstaller/disabler_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
@@ -11,6 +10,7 @@ import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_configuration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
@@ -32,15 +32,17 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   final PrefRepo _prefRepo;
   final SetupRepo _setupWizardRepo;
   final ArButtonCubit _arButtonCubit;
-  final DisablerRepo _disablerRepo;
+  final DisableSettingsRepo _disablerRepo;
+
+  final GlobalConfig _globalConfig=Constants.globalConfig;
 
   _initSetup(emit) async {
     await _homeRepo.getVersion();
     await _setupWizardRepo.initSetup();
 
-    if(await _prefRepo.getVersion() !=Constants.globalConfig.arVersion && await _homeRepo.checkInternetAccess()){
+    if(await _prefRepo.getVersion() !=_globalConfig.arVersion && await _homeRepo.checkInternetAccess()){
       emit(SetupWhatsNewState(await _fetchChangelog()));
-      await _prefRepo.setVersion(Constants.globalConfig.arVersion!);
+      await _prefRepo.setVersion(_globalConfig.arVersion!);
     }else {
       await _checkForUpdates(emit);
     }
@@ -65,7 +67,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
         case 4:
           if(_homeRepo.checkFaustusFolder()){
             emit(SetupDisableFaustusState());
-            await _disablerRepo.disableServices(disable: DISABLE.faustus);
+            await _disablerRepo.disableServices(disable: DisableEnum.faustus);
           }
             emit(SetupMainlineCompatibleState());
           break;
@@ -106,19 +108,20 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   Future _switchToMainline(emit,{required bool removeFaustus}) async{
     if(removeFaustus){
       emit(SetupDisableFaustusState());
-      await _disablerRepo.disableServices(disable: DISABLE.faustus);
+      await _disablerRepo.disableServices(disable: DisableEnum.faustus);
       BuildContext context=Constants.kScaffoldKey.currentState!.context;
       if(context.mounted) {
         Phoenix.rebirth(context);
       }
     }else{
-      Constants.globalConfig.setInstance(arMode: ARMODE.faustus);
+      _globalConfig.setInstance(arMode: ArModeEnum.faustus);
       emit(SetupCompatibleState());
     }
   }
 
   void _enterBatteryManagerMode(emit){
-    Constants.globalConfig.setInstance(arMode: ARMODE.batteryManager);
+    _globalConfig.setInstance(arMode: ArModeEnum.batteryManager);
+
     emit(SetupCompatibleState());
   }
 
@@ -127,7 +130,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     if(BuildType.rpm==Constants.buildType) return false;
 
     var liveVersion=  _homeRepo.convertVersionToInt(await _setupWizardRepo.getAuroraLiveVersion());
-    var currentVersion= _homeRepo.convertVersionToInt(Constants.globalConfig.arVersion!);
+    var currentVersion= _homeRepo.convertVersionToInt(_globalConfig.arVersion!);
 
     if(liveVersion==0||currentVersion==0) {
       return false;
@@ -211,7 +214,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   void _validateRepo(emit,{required String value}) {
     bool isValid = value.isNotEmpty && value.startsWith('http') && value.endsWith('.git');
     if (isValid) {
-      Constants.globalConfig.setInstance(
+      _globalConfig.setInstance(
           kFaustusGitUrl:value
       );
     }

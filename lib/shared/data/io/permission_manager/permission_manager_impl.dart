@@ -80,7 +80,7 @@ class PermissionManagerImpl implements PermissionManager{
       pathList.add(Constants.kOldServicePath+Constants.kServiceName);
     }
 
-    if(globalConfig.arMode.name.contains(ARMODE.mainline.name)){
+    if(globalConfig.arMode.name.contains(ArModeEnum.mainline.name)){
       pathList.addAll([
         Constants.kMainlineModuleStatePath,
         Constants.kMainlineModuleModePath,
@@ -92,7 +92,7 @@ class PermissionManagerImpl implements PermissionManager{
       pathList.add(globalConfig.kThresholdPath!);
     }
     
-    if (globalConfig.arMode==ARMODE.faustus) {
+    if (globalConfig.arMode==ArModeEnum.faustus) {
       pathList.addAll([
         Constants.kFaustusModuleBrightnessPath,
         Constants.kFaustusModuleRedPath,

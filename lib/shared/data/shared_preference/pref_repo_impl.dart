@@ -44,6 +44,11 @@ class PrefRepoImpl extends PrefRepo{
   }
 
   @override
+  Future<bool> isFaustusEnforced() async {
+    return (_sharedPreferences.getBool(PrefConstants.enforceFaustus))??false;
+  }
+
+  @override
   Future<ThemeMode> getTheme() async{
     switch((_sharedPreferences.getString(PrefConstants.theme))??PrefConstants.theme){
       case 'system':
@@ -90,6 +95,11 @@ class PrefRepoImpl extends PrefRepo{
   @override
   Future setTheme(ThemeMode arTheme) async {
     await _sharedPreferences.setString(PrefConstants.theme, arTheme.name);
+  }
+
+  @override
+  Future setFaustusEnforcement(bool enforced) async {
+    await _sharedPreferences.setBool(PrefConstants.enforceFaustus, enforced);
   }
 
   @override

@@ -2,11 +2,10 @@ import 'package:aurora/shared/shared.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
 
-import 'disabler_repo.dart';
 
-class DisablerRepoImpl extends DisablerRepo with TerminalMixin{
+class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin{
 
-  DisablerRepoImpl(this._prefRepo,this._serviceManager,this._permissionManager,this._ioManager);
+  DisableSettingsRepoImpl(this._prefRepo,this._serviceManager,this._permissionManager,this._ioManager);
 
   final PrefRepo _prefRepo;
 
@@ -16,15 +15,23 @@ class DisablerRepoImpl extends DisablerRepo with TerminalMixin{
 
 
   @override
-  Future<bool> disableServices({required DISABLE disable}) async{
+  Future<bool> disableServices({required DisableEnum disable}) async{
 
     List<String> disableCommands=[];
+
+    List<String> disableMainlineCommandList=[
+      'modprobe -r asus_wmi',
+      'modprobe -r asus_nb_wmi',
+      'printf "blacklist asus_wmi\\n blacklist asus_nb_wmi\\n" | sudo tee /etc/modprobe.d/faustus.conf',
+      'modprobe faustus || echo faustus aint available'
+    ];
+
     List<String> disableFaustusCommandList=[
       'modprobe -r faustus',
       'printf "blacklist faustus\\n" | sudo tee /etc/modprobe.d/faustus.conf',
-      'sudo modprobe asus-nb-wmi',
-      'sudo modprobe asus-wmi',
-      'sudo dkms remove faustus/0.2 --all'
+      'modprobe asus-nb-wmi',
+      'modprobe asus-wmi',
+      'dkms remove faustus/0.2 --all || echo faustus aint available'
     ];
 
     List<String> uninstallAuroraCommandList=[
@@ -36,25 +43,28 @@ class DisablerRepoImpl extends DisablerRepo with TerminalMixin{
 
 
       switch(disable) {
-        case DISABLE.faustus:
+        case DisableEnum.mainline:
+            disableCommands.addAll(disableMainlineCommandList);
+            break;
+        case DisableEnum.faustus:
             disableCommands.addAll(disableFaustusCommandList);
             break;
 
-        case DISABLE.all:
+        case DisableEnum.all:
             disableCommands.addAll([
               ...disableFaustusCommandList,
               "systemctl disable ${Constants.kServiceName}"
             ]);
             break;
 
-        case DISABLE.threshold:
+        case DisableEnum.threshold:
             disableCommands.add("systemctl disable ${Constants.kServiceName}");
             break;
 
-        case DISABLE.uninstall:
+        case DisableEnum.uninstall:
             disableCommands.addAll([...disableFaustusCommandList,...uninstallAuroraCommandList]);
             break;
-        case DISABLE.none:
+        case DisableEnum.none:
           // TODO: Handle this case.
           break;
       }
@@ -62,13 +72,13 @@ class DisablerRepoImpl extends DisablerRepo with TerminalMixin{
       bool isSuccess= await _runDisableCommand(disableCommands);
 
       if(!await super.arServiceEnabled()) {
-        if (disable == DISABLE.all || disable == DISABLE.threshold) {
+        if (disable == DisableEnum.all || disable == DisableEnum.threshold) {
           await _disableBatteryManager();
           await _prefRepo.setThreshold(100);
         }
       }
 
-        if (disable == DISABLE.uninstall) {
+        if (disable == DisableEnum.uninstall) {
           await _prefRepo.nukePref();
         }
 

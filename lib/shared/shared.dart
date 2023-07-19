@@ -18,3 +18,5 @@ export 'terminal/domain/model/terminal_text.dart';
 export 'terminal/domain/mixins/terminal_mixin.dart';
 export 'terminal/domain/repository/terminal_repo.dart';
 export 'terminal/domain/repository/terminal_repo_impl.dart';
+export 'disable_settings/domain/repository/disable_settings_repo.dart';
+export 'disable_settings/domain/repository/disable_settings_repo_impl.dart';

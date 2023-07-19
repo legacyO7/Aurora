@@ -6,6 +6,7 @@ import 'global_configuration.dart';
 
 class Constants {
 
+  //dynamic variables
   static final GlobalConfig globalConfig=sl<GlobalConfig>();
 
   //files
@@ -54,8 +55,5 @@ class Constants {
 
   //build type
   static const BuildType buildType= BuildType.debug;
-  
-  //flags
-  static bool isLoggingEnabled=false;
 
 }

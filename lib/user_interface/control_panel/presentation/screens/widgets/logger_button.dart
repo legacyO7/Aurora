@@ -12,7 +12,7 @@ class LoggerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ArButton(
         animate: false,
-        title: "${Constants.isLoggingEnabled?'Dis':'En'}able logging", action: (){
+        title: "${Constants.globalConfig.isLoggingEnabled?'Dis':'En'}able logging", action: (){
       context.read<HomeBloc>().add(HomeEventEnableLogging());
       Navigator.pop(context);
     });
