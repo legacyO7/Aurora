@@ -24,6 +24,7 @@ import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.
 import 'package:aurora/utility/ar_bloc_observer.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
+import 'package:aurora/utility/ar_widgets/cubits/color_cubit.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
 import 'package:aurora/utility/global_mixin.dart';
@@ -44,14 +45,15 @@ class InitAurora with GlobalMixin {
   Future initDI() async {
     sl.allowReassignment = true;
 
-    sl.registerLazySingleton(() => HomeBloc(sl(), sl(),sl(), sl()));
-    sl.registerLazySingleton(() => DisablerBloc(sl()));
+    sl.registerLazySingleton(() => HomeBloc(sl(), sl(), sl()));
+    sl.registerLazySingleton(() => DisableSettingsBloc(sl()));
     sl.registerLazySingleton(() => TerminalBloc());
     sl.registerLazySingleton(() => KeyboardSettingsBloc(sl(), sl()));
     sl.registerLazySingleton(() => BatteryManagerBloc(sl()));
-    sl.registerLazySingleton(() => SetupBloc(sl(), sl(), sl(), sl(), sl()));
+    sl.registerLazySingleton(() => SetupBloc(sl(), sl(), sl(),sl()));
     sl.registerLazySingleton(() => ThemeBloc(sl()));
     sl.registerLazySingleton(() => ArButtonCubit());
+    sl.registerLazySingleton(() => ArColorCubit());
 
     sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
     sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl(),sl(), sl(),sl()));
@@ -125,7 +127,8 @@ class InitAurora with GlobalMixin {
         return true;
       };
 
-      Bloc.observer = AppBlocObserver();
+      Bloc.observer = ArBlocObserver();
+
     }
   }
 

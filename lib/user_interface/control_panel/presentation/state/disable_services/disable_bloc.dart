@@ -4,20 +4,22 @@ import 'package:aurora/shared/shared.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
+import 'package:equatable/equatable.dart';
 
 part 'disable_state.dart';
 part 'disabler_event.dart';
 
 
 
-class DisablerBloc extends TerminalBaseBloc<DisableEvent,DisableState> {
-  DisablerBloc(this._disablerRepo) : super(const DisableState.init()){
+class DisableSettingsBloc extends TerminalBaseBloc<DisableEvent,DisableSettingsState> {
+  DisableSettingsBloc(this._disablerRepo) : super(const DisableSettingsState.init()){
+    on<DisableEventInit>((_, emit) => emit(const DisableSettingsState.init()));
     on<DisableEventCheckDisableServices>((event, emit) => _setDisableService(event,emit));
     on<DisableEventSubmitDisableServices>((_, emit) => _disableServices(emit));
-    on<DisableEventDispose>((_, emit) => _dispose(emit));
-  }
+ }
 
   final DisableSettingsRepo _disablerRepo;
+
 
   void _setDisableService(DisableEventCheckDisableServices event, emit) {
       emit(state.setState(
@@ -28,6 +30,8 @@ class DisablerBloc extends TerminalBaseBloc<DisableEvent,DisableState> {
   }
 
   Future _disableServices(emit) async{
+
+    super.setLoad();
       DisableEnum disable=DisableEnum.none;
       if(state.uninstallAurora){
         disable=DisableEnum.uninstall;
@@ -39,20 +43,19 @@ class DisablerBloc extends TerminalBaseBloc<DisableEvent,DisableState> {
         disable=DisableEnum.threshold;
       }
 
-      emit(state.setState(state: DisableStateStates.terminal));
       if(await _disablerRepo.disableServices(disable: disable)) {
-        emit(const DisableState.completed());
+       // await close();
         if(state.uninstallAurora){
           exit(0);
+        }else{
+          super.restartApp();
         }
       } else{
         arSnackBar(text: "Something went wrong",isPositive: false);
         emit(state.setState(state: DisableStateStates.init));
       }
-  }
 
-  void _dispose(emit){
-    emit(const DisableState.init());
+      super.setUnLoad();
   }
 
 }

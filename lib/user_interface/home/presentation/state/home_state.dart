@@ -1,5 +1,5 @@
 
-enum HomeStates {init, accessGranted, cannotElevate, rebirth}
+enum HomeStates {init, accessGranted, cannotElevate}
 
 class HomeState{
 
@@ -24,8 +24,6 @@ class HomeState{
     bool hasAccess=false,
     bool runAsRoot=false
   }):this._(hasAccess: hasAccess,runAsRoot: runAsRoot,state: HomeStates.accessGranted);
-
-  const HomeState.rebirth():this._(state: HomeStates.rebirth);
 
   HomeState setState({
     bool? loggingEnabled,

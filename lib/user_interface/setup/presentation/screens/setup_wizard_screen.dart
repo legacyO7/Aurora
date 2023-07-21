@@ -1,7 +1,6 @@
 
 import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/clear_cache_widget.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/theme_button.dart';
-import 'package:aurora/user_interface/home/presentation/screens/home_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/widgets/ar_kernel_compatible_dialog.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
@@ -13,7 +12,6 @@ import 'package:aurora/utility/global_mixin.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class SetupWizardScreen extends StatefulWidget with GlobalMixin {
   const SetupWizardScreen({Key? key}) : super(key: key);
@@ -23,7 +21,6 @@ class SetupWizardScreen extends StatefulWidget with GlobalMixin {
 }
 
 class _SetupWizardScreenState extends State<SetupWizardScreen> {
-
 
   @override
   initState() {
@@ -42,17 +39,18 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                arTitle(context),
+                arTitle(),
                 Flexible(
                   child: BlocListener <SetupBloc,SetupState>(
-                    listener: (BuildContext context, state) {
+                    listener: (_, state) {
                       if(state is SetupCompatibleState|| state is SetupMainlineCompatibleState){
                         Future.delayed(const Duration(milliseconds: 1000)).then((value) =>
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const HomeScreen()))
+                            Navigator.pushNamed(context,'/home')
                         );
                       }
                       if(state is SetupRebirth){
-                        Phoenix.rebirth(context);
+                        Navigator.popUntil(context, (route) =>route.isFirst);
+                        context.read<SetupBloc>().add(EventSWInit());
                       }
                     },
                     child: BlocBuilder<SetupBloc,SetupState>(
@@ -83,7 +81,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                         }
 
                         if(state is SetupCompatibleState) {
-                          return const Text("initializing...");
+                          return const Text("initializing in faustus mode");
                         }
 
                         if(state is SetupDisableFaustusState) {
@@ -95,7 +93,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                         }
 
                         if(state is SetupMainlineCompatibleState) {
-                          return const Text("using mainline kernel module, nothing to install");
+                          return const Text("initializing in mainline mode");
                         }
 
                         if(state is SetupMissingPkexec) {

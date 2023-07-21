@@ -39,8 +39,8 @@ class BatteryManagerBloc extends TerminalBaseBloc<BatteryManagerEvent,BatteryMan
     emit(BatteryManagerInit(batteryLevel: _batteryLevel));
   }
 
-  Color getSliderColor(Color color){
-    return HSLColor.fromColor(color).withHue(100-((_batteryLevel-Constants.kMinimumChargeLevel)/Constants.kMinimumChargeLevel)*100).toColor();
+  Color getSliderColor(){
+    return HSLColor.fromColor(super.selectedColor).withHue(100-((_batteryLevel-Constants.kMinimumChargeLevel)/Constants.kMinimumChargeLevel)*100).toColor();
   }
 
   int get batteryLevel => _batteryLevel;

@@ -1,11 +1,9 @@
 import 'package:aurora/shared/shared.dart';
-
 import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
-import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
 import 'package:flutter/foundation.dart';
@@ -16,22 +14,20 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   final HomeRepo _homeRepo;
   final BatteryManagerRepo _batteryManagerRepo;
   final PermissionManager _permissionManager;
-  final ArButtonCubit _arButtonCubit;
   
   final GlobalConfig _globalConfig=Constants.globalConfig;
 
-  HomeBloc(this._homeRepo,this._batteryManagerRepo,this._permissionManager, this._arButtonCubit) :
-        super(const HomeState.init()){
+  HomeBloc(this._homeRepo,this._batteryManagerRepo,this._permissionManager) : super(const HomeState.init()){
     on<HomeEventInit>((_, emit) => _initHome(emit));
     on<HomeEventRequestAccess>((_, emit) => _requestAccess(emit));
     on<HomeEventRunAsRoot>((_, __) => _selfElevate());
     on<HomeEventLaunch>((event, __) => _launchUrl(subPath: event.url));
     on<HomeEventEnableLogging>((_, emit) => _enableLogging(emit));
     on<HomeEventEnforcement>((event, emit) => _enforcement(emit,enforcement: event.enforcement));
-    on<HomeEventDispose>((_, emit) => _dispose(emit));
   }
 
   Future _initHome(emit) async{
+    emit(const HomeState.init());
     await _permissionManager.validatePaths();
     emit(state.setState(deniedList: _permissionManager.deniedList));
     await _requestAccess(emit);
@@ -51,12 +47,11 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   }
 
   Future _enforcement(emit,{required Enforcement enforcement}) async{
-    _arButtonCubit.setLoad();
+    super.setLoad();
     if(await _homeRepo.enforcement(enforcement)){
-      _arButtonCubit.setUnLoad();
-      emit(const HomeState.rebirth());
+      super.setUnLoad();
+      super.restartApp();
     }
-
   }
 
   void _enableLogging(emit){
@@ -71,9 +66,6 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
     _homeRepo.launchArUrl(subPath: subPath);
   }
 
-  void _dispose(emit){
-    emit(const HomeState.init());
-  }
 
   Future<bool> compatibilityChecker() async=>
       (await _homeRepo.compatibilityChecker())==0&&( await _batteryManagerRepo.getBatteryCharge()!=100);

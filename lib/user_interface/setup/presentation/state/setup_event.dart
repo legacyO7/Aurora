@@ -39,4 +39,7 @@ class SetupEventCompatibleKernel implements SetupEvent{
 class SetupEventClearCache implements SetupEvent{
   SetupEventClearCache();
 }
+class SetupEventRebirth implements SetupEvent{
+  SetupEventRebirth();
+}
 

@@ -13,11 +13,12 @@ Future<dynamic> arDialog({
   bool? isWarning = false,
   required VoidCallback onConfirm,
   Widget? optionalWidget,
+  BuildContext? context,
   VoidCallback? onCancel
 }) {
   return showDialog(
       barrierDismissible: false,
-      context: Constants.kScaffoldKey.currentState!.context,
+      context: context?? Constants.kScaffoldKey.currentState!.context,
       builder: (_) => StatefulBuilder(
         builder: (_, __) {
           return  _ArDialogBody(
@@ -57,7 +58,7 @@ class _ArDialogBody extends StatefulWidget {
 
 class _ArDialogBodyState extends State<_ArDialogBody> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext ctx) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -119,7 +120,6 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
                             isLoading: state,
                             isSelected: true,
                             action: () async {
-                              context.read<ArButtonCubit>().setLoad();
                               try {
                                  await widget.onConfirm();
                               } catch(e,stackTrace) {

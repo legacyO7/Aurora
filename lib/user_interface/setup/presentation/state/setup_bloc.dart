@@ -15,7 +15,7 @@ import 'package:aurora/utility/global_configuration.dart';
 import 'setup_state.dart';
 
 class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
-  SetupBloc(this._homeRepo,this._prefRepo, this._setupWizardRepo,this._arButtonCubit, this._disablerRepo) : super(SetupInitState()){
+  SetupBloc(this._homeRepo,this._prefRepo, this._setupWizardRepo, this._disablerRepo) : super(SetupInitState()){
     on<EventSWInit>((_, emit) => _initSetup(emit));
     on<SetupEventConfigure>((event, emit) => _allowConfigure(event.allow, emit));
     on<SetupEventOnCancel>((event, emit) => _onCancel(stepValue: event.stepValue,emit));
@@ -25,12 +25,12 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     on<SetupEventBatteryManagerMode>((event, emit) => _enterBatteryManagerMode(emit));
     on<SetupEventCompatibleKernel>((event, emit) => _switchToMainline(emit, removeFaustus: event.removeFaustus));
     on<SetupEventClearCache>((_, emit) => _clearCache(emit));
+    on<SetupEventRebirth>((_, emit) => _restart(emit));
   }
 
   final HomeRepo _homeRepo;
   final PrefRepo _prefRepo;
   final SetupRepo _setupWizardRepo;
-  final ArButtonCubit _arButtonCubit;
   final DisableSettingsRepo _disablerRepo;
 
   final GlobalConfig _globalConfig=Constants.globalConfig;
@@ -164,7 +164,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
   void _onInstall(emit,{required int stepValue}) async {
       var isSuccess=false;
-      _arButtonCubit.setLoad();
+      super.setLoad();
 
 
       if (stepValue == 0 ) {
@@ -189,7 +189,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
           }
       }
 
-      _arButtonCubit.setUnLoad();
+      super.setUnLoad();
       await _processOutput(emit,state: state,isSuccess: isSuccess);
     
   }
@@ -219,6 +219,10 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
   Future _clearCache(emit) async{
     await _prefRepo.nukePref();
+    _restart(emit);
+  }
+
+   void _restart(emit) {
     emit(SetupRebirth());
   }
 

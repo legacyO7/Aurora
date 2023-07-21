@@ -20,4 +20,3 @@ class HomeEventLaunch extends HomeEvent{
   HomeEventLaunch({this.url});
 }
 
-class HomeEventDispose extends HomeEvent{}
