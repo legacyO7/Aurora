@@ -45,12 +45,12 @@ class InitAurora with GlobalMixin {
   Future initDI() async {
     sl.allowReassignment = true;
 
-    sl.registerLazySingleton(() => HomeBloc(sl(), sl(), sl()));
+    sl.registerLazySingleton(() => HomeBloc(sl(), sl()));
     sl.registerLazySingleton(() => DisableSettingsBloc(sl()));
     sl.registerLazySingleton(() => TerminalBloc());
     sl.registerLazySingleton(() => KeyboardSettingsBloc(sl(), sl()));
     sl.registerLazySingleton(() => BatteryManagerBloc(sl()));
-    sl.registerLazySingleton(() => SetupBloc(sl(), sl(), sl(),sl()));
+    sl.registerLazySingleton(() => SetupBloc(sl(), sl(), sl()));
     sl.registerLazySingleton(() => ThemeBloc(sl()));
     sl.registerLazySingleton(() => ArButtonCubit());
     sl.registerLazySingleton(() => ArColorCubit());
@@ -58,7 +58,7 @@ class InitAurora with GlobalMixin {
     sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
     sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl(),sl(), sl(),sl()));
     sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
-    sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl(), sl(),sl()));
+    sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl(), sl(),sl(), sl()));
     sl.registerLazySingleton<KeyboardSettingsRepo>(() => KeyboardSettingsRepoImpl(sl(), sl()));
     sl.registerLazySingleton<BatteryManagerRepo>(() => BatteryManagerRepoImpl(sl(), sl(),sl(),sl()));
     sl.registerLazySingleton<DisableSettingsRepo>(() => DisableSettingsRepoImpl(sl(), sl(),sl(),sl()));
@@ -154,7 +154,7 @@ class InitAurora with GlobalMixin {
     List<String> appArgs=['log'];
 
     Map<String, Function> argExecutables={
-      'version': () async => stdout.writeln(await sl<HomeRepo>().getVersion()),
+      'version': () async => stdout.writeln(await getVersion()),
       'log': () => Constants.globalConfig.isLoggingEnabled=results.wasParsed('log')
     };
 

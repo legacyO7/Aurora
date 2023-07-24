@@ -10,7 +10,6 @@ import 'ar_logger.dart';
 Future<dynamic> arDialog({
   required String title,
   required String subject,
-  bool? isWarning = false,
   required VoidCallback onConfirm,
   Widget? optionalWidget,
   BuildContext? context,
@@ -24,7 +23,6 @@ Future<dynamic> arDialog({
           return  _ArDialogBody(
             title: title,
             subject: subject,
-            isWarning: isWarning,
             onConfirm: onConfirm,
             optionalWidget: optionalWidget,
             onCancel: onCancel,
@@ -37,7 +35,6 @@ class _ArDialogBody extends StatefulWidget {
    const _ArDialogBody({
     required this.title,
     required this.subject,
-    this.isWarning = false,
     required this.onConfirm,
     this.optionalWidget,
     this.onCancel,
@@ -45,7 +42,6 @@ class _ArDialogBody extends StatefulWidget {
 
   final String title;
   final String subject;
-  final bool? isWarning;
   final Function onConfirm;
   final Widget? optionalWidget;
   final Function? onCancel;

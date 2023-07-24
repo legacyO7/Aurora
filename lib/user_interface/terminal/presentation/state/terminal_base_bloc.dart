@@ -1,4 +1,5 @@
 import 'package:aurora/shared/shared.dart';
+import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
@@ -36,7 +37,16 @@ abstract class TerminalBaseBloc<Event,State> extends Bloc<Event,State> with Glob
   Color get selectedColorWithAlpha =>_arColorCubit.selectedColorWithAlpha;
   Color get invertedColor =>_arColorCubit.invertedColor;
 
-  void restartApp()=> sl<SetupBloc>().add(SetupEventRebirth());
+  void restartApp(){
+    sl<SetupBloc>().add(SetupEventRebirth());
+    sl<HomeBloc>().close();
+    sl.resetLazySingleton<HomeBloc>();
+  }
+
+  void clearCache(){
+    sl<SetupBloc>().add(SetupEventClearCache());
+    restartApp();
+  }
 
 
   Stream<List<String>> get terminalOutput => _terminalRepo.terminalOutStream;

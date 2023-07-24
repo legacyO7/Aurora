@@ -1,4 +1,3 @@
-import 'package:aurora/shared/data/di/init_aurora.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_widgets.dart';
 import 'package:aurora/user_interface/home/presentation/screens/home_widgets.dart';
 import 'package:aurora/user_interface/home/presentation/screens/widgets/home_top_bar.dart';
@@ -26,13 +25,6 @@ class _MyHomePageState extends State<HomeScreen> {
       ..add(HomeEventInit())
       ..setAppHeight();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    sl<HomeBloc>().close();
-    sl.resetLazySingleton<HomeBloc>();
-    super.dispose();
   }
 
   @override

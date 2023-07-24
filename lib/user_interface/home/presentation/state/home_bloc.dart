@@ -1,5 +1,4 @@
 import 'package:aurora/shared/shared.dart';
-import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
@@ -12,12 +11,11 @@ import 'home_state.dart';
 
 class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   final HomeRepo _homeRepo;
-  final BatteryManagerRepo _batteryManagerRepo;
   final PermissionManager _permissionManager;
   
   final GlobalConfig _globalConfig=Constants.globalConfig;
 
-  HomeBloc(this._homeRepo,this._batteryManagerRepo,this._permissionManager) : super(const HomeState.init()){
+  HomeBloc(this._homeRepo, this._permissionManager) : super(const HomeState.init()){
     on<HomeEventInit>((_, emit) => _initHome(emit));
     on<HomeEventRequestAccess>((_, emit) => _requestAccess(emit));
     on<HomeEventRunAsRoot>((_, __) => _selfElevate());
@@ -65,10 +63,6 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   void _launchUrl({String? subPath})async{
     _homeRepo.launchArUrl(subPath: subPath);
   }
-
-
-  Future<bool> compatibilityChecker() async=>
-      (await _homeRepo.compatibilityChecker())==0&&( await _batteryManagerRepo.getBatteryCharge()!=100);
 
   void setAppHeight()=>_homeRepo.setAppHeight();
 

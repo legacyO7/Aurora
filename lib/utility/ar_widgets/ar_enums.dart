@@ -4,3 +4,4 @@ enum ArModeEnum {faustus, batteryManager, mainline, mainlineWithoutBatteryManage
 enum CommandStatus { stderr, stdout, stdinp }
 enum BuildType { debug, rpm, deb, appimage }
 enum Enforcement { faustus, mainline}
+enum ArModules {faustus, mainline}

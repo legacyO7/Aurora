@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'ar_widgets/ar_enums.dart';
@@ -17,6 +18,29 @@ mixin GlobalMixin{
 
   bool isFallbackedWorkingDirectory()=>Constants.globalConfig.kWorkingDirectory=='/tmp';
 
+  Future<String> getVersion() async{
+    var version= (await PackageInfo.fromPlatform()).version;
+    Constants.globalConfig.setInstance(
+        arVersion:version,
+        arChannel: version.split('-')[1]
+    );
+    return version;
+  }
+  
+  List<String> kernelModules(ArModules? module){
+    ArModules arModule=module??(isMainLine()?ArModules.mainline:ArModules.faustus);
+
+    if(arModule==ArModules.faustus){
+      return ['faustus'];
+    }
+    if(arModule==ArModules.mainline){
+      return ['asus-nb-wmi','asus-wmi','asus_nb_wmi','asus_wmi'];
+    }
+
+    return [];
+  }
+
+
   bool isMainLineCompatible()=>
       File(Constants.kMainlineModuleModePath).existsSync() &&
       File(Constants.kMainlineModuleStatePath).existsSync() &&
@@ -25,7 +49,7 @@ mixin GlobalMixin{
   bool isDark({BuildContext? context})=>
     Theme.of(context??Constants.kScaffoldKey.currentState!.context).brightness==Brightness.dark;
 
-  ThemeData _setTheme([bool light=true]) {
+  ThemeData setTheme([bool light=true]) {
     return ThemeData(
       fontFamily: 'Play',
       brightness: light ? Brightness.light : Brightness.dark,
@@ -43,8 +67,8 @@ mixin GlobalMixin{
   }
 
 
-  ThemeData lightTheme()=> _setTheme();
-  ThemeData darkTheme()=> _setTheme(false);
+  ThemeData lightTheme()=> setTheme();
+  ThemeData darkTheme()=> setTheme(false);
 
 
 }

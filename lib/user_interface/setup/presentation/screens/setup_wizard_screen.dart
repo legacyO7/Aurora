@@ -1,11 +1,14 @@
 
+import 'package:aurora/shared/data/di/init_aurora.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/clear_cache_widget.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/theme_button.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/widgets/ar_kernel_compatible_dialog.dart';
+import 'package:aurora/user_interface/setup/presentation/screens/widgets/revoke_faustus.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_state.dart';
+import 'package:aurora/utility/ar_widgets/ar_dialog.dart';
 import 'package:aurora/utility/ar_widgets/ar_top_buttons.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
@@ -43,7 +46,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                 Flexible(
                   child: BlocListener <SetupBloc,SetupState>(
                     listener: (_, state) {
-                      if(state is SetupCompatibleState|| state is SetupMainlineCompatibleState){
+                      if(state is SetupCompatibleState || state is SetupMainlineCompatibleState){
                         Future.delayed(const Duration(milliseconds: 1000)).then((value) =>
                             Navigator.pushNamed(context,'/home')
                         );
@@ -51,6 +54,16 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
                       if(state is SetupRebirth){
                         Navigator.popUntil(context, (route) =>route.isFirst);
                         context.read<SetupBloc>().add(EventSWInit());
+                      }
+
+                      if(state is SetupCompatibleKernelUserBlacklisted){
+                        arDialog(
+                            title: "Warning!",
+                            subject:  'Your kernel might have inbuilt keyboard backlit support. But you have blacklisted \n- asus_wmi\n- asus_nb_wmi \nin \n${state.blacklistedConfs.join('\n')}'
+                            '\n\nWhitelist the modules manually and  undo the changes made while blacklisting these modules.\n Ignore this message if this was intentional',
+                            onConfirm: (){
+                              Navigator.pop(context);
+                            });
                       }
                     },
                     child: BlocBuilder<SetupBloc,SetupState>(
@@ -137,20 +150,24 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
       context: context,
       barrierColor: Colors.transparent,
       builder: (BuildContext context) {
-        return  const AlertDialog(
-          alignment: Alignment.topRight,
-          actionsPadding: EdgeInsets.zero,
-          actionsAlignment: MainAxisAlignment.start,
-          actions: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-              ThemeButton(asText: true),
-              ClearCacheWidget(),
-            ],)
-              ],
+        return  BlocProvider.value(
+         value: sl<SetupBloc>(),
+          child:  const AlertDialog(
+            alignment: Alignment.topRight,
+            actionsPadding: EdgeInsets.zero,
+            actionsAlignment: MainAxisAlignment.start,
+            actions: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                RevokeFaustus(),
+                ThemeButton(asText: true),
+                ClearCacheWidget(),
+              ],)
+                ],
+          ),
         );});
   }
 }

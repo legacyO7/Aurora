@@ -44,6 +44,11 @@ class SetupCompatibleKernel extends SetupState{
   SetupCompatibleKernel();
 }
 
+class SetupCompatibleKernelUserBlacklisted extends SetupState{
+  List<String> blacklistedConfs;
+  SetupCompatibleKernelUserBlacklisted(this.blacklistedConfs);
+}
+
 class SetupBatteryManagerCompatibleState extends SetupState{
   SetupBatteryManagerCompatibleState();
 }

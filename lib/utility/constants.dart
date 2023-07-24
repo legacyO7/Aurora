@@ -37,9 +37,10 @@ class Constants {
   static const String kOldServicePath = '/etc/systemd/system/';
   static const String kProductName = '/sys/devices/virtual/dmi/id/product_name';
   static const String kVendorName = '/sys/devices/virtual/dmi/id/sys_vendor';
-  static const String installedDir = '/opt/aurora/data/flutter_assets/assets/scripts/';
-  static const String installedBinary = '/usr/bin/aurora';
-  static const String selfLinker = '/proc/self/exe';
+  static const String kInstalledDir = '/opt/aurora/data/flutter_assets/assets/scripts/';
+  static const String kInstalledBinary = '/usr/bin/aurora';
+  static const String kSelfLinker = '/proc/self/exe';
+  static const String kBlacklistPath = '/etc/modprobe.d/';
 
   //url
   static const String kAuroraGitUrl = "https://github.com/legacyO7/Aurora";

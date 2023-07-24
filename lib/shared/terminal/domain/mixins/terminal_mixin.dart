@@ -38,4 +38,8 @@ mixin TerminalMixin {
 
   }
 
+  Future<bool> systemHasSystemd() async{
+    return (await _terminalRepo.getOutput(Constants.kChecksystemd)).toString().contains('systemd');
+  }
+
 }
