@@ -16,7 +16,6 @@ import 'package:aurora/user_interface/home/domain/home_repo_impl.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
 import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
 import 'package:aurora/user_interface/setup/data/repository/setup_source_impl.dart';
-import 'package:aurora/user_interface/setup/data/source/dio_client.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo_impl.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
@@ -50,13 +49,13 @@ class InitAurora with GlobalMixin {
     sl.registerLazySingleton(() => TerminalBloc());
     sl.registerLazySingleton(() => KeyboardSettingsBloc(sl(), sl()));
     sl.registerLazySingleton(() => BatteryManagerBloc(sl()));
-    sl.registerLazySingleton(() => SetupBloc(sl(), sl(), sl()));
+    sl.registerLazySingleton(() => SetupBloc(sl(), sl(), sl(),sl()));
     sl.registerLazySingleton(() => ThemeBloc(sl()));
     sl.registerLazySingleton(() => ArButtonCubit());
     sl.registerLazySingleton(() => ArColorCubit());
 
     sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
-    sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl(),sl(), sl(),sl()));
+    sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl(),sl(), sl(),sl(),sl()));
     sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
     sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl(), sl(),sl(), sl()));
     sl.registerLazySingleton<KeyboardSettingsRepo>(() => KeyboardSettingsRepoImpl(sl(), sl()));
@@ -69,7 +68,7 @@ class InitAurora with GlobalMixin {
     sl.registerLazySingleton<ServiceManager>(() => ServiceManagerImpl(sl(),sl()));
     sl.registerLazySingleton<FileManager>(() => FileManagerImpl(sl()));
 
-    sl.registerLazySingleton<DioClient>(() => DioClientImpl(sl()));
+    sl.registerLazySingleton<RemoteIOManager>(() => RemoteIOManagerImpl(sl()));
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);

@@ -43,3 +43,9 @@ class SetupEventRebirth implements SetupEvent{
   SetupEventRebirth();
 }
 
+class SetupEventLaunch extends SetupEvent{
+  String? url;
+  SetupEventLaunch({this.url});
+}
+
+

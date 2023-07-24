@@ -14,7 +14,7 @@ import 'package:aurora/utility/global_mixin.dart';
 import 'setup_state.dart';
 
 class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixin{
-  SetupBloc(this._prefRepo, this._setupRepo, this._disablerRepo) : super(SetupInitState()){
+  SetupBloc(this._prefRepo, this._setupRepo, this._disablerRepo, this._remoteIOManager) : super(SetupInitState()){
     on<EventSWInit>((_, emit) => _initSetup(emit));
     on<SetupEventConfigure>((event, emit) => _allowConfigure(event.allow, emit));
     on<SetupEventOnCancel>((event, emit) => _onCancel(stepValue: event.stepValue,emit));
@@ -25,11 +25,13 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
     on<SetupEventCompatibleKernel>((event, emit) => _switchToMainline(emit, removeFaustus: event.removeFaustus));
     on<SetupEventClearCache>((_, emit) => _clearCache(emit));
     on<SetupEventRebirth>((_, emit) => _restart(emit));
+    on<SetupEventLaunch>((event, _) => _launchUrl(event.url));
   }
 
   final PrefRepo _prefRepo;
   final SetupRepo _setupRepo;
   final DisableSettingsRepo _disablerRepo;
+  final RemoteIOManager _remoteIOManager;
 
   final GlobalConfig _globalConfig=Constants.globalConfig;
 
@@ -236,6 +238,10 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
 
    void _restart(emit) {
     emit(SetupRebirth());
+  }
+
+  void _launchUrl(String? url){
+    _remoteIOManager.launchArUrl(subPath: url);
   }
 
   _emitInstallPackage(emit)  => emit(SetupIncompatibleState(stepValue: 0, child: packageInstaller(packagesToInstall:  _setupRepo.missingPackagesList), isValid: true));

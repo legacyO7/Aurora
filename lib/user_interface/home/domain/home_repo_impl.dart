@@ -7,14 +7,13 @@ import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'home_repo.dart';
 
 class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
 
-  HomeRepoImpl(this._terminalRepo, this._permissionManager, this._ioManager, this._fileManager, this._prefRepo, this._disableSettingsRepo);
+  HomeRepoImpl(this._terminalRepo, this._permissionManager, this._ioManager, this._fileManager, this._prefRepo, this._disableSettingsRepo,this._remoteIOManager);
 
   final TerminalRepo _terminalRepo;
   final PermissionManager _permissionManager;
@@ -22,6 +21,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
   final FileManager _fileManager;
   final PrefRepo _prefRepo;
   final DisableSettingsRepo _disableSettingsRepo;
+  final RemoteIOManager _remoteIOManager;
 
 
   @override
@@ -31,12 +31,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
 
   @override
   Future launchArUrl({String? subPath}) async {
-    var url = Uri.parse(Constants.kAuroraGitUrl+(subPath??''));
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
-      throw "error launching $url";
-    }
+    await _remoteIOManager.launchArUrl(subPath: subPath);
   }
 
 

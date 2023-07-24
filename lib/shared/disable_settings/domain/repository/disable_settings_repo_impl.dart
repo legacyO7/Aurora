@@ -1,5 +1,6 @@
 import 'package:aurora/shared/shared.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
+import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
 
 
@@ -27,7 +28,7 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin{
     ];
 
     List<String> disableFaustusCommandList=[
-      'modprobe -r faustus',
+      'rmmod faustus',
       'printf "blacklist faustus\\n" | sudo tee /etc/modprobe.d/faustus.conf',
       'modprobe asus-nb-wmi',
       'modprobe asus-wmi',
@@ -81,6 +82,10 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin{
 
         if (disable == DisableEnum.uninstall) {
           await _prefRepo.nukePref();
+        }
+
+        if(!isSuccess) {
+          arSnackBar(text: "Failed to apply setting",isPositive: false);
         }
 
         return isSuccess;

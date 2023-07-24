@@ -74,7 +74,8 @@ class PermissionManagerImpl implements PermissionManager{
 
     GlobalConfig globalConfig=Constants.globalConfig;
 
-    List<String> pathList=[Constants.kServicePath+Constants.kServiceName];
+    List<String> pathList=[Constants.kServicePath];
+    pathList.add(Constants.kServicePath+Constants.kServiceName);
 
     if(_checkIfOldServiceExists()){
       pathList.add(Constants.kOldServicePath+Constants.kServiceName);

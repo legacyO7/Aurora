@@ -66,7 +66,7 @@ class Aurora extends StatelessWidget with GlobalMixin{
                             builder: (context) =>
                              MultiBlocProvider(
                               providers: [
-                                BlocProvider(create:(_)=> sl<HomeBloc>()),
+                                BlocProvider.value(value: sl<HomeBloc>()),
                                 BlocProvider.value(value: sl<BatteryManagerBloc>()),
                                 BlocProvider.value(value: sl<KeyboardSettingsBloc>()),
                                 BlocProvider.value(value: sl<DisableSettingsBloc>()),
