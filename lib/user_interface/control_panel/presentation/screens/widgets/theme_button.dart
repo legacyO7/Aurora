@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ThemeButton extends StatefulWidget{
-  const ThemeButton({super.key,this.aasText=false});
-  final bool aasText;
+  const ThemeButton({super.key,this.asText=false});
+  final bool asText;
 
   @override
   State<StatefulWidget> createState() {
@@ -49,7 +49,7 @@ class _ThemeButtonState extends State<ThemeButton>{
     return BlocBuilder<ThemeBloc, ThemeState>(
           builder:(context, state){
             setIcon(state.arTheme);
-            return widget.aasText?
+            return widget.asText?
             ArButton(
                 title: "Theme: $tooltipText",
                 action: ()=>context.read<ThemeBloc>().add(ThemeEventSwitch()),

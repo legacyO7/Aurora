@@ -44,6 +44,11 @@ class SetupCompatibleKernel extends SetupState{
   SetupCompatibleKernel();
 }
 
+class SetupCompatibleKernelUserBlacklisted extends SetupState{
+  List<String> blacklistedConfs;
+  SetupCompatibleKernelUserBlacklisted(this.blacklistedConfs);
+}
+
 class SetupBatteryManagerCompatibleState extends SetupState{
   SetupBatteryManagerCompatibleState();
 }
@@ -58,6 +63,10 @@ class SetupPermissionState extends SetupState{
 
 class SetupAskNetworkAccessState extends SetupState{
   SetupAskNetworkAccessState();
+}
+
+class SetupRebirth extends SetupState{
+  SetupRebirth();
 }
 
 class SetupIncompatibleState extends SetupState{

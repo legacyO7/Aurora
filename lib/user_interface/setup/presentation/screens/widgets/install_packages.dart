@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 Widget packageInstaller({required List<String> packagesToInstall}){
   return
-    packagesToInstall.isNotEmpty?
+    packagesToInstall.isEmpty?
         const Center(child: Text("Nothing to install!")):
     SingleChildScrollView(
     child: Column(

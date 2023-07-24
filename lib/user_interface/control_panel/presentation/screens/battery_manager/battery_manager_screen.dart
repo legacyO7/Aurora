@@ -6,10 +6,8 @@ import 'package:another_xlider/models/trackbar.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_state.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/battery_manager_event.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
-import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
-
 import 'package:aurora/utility/ar_widgets/ar_colors.dart';
+import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,11 +59,11 @@ class _BatteryManagerScreenState extends State<BatteryManagerScreen> {
                activeTrackBarHeight: 20,
                inactiveTrackBar: BoxDecoration(
                  borderRadius: BorderRadius.circular(20),
-                 color: context.read<BatteryManagerBloc>().getSliderColor(context.read<KeyboardSettingsBloc>().selectedColor),
+                 color: context.read<BatteryManagerBloc>().getSliderColor(),
                ),
                activeTrackBar: BoxDecoration(
                    borderRadius: BorderRadius.circular(15),
-                   color: context.read<BatteryManagerBloc>().getSliderColor(context.read<KeyboardSettingsBloc>().selectedColor)
+                   color: context.read<BatteryManagerBloc>().getSliderColor()
                ),
              ),
              handlerAnimation: const FlutterSliderHandlerAnimation(

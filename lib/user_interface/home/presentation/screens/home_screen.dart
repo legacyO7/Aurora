@@ -5,7 +5,6 @@ import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../state/home_bloc.dart';
@@ -29,11 +28,6 @@ class _MyHomePageState extends State<HomeScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -49,26 +43,18 @@ class _MyHomePageState extends State<HomeScreen> {
               flex: 5,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 2.5.w),
-                child: BlocListener<HomeBloc, HomeState>(
-                  listener: (context, state){
-                    if(state.state == HomeStates.rebirth){
-                      context.read<HomeBloc>().add(HomeEventDispose());
-                      Phoenix.rebirth(context);
+                child: BlocBuilder<HomeBloc,HomeState>
+                  (builder: (context,state){
+                  if(state.state==HomeStates.accessGranted) {
+                    if(state.hasAccess) {
+                      return const ControlPanelScreen();
+                    }else{
+                      return grantAccess(context,runAsRoot: true,deniedList: state.deniedList);
                     }
-                  },
-                  child: BlocBuilder<HomeBloc,HomeState>
-                    (builder: (context,state){
-                    if(state.state==HomeStates.accessGranted) {
-                      if(state.hasAccess) {
-                        return const ControlPanelScreen();
-                      }else{
-                        return grantAccess(context,runAsRoot: true,deniedList: state.deniedList);
-                      }
-                    }else {
-                      return grantAccess(context,deniedList: state.deniedList);
-                    }
-                  }),
-                ),
+                  }else {
+                    return grantAccess(context,deniedList: state.deniedList);
+                  }
+                }),
               ),
             )
           ],

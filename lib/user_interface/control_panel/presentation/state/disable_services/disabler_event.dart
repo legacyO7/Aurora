@@ -2,6 +2,8 @@ part of 'disable_bloc.dart';
 
 sealed class DisableEvent{}
 
+class DisableEventInit extends DisableEvent{}
+
 class DisableEventCheckDisableServices extends DisableEvent{
   final bool? disableThreshold;
   final bool? disableFaustusModule;
@@ -12,4 +14,3 @@ class DisableEventCheckDisableServices extends DisableEvent{
 }
 
 class DisableEventSubmitDisableServices extends DisableEvent{}
-class DisableEventDispose extends DisableEvent{}

@@ -1,5 +1,3 @@
-import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
-import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/widgets/changelog_container.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
@@ -32,7 +30,7 @@ class UpdateWidget extends StatelessWidget{
           children: [
             ArButton(
                 isSelected: true,
-                title: "Download\nupdate", action:() => context.read<HomeBloc>().add(HomeEventLaunch())),
+                title: "Download\nupdate", action:() => context.read<SetupBloc>().add(SetupEventLaunch())),
             ArButton(
                 edgeInsets: const EdgeInsets.only(left: 10),
                 title: "Ignore",

@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:aurora/data/init_aurora.dart';
-import 'package:aurora/data/io/io_manager/io_manager.dart';
+import 'package:aurora/shared/shared.dart';
+
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/foundation.dart';

@@ -1,7 +1,5 @@
 
-import 'package:aurora/data/model/ar_mode_model.dart';
-import 'package:aurora/data/model/ar_state_model.dart';
-import 'package:aurora/data/shared_preference/pref_repo.dart';
+import 'package:aurora/shared/shared.dart';
 import 'package:aurora/user_interface/control_panel/domain/keyboard_settings/keyboard_settings_repo.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
@@ -85,16 +83,12 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
 
   _parseBool(bool? value)=>(value??false)?1:0;
   
-  _updateState(emit)=>emit(state.copyState(speed: arMode.speed,mode: arMode.mode,color: arMode.color,awake: _awake,sleep: _sleep,boot: _boot));
+  _updateState(emit){
+    super.setSelectedColor(arMode.color!);
+    emit(state.copyState(speed: arMode.speed,mode: arMode.mode,color: arMode.color,awake: _awake,sleep: _sleep,boot: _boot));
+  }
 
   bool get isSpeedBarVisible => (state.mode)>0&&(state.mode)<3&&isModeBarVisible;
   bool get isModeBarVisible => (state.brightness)>0;
-
-  Color get selectedColor => arMode.color!;
-  Color get invertedSelectedColor => Color.fromARGB(
-      (arMode.color!.opacity * 255).round(),
-      255-arMode.color!.red,
-      255-arMode.color!.green,
-      255-arMode.color!.blue);
 
 }

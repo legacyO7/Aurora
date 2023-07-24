@@ -1,6 +1,5 @@
-import 'package:aurora/data/shared_preference/pref_repo.dart';
-import 'package:aurora/user_interface/control_panel/domain/uninstaller/disabler_repo.dart';
-import 'package:aurora/user_interface/home/domain/home_repo.dart';
+
+import 'package:aurora/shared/shared.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
@@ -9,13 +8,13 @@ import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:aurora/utility/global_configuration.dart';
+import 'package:aurora/utility/global_mixin.dart';
 
 import 'setup_state.dart';
 
-class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
-  SetupBloc(this._homeRepo,this._prefRepo, this._setupWizardRepo,this._arButtonCubit, this._disablerRepo) : super(SetupInitState()){
+class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixin{
+  SetupBloc(this._prefRepo, this._setupRepo, this._disablerRepo, this._remoteIOManager) : super(SetupInitState()){
     on<EventSWInit>((_, emit) => _initSetup(emit));
     on<SetupEventConfigure>((event, emit) => _allowConfigure(event.allow, emit));
     on<SetupEventOnCancel>((event, emit) => _onCancel(stepValue: event.stepValue,emit));
@@ -24,21 +23,26 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
     on<SetupEventOnUpdate>((event, emit) => _onUpdate(emit,ignoreUpdate: event.ignoreUpdate));
     on<SetupEventBatteryManagerMode>((event, emit) => _enterBatteryManagerMode(emit));
     on<SetupEventCompatibleKernel>((event, emit) => _switchToMainline(emit, removeFaustus: event.removeFaustus));
+    on<SetupEventClearCache>((_, emit) => _clearCache(emit));
+    on<SetupEventRebirth>((_, emit) => _restart(emit));
+    on<SetupEventLaunch>((event, _) => _launchUrl(event.url));
   }
 
-  final HomeRepo _homeRepo;
   final PrefRepo _prefRepo;
-  final SetupRepo _setupWizardRepo;
-  final ArButtonCubit _arButtonCubit;
-  final DisablerRepo _disablerRepo;
+  final SetupRepo _setupRepo;
+  final DisableSettingsRepo _disablerRepo;
+  final RemoteIOManager _remoteIOManager;
+
+  final GlobalConfig _globalConfig=Constants.globalConfig;
 
   _initSetup(emit) async {
-    await _homeRepo.getVersion();
-    await _setupWizardRepo.initSetup();
+    _globalConfig.setInstance(isFaustusEnforced: await _setupRepo.isFaustusEnforced());
+    await getVersion();
+    await _setupRepo.initSetup();
 
-    if(await _prefRepo.getVersion() !=Constants.globalConfig.arVersion && await _homeRepo.checkInternetAccess()){
+    if(await _prefRepo.getVersion() !=_globalConfig.arVersion && await _setupRepo.checkInternetAccess()){
       emit(SetupWhatsNewState(await _fetchChangelog()));
-      await _prefRepo.setVersion(Constants.globalConfig.arVersion!);
+      await _prefRepo.setVersion(_globalConfig.arVersion!);
     }else {
       await _checkForUpdates(emit);
     }
@@ -50,10 +54,10 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
   Future _checkForUpdates(emit,{bool ignoreUpdate=false}) async {
 
-    bool isConnected=await _homeRepo.checkInternetAccess();
+    bool isConnected=await _setupRepo.checkInternetAccess();
 
     navigate() async {
-      switch( await _homeRepo.compatibilityChecker()){
+      switch( await _setupRepo.compatibilityChecker()){
         case 0:
           emit(SetupCompatibleState());
           break;
@@ -61,15 +65,19 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
           emit(SetupBatteryManagerCompatibleState());
           break;
         case 4:
-          if(_homeRepo.checkFaustusFolder()){
+          if(_setupRepo.checkFaustusFolder()){
             emit(SetupDisableFaustusState());
-            await _disablerRepo.disableServices(disable: DISABLE.faustus);
+            await _disablerRepo.disableServices(disable: DisableEnum.faustus);
           }
             emit(SetupMainlineCompatibleState());
           break;
 
         case 5:
-          emit(SetupCompatibleKernel());
+          if(await _setupRepo.checkIfBlackListed()){
+            emit(SetupCompatibleKernelUserBlacklisted(_setupRepo.blacklistedConfs));
+          }else{
+            emit(SetupCompatibleKernel());
+          }
           break;
 
         case 6:
@@ -87,6 +95,12 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
             emit(SetupAskNetworkAccessState());
           }
       }
+
+      if(_setupRepo.blacklistedConfs.isNotEmpty){
+        var prevState=state;
+        emit(SetupCompatibleKernelUserBlacklisted(_setupRepo.blacklistedConfs));
+        emit(prevState);
+      }
     }
 
     if (isConnected && !ignoreUpdate) {
@@ -103,20 +117,22 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
   Future _switchToMainline(emit,{required bool removeFaustus}) async{
     if(removeFaustus){
+      var previousState= state;
       emit(SetupDisableFaustusState());
-      await _disablerRepo.disableServices(disable: DISABLE.faustus);
-      BuildContext context=Constants.kScaffoldKey.currentState!.context;
-      if(context.mounted) {
-        Phoenix.rebirth(context);
+      if(await _disablerRepo.disableServices(disable: DisableEnum.faustus)) {
+        emit(SetupRebirth());
+      }else{
+        emit(previousState);
       }
     }else{
-      Constants.globalConfig.setInstance(arMode: ARMODE.faustus);
+      _globalConfig.setInstance(arMode: ArModeEnum.faustus);
       emit(SetupCompatibleState());
     }
   }
 
   void _enterBatteryManagerMode(emit){
-    Constants.globalConfig.setInstance(arMode: ARMODE.batteryManager);
+    _globalConfig.setInstance(arMode: ArModeEnum.batteryManager);
+
     emit(SetupCompatibleState());
   }
 
@@ -124,8 +140,8 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
     if(BuildType.rpm==Constants.buildType) return false;
 
-    var liveVersion=  _homeRepo.convertVersionToInt(await _setupWizardRepo.getAuroraLiveVersion());
-    var currentVersion= _homeRepo.convertVersionToInt(Constants.globalConfig.arVersion!);
+    var liveVersion=  _setupRepo.convertVersionToInt(await _setupRepo.getAuroraLiveVersion());
+    var currentVersion= _setupRepo.convertVersionToInt(_globalConfig.arVersion!);
 
     if(liveVersion==0||currentVersion==0) {
       return false;
@@ -135,13 +151,13 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   }
 
   Future<String> _fetchChangelog() async{
-    return await _setupWizardRepo.getChangelog();
+    return await _setupRepo.getChangelog();
   }
 
   _allowConfigure(bool allow,emit) async{
     if(allow) {
-      await _setupWizardRepo.loadSetupFiles();
-      if((await _homeRepo.compatibilityChecker())==1) {
+      await _setupRepo.loadSetupFiles();
+      if((await _setupRepo.compatibilityChecker())==1) {
         _emitInstallPackage(emit);
       }else{
         _emitInstallFaustus(emit);
@@ -163,22 +179,22 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
 
   void _onInstall(emit,{required int stepValue}) async {
       var isSuccess=false;
-      _arButtonCubit.setLoad();
+      super.setLoad();
 
 
       if (stepValue == 0 ) {
-        if((await _homeRepo.compatibilityChecker())!=1) {
+        if((await _setupRepo.compatibilityChecker())!=1) {
           isSuccess = true;
         }else {
-          if (await _setupWizardRepo.pkexecChecker()) {
+          if (await _setupRepo.pkexecChecker()) {
             _emitInstallFaustusTerminal(emit, stepValue: 0);
           }
-          await _setupWizardRepo.installPackages();
+          await _setupRepo.installPackages();
         }
       } else {
           _emitInstallFaustusTerminal(emit,stepValue: 2);
-          await _setupWizardRepo.installFaustus();
-          switch (await _homeRepo.compatibilityChecker()){
+          await _setupRepo.installFaustus();
+          switch (await _setupRepo.compatibilityChecker()){
             case 0:
             case 5:
               isSuccess=true;
@@ -188,14 +204,14 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
           }
       }
 
-      _arButtonCubit.setUnLoad();
+      super.setUnLoad();
       await _processOutput(emit,state: state,isSuccess: isSuccess);
     
   }
 
   _processOutput(emit,{required SetupState state, required bool isSuccess}) async {
     if (state is SetupIncompatibleState) {
-      if (isSuccess && state.stepValue == 0 && await _homeRepo.compatibilityChecker()!=1) {
+      if (isSuccess && state.stepValue == 0 && await _setupRepo.compatibilityChecker()!=1) {
        _emitInstallFaustus(emit);
       } else if (isSuccess && state.stepValue == 2) {
         emit(SetupCompatibleState());
@@ -209,14 +225,26 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> {
   void _validateRepo(emit,{required String value}) {
     bool isValid = value.isNotEmpty && value.startsWith('http') && value.endsWith('.git');
     if (isValid) {
-      Constants.globalConfig.setInstance(
+      _globalConfig.setInstance(
           kFaustusGitUrl:value
       );
     }
     _emitInstallFaustus(emit,isValid: isValid);
   }
 
-  _emitInstallPackage(emit)  => emit(SetupIncompatibleState(stepValue: 0, child: packageInstaller(packagesToInstall:  _setupWizardRepo.missingPackagesList), isValid: true));
+  Future _clearCache(emit) async{
+    await _prefRepo.nukePref();
+  }
+
+   void _restart(emit) {
+    emit(SetupRebirth());
+  }
+
+  void _launchUrl(String? url){
+    _remoteIOManager.launchArUrl(subPath: url);
+  }
+
+  _emitInstallPackage(emit)  => emit(SetupIncompatibleState(stepValue: 0, child: packageInstaller(packagesToInstall:  _setupRepo.missingPackagesList), isValid: true));
 
   _emitInstallFaustus(emit,{bool? isValid})=>  emit(SetupIncompatibleState(stepValue: 1, child: const FaustusInstaller(),isValid: isValid??true));
 

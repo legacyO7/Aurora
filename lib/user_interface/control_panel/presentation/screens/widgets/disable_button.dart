@@ -1,86 +1,79 @@
+import 'package:aurora/shared/data/di/init_aurora.dart';
 import 'package:aurora/user_interface/control_panel/presentation/state/disable_services/disable_bloc.dart';
-import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
-import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
-import 'package:aurora/user_interface/terminal/presentation/screens/terminal_widgets.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 
-class DisableButton extends StatelessWidget with GlobalMixin {
+class DisableButton extends StatefulWidget with GlobalMixin {
   const DisableButton({super.key});
 
+  @override
+  State<DisableButton> createState() => _DisableButtonState();
+}
+
+class _DisableButtonState extends State<DisableButton> {
+
+  late Bloc _bloc;
+
+  @override
+  void initState() {
+    _bloc = BlocProvider.of<DisableSettingsBloc>(context);
+    _bloc.add(DisableEventInit());
+    super.initState();
+  }
+
   Widget _selectorWindow() {
-    return BlocListener<DisablerBloc,DisableState>(
-      listener: (BuildContext context, state) {
-        if(state.state == DisableStateStates.completed) {
-          _navigate(context);
-        }
-      },
-      child: BlocBuilder<DisablerBloc, DisableState>
-        (builder: (BuildContext context, state) {
+    return BlocProvider.value(value: sl<DisableSettingsBloc>(),
+      child: BlocBuilder<DisableSettingsBloc, DisableSettingsState>(
+          builder: (BuildContext context, state) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
 
-        if (state.state == DisableStateStates.init) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+                ArCheckbox(
+                    text: "Disable charging threshold",
+                    isSelected: state.disableThreshold,
+                    onChange: (_) => _bloc.add(DisableEventCheckDisableServices(disableThreshold: !state.disableThreshold))
+                ),
 
-              ArCheckbox(
-                  text: "Disable charging threshold",
-                  isSelected: state.disableThreshold,
-                  onChange: (_)=>context.read<DisablerBloc>().add(DisableEventCheckDisableServices(disableThreshold: !state.disableThreshold))
-              ),
-
-              if(!super.isMainLine()&&!super.isFallbackedWorkingDirectory())
-              ArCheckbox(
-                  text: "Disable faustus module",
-                  isSelected: state.disableFaustusModule,
-                  onChange: (_)=>context.read<DisablerBloc>().add(DisableEventCheckDisableServices(disableFaustusModule: !state.disableFaustusModule))
-              ),
-              if(super.isInstalledPackage()&&!super.isFallbackedWorkingDirectory())
-              ArCheckbox(
-                  text: "Uninstall Aurora",
-                  isSelected: state.uninstallAurora,
-                  onChange: (_)=>context.read<DisablerBloc>().add(DisableEventCheckDisableServices(uninstallAurora: !state.uninstallAurora))
-              ),
-            ],
-          );
-        } else if (state .state ==DisableStateStates.terminal) {
-          return const TerminalScreen();
-        }
-
-        return placeholder();
-      }),
+                if(!widget.isMainLine() && !widget.isFallbackedWorkingDirectory())
+                  ArCheckbox(
+                      text: "Disable faustus module",
+                      isSelected: state.disableFaustusModule,
+                      onChange: (_) =>
+                          _bloc.add(DisableEventCheckDisableServices(disableFaustusModule: !state.disableFaustusModule))
+                  ),
+                if(widget.isInstalledPackage() && !widget.isFallbackedWorkingDirectory())
+                  ArCheckbox(
+                      text: "Uninstall Aurora",
+                      isSelected: state.uninstallAurora,
+                      onChange: (_) =>
+                          _bloc.add(DisableEventCheckDisableServices(uninstallAurora: !state.uninstallAurora))
+                  ),
+              ],
+            );
+          }),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return ArButton(
-        action: () async {
-          await arDialog(
-              title: "Disable Services",
-              subject: "Select the services to be disabled",
-              optionalWidget: _selectorWindow(),
-              onConfirm: () {
-                context.read<DisablerBloc>().add(DisableEventSubmitDisableServices());
-              },
-              onCancel: (){
-                _navigate(context,restart: false);
-              });
-        },
-        title: "Disable Features",
-        animate: false,
+      action: () async {
+        await arDialog(
+            title: "Disable Services",
+            subject: "Select the services to be disabled",
+            optionalWidget: _selectorWindow(),
+            onConfirm: () {
+              _bloc.add(DisableEventSubmitDisableServices());
+            },
+            onCancel: () {
+              Navigator.pop(context);
+            });
+      },
+      title: "Disable Features",
+      animate: false,
     );
-  }
-
-  _navigate(BuildContext context,{bool restart=true})async{
-    if(restart) {
-      context.read<DisablerBloc>().add(DisableEventDispose());
-      context.read<HomeBloc>().add(HomeEventDispose());
-      Phoenix.rebirth(context);
-    }
-      Navigator.pop(context);
   }
 }

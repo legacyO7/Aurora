@@ -1,3 +1,4 @@
+import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
@@ -6,16 +7,22 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'ar_logger.dart';
 
-Future<dynamic> arDialog({required String title, required String subject, bool? isWarning = false, required VoidCallback onConfirm, Widget? optionalWidget, VoidCallback? onCancel}) {
+Future<dynamic> arDialog({
+  required String title,
+  required String subject,
+  required VoidCallback onConfirm,
+  Widget? optionalWidget,
+  BuildContext? context,
+  VoidCallback? onCancel
+}) {
   return showDialog(
       barrierDismissible: false,
-      context: Constants.kScaffoldKey.currentState!.context,
+      context: context?? Constants.kScaffoldKey.currentState!.context,
       builder: (_) => StatefulBuilder(
         builder: (_, __) {
           return  _ArDialogBody(
             title: title,
             subject: subject,
-            isWarning: isWarning,
             onConfirm: onConfirm,
             optionalWidget: optionalWidget,
             onCancel: onCancel,
@@ -28,7 +35,6 @@ class _ArDialogBody extends StatefulWidget {
    const _ArDialogBody({
     required this.title,
     required this.subject,
-    this.isWarning = false,
     required this.onConfirm,
     this.optionalWidget,
     this.onCancel,
@@ -36,7 +42,6 @@ class _ArDialogBody extends StatefulWidget {
 
   final String title;
   final String subject;
-  final bool? isWarning;
   final Function onConfirm;
   final Widget? optionalWidget;
   final Function? onCancel;
@@ -49,7 +54,7 @@ class _ArDialogBody extends StatefulWidget {
 
 class _ArDialogBodyState extends State<_ArDialogBody> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext ctx) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -92,12 +97,13 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
                   Flexible(
                       flex: 2,
                       child: Text(widget.subject)),
-                  widget.optionalWidget==null?const SizedBox(height: 10):
                   Flexible(
-                    flex: 5,
+                    flex: context.watch<ArButtonCubit>().state||widget.optionalWidget!=null? 5:0,
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 1.h),
-                      child: Center(child: widget.optionalWidget),
+                      child: Center(child:
+                      context.watch<ArButtonCubit>().state? const TerminalScreen():
+                      widget.optionalWidget??const SizedBox(height: 10,)),
                     ),
                   ),
                   Padding(
@@ -110,14 +116,10 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
                             isLoading: state,
                             isSelected: true,
                             action: () async {
-                              context.read<ArButtonCubit>().setLoad();
                               try {
-                                await widget.onConfirm();
+                                 await widget.onConfirm();
                               } catch(e,stackTrace) {
                                 ArLogger.log(data: e,stackTrace: stackTrace);
-                              }
-                              finally{
-                                context.read<ArButtonCubit>().setUnLoad();
                               }
                             },
                           );

@@ -23,10 +23,14 @@ class GlobalConfig {
    //misc
    bool? kSecureBootEnabled = false;
    String deviceName;
-   ARMODE arMode;
+   ArModeEnum arMode;
+
+   //flags
+   bool isLoggingEnabled;
+   bool isFaustusEnforced;
 
 
-  GlobalConfig({
+   GlobalConfig({
     this.arVersion,
     this.arChannel,
     this.kWorkingDirectory,
@@ -35,9 +39,11 @@ class GlobalConfig {
     this.kSecureBootEnabled,
     this.kFaustusGitUrl,
     this.kTmpPath,
-    this.arMode=ARMODE.faustus,
+    this.arMode=ArModeEnum.faustus,
     this.deviceName='',
-    this.kThresholdPath
+    this.kThresholdPath,
+    this.isLoggingEnabled=false,
+    this.isFaustusEnforced =false
   });
 
   setInstance({
@@ -53,7 +59,9 @@ class GlobalConfig {
     arMode,
     kTmpPath,
     deviceName,
-    kThresholdPath
+    kThresholdPath,
+    isLoggingEnabled,
+    isFaustusEnforced
   }){
 
     this.arChannel= arChannel??this.arChannel;
@@ -67,6 +75,8 @@ class GlobalConfig {
     this.kTmpPath=kTmpPath??this.kTmpPath;
     this.deviceName=deviceName??this.deviceName;
     this.kThresholdPath=kThresholdPath??this.kThresholdPath;
+    this.isLoggingEnabled=isLoggingEnabled??this.isLoggingEnabled;
+    this.isFaustusEnforced=isFaustusEnforced??this.isFaustusEnforced;
   }
 
   

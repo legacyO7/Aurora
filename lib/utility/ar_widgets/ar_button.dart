@@ -1,6 +1,6 @@
-import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
+import 'package:aurora/utility/ar_widgets/cubits/color_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -60,7 +60,7 @@ class _ArButtonState extends State<ArButton> {
                   height: height,
                   width: width,
                   child: LinearProgressIndicator(
-                    color: context.read<KeyboardSettingsBloc>().selectedColor,
+                    color: context.read<ArColorCubit>().selectedColor,
                   ))
               : InkWell(
                   onHover: context.read<ArButtonHoverCubit>().setHover,

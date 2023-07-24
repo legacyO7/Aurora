@@ -1,37 +1,38 @@
 
 part of 'disable_bloc.dart';
 
-enum DisableStateStates {init, terminal, completed}
+enum DisableStateStates {init}
 
-class DisableState{
+class DisableSettingsState extends Equatable{
 
   final DisableStateStates state;
   final bool disableThreshold;
   final bool disableFaustusModule;
   final bool uninstallAurora;
 
-  const DisableState._({
+  const DisableSettingsState._({
     this.state=DisableStateStates.init,
     this.disableThreshold=false,
     this.disableFaustusModule=false,
     this.uninstallAurora=false
   });
 
-  const DisableState.init():this._();
-
-  const DisableState.completed():this._(state: DisableStateStates.completed);
+  const DisableSettingsState.init():this._();
 
 
-  DisableState setState({
+  DisableSettingsState setState({
     bool? disableThreshold,
     bool? disableFaustusModule,
     bool? uninstallAurora,
     DisableStateStates? state
-  })=>DisableState._(
+  })=>DisableSettingsState._(
       disableThreshold: disableThreshold??this.disableThreshold,
       disableFaustusModule: disableFaustusModule??this.disableFaustusModule,
       uninstallAurora:uninstallAurora??this.uninstallAurora,
       state: state??this.state
     );
+
+  @override
+  List<Object?> get props => [state, disableThreshold, disableFaustusModule, uninstallAurora];
 
 }
