@@ -44,19 +44,14 @@ class TerminalRepoImpl extends TerminalRepo{
 
   @override
   Future<List<String>> getOutput(String command) async{
-
-    await execute(command);
-
-    return _terminalOut.length>1? (_terminalOut.sublist(_terminalOut.lastIndexWhere((element) => element.contains(command)))
-      .map((e) => e.split(' ').sublist(1).join(' ')).toList()..removeAt(0)):[];
-
+    return await  _terminalSource.getOutput(command);
   }
 
   @override
   Future<int> getStatusCode(String command) async{
     try {
-      List<String> output = await getOutput('$command; echo \$?');
-      return int.tryParse(output.last)??-1;
+      List<String> output = await _terminalSource.getOutput('$command; echo \$?');
+      return int.tryParse(output.last.trim())??-1;
     }catch(e,stackTrace){
       ArLogger.log(data: e,stackTrace: stackTrace);
       return -1;

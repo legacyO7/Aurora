@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/constants.dart';
-import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'terminal_source.dart';
@@ -23,6 +22,7 @@ class TerminalSourceImpl extends TerminalSource{
   late Sink<String>  _terminalSink;
 
   final List<String> _commands=[];
+  List<String> _perCommandOutput=[];
 
 
   @override
@@ -40,12 +40,12 @@ class TerminalSourceImpl extends TerminalSource{
 
     if(command.isNotEmpty) {
 
-      if(kDebugMode) {
         _convertToList(lines: "\$ $command", commandStatus: CommandStatus.stdinp);
-      }
 
         try {
           _inProgress = true;
+          _perCommandOutput=[];
+
           process = await Process.start(
               'bash',
               ['-c', command],
@@ -84,10 +84,17 @@ class TerminalSourceImpl extends TerminalSource{
   }
 
   _convertToList({required String lines, required CommandStatus commandStatus}){
+    _perCommandOutput.add(lines);
     _lineSplitter.convert(lines).forEach((line) async{
       await ArLogger.log(data: "> ${commandStatus.name} $line");
       _terminalSink.add("${commandStatus.name} $line");
     });
+  }
+
+  @override
+  Future<List<String>> getOutput(String command) async{
+    await execute(command);
+    return _perCommandOutput;
   }
 
 

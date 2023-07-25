@@ -4,9 +4,10 @@ import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/shared/shared.dart';
 import 'package:aurora/utility/global_configuration.dart';
+import 'package:aurora/utility/global_mixin.dart';
 
 
-class FileManagerImpl extends FileManager{
+class FileManagerImpl extends FileManager with GlobalMixin{
 
   FileManagerImpl(this._ioManager);
 
@@ -15,7 +16,7 @@ class FileManagerImpl extends FileManager{
   final GlobalConfig _globalConfig=Constants.globalConfig;
 
   @override
-  void setWorkingDirectory() async{
+  Future setWorkingDirectory() async{
     _globalConfig.setInstance(
         kWorkingDirectory: await _validateWorkingDir()
     );
@@ -31,19 +32,39 @@ class FileManagerImpl extends FileManager{
 
   Future<String> _validateWorkingDir() async{
 
-    switch(Constants.buildType){
+      switch (Constants.buildType) {
+        case BuildType.debug:
+          return await _workingDir('${Directory.current.path}/assets/scripts/');
 
-      case BuildType.debug:
-        return await _workingDir('${Directory.current.path}/assets/scripts/');
+        case BuildType.rpm:
+        case BuildType.deb:
+          return Constants.kInstalledDir;
 
-      case BuildType.rpm:
-      case BuildType.deb:
-        return Constants.kInstalledDir;
+        case BuildType.appimage:
+          return await _workingDir("${_getAppImageExtractionDir()}/data/flutter_assets/assets/scripts/");
+      }
 
-      case BuildType.appimage:
-        return await _workingDir("${_getAppImageExtractionDir()}/data/flutter_assets/assets/scripts/");
+  }
 
+  Future <Directory> _clearTmpWorkingDir() async{
+    Directory workingDir= Directory('${Directory.systemTemp.path}/legacy07.aurora');
+    if(await workingDir.exists()){
+      await workingDir.delete(recursive: true);
     }
+    return workingDir;
+  }
+
+  @override
+  Future setTmpWorkingDir() async{
+    _globalConfig
+        .setInstance(
+        kWorkingDirectory: (await (await _clearTmpWorkingDir()).create()).path);
+  }
+
+  @override
+  Future releaseTmpWorkingDir() async{
+    await _clearTmpWorkingDir();
+    await setWorkingDirectory();
   }
 
   @override
