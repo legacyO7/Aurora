@@ -8,6 +8,7 @@ import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
+import 'package:flutter/services.dart';
 
 class SetupRepoImpl extends SetupRepo with GlobalMixin, TerminalMixin{
   SetupRepoImpl(this._setupSource,this._terminalRepo,this._permissionManager,this._fileManager, this._prefRepo);
@@ -60,10 +61,21 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin, TerminalMixin{
   
   @override
   Future loadSetupFiles() async{
-    _setupPath = "${_globalConfig.kWorkingDirectory!+Constants.kArSetup} ${_globalConfig.kWorkingDirectory}";
+    await _fileManager.setTmpWorkingDir();
+    await _extractAsset(sourceFileName: Constants.kFaustusInstaller);
+    _setupPath = "${await _extractAsset(sourceFileName: Constants.kArSetup)} ${_globalConfig.kWorkingDirectory}";
+
     if(_globalConfig.kSecureBootEnabled! || !await super.pkexecChecker()){
       _terminalList = '" ${(await getTerminalList())} "';
     }
+  }
+
+  Future<String> _extractAsset({required String sourceFileName}) async {
+    final byteData = await rootBundle.load('${Constants.kAssetsPath}/$sourceFileName');
+    var destinationFileName = "${Constants.globalConfig.kWorkingDirectory}/$sourceFileName";
+    await File(destinationFileName).writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    await _terminalRepo.execute("chmod +x $destinationFileName");
+    return destinationFileName;
   }
   
   @override
@@ -130,6 +142,7 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin, TerminalMixin{
     }
 
     _globalConfig.setInstance(arMode: ArModeEnum.faustus);
+    await  _fileManager.releaseTmpWorkingDir();
     return 0;
   }
 

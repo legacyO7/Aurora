@@ -12,6 +12,8 @@ class Constants {
   //files
   static const String kBatteryManager = 'battery_manager.sh';
   static const String kArSetup = 'ar_setup.sh';
+  static const String kFaustusInstaller = 'install_faustus.sh';
+
 
   //commands
   static const String kPolkit = 'pkexec --disable-internal-agent';
