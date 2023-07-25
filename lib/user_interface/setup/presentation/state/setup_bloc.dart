@@ -65,7 +65,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
           emit(SetupBatteryManagerCompatibleState());
           break;
         case 4:
-          if(_setupRepo.checkFaustusFolder()){
+          if(await _setupRepo.checkFaustusFolder()){
             emit(SetupDisableFaustusState());
             await _disablerRepo.disableServices(disable: DisableEnum.faustus);
           }
@@ -73,11 +73,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
           break;
 
         case 5:
-          if(await _setupRepo.checkIfBlackListed()){
-            emit(SetupCompatibleKernelUserBlacklisted(_setupRepo.blacklistedConfs));
-          }else{
             emit(SetupCompatibleKernel());
-          }
           break;
 
         case 6:
@@ -126,7 +122,11 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
       }
     }else{
       _globalConfig.setInstance(arMode: ArModeEnum.faustus);
-      emit(SetupCompatibleState());
+      if(await _setupRepo.checkFaustusFolder()) {
+        emit(SetupCompatibleState());
+      }else{
+        emit(SetupPermissionState());
+      }
     }
   }
 
@@ -197,7 +197,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
           switch (await _setupRepo.compatibilityChecker()){
             case 0:
             case 5:
-              isSuccess=true;
+              isSuccess=await _setupRepo.checkFaustusFolder();
               break;
             default:
               isSuccess=false;

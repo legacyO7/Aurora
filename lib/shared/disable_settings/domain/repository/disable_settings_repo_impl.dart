@@ -92,7 +92,7 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin{
   }
 
   Future<bool> _runDisableCommand(List<String> commands) async{
-    return await _permissionManager.runWithPrivileges(commands)==0;
+    return (await _permissionManager.runWithPrivileges(commands))==0;
   }
   
 

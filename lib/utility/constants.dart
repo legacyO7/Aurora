@@ -18,7 +18,7 @@ class Constants {
   //commands
   static const String kPolkit = 'pkexec --disable-internal-agent';
   static const String kArServiceStatus = 'systemctl is-enabled aurora-controller.service';
-  static const String kChecksystemd = 'ps --no-headers -o comm 1';
+  static const String kCheckSystemd = 'ps --no-headers -o comm 1';
 
   //paths
   static const String kFaustusModulePath = "/sys/devices/platform/faustus/";

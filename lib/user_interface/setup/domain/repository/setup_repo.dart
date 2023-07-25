@@ -1,7 +1,7 @@
 abstract class SetupRepo{
   Future<bool> checkInternetAccess();
   Future<int> compatibilityChecker();
-  bool checkFaustusFolder();
+  Future<bool> checkFaustusFolder();
   int convertVersionToInt(String version);
   Future<String> getTerminalList();
   Future<String> getAuroraLiveVersion();
