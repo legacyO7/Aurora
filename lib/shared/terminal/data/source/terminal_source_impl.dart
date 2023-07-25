@@ -84,11 +84,12 @@ class TerminalSourceImpl extends TerminalSource{
   }
 
   _convertToList({required String lines, required CommandStatus commandStatus}){
-    _perCommandOutput.add(lines);
-    _lineSplitter.convert(lines).forEach((line) async{
-      await ArLogger.log(data: "> ${commandStatus.name} $line");
+
+    for ( var line in  _lineSplitter.convert(lines)){
+      _perCommandOutput.add(line);
       _terminalSink.add("${commandStatus.name} $line");
-    });
+       ArLogger.log(data: "> ${commandStatus.name} $line");
+    }
   }
 
   @override

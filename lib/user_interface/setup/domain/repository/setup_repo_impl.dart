@@ -129,7 +129,7 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin, TerminalMixin{
       return 5;
     }
 
-    if(!checkFaustusFolder()) {
+    if(!await checkFaustusFolder()) {
       if(await _fileManager.thresholdPathExists() && !_globalConfig.isFaustusEnforced && await systemHasSystemd()) {
         return 3;
       } else {
@@ -148,7 +148,7 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin, TerminalMixin{
 
 
   @override
-  bool checkFaustusFolder()=>Directory(Constants.kFaustusModulePath).existsSync();
+  Future<bool> checkFaustusFolder() async=> await Directory(Constants.kFaustusModulePath).exists();
 
 
   @override
