@@ -12,6 +12,8 @@ Requires:       bash, polkit
 %description
 A utility to control keyboard back-light and charging threshold for Asus TUF-gaming series laptop
 
+%define debug_package %{nil}
+
 %prep
 %setup -q
 
