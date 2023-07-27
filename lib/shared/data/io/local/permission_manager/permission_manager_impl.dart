@@ -1,7 +1,9 @@
 import 'dart:io';
 
-import 'package:aurora/shared/shared.dart';
 
+
+import 'package:aurora/shared/data/shared_data.dart';
+import 'package:aurora/shared/terminal/shared_terminal.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';

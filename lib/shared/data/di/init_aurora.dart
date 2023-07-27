@@ -2,15 +2,15 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
-import 'package:aurora/shared/shared.dart';
-import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo.dart';
-import 'package:aurora/user_interface/control_panel/domain/battery_manager/battery_manager_repo_impl.dart';
-import 'package:aurora/user_interface/control_panel/domain/keyboard_settings/keyboard_settings_repo.dart';
-import 'package:aurora/user_interface/control_panel/domain/keyboard_settings/keyboard_settings_repo_impl.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/disable_services/disable_bloc.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_bloc.dart';
+
+import 'package:aurora/user_interface/battery_manager/data/repositories/battery_manager_repo.dart';
+import 'package:aurora/user_interface/battery_manager/data/repositories/battery_manager_repo_impl.dart';
+import 'package:aurora/user_interface/keyboard_settings/domain/repositories/keyboard_settings_repo.dart';
+import 'package:aurora/user_interface/keyboard_settings/domain/repositories/keyboard_settings_repo_impl.dart';
+import 'package:aurora/user_interface/battery_manager/presentation/state/batter_manager_bloc.dart';
+import 'package:aurora/user_interface/disable_services/presentation/state/disable_bloc.dart';
+import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/theme/presentation/state/theme_bloc.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo_impl.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
@@ -21,9 +21,7 @@ import 'package:aurora/user_interface/setup/domain/repository/setup_repo_impl.da
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/utility/ar_bloc_observer.dart';
-import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
-import 'package:aurora/utility/ar_widgets/cubits/color_cubit.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
 import 'package:aurora/utility/global_mixin.dart';
@@ -35,6 +33,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
+
+import '../../disable_settings/shared_disable_services.dart';
+import '../../terminal/shared_terminal.dart';
+import '../shared_data.dart';
 
 
 final sl = GetIt.I;
@@ -49,13 +51,13 @@ class InitAurora with GlobalMixin {
     sl.registerLazySingleton(() => TerminalBloc());
     sl.registerLazySingleton(() => KeyboardSettingsBloc(sl(), sl()));
     sl.registerLazySingleton(() => BatteryManagerBloc(sl()));
-    sl.registerLazySingleton(() => SetupBloc(sl(), sl(), sl(),sl()));
+    sl.registerLazySingleton(() => SetupBloc(sl(), sl(), sl()));
     sl.registerLazySingleton(() => ThemeBloc(sl()));
     sl.registerLazySingleton(() => ArButtonCubit());
     sl.registerLazySingleton(() => ArColorCubit());
 
     sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
-    sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl(),sl(), sl(),sl(),sl()));
+    sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl(),sl(), sl(),sl()));
     sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
     sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl(), sl(),sl(), sl()));
     sl.registerLazySingleton<KeyboardSettingsRepo>(() => KeyboardSettingsRepoImpl(sl(), sl()));

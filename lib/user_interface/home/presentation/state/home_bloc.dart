@@ -1,7 +1,9 @@
-import 'package:aurora/shared/shared.dart';
+import 'package:aurora/shared/data/shared_data.dart';
+import 'package:aurora/shared/presentation/url_launcher.dart';
+
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
+import 'package:aurora/shared/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
@@ -61,7 +63,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   }
 
   void _launchUrl({String? subPath})async{
-    _homeRepo.launchArUrl(subPath: subPath);
+    UrlLauncher.launchArUrl(subPath: subPath);
   }
 
   void setAppHeight()=>_homeRepo.setAppHeight();

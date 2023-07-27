@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import 'ar_widgets/ar_enums.dart';
 import 'constants.dart';
 
 mixin GlobalMixin{

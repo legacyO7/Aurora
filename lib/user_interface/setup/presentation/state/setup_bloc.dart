@@ -1,11 +1,13 @@
 
-import 'package:aurora/shared/shared.dart';
+import 'package:aurora/shared/data/shared_data.dart';
+import 'package:aurora/shared/disable_settings/shared_disable_services.dart';
+import 'package:aurora/shared/presentation/url_launcher.dart';
+
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_widgets.dart';
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
-import 'package:aurora/utility/ar_widgets/ar_enums.dart';
+import 'package:aurora/shared/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
@@ -14,7 +16,7 @@ import 'package:aurora/utility/global_mixin.dart';
 import 'setup_state.dart';
 
 class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixin{
-  SetupBloc(this._prefRepo, this._setupRepo, this._disablerRepo, this._remoteIOManager) : super(SetupInitState()){
+  SetupBloc(this._prefRepo, this._setupRepo, this._disablerRepo) : super(SetupInitState()){
     on<EventSWInit>((_, emit) => _initSetup(emit));
     on<SetupEventConfigure>((event, emit) => _allowConfigure(event.allow, emit));
     on<SetupEventOnCancel>((event, emit) => _onCancel(stepValue: event.stepValue,emit));
@@ -31,7 +33,6 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
   final PrefRepo _prefRepo;
   final SetupRepo _setupRepo;
   final DisableSettingsRepo _disablerRepo;
-  final RemoteIOManager _remoteIOManager;
 
   final GlobalConfig _globalConfig=Constants.globalConfig;
 
@@ -241,7 +242,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
   }
 
   void _launchUrl(String? url){
-    _remoteIOManager.launchArUrl(subPath: url);
+    UrlLauncher.launchArUrl(subPath: url);
   }
 
   _emitInstallPackage(emit)  => emit(SetupIncompatibleState(stepValue: 0, child: packageInstaller(packagesToInstall:  _setupRepo.missingPackagesList), isValid: true));

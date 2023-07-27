@@ -1,6 +1,9 @@
 import 'dart:io';
 
-import 'package:aurora/shared/shared.dart';
+
+import 'package:aurora/shared/data/shared_data.dart';
+import 'package:aurora/shared/disable_settings/shared_disable_services.dart';
+import 'package:aurora/shared/terminal/shared_terminal.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
@@ -13,7 +16,7 @@ import 'home_repo.dart';
 
 class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
 
-  HomeRepoImpl(this._terminalRepo, this._permissionManager, this._ioManager, this._fileManager, this._prefRepo, this._disableSettingsRepo,this._remoteIOManager);
+  HomeRepoImpl(this._terminalRepo, this._permissionManager, this._ioManager, this._fileManager, this._prefRepo, this._disableSettingsRepo);
 
   final TerminalRepo _terminalRepo;
   final PermissionManager _permissionManager;
@@ -21,17 +24,11 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
   final FileManager _fileManager;
   final PrefRepo _prefRepo;
   final DisableSettingsRepo _disableSettingsRepo;
-  final RemoteIOManager _remoteIOManager;
 
 
   @override
   Future writeToFile({required String path, required String content}) async{
     await _ioManager.writeToFile(filePath: path, content: content);
-  }
-
-  @override
-  Future launchArUrl({String? subPath}) async {
-    await _remoteIOManager.launchArUrl(subPath: subPath);
   }
 
 
