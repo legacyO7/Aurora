@@ -1,10 +1,13 @@
-import 'package:aurora/shared/shared.dart';
+
+import 'package:aurora/shared/data/shared_data.dart';
+import 'package:aurora/shared/disable_settings/shared_disable_services.dart';
+import 'package:aurora/shared/terminal/shared_terminal.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
 
 
-class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin{
+class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin {
 
   DisableSettingsRepoImpl(this._prefRepo,this._serviceManager,this._permissionManager,this._ioManager);
 

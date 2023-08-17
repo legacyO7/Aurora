@@ -1,4 +1,6 @@
-import 'package:aurora/shared/shared.dart';
+
+import 'package:aurora/shared/data/shared_data.dart';
+import 'package:aurora/shared/terminal/shared_terminal.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/constants.dart';
 

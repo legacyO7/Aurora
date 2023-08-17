@@ -1,7 +1,8 @@
+import 'package:aurora/shared/data/shared_data.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:flutter/material.dart';
 
-import 'package:aurora/shared/shared.dart';
+
 import 'global_configuration.dart';
 
 class Constants {

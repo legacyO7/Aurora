@@ -1,7 +1,6 @@
 
 import 'package:aurora/shared/data/di/init_aurora.dart';
-import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/clear_cache_widget.dart';
-import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/theme_button.dart';
+import 'package:aurora/shared/presentation/shared_presentation.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/widgets/ar_kernel_compatible_dialog.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/widgets/revoke_faustus.dart';
@@ -152,7 +151,7 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
       builder: (BuildContext context) {
         return  BlocProvider.value(
          value: sl<SetupBloc>(),
-          child:  const AlertDialog(
+          child:   const AlertDialog(
             alignment: Alignment.topRight,
             actionsPadding: EdgeInsets.zero,
             actionsAlignment: MainAxisAlignment.start,

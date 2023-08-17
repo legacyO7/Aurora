@@ -1,21 +1,20 @@
-import 'package:aurora/user_interface/control_panel/presentation/state/battery_manager/batter_manager_bloc.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_bloc.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_event.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/theme/theme_state.dart';
+import 'package:aurora/user_interface/battery_manager/presentation/state/batter_manager_bloc.dart';
+import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/theme/presentation/state/theme_bloc.dart';
+import 'package:aurora/user_interface/theme/presentation/state/theme_event.dart';
+import 'package:aurora/user_interface/theme/presentation/state/theme_state.dart';
 import 'package:aurora/user_interface/home/presentation/screens/home_screen.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
-import 'package:aurora/utility/ar_widgets/cubits/color_cubit.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'shared/data/di/init_aurora.dart';
-import 'user_interface/control_panel/presentation/state/disable_services/disable_bloc.dart';
+import 'user_interface/disable_services/presentation/state/disable_bloc.dart';
 import 'user_interface/home/presentation/state/home_bloc.dart';
 
 

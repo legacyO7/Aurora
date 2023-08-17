@@ -1,4 +1,4 @@
-import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_widgets.dart';
+import 'package:aurora/user_interface/control_panel/control_panel.dart';
 import 'package:aurora/user_interface/home/presentation/screens/home_widgets.dart';
 import 'package:aurora/user_interface/home/presentation/screens/widgets/home_top_bar.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
