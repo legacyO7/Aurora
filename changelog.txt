@@ -1,11 +1,8 @@
-
 Changelogs:
 
-- improved battery manager
-- improved logging. provide /tmp/ar.log while reporting an issue
-- optimized terminal op.
-- native packages will be installed in /opt and exposes the binary to known paths, allowing the app to open directly from terminal
-- added option for complete uninstallation of aurora from within the app
-- periodic dependency updates
-- fixed crashes on debian build
-- minor tweaks
+- Added option to clear cache from settings and setup screen
+- Once the user enforced faustus mode, prompts for switching to Mainline mode are disabled.
+- User can switch back to mainline mode from Settings Panel
+- Added option to revoke faustus mode from setup screen, in case faustus installation goes wrong
+- Check and warn user if required modules are blacklisted prior to app installation
+- Bugfixes and Improvements

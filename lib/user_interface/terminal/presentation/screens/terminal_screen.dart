@@ -1,4 +1,4 @@
-import 'package:aurora/user_interface/terminal/presentation/state/terminal_base_bloc.dart';
+import 'package:aurora/shared/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_bloc.dart';
 import 'package:aurora/user_interface/terminal/presentation/state/terminal_state.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';

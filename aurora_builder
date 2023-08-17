@@ -69,30 +69,25 @@ builddeb(){
 
 echo BUILDING DEB...
 rm -rf debian/opt
-rm -rf debian/usr/share/applications
+rm -rf debian/usr
 
 mkdir -p debian/opt
+mkdir -p debian/usr/bin/
 mkdir -p debian/usr/share/applications
 cp -rf build/linux/x64/release/bundle debian/opt
+cp metadata/exec debian/usr/bin/aurora
+cp metadata/aurora.desktop  debian/usr/share/applications/
 mv debian/opt/bundle debian/opt/aurora
-cat > debian/usr/share/applications/aurora.desktop <<'EOF'
-[Desktop Entry]
-Name=Aurora
-Comment=A utility to control keyboard back-light and charging threshold for Asus TUF-gaming series laptop
-Exec=/usr/bin/aurora
-Icon=/opt/aurora/data/flutter_assets/assets/images/icon.png
-Terminal=false
-Type=Application
-Categories=Utility;
-EOF
 sed -i "s/aurora_ver/$arversion/g" debian/DEBIAN/control
 dpkg-deb --build --root-owner-group debian
 }
 
 buildrpm(){
 
+echo BUILDING RPM...
 mkdir -p rpmbuild/SOURCES
 cp -rf build/linux/x64/release/bundle rpmbuild/SOURCES/
+cp metadata/* rpmbuild/SOURCES/bundle
 cd rpmbuild/SOURCES
 mv  bundle aurora-$arversion
 tar --create --file aurora-"$arversion".tar.gz aurora-$arversion

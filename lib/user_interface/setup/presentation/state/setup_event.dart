@@ -36,3 +36,16 @@ class SetupEventCompatibleKernel implements SetupEvent{
   SetupEventCompatibleKernel({this.removeFaustus = false});
 }
 
+class SetupEventClearCache implements SetupEvent{
+  SetupEventClearCache();
+}
+class SetupEventRebirth implements SetupEvent{
+  SetupEventRebirth();
+}
+
+class SetupEventLaunch extends SetupEvent{
+  String? url;
+  SetupEventLaunch({this.url});
+}
+
+

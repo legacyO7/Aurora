@@ -53,6 +53,18 @@ By default, Aurora uses [this fork](https://github.com/legacyO7/faustus.git) tha
 
 Secureboot enabled devices need to enroll MOK
 
+
+## Command-Line Arguments
+
+```
+usage: 
+--log          -       enables logging
+--version      -       displays app version
+--with-root    -       runs with elevated privileges
+```
+
+Appimage builds doesnt support ``--with-root`` argument
+
 ## Build and Run
 
 ##### - Manual

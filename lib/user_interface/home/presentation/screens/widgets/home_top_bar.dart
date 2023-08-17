@@ -1,8 +1,12 @@
+import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
+import 'package:aurora/user_interface/home/presentation/state/home_state.dart';
 import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:aurora/utility/ar_widgets/ar_top_buttons.dart';
+import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class HomeTopBar extends StatelessWidget with GlobalMixin {
@@ -16,6 +20,7 @@ class HomeTopBar extends StatelessWidget with GlobalMixin {
       children: [
         const Expanded(child: ArWindowButtons()),
         Expanded(
+          flex: 2,
           child: Column(
             children: [
               Text("Aurora",style: Theme.of(context).textTheme.headlineLarge!.apply(color: context.selectedColor),),
@@ -38,7 +43,20 @@ class HomeTopBar extends StatelessWidget with GlobalMixin {
             ],
           ),
         ),
-        Expanded(child: Text(Constants.globalConfig.deviceName,textAlign: TextAlign.end,))
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(Constants.globalConfig.deviceName,textAlign: TextAlign.end,),
+                BlocBuilder<HomeBloc, HomeState>(builder: (context,state){
+                  if(state.loggingEnabled) {
+                    return const Text("logging enabled", style: TextStyle(color: ArColors.orange,fontWeight: FontWeight.bold),textAlign: TextAlign.end,);
+                  }
+                  return const SizedBox();
+                },)
+            ],
+          ),
+        )
       ],);
   }
 }

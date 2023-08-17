@@ -1,5 +1,7 @@
 
-enum DISABLE {faustus, threshold, all, none, uninstall}
-enum ARMODE {normal, batteryManager, mainline, mainlineWithoutBatteryManager}
+enum DisableEnum {faustus,mainline, threshold, all, none, uninstall}
+enum ArModeEnum {faustus, batteryManager, mainline, mainlineWithoutBatteryManager}
 enum CommandStatus { stderr, stdout, stdinp }
 enum BuildType { debug, rpm, deb, appimage }
+enum Enforcement { faustus, mainline}
+enum ArModules {faustus, mainline}

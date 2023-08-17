@@ -10,7 +10,7 @@ class ArKernelCompatibleDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return arRequestDialog(title: 'Your kernel might support keyboard backlit without using faustus module.\n Would you like to remove faustus module and give it a try?',
+    return arRequestDialog(title: 'Your kernel might support keyboard backlit without using faustus module.\n Would you like to give it a try?',
         buttonTitle1: "Nope",
         buttonTitle2: "Okay",
         onClickButton1: (){

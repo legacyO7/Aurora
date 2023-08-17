@@ -1,10 +1,12 @@
 #!/bin/bash
 
-tmpdir="$1"
+workingdir="$1"
+tmpdir=$(mktemp -d)
 signingfileloc="/lib/modules/$(uname -r)/build/certs"
 faustusDir="/sys/devices/platform/faustus/"
 filename_key="signing_key"
 require_reboot=false
+
 
 echo "Installing faustus"
 
@@ -13,11 +15,11 @@ echo "Installing faustus"
             else
             echo faustus module not found
 
-            mkdir -p $tmpdir
+            mkdir -p workingdir
 
-                git clone --depth=1 $2 $tmpdir/faustus
+                git clone --depth=1 $2 $tmpdir
 
-                cd $tmpdir/faustus
+                cd $tmpdir
 
                     if mokutil --sb-state | grep -q 'enabled'; then
 
@@ -46,6 +48,8 @@ echo "Installing faustus"
 
                 sudo rmmod asus_nb_wmi
                 sudo rmmod asus_wmi
+
+                # sudo ln -s /sys/kernel/btf/vmlinux  /usr/lib/modules/`uname -r`/build/vmlinux
 
                 make
                 sudo modprobe sparse-keymap wmi video

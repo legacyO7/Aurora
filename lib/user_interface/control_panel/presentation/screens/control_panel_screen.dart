@@ -1,12 +1,11 @@
-import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_widgets.dart';
-import 'package:aurora/user_interface/control_panel/presentation/screens/widgets/theme_button.dart';
-import 'package:aurora/user_interface/control_panel/presentation/state/keyboard_settings/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/battery_manager/battery_manager.dart';
+import 'package:aurora/user_interface/control_panel/presentation/screens/drawer/ar_drawer.dart';
+import 'package:aurora/user_interface/keyboard_settings/keyboard_settings.dart';
+import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
-import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class ControlPanelScreen extends StatefulWidget {
@@ -18,6 +17,13 @@ class ControlPanelScreen extends StatefulWidget {
 
 class _ControlPanelState extends State<ControlPanelScreen> with GlobalMixin{
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _openEndDrawer() {
+    _scaffoldKey.currentState?.openEndDrawer();
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -25,41 +31,38 @@ class _ControlPanelState extends State<ControlPanelScreen> with GlobalMixin{
 
   @override
   Widget build(BuildContext context) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children:  <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: context.read<KeyboardSettingsBloc>().selectedColor),
-                      borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(20),topLeft: Radius.circular(20))
-                    ),
-                    child: const ThemeButton()),
-                Container(
-                    decoration: BoxDecoration(
-                        border: Border.symmetric(vertical: BorderSide.none,horizontal: BorderSide(color:context.selectedColor ))
-                    ),
-                    child: const GitButton()),
-                Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: context.selectedColor),
-                        borderRadius: const BorderRadius.only(bottomRight: Radius.circular(10))
-                    ),
-                    child: const DisableButton())
-              ],
-            ),
-            if(Constants.globalConfig.arMode!=ARMODE.mainlineWithoutBatteryManager)
-            const Expanded(
-              child:BatteryManagerScreen()
-            ),
-            if(Constants.globalConfig.arMode!=ARMODE.batteryManager)
-             Expanded(
-                flex: super.isMainLine()?3:2,
-                child: const KeyboardSettingsScreen())
-          ],
+      return Scaffold(
+        endDrawer: const ArDrawer(),
+        drawerScrimColor: Colors.transparent,
+        endDrawerEnableOpenDragGesture: true,
+        key: _scaffoldKey,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:  <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: ()=>_openEndDrawer(),
+                      icon: const Icon(Icons.settings),
+                      hoverColor: ArColors.transparent,
+                      highlightColor: ArColors.transparent,
+                      splashColor: ArColors.transparent,
+                  ),
+                ],
+              ),
+
+              if(Constants.globalConfig.arMode!=ArModeEnum.mainlineWithoutBatteryManager)
+               const Expanded(
+                child:BatteryManagerScreen()
+              ),
+              if(Constants.globalConfig.arMode!=ArModeEnum.batteryManager)
+               Expanded(
+                  flex: super.isMainLine()?3:2,
+                  child: const KeyboardSettingsScreen())
+            ],
+          ),
         ),
       );
   }

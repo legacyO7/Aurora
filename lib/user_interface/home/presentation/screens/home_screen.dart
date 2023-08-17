@@ -1,4 +1,4 @@
-import 'package:aurora/user_interface/control_panel/presentation/screens/control_panel_widgets.dart';
+import 'package:aurora/user_interface/control_panel/control_panel.dart';
 import 'package:aurora/user_interface/home/presentation/screens/home_widgets.dart';
 import 'package:aurora/user_interface/home/presentation/screens/widgets/home_top_bar.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_event.dart';
@@ -28,11 +28,6 @@ class _MyHomePageState extends State<HomeScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -50,10 +45,14 @@ class _MyHomePageState extends State<HomeScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 2.5.w),
                 child: BlocBuilder<HomeBloc,HomeState>
                   (builder: (context,state){
-                  if(state is AccessGranted && (state.hasAccess)) {
-                    return const ControlPanelScreen();
-                  } else {
-                    return grantAccess(context);
+                  if(state.state==HomeStates.accessGranted) {
+                    if(state.hasAccess) {
+                      return const ControlPanelScreen();
+                    }else{
+                      return grantAccess(context,runAsRoot: true,deniedList: state.deniedList);
+                    }
+                  }else {
+                    return grantAccess(context,deniedList: state.deniedList);
                   }
                 }),
               ),

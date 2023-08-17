@@ -10,11 +10,7 @@ class GlobalConfig {
    String? arChannel;
 
   //paths
-   String? kExecFaustusPath;
-   String? kExecMainlinePath;
-   String? kExecBatteryManagerPath;
    String? kWorkingDirectory;
-   String? kExecPermissionCheckerPath;
    String? kTmpPath;
    String? kThresholdPath;
 
@@ -27,60 +23,60 @@ class GlobalConfig {
    //misc
    bool? kSecureBootEnabled = false;
    String deviceName;
-   ARMODE arMode;
+   ArModeEnum arMode;
+
+   //flags
+   bool isLoggingEnabled;
+   bool isFaustusEnforced;
 
 
-  GlobalConfig({
+   GlobalConfig({
     this.arVersion,
     this.arChannel,
-    this.kExecFaustusPath,
-    this.kExecMainlinePath,
-    this.kExecBatteryManagerPath,
     this.kWorkingDirectory,
     this.kAuroraGitRawYaml,
     this.kAuroraGitRawChangelog,
     this.kSecureBootEnabled,
     this.kFaustusGitUrl,
-    this.kExecPermissionCheckerPath,
     this.kTmpPath,
-    this.arMode=ARMODE.normal,
+    this.arMode=ArModeEnum.faustus,
     this.deviceName='',
-    this.kThresholdPath
+    this.kThresholdPath,
+    this.isLoggingEnabled=false,
+    this.isFaustusEnforced =false
   });
 
   setInstance({
     arVersion,
     arChannel,
     kExecFaustusPath,
-    kExecMainlinePath,
     kExecBatteryManagerPath,
     kWorkingDirectory,
     kAuroraGitRawYaml,
     kAuroraGitRawChangelog,
     kSecureBootEnabled,
     kFaustusGitUrl,
-    kExecPermissionCheckerPath,
     arMode,
     kTmpPath,
     deviceName,
-    kThresholdPath
+    kThresholdPath,
+    isLoggingEnabled,
+    isFaustusEnforced
   }){
 
     this.arChannel= arChannel??this.arChannel;
     this.arVersion=  arVersion??this.arVersion;
     this.kAuroraGitRawChangelog= kAuroraGitRawChangelog?? "https://raw.githubusercontent.com/legacyO7/Aurora/${arChannel??this.arChannel}/changelog.txt";
     this.kAuroraGitRawYaml= kAuroraGitRawYaml?? "https://raw.githubusercontent.com/legacyO7/Aurora/${arChannel??this.arChannel}/pubspec.yaml";
-    this.kExecBatteryManagerPath=kExecBatteryManagerPath??this.kExecBatteryManagerPath;
-    this.kExecFaustusPath= kExecFaustusPath??this.kExecFaustusPath;
-    this.kExecMainlinePath= kExecMainlinePath??this.kExecMainlinePath;
     this.kSecureBootEnabled= kSecureBootEnabled??this.kSecureBootEnabled;
     this.kWorkingDirectory= kWorkingDirectory??this.kWorkingDirectory;
     this.kFaustusGitUrl=kFaustusGitUrl??'https://github.com/legacyO7/faustus.git';
-    this.kExecPermissionCheckerPath=kExecPermissionCheckerPath??this.kExecPermissionCheckerPath;
     this.arMode=arMode??this.arMode;
     this.kTmpPath=kTmpPath??this.kTmpPath;
     this.deviceName=deviceName??this.deviceName;
     this.kThresholdPath=kThresholdPath??this.kThresholdPath;
+    this.isLoggingEnabled=isLoggingEnabled??this.isLoggingEnabled;
+    this.isFaustusEnforced=isFaustusEnforced??this.isFaustusEnforced;
   }
 
   

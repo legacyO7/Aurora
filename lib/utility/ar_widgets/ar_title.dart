@@ -1,8 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:aurora/utility/ar_widgets/colors.dart';
+import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:flutter/material.dart';
 
-Widget arTitle(BuildContext context){
+Widget arTitle(){
 
   return Center(
     child: AnimatedTextKit(

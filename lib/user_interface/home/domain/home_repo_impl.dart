@@ -1,60 +1,36 @@
 import 'dart:io';
 
-import 'package:aurora/data/shared_preference/pref_repo.dart';
-import 'package:aurora/user_interface/terminal/domain/repository/terminal_delegate.dart';
+
+import 'package:aurora/shared/data/shared_data.dart';
+import 'package:aurora/shared/disable_settings/shared_disable_services.dart';
+import 'package:aurora/shared/terminal/shared_terminal.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
+import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'home_repo.dart';
 
-class HomeRepoImpl extends HomeRepo with GlobalMixin{
+class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
 
-  HomeRepoImpl(this._terminalDelegate,this._prefRepo);
+  HomeRepoImpl(this._terminalRepo, this._permissionManager, this._ioManager, this._fileManager, this._prefRepo, this._disableSettingsRepo);
 
-  final TerminalDelegate _terminalDelegate;
+  final TerminalRepo _terminalRepo;
+  final PermissionManager _permissionManager;
+  final IOManager _ioManager;
+  final FileManager _fileManager;
   final PrefRepo _prefRepo;
+  final DisableSettingsRepo _disableSettingsRepo;
 
-  final _globalConfig=Constants.globalConfig;
-
-  @override
-  List<String> readFile({required String path}){
-    return (File(path).readAsLinesSync());
-  }
 
   @override
-  Future<bool> checkInternetAccess() async{
-    try {
-      final result = await InternetAddress.lookup('www.google.com');
-        return (result.isNotEmpty && result[0].rawAddress.isNotEmpty);
-    } on SocketException catch (_) {
-      return false;
-    }
+  Future writeToFile({required String path, required String content}) async{
+    await _ioManager.writeToFile(filePath: path, content: content);
   }
 
-  @override
-  Future launchArUrl({String? subPath}) async {
-    var url = Uri.parse(Constants.kAuroraGitUrl+(subPath??''));
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
-      throw "error launching $url";
-    }
-  }
-
-  @override
-  Future<String> getVersion() async{
-    var version= (await PackageInfo.fromPlatform()).version;
-    _globalConfig.setInstance(
-        arVersion:version,
-        arChannel: version.split('-')[1]
-    );
-    return version;
-  }
 
   @override
   void setAppHeight(){
@@ -64,85 +40,27 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     ..focus();
   }
 
-  Future<bool> _isDeviceCompatible() async{
-
-    bool checkDeviceInfo({required String info}){
-      return (info.toLowerCase().contains('asus'));
-    }
-
-    if(File(Constants.kProductName).existsSync()){
-      Constants.globalConfig.setInstance(deviceName: File(Constants.kProductName).readAsLinesSync().toString());
-      return checkDeviceInfo(info: Constants.globalConfig.deviceName);
-    } else if(File(Constants.kVendorName).existsSync()){
-      return checkDeviceInfo(info: File(Constants.kVendorName).readAsLinesSync().toString());
-    }
-    debugPrint("unknown device");
-    return true;
-  }
-
-  @override
-  Future<int> compatibilityChecker() async{
-
-    if(!await _isDeviceCompatible()){
-      return 7;
-    }
-
-    if(!await _terminalDelegate.pkexecChecker()){
-      return 6;
-    }
-
-    if(isMainLineCompatible()){
-      if(await _thresholdPathExists() && await _systemHasSystemd()){
-        _globalConfig.setInstance(arMode: ARMODE.mainline);
-      }else{
-        _globalConfig.setInstance(arMode:  ARMODE.mainlineWithoutBatteryManager);
-      }
-      return 4;
-    }
-
-    if(!checkFaustusFolder()) {
-      if(await _thresholdPathExists()&& await _systemHasSystemd()) {
-        return 3;
-      } else {
-        return 2;
-      }
-    }else if(await _terminalDelegate.isKernelCompatible()) {
-      return 5;
-    }
-
-    if((await _terminalDelegate.listPackagesToInstall()).isNotEmpty) {
-      return 1;
-    }
-
-    _globalConfig.setInstance(arMode: ARMODE.normal);
-    return 0;
-  }
-
-  @override
-  int convertVersionToInt(String version) {
-    return int.tryParse(version.replaceAll('.', '').replaceAll('+', '').split('-')[0])??0;
-  }
-
-  @override
-  bool checkFaustusFolder()=>Directory(Constants.kFaustusModulePath).existsSync();
-
   Future _getAccess() async{
-    await _terminalDelegate.execute("${Constants.kPolkit} ${super.isMainLine()? _globalConfig.kExecMainlinePath: _globalConfig
-        .kExecFaustusPath} init ${_globalConfig.kWorkingDirectory} ${await _prefRepo.getThreshold()}");
+     await _permissionManager.setPermissions();
+  }
+
+  @override
+  Future<bool> canElevate() async{
+    return await _ioManager.checkIfExists(filePath: Constants.kInstalledBinary, fileType: FileSystemEntityType.file) && isInstalledPackage();
+  }
+
+  @override
+  Future selfElevate() async{
+    if(await canElevate()) {
+        await _terminalRepo.execute("${Constants.kInstalledBinary} --with-root");
+        exit(0);
+    }else{
+      arSnackBar(text: "Can't elevate at this point",isPositive: false);
+    }
   }
 
   Future<bool> _checkAccess() async{
-    return await _terminalDelegate.checkAccess();
-  }
-
-  @override
-  Future loadScripts() async{
-    _globalConfig.kExecBatteryManagerPath= await _terminalDelegate.extractAsset(sourceFileName:Constants.kBatteryManager);
-    if(super.isMainLine()){
-      _globalConfig.kExecMainlinePath= await _terminalDelegate.extractAsset(sourceFileName: Constants.kMainline);
-    }else {
-      _globalConfig.kExecFaustusPath=await _terminalDelegate.extractAsset(sourceFileName: Constants.kFaustus);
-    }
+    return await _permissionManager.validatePaths() && await super.arServiceEnabled();
   }
 
   @override
@@ -155,27 +73,43 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin{
     return checkAccess;
   }
 
-  Future<bool> _thresholdPathExists() async{
-    Directory powerDir=Directory(Constants.kPowerSupplyPath);
-    String? thresholdPath;
-    if(powerDir.existsSync()){
 
-      await for(var file in powerDir.list()){
-        if(file.path.split('/').last.contains('BAT')){
-          thresholdPath='${file.path}/charge_control_end_threshold';
-          break;
-        }
-      }
-
-      if(thresholdPath!=null&&File(thresholdPath).existsSync()){
-        _globalConfig.setInstance(kThresholdPath: thresholdPath);
-      }
+  @override
+  Future<bool> enforcement(Enforcement enforce) async{
+    bool isSuccess=false;
+    if(enforce==Enforcement.faustus){
+      isSuccess= await _disableSettingsRepo.disableServices(disable: DisableEnum.mainline);
     }
-    return _globalConfig.kThresholdPath!=null;
+    if(enforce==Enforcement.mainline){
+      isSuccess= await _disableSettingsRepo.disableServices(disable: DisableEnum.faustus);
+    }
+
+    if(isSuccess) {
+      bool isFaustusEnforced=enforce==Enforcement.faustus;
+      await _prefRepo.setFaustusEnforcement(isFaustusEnforced);
+    }
+
+    return isSuccess;
   }
 
-  Future<bool> _systemHasSystemd() async{
-    return (await _terminalDelegate.getOutput(command: Constants.kChecksystemd)).toString().contains('systemd');
+  @override
+  Future initLog() async{
+
+    _fileManager.setWorkingDirectory();
+
+   ArLogger.log(data: "Build Version          : ${await getVersion()}");
+   ArLogger.log(data: "Build Type             : ${Constants.buildType.name}");
+   ArLogger.log(data: "Compatible Device      : ${await _fileManager.isDeviceCompatible()}");
+   ArLogger.log(data: "Compatible Kernel      : ${await super.isKernelCompatible()}");
+   ArLogger.log(data: "Mainline Mode          : ${isMainLineCompatible()}");
+   ArLogger.log(data: "System has systemd     : ${await systemHasSystemd()}");
+   ArLogger.log(data: "Threshold Path Exists  : ${await _fileManager.thresholdPathExists()}");
+   ArLogger.log(data: "Working Directory      : ${Constants.globalConfig.kWorkingDirectory}");
+
+    if(await  _ioManager.checkIfExists(filePath: "${Constants.globalConfig.kTmpPath}/ar.log", fileType: FileSystemEntityType.file)) {
+      await _terminalRepo.execute("chown \$(logname) ${Constants.globalConfig.kTmpPath}/ar.log");
+    }
+
   }
 
 
