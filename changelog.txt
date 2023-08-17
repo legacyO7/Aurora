@@ -1,5 +1,13 @@
 Changelogs:
 
+- Improved app performance and reliability by leveraging Dart's built-in I/O capabilities.
+- Enhanced security by eliminating reliance on external shell commands.
+- Added support for command-line arguments in the app. Refer README for usage
+- Added optional logging functionality to the app. By default, logging is now disabled to minimize resource consumption and improve performance. Introduced a new command-line argument (--log) to enable logging functionality.
+- Added Settings Panel
+- Option to enforce faustus in mainline mode. This will force aurora to run in faustus mode, even if mainline mode is compatible. ( Settings > Enforce faustus )
+- Logging can be enabled or disabled anytime from Settings
+- Option to revoke faustus from setup screen
 - Added option to clear cache from settings and setup screen
 - Once the user enforced faustus mode, prompts for switching to Mainline mode are disabled.
 - User can switch back to mainline mode from Settings Panel

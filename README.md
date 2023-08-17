@@ -51,7 +51,8 @@ By default, Aurora uses [this fork](https://github.com/legacyO7/faustus.git) tha
 
 ![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arsrceen_3.png)
 
-Secureboot enabled devices need to enroll MOK
+* Note that the installation of Faustus using aurora is not fully error-proof. If you encounter an installation failure, refer to the error log and install Faustus manually.
+* Secureboot enabled devices need to enroll MOK
 
 
 ## Command-Line Arguments
