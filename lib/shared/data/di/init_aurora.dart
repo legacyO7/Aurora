@@ -2,6 +2,10 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
+import 'package:aurora/shared/data/isar_manager/repository/isar_delegate_impl.dart';
+import 'package:aurora/shared/data/isar_manager/repository/isar_manager.dart';
+import 'package:aurora/shared/data/isar_manager/repository/isar_manager_impl.dart';
 
 import 'package:aurora/user_interface/battery_manager/data/repositories/battery_manager_repo.dart';
 import 'package:aurora/user_interface/battery_manager/data/repositories/battery_manager_repo_impl.dart';
@@ -69,7 +73,8 @@ class InitAurora with GlobalMixin {
     sl.registerLazySingleton<IOManager>(() => IOManagerImpl());
     sl.registerLazySingleton<ServiceManager>(() => ServiceManagerImpl(sl(),sl()));
     sl.registerLazySingleton<FileManager>(() => FileManagerImpl(sl()));
-
+    sl.registerLazySingleton<IsarManager>(() => IsarManagerImpl());
+    sl.registerLazySingleton<IsarDelegate>(() => IsarDelegateImpl(sl()));
     sl.registerLazySingleton<RemoteIOManager>(() => RemoteIOManagerImpl(sl()));
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();

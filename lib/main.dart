@@ -1,3 +1,4 @@
+import 'package:aurora/shared/data/isar_manager/repository/isar_manager.dart';
 import 'package:aurora/user_interface/battery_manager/presentation/state/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/theme/presentation/state/theme_bloc.dart';
@@ -25,6 +26,7 @@ void main(List<String> args) async{
   WidgetsFlutterBinding.ensureInitialized();
   await initAurora.setWindow();
   await initAurora.initLogger();
+  await sl<IsarManager>().initIsar();
   runApp(const Aurora());
 }
 

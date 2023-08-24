@@ -1,3 +1,9 @@
+
+import 'package:isar/isar.dart';
+
+part 'ar_state_model.g.dart';
+
+@embedded
 class ArState{
   bool? boot;
   bool? awake;
