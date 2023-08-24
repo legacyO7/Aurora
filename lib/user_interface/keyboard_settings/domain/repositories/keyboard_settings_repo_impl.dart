@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 
+import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/shared/data/shared_data.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/utility/ar_widgets/ar_colors.dart';
@@ -11,10 +12,10 @@ import 'keyboard_settings_repo.dart';
 
 class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
 
-  KeyboardSettingsRepoImpl(this._homeRepo, this._prefRepo);
+  KeyboardSettingsRepoImpl(this._homeRepo, this._isarDelegate);
 
   final HomeRepo _homeRepo;
-  final PrefRepo _prefRepo;
+  final IsarDelegate _isarDelegate;
 
   final List<int> faustusKeys=[0,1,2,3];
   final List<int> mainLineKeys=[0,1,2,9];
@@ -22,11 +23,12 @@ class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
   @override
   Future setMainlineStateParams({required int boot, required int awake, required int sleep}) async{
     await _homeRepo.writeToFile(path: Constants.kMainlineModuleStatePath,content: "1 $boot $awake $sleep 0");
-    await _prefRepo.setArState(arState:ArState(awake: awake==1,sleep: sleep==1,boot: boot==1));
+    await _isarDelegate.setArState(arState:ArState(awake: awake==1,sleep: sleep==1,boot: boot==1));
   }
 
   @override
   Future setMainlineModeParams({required ArMode arMode}) async{
+    arMode.color??=Color(arMode.colorRad!);
     if(super.isMainLine()) {
       await _homeRepo.writeToFile(
         path: Constants.kMainlineModuleModePath,
@@ -49,7 +51,7 @@ class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
       );
       await saveFaustusSettings();
     }
-    await _prefRepo.setArMode(arMode: arMode);
+    await _isarDelegate.setArMode(arMode: arMode);
   }
 
   @override
@@ -66,7 +68,7 @@ class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
       await setMode(arMode: ArMode(mode: 0));
 
     }
-    await _prefRepo.setArMode(arMode: arMode);
+    await _isarDelegate.setArMode(arMode: arMode);
   }
 
   @override
@@ -78,7 +80,7 @@ class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
           path: Constants.kFaustusModuleSpeedPath,
           content: "${arMode.speed}");
     }
-    await _prefRepo.setArMode(arMode: arMode);
+    await _isarDelegate.setArMode(arMode: arMode);
   }
 
   @override
@@ -87,7 +89,7 @@ class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
         path: super.isMainLine()?Constants.kMainlineBrightnessPath: Constants.kFaustusModuleBrightnessPath,
         content:  brightness.toString()
     );
-    _prefRepo.setBrightness(brightness);
+    _isarDelegate.setBrightness(brightness);
   }
 
   Future saveFaustusSettings() async{

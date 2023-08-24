@@ -13,6 +13,7 @@ class IsarManagerImpl implements IsarManager {
   late Isar isar;
 
   ArSettingsModel _arSettingsModel=ArSettingsModel();
+  late ArProfileModel _arProfileModel;
 
   @override
   Future initIsar() async{
@@ -27,7 +28,8 @@ class IsarManagerImpl implements IsarManager {
      await _initArSettings();
    }
 
-   _arSettingsModel=(await readArSettingsIsar())!;
+   await readArSettingsIsar();
+   await readArProfileIsar();
 
   }
 
@@ -41,13 +43,13 @@ class IsarManagerImpl implements IsarManager {
   }
 
   Future<int> _initArProfiles() async{
-    await writeArProfileIsar(ArProfileModel(
+    _arProfileModel=ArProfileModel(
         profileName: 'Default Profile',
         threshold: 55,
         brightness: 1,
         arState: ArState(),
-        arMode: ArMode(colorRad: ArColors.accentColor.value,mode: 1,speed: 0 ))
-    );
+        arMode: ArMode(colorRad: ArColors.accentColor.value,mode: 1,speed: 0 ));
+    await writeArProfileIsar();
     return (await isar.arProfileModels.where().findFirst())!.id!;
   }
   
@@ -55,13 +57,6 @@ class IsarManagerImpl implements IsarManager {
 
   @override
   Future writeArSettingsIsar() async{
-    await isar.writeTxn(() => isar.arSettingsModels.put(arSettingsModel));
-    await readArSettingsIsar();
-  }
-  
-  @override
-  Future updateArSettingsIsar(ArSettingsModel arSettingsModel) async{
-    arSettingsModel.id= (await readArSettingsIsar())!.profileId;
     await isar.writeTxn(() => isar.arSettingsModels.put(arSettingsModel));
     await readArSettingsIsar();
   }
@@ -83,24 +78,25 @@ class IsarManagerImpl implements IsarManager {
 
   /// AR Profile ISAR
   @override
-  Future writeArProfileIsar(ArProfileModel arProfileModel) async{
+  Future writeArProfileIsar() async{
     await isar.writeTxn(() => isar.arProfileModels.put(arProfileModel));
-  }
-
- @override
-  Future updateArProfileIsar(ArProfileModel arProfileModel, int id) async{
-    arProfileModel.id=id;
-    await isar.writeTxn(() => isar.arProfileModels.put(arProfileModel));
+    await readArProfileIsar();
   }
 
   @override
-  Future<ArProfileModel?> readArProfileIsar(int id) async{
-    return await isar.arProfileModels.get(id);
+  Future<ArProfileModel?> readArProfileIsar({int? id}) async{
+    id??=_arSettingsModel.profileId;
+    ArProfileModel? tempModel= await isar.arProfileModels.get(id!);
+    if(tempModel!=null){
+      _arProfileModel=tempModel;
+    }
+    return tempModel;
   }
 
   @override
-  Future deleteArProfileIsar(int id) async{
-    await isar.arProfileModels.delete(id);
+  Future deleteArProfileIsar({int? id}) async{
+    id??=_arSettingsModel.profileId;
+    await isar.arProfileModels.delete(id!);
   }
 
   @override
@@ -110,5 +106,6 @@ class IsarManagerImpl implements IsarManager {
 
   @override
   ArSettingsModel get arSettingsModel=> _arSettingsModel;
+  ArProfileModel get arProfileModel=> _arProfileModel;
 
 }

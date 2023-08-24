@@ -1,4 +1,7 @@
+import 'package:aurora/shared/data/isar_manager/models/ar_profile_model.dart';
 import 'package:aurora/shared/data/isar_manager/repository/isar_manager.dart';
+import 'package:aurora/shared/data/model/ar_mode_model.dart';
+import 'package:aurora/shared/data/model/ar_state_model.dart';
 import 'package:flutter/material.dart';
 
 import 'isar_delegate.dart';
@@ -55,9 +58,39 @@ class IsarDelegateImpl implements IsarDelegate{
   }
 
   @override
+  Future<ArProfileModel> getArProfile({int? id}) async{
+    return (await _isarManager.readArProfileIsar(id: id))!;
+  }
+
+  @override
+  Future setBrightness(int brightness) async {
+    _isarManager.arProfileModel.brightness=brightness;
+    await _isarManager.writeArProfileIsar();
+  }
+
+  @override
+  Future setArMode({ required ArMode arMode}) async {
+    arMode.colorRad=arMode.color!.value;
+    _isarManager.arProfileModel.arMode=arMode;
+    await _isarManager.writeArProfileIsar();
+  }
+
+
+  @override
+  Future setArState({ required ArState arState }) async {
+    _isarManager.arProfileModel.arState=arState;
+    await _isarManager.writeArProfileIsar();
+  }
+
+  @override
+  Future setThreshold(int threshold) async {
+    _isarManager.arProfileModel.threshold=threshold;
+    await _isarManager.writeArProfileIsar();
+  }
+
+  @override
   Future deleteDatabase() async{
     await _isarManager.deleteDatabase();
   }
-
 
 }

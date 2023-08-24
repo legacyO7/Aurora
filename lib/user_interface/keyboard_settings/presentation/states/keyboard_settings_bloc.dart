@@ -1,5 +1,6 @@
 
-
+import 'package:aurora/shared/data/isar_manager/models/ar_profile_model.dart';
+import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/shared/data/shared_data.dart';
 import 'package:aurora/user_interface/keyboard_settings/domain/repositories/keyboard_settings_repo.dart';
 import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_event.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'keyboard_settings_state.dart';
 
 class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,KeyboardSettingsState> {
-  KeyboardSettingsBloc(this._prefRepo,this._controlPanelRepo):super(const KeyboardSettingsState()){
+  KeyboardSettingsBloc(this._isarDelegate,this._controlPanelRepo):super(const KeyboardSettingsState()){
    on<KeyboardSettingsEventSetBrightness>((event, emit)=> _setBrightness(event.brightness,emit));
    on<KeyboardSettingsEventSetSpeed>((event, emit)=> _setSpeed(speed: event.speed,emit));
    on<KeyboardSettingsEventSetMode>((event, emit)=> _setMode(mode: event.mode,emit));
@@ -19,7 +20,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
    on<KeyboardSettingsEventSetState>((event, emit) => _setMainLineStateParams(emit,arState: ArState(boot: event.boot,sleep: event.sleep,awake: event.awake)));
   }
 
-  final PrefRepo _prefRepo;
+  final IsarDelegate _isarDelegate;
   final KeyboardSettingsRepo _controlPanelRepo;
 
   bool _boot=false;
@@ -28,12 +29,15 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
 
   ArMode arMode=ArMode(color: ArColors.accentColor,mode: 0,speed: 0);
 
+  late ArProfileModel arProfileModel;
+
   _initPanel(emit) async{
-      arMode= (await _prefRepo.getArMode())??arMode;
-      await _setBrightness(await _prefRepo.getBrightness(), emit);
+      arProfileModel=await _isarDelegate.getArProfile();
+      arMode= (arProfileModel.arMode);
+      await _setBrightness(arProfileModel.brightness, emit);
       await _setMainlineModeParams(arMode: arMode, emit);
       if(super.isMainLine()){
-        await _setMainLineStateParams(arState: (await _prefRepo.getArState()).negateValue(), emit );
+        await _setMainLineStateParams(arState: (arProfileModel.arState).negateValue(), emit );
       }
   }
 
