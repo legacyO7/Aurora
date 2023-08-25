@@ -14,6 +14,9 @@ import 'package:aurora/user_interface/keyboard_settings/domain/repositories/keyb
 import 'package:aurora/user_interface/battery_manager/presentation/state/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/disable_services/presentation/state/disable_bloc.dart';
 import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/profiles/domain/repositories/profile_repo.dart';
+import 'package:aurora/user_interface/profiles/domain/repositories/profile_repo_impl.dart';
+import 'package:aurora/user_interface/profiles/presentation/states/profiles_bloc.dart';
 import 'package:aurora/user_interface/theme/presentation/state/theme_bloc.dart';
 import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo_impl.dart';
@@ -56,6 +59,7 @@ class InitAurora with GlobalMixin {
     sl.registerLazySingleton(() => BatteryManagerBloc(sl()));
     sl.registerLazySingleton(() => SetupBloc(sl(), sl(), sl()));
     sl.registerLazySingleton(() => ThemeBloc(sl()));
+    sl.registerLazySingleton(() => ProfilesBloc(sl()));
     sl.registerLazySingleton(() => ArButtonCubit());
     sl.registerLazySingleton(() => ArColorCubit());
 
@@ -73,6 +77,7 @@ class InitAurora with GlobalMixin {
     sl.registerLazySingleton<FileManager>(() => FileManagerImpl(sl()));
     sl.registerLazySingleton<IsarManager>(() => IsarManagerImpl());
     sl.registerLazySingleton<IsarDelegate>(() => IsarDelegateImpl(sl()));
+    sl.registerLazySingleton<ProfileRepo>(() => ProfileRepoImpl(sl()));
     sl.registerLazySingleton<RemoteIOManager>(() => RemoteIOManagerImpl(sl()));
 
     sl.registerLazySingleton<Dio>(() => Dio());

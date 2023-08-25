@@ -1,4 +1,5 @@
 part of 'profiles_bloc.dart';
 
-@immutable
 abstract class ProfilesEvent {}
+
+class ProfilesInitEvent extends ProfilesEvent {}

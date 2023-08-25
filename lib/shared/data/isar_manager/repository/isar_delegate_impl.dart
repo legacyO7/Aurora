@@ -34,7 +34,6 @@ class IsarDelegateImpl implements IsarDelegate{
       default:
         return ThemeMode.system;
     }
-
   }
 
   @override
@@ -46,7 +45,6 @@ class IsarDelegateImpl implements IsarDelegate{
   int getThreshold(){
     return _isarManager.arProfileModel.threshold;
   }
-
 
   @override
   Future setVersion(String version) async{
@@ -71,7 +69,6 @@ class IsarDelegateImpl implements IsarDelegate{
     return (await _isarManager.readArProfileIsar(id: id))!;
   }
 
-
   @override
   Future setBrightness(int brightness) async {
     await _writeProfile(()=>_arProfileModel.brightness=brightness);
@@ -83,7 +80,6 @@ class IsarDelegateImpl implements IsarDelegate{
       _arProfileModel.arMode=ArMode.copyModel(arMode);
     });
   }
-
 
   @override
   Future setArState({ required ArState arState }) async {

@@ -87,10 +87,11 @@ class IsarManagerImpl implements IsarManager {
 
   /// AR Profile ISAR
   @override
-  Future writeArProfileIsar() async{
-    await isar.writeTxn(() => isar.arProfileModels.put(arProfileModel));
-    await writeArSettingsIsar();
+  Future writeArProfileIsar({ArProfileModel? arProfileModel}) async{
+    arProfileModel??=_arProfileModel;
+    await isar.writeTxn(() => isar.arProfileModels.put(arProfileModel!));
     _arSettingsModel.profileId=_arProfileModel.id;
+    await writeArSettingsIsar();
     await readArProfileIsar();
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     print("Profile ID - ${_arSettingsModel.profileId}");
@@ -106,6 +107,11 @@ class IsarManagerImpl implements IsarManager {
       _arProfileModel=tempModel;
     }
     return tempModel;
+  }
+
+  @override
+  Future<List<ArProfileModel>> readAllArProfileIsar() async{
+    return isar.arProfileModels.where().findAll();
   }
 
   @override

@@ -8,8 +8,9 @@ abstract class IsarManager{
   Future<ArSettingsModel?> readArSettingsIsar();
   Future deleteArSettingsIsar(int id);
 
-  Future writeArProfileIsar();
+  Future writeArProfileIsar({ArProfileModel? arProfileModel});
   Future<ArProfileModel?> readArProfileIsar({int? id});
+  Future<List<ArProfileModel>> readAllArProfileIsar();
   Future deleteArProfileIsar({int? id});
 
   ArSettingsModel get arSettingsModel;

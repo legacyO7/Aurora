@@ -1,6 +1,7 @@
 import 'package:aurora/shared/data/isar_manager/repository/isar_manager.dart';
 import 'package:aurora/user_interface/battery_manager/presentation/state/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/profiles/presentation/states/profiles_bloc.dart';
 import 'package:aurora/user_interface/theme/presentation/state/theme_bloc.dart';
 import 'package:aurora/user_interface/theme/presentation/state/theme_event.dart';
 import 'package:aurora/user_interface/theme/presentation/state/theme_state.dart';
@@ -71,6 +72,7 @@ class Aurora extends StatelessWidget with GlobalMixin{
                                 BlocProvider.value(value: sl<BatteryManagerBloc>()),
                                 BlocProvider.value(value: sl<KeyboardSettingsBloc>()),
                                 BlocProvider.value(value: sl<DisableSettingsBloc>()),
+                                BlocProvider.value(value: sl<ProfilesBloc>()),
                               ],
                               child: const HomeScreen()
                             )
