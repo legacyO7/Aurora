@@ -1,4 +1,5 @@
-import 'package:aurora/shared/data/isar_manager/repository/isar_manager_impl.dart';
+import 'package:aurora/shared/data/di/init_aurora.dart';
+import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -20,8 +21,7 @@ class ProfilePanel extends StatelessWidget {
         children: [
           IconButton(
               onPressed: () async{
-                IsarManagerImpl _hiveManager=IsarManagerImpl();
-                _hiveManager.initIsar();
+                sl<IsarDelegate>().deleteDatabase();
               },
               tooltip: "Add new profile",
               icon: const Icon(Icons.add)),

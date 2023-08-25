@@ -35,7 +35,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../../disable_settings/shared_disable_services.dart';
@@ -62,7 +61,6 @@ class InitAurora with GlobalMixin {
 
     sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
     sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl(),sl(), sl(),sl()));
-    sl.registerLazySingleton<PrefRepo>(() => PrefRepoImpl(sl()));
     sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl(), sl(),sl(), sl()));
     sl.registerLazySingleton<KeyboardSettingsRepo>(() => KeyboardSettingsRepoImpl(sl(), sl()));
     sl.registerLazySingleton<BatteryManagerRepo>(() => BatteryManagerRepoImpl(sl(), sl(),sl(),sl()));
@@ -77,8 +75,6 @@ class InitAurora with GlobalMixin {
     sl.registerLazySingleton<IsarDelegate>(() => IsarDelegateImpl(sl()));
     sl.registerLazySingleton<RemoteIOManager>(() => RemoteIOManagerImpl(sl()));
 
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
     sl.registerLazySingleton<Dio>(() => Dio());
     sl.registerLazySingleton<GlobalConfig>(() => GlobalConfig());
 

@@ -1,28 +1,35 @@
+
 import 'dart:ui';
 
-import 'package:aurora/utility/ar_widgets/ar_colors.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:isar/isar.dart';
 
 part 'ar_mode_model.g.dart';
 
-@embedded
-class ArMode{
-  int? mode;
-  int? speed;
+@Embedded(inheritance: false)
+//ignore: must_be_immutable
+class ArMode extends Equatable {
+   int? mode;
+   int? speed;
 
   @ignore
-  Color? color;
-  int? colorRad;
+   Color? color;
+   int? colorRad;
 
 
-  ArMode({this.mode, this.speed, this.color, this.colorRad});
+   ArMode({this.mode, this.speed, this.color, this.colorRad});
 
-  ArMode.fromJson(Map<String, dynamic> json){
-    if(json.isEmpty) return;
+  factory ArMode.copyModel(ArMode model)=>
+      ArMode(
+        mode: model.mode,
+        speed: model.speed,
+        color: model.color,
+        colorRad: model.color!.value
+      );
 
-    mode=json['mode'] as int;
-    speed=json['speed'] as int;
-    colorRad=int.parse((json['color']??ArColors.blue.toString()).split('(0x')[1].split(')')[0],radix: 16);
-    color=Color(colorRad!);
-  }
+  @override
+  @ignore
+  List<Object?> get props => [mode, speed, color, colorRad];
+
 }

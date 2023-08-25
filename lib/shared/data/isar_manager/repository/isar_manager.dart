@@ -15,5 +15,7 @@ abstract class IsarManager{
   ArSettingsModel get arSettingsModel;
   ArProfileModel get arProfileModel;
 
+  set arProfileModel(ArProfileModel value);
+
   Future deleteDatabase();
 }

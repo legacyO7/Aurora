@@ -31,6 +31,12 @@ class IsarManagerImpl implements IsarManager {
    await readArSettingsIsar();
    await readArProfileIsar();
 
+   print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+   print("Profile ID - ${_arSettingsModel.profileId}");
+   print("Profile Name - ${_arProfileModel.profileName}");
+   print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
+
   }
 
   Future _initArSettings() async{
@@ -43,11 +49,12 @@ class IsarManagerImpl implements IsarManager {
   }
 
   Future<int> _initArProfiles() async{
+    print("initing isar profile");
     _arProfileModel=ArProfileModel(
         profileName: 'Default Profile',
         threshold: 55,
         brightness: 1,
-        arState: ArState(),
+        arState: const ArState(),
         arMode: ArMode(colorRad: ArColors.accentColor.value,mode: 1,speed: 0 ));
     await writeArProfileIsar();
     return (await isar.arProfileModels.where().findFirst())!.id!;
@@ -57,8 +64,10 @@ class IsarManagerImpl implements IsarManager {
 
   @override
   Future writeArSettingsIsar() async{
-    await isar.writeTxn(() => isar.arSettingsModels.put(arSettingsModel));
-    await readArSettingsIsar();
+    if(_arSettingsModel.profileId!=null) {
+      await isar.writeTxn(() => isar.arSettingsModels.put(_arSettingsModel));
+      await readArSettingsIsar();
+    }
   }
 
   @override
@@ -80,7 +89,13 @@ class IsarManagerImpl implements IsarManager {
   @override
   Future writeArProfileIsar() async{
     await isar.writeTxn(() => isar.arProfileModels.put(arProfileModel));
+    await writeArSettingsIsar();
+    _arSettingsModel.profileId=_arProfileModel.id;
     await readArProfileIsar();
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    print("Profile ID - ${_arSettingsModel.profileId}");
+    print("Profile Name - ${_arProfileModel.profileName}");
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   }
 
   @override
@@ -104,8 +119,16 @@ class IsarManagerImpl implements IsarManager {
     isar.close(deleteFromDisk: true);
   }
 
+
+  @override
+  set arProfileModel(ArProfileModel value) {
+    _arProfileModel = value;
+  }
+
   @override
   ArSettingsModel get arSettingsModel=> _arSettingsModel;
+
+  @override
   ArProfileModel get arProfileModel=> _arProfileModel;
 
 }

@@ -1,4 +1,5 @@
 
+import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/shared/data/shared_data.dart';
 import 'package:aurora/shared/terminal/shared_terminal.dart';
 import 'package:aurora/utility/constants.dart';
@@ -7,17 +8,17 @@ import 'battery_manager_repo.dart';
 
 class BatteryManagerRepoImpl extends BatteryManagerRepo with TerminalMixin{
 
-  BatteryManagerRepoImpl( this._prefRepo, this._ioManager,this._permissionManager,this._serviceManager);
+  BatteryManagerRepoImpl( this._isarDelegate, this._ioManager,this._permissionManager,this._serviceManager);
 
 
-  final PrefRepo _prefRepo;
+  final IsarDelegate _isarDelegate;
   final IOManager _ioManager;
   final PermissionManager _permissionManager;
   final ServiceManager _serviceManager;
 
   @override
   Future initBatteryManager() async{
-    await setBatteryChargeLimit(limit: (await _prefRepo.getThreshold())??await getBatteryCharge());
+    await setBatteryChargeLimit(limit: ( _isarDelegate.getThreshold()));
   }
 
   @override
@@ -33,7 +34,7 @@ class BatteryManagerRepoImpl extends BatteryManagerRepo with TerminalMixin{
     if(!await super.arServiceEnabled()){
       await _permissionManager.setPermissions();
     }
-    await _prefRepo.setThreshold(limit);
+    await _isarDelegate.setThreshold(limit);
     await _ioManager.writeToFile(
         filePath: Constants.globalConfig.kThresholdPath!,
         content: '$limit'

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 
+import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/shared/data/shared_data.dart';
 import 'package:aurora/shared/terminal/shared_terminal.dart';
 import 'package:aurora/user_interface/setup/data/repository/setup_source.dart';
@@ -13,13 +14,13 @@ import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/services.dart';
 
 class SetupRepoImpl extends SetupRepo with GlobalMixin, TerminalMixin{
-  SetupRepoImpl(this._setupSource,this._terminalRepo,this._permissionManager,this._fileManager, this._prefRepo);
+  SetupRepoImpl(this._setupSource,this._terminalRepo,this._permissionManager,this._fileManager, this._isarDelegate);
 
   final SetupSource _setupSource;
   final TerminalRepo _terminalRepo;
   final PermissionManager _permissionManager;
   final FileManager _fileManager;
-  final PrefRepo _prefRepo;
+  final IsarDelegate _isarDelegate;
 
   final _globalConfig=Constants.globalConfig;
   String _setupPath='';
@@ -169,7 +170,7 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin, TerminalMixin{
 
   @override
   Future<bool> isFaustusEnforced() async{
-    return await _prefRepo.isFaustusEnforced();
+    return await _isarDelegate.getEnforceFaustus();
   }
 
   @override

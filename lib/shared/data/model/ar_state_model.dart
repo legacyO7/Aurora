@@ -1,23 +1,17 @@
 
+import 'package:equatable/equatable.dart';
 import 'package:isar/isar.dart';
 
 part 'ar_state_model.g.dart';
 
-@embedded
-class ArState{
-  bool? boot;
-  bool? awake;
-  bool? sleep;
+@Embedded(inheritance: false)
+class ArState extends Equatable{
+  final bool? boot;
+  final bool? awake;
+  final bool? sleep;
 
-  ArState({this.boot=false, this.awake=true, this.sleep=false});
+  const ArState({this.boot=false, this.awake=true, this.sleep=false});
 
-  ArState.fromJson(Map<String, dynamic> json){
-    if(json.isEmpty) return;
-
-    boot=json['boot'];
-    awake=json['awake'];
-    sleep=json['sleep'];
-  }
 
   ArState negateValue(){
     return ArState(
@@ -26,4 +20,8 @@ class ArState{
       boot: !boot!
     );
   }
+
+  @override
+  @ignore
+  List<Object?> get props => [awake, sleep, boot];
 }

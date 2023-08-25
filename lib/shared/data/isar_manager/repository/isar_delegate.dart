@@ -12,6 +12,7 @@ abstract class IsarDelegate{
   Future setEnforceFaustus(bool enforced);
   Future<ArProfileModel> getArProfile({int? id});
 
+  int getThreshold();
   Future setBrightness(int brightness);
   Future setArMode({ required ArMode arMode});
   Future setArState({ required ArState arState });
