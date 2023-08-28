@@ -101,7 +101,12 @@ class IsarManagerImpl implements IsarManager {
 
   @override
   Future<ArProfileModel?> readArProfileIsar({int? id}) async{
-    id??=_arSettingsModel.profileId;
+    if(id==null) {
+      id=_arSettingsModel.profileId;
+    }else{
+      _arSettingsModel.profileId=id;
+      await writeArSettingsIsar();
+    }
     ArProfileModel? tempModel= await isar.arProfileModels.get(id!);
     if(tempModel!=null){
       _arProfileModel=tempModel;
@@ -117,7 +122,9 @@ class IsarManagerImpl implements IsarManager {
   @override
   Future deleteArProfileIsar({int? id}) async{
     id??=_arSettingsModel.profileId;
-    await isar.arProfileModels.delete(id!);
+    await isar.writeTxn(() async {
+      await isar.arProfileModels.delete(id!);
+    });
   }
 
   @override

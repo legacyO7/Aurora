@@ -7,11 +7,13 @@ class ProfilesState {
   ProfileStates state;
   List<ProfileModel> allProfiles;
   ArProfileModel? currentProfile;
+  bool isLoading;
 
   ProfilesState._({
     this.state=ProfileStates.init,
     this.allProfiles=const[],
-    this.currentProfile
+    this.currentProfile,
+    this.isLoading=true
   });
 
   ProfilesState.init():this._();
@@ -22,17 +24,20 @@ class ProfilesState {
   }):this._(
     state: ProfileStates.loaded,
     allProfiles: allProfiles,
-    currentProfile: currentProfile
+    currentProfile: currentProfile,
+    isLoading: false
   );
 
   ProfilesState setState({
     ProfileStates? state,
     List<ProfileModel>? allProfiles,
-    ArProfileModel? currentProfile
+    ArProfileModel? currentProfile,
+    bool? isLoading
    })=>ProfilesState._(
     state: state??this.state,
     allProfiles: allProfiles??this.allProfiles,
-    currentProfile: currentProfile??this.currentProfile
+    currentProfile: currentProfile??this.currentProfile,
+    isLoading: isLoading??this.isLoading
   );
 
 
