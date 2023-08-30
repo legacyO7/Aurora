@@ -17,6 +17,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
    on<KeyboardSettingsEventSetMode>((event, emit)=> _setMode(mode: event.mode,emit));
    on<KeyboardSettingsEventSetColor>((event, emit)=> _setColor(color: event.color??ArColors.accentColor,mode: 0, emit));
    on<KeyboardSettingsEventInit>((event, emit) => _initPanel(emit));
+   on<KeyboardSettingsEventReload>((event, emit) => _reloadSettings(emit, event.arProfileModel));
    on<KeyboardSettingsEventSetState>((event, emit) => _setMainLineStateParams(emit,arState: ArState(boot: event.boot,sleep: event.sleep,awake: event.awake)));
   }
 
@@ -27,13 +28,13 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
   bool _awake=false;
   bool _sleep=false;
 
-  ArMode arMode=ArMode(color: ArColors.accentColor,mode: 0,speed: 0);
+  late ArMode arMode;
 
   late ArProfileModel arProfileModel;
 
   _initPanel(emit) async{
       arProfileModel=await _isarDelegate.getArProfile();
-      arMode= (arProfileModel.arMode);
+      arMode= ArMode.copyModel(arProfileModel.arMode);
       await _setBrightness(arProfileModel.brightness, emit);
       await _setMainlineModeParams(arMode: arMode, emit);
       if(super.isMainLine()){
@@ -41,10 +42,21 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
       }
   }
 
+  _reloadSettings(emit, ArProfileModel arProfileModel)async{
+    arMode= ArMode.copyModel(arProfileModel.arMode);
+    await _setBrightness(arProfileModel.brightness, emit);
+    await _setMainlineModeParams(arMode: arMode, emit);
+    if(super.isMainLine()){
+      await _setMainLineStateParams(arState: (arProfileModel.arState).negateValue(), emit );
+    }
+  }
+
   _setColor(emit,{required Color color,int? mode}) async {
     arMode.color= color;
+    arMode.colorRad=color.value;
     arMode.mode=mode??arMode.mode;
-    await _controlPanelRepo.setColor(arMode: arMode);
+
+    await _controlPanelRepo.setColor(arMode: ArMode.copyModel(arMode));
     _updateState(emit);
   }
 

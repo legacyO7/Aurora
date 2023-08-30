@@ -170,7 +170,7 @@ class SetupRepoImpl extends SetupRepo with GlobalMixin, TerminalMixin{
 
   @override
   Future<bool> isFaustusEnforced() async{
-    return await _isarDelegate.getEnforceFaustus();
+    return _isarDelegate.getEnforceFaustus();
   }
 
   @override

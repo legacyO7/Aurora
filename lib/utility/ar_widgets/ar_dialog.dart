@@ -82,8 +82,10 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
                           } catch(e,stackTrace) {
                             ArLogger.log(data: e,stackTrace: stackTrace);
                           } finally {
-                            context.read<ArButtonCubit>().setUnLoad();
-                            Navigator.pop(context);
+                            if(context.mounted) {
+                              context.read<ArButtonCubit>().setUnLoad();
+                              Navigator.pop(context);
+                            }
                           }
                       },
                           icon: const Icon(Icons.close))

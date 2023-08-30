@@ -25,6 +25,8 @@ class _ProfilePanelState extends State<ProfilePanel> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 1.w),
+      height: 6.h,
+      width: 25.w,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: context.selectedColor, width: .2.w),
@@ -32,7 +34,12 @@ class _ProfilePanelState extends State<ProfilePanel> {
       child: BlocBuilder<ProfilesBloc, ProfilesState>(
         builder: (context, state) {
           if(state.isLoading){
-           return const IntrinsicWidth(child: LinearProgressIndicator());
+           return ClipRRect(
+             borderRadius:  BorderRadius.circular(15),
+              child: LinearProgressIndicator(
+                color: context.selectedColor,
+                backgroundColor: context.selectedColorWithAlpha
+              ));
           }
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -41,18 +48,26 @@ class _ProfilePanelState extends State<ProfilePanel> {
               Container(
                   padding: EdgeInsets.symmetric(horizontal: 1.w),
                   decoration: BoxDecoration(
-                      border: Border.symmetric(vertical: BorderSide(color: context.selectedColorWithAlpha, width: .2.w))),
+                      border: Border(right: BorderSide(
+                          color: context.selectedColorWithAlpha,
+                          width: .1.w
+                      ))),
                   child: Row(
                     children: [
-                      DropdownButton(
-                          value: state.currentProfile!.id,
-                          items: state.allProfiles.map<DropdownMenuItem<int>>((e) =>
-                          DropdownMenuItem<int>(
-                              value: e.id,
-                              child: Text(e.profileName))).toList(),
-                          onChanged: (value){
-                            context.read<ProfilesBloc>().add(ProfilesLoadEvent(id: value??state.currentProfile!.id!));
-                          })
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                            alignment: Alignment.center,
+                            value: state.currentProfile!.id,
+                            items: state.allProfiles.map<DropdownMenuItem<int>>((e) =>
+                            DropdownMenuItem<int>(
+                                value: e.id,
+                                child: SizedBox(
+                                    width: 12.w,
+                                    child: Text(e.profileName,overflow: TextOverflow.ellipsis,)))).toList(),
+                            onChanged: (value){
+                              context.read<ProfilesBloc>().add(ProfilesLoadEvent(id: value??state.currentProfile!.id!));
+                            }),
+                      )
                     ],
                   )),
               IconButton(

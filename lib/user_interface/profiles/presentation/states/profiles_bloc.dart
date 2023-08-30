@@ -1,15 +1,16 @@
 import 'package:aurora/shared/data/isar_manager/models/ar_profile_model.dart';
+import 'package:aurora/shared/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/user_interface/profiles/domain/models/profile_model.dart';
 import 'package:aurora/user_interface/profiles/domain/repositories/profile_repo.dart';
-import 'package:bloc/bloc.dart';
 
 part 'profiles_event.dart';
 part 'profiles_state.dart';
 
-class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
+class ProfilesBloc extends TerminalBaseBloc<ProfilesEvent, ProfilesState> {
   ProfilesBloc(this._profileRepo) : super(ProfilesState.init()) {
     on<ProfilesInitEvent>((_, emit)=>_onInit(emit));
     on<ProfilesSaveEvent>((event, emit)=>_saveProfile(emit,name: event.name));
+    on<ProfilesReloadEvent>((event, emit)=>_reloadProfile(emit,event.profile));
     on<ProfilesLoadEvent>((event, emit)=>_loadProfile(emit, event.id));
     on<ProfilesDeleteEvent>((event, emit)=>_deleteProfile(emit,id: event.id));
   }
@@ -35,6 +36,14 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
     return _currentProfile;
   }
 
+  Future _reloadProfile(emit,ArProfileModel profile) async{
+    if(_allProfiles.where((element) => element.id==profile.id).isEmpty){
+      emit(state.setState(allProfiles: await _getAllProfiles()));
+    }
+    _currentProfile=profile;
+    emit(state.setState(currentProfile: profile));
+  }
+
   Future<List<ProfileModel>> _getAllProfiles() async{
     _allProfiles= await _profileRepo.getAllProfiles();
     return _allProfiles;
@@ -46,7 +55,9 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       if(_currentProfile.id==2) {
         _currentProfile.id = null;
       }
+
       await _profileRepo.setProfile(arProfileModel: _currentProfile);
+      await _getAllProfiles();
       await _getCurrentProfile();
     });
   }
@@ -54,6 +65,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
   Future _loadProfile(emit,int id) async{
     await _wrapLoader(emit, fn: ()async{
       _currentProfile= await _profileRepo.loadProfile(id);
+      super.reloadSettings();
     });
   }
 
@@ -62,6 +74,7 @@ class ProfilesBloc extends Bloc<ProfilesEvent, ProfilesState> {
       await _profileRepo.deleteProfile(id: id);
       await _getCurrentProfile();
       await _getAllProfiles();
+      super.reloadSettings();
     });
 
   }

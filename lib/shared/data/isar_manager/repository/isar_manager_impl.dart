@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:aurora/shared/data/isar_manager/models/ar_profile_model.dart';
 import 'package:aurora/shared/data/isar_manager/models/ar_settings_model.dart';
 import 'package:aurora/shared/data/isar_manager/repository/isar_manager.dart';
@@ -24,32 +26,26 @@ class IsarManagerImpl implements IsarManager {
       directory: (await getApplicationSupportDirectory()).path
     );
 
-   if((await isar.arSettingsModels.where().findAll()).isEmpty){
-     await _initArSettings();
+   if(await _validateArSettingsIsar()){
+     await _initArProfiles();
    }
 
    await readArSettingsIsar();
    await readArProfileIsar();
-
-   print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-   print("Profile ID - ${_arSettingsModel.profileId}");
-   print("Profile Name - ${_arProfileModel.profileName}");
-   print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-
-
   }
 
-  Future _initArSettings() async{
+  Future<bool> _validateArSettingsIsar() async{
+    return (await isar.arSettingsModels.where().findAll()).isEmpty;
+  }
+
+
+  Future _initArProfiles() async{
+
     _arSettingsModel=ArSettingsModel(
         arTheme: 'system',
         arVersion: '0',
-        profileId: await _initArProfiles());
+        profileId: null);
 
-    await writeArSettingsIsar();
-  }
-
-  Future<int> _initArProfiles() async{
-    print("initing isar profile");
     _arProfileModel=ArProfileModel(
         profileName: 'Default Profile',
         threshold: 55,
@@ -57,7 +53,6 @@ class IsarManagerImpl implements IsarManager {
         arState: const ArState(),
         arMode: ArMode(colorRad: ArColors.accentColor.value,mode: 1,speed: 0 ));
     await writeArProfileIsar();
-    return (await isar.arProfileModels.where().findFirst())!.id!;
   }
   
   /// Ar Settings Isar
@@ -65,8 +60,12 @@ class IsarManagerImpl implements IsarManager {
   @override
   Future writeArSettingsIsar() async{
     if(_arSettingsModel.profileId!=null) {
-      await isar.writeTxn(() => isar.arSettingsModels.put(_arSettingsModel));
-      await readArSettingsIsar();
+      if(_arSettingsModel.id!=null || (_arSettingsModel.id==null && await _validateArSettingsIsar())) {
+        await isar.writeTxn(() => isar.arSettingsModels.put(_arSettingsModel));
+        await readArSettingsIsar();
+      }else{
+        stdout.writeln("ArSettingsModel already exists!");
+      }
     }
   }
 
@@ -90,13 +89,10 @@ class IsarManagerImpl implements IsarManager {
   Future writeArProfileIsar({ArProfileModel? arProfileModel}) async{
     arProfileModel??=_arProfileModel;
     await isar.writeTxn(() => isar.arProfileModels.put(arProfileModel!));
-    _arSettingsModel.profileId=_arProfileModel.id;
+    _arSettingsModel.profileId=arProfileModel.id;
+
     await writeArSettingsIsar();
     await readArProfileIsar();
-    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    print("Profile ID - ${_arSettingsModel.profileId}");
-    print("Profile Name - ${_arProfileModel.profileName}");
-    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
   }
 
   @override
@@ -135,13 +131,13 @@ class IsarManagerImpl implements IsarManager {
 
   @override
   set arProfileModel(ArProfileModel value) {
-    _arProfileModel = value;
+    _arProfileModel = ArProfileModel.copyModel(value);
   }
 
   @override
   ArSettingsModel get arSettingsModel=> _arSettingsModel;
 
   @override
-  ArProfileModel get arProfileModel=> _arProfileModel;
+  ArProfileModel get arProfileModel=> ArProfileModel.copyModel(_arProfileModel);
 
 }

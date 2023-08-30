@@ -4,6 +4,12 @@ abstract class ProfilesEvent {}
 
 class ProfilesInitEvent extends ProfilesEvent {}
 
+class ProfilesReloadEvent extends ProfilesEvent {
+  ArProfileModel profile;
+
+  ProfilesReloadEvent(this.profile);
+}
+
 class ProfilesSaveEvent extends ProfilesEvent {
   String name;
   ProfilesSaveEvent({required this.name});

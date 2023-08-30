@@ -44,7 +44,7 @@ class _ControlPanelState extends State<ControlPanelScreen> with GlobalMixin{
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ProfilePanel(),
+                  const ProfilePanel(),
                   IconButton(
                       onPressed: ()=>_openEndDrawer(),
                       icon: const Icon(Icons.settings),

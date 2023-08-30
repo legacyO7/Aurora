@@ -28,6 +28,7 @@ class ArProfileModel extends Equatable{
 
   factory ArProfileModel.copyModel(ArProfileModel model){
     return ArProfileModel(
+        id: model.id,
         profileName: model.profileName,
         threshold: model.threshold,
         brightness: model.brightness,

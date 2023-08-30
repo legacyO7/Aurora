@@ -1,9 +1,16 @@
 import 'dart:ui';
 
+import 'package:aurora/shared/data/isar_manager/models/ar_profile_model.dart';
+
 abstract class KeyboardSettingsEvent{}
 
 class KeyboardSettingsEventInit extends KeyboardSettingsEvent{
   KeyboardSettingsEventInit();
+}
+
+class KeyboardSettingsEventReload extends KeyboardSettingsEvent{
+  ArProfileModel arProfileModel;
+  KeyboardSettingsEventReload(this.arProfileModel);
 }
 
 class KeyboardSettingsEventSetColor extends KeyboardSettingsEvent{

@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:aurora/shared/data/di/init_aurora.dart';
 import 'package:aurora/shared/data/isar_manager/models/ar_profile_model.dart';
 import 'package:aurora/shared/data/isar_manager/repository/isar_manager.dart';
 import 'package:aurora/shared/data/model/ar_mode_model.dart';
 import 'package:aurora/shared/data/model/ar_state_model.dart';
+import 'package:aurora/user_interface/profiles/presentation/states/profiles_bloc.dart';
 import 'package:flutter/material.dart';
 
 import 'isar_delegate.dart';
@@ -76,7 +78,7 @@ class IsarDelegateImpl implements IsarDelegate{
 
   @override
   Future setArMode({ required ArMode arMode}) async {
-    await _writeProfile(() {
+      await _writeProfile(() {
       _arProfileModel.arMode=ArMode.copyModel(arMode);
     });
   }
@@ -101,13 +103,15 @@ class IsarDelegateImpl implements IsarDelegate{
     _arProfileModel=ArProfileModel.copyModel(_isarManager.arProfileModel);
     updateModel();
     if(_arProfileModel!=_isarManager.arProfileModel){
-      _isarManager.arProfileModel=_arProfileModel;
-      if(_isarManager.arProfileModel.id!=2){
-        _isarManager.arProfileModel.id=2;
-        _isarManager.arProfileModel.profileName='FreeStyle';
+      if(_arProfileModel.id!=2){
+        _arProfileModel.id=2;
+        _arProfileModel.profileName='FreeStyle';
       }
 
+      _isarManager.arProfileModel=_arProfileModel;
       await _isarManager.writeArProfileIsar();
+
+      sl<ProfilesBloc>().add(ProfilesReloadEvent(_arProfileModel));
 
     }else{
       stdout.writeln("avoiding unnecessary writes");

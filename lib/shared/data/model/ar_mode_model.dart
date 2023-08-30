@@ -24,8 +24,8 @@ class ArMode extends Equatable {
       ArMode(
         mode: model.mode,
         speed: model.speed,
-        color: model.color,
-        colorRad: model.color!.value
+        color: model.color??Color(model.colorRad!),
+        colorRad: model.colorRad?? model.color!.value
       );
 
   @override
