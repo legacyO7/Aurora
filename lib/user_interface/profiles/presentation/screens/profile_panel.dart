@@ -70,10 +70,11 @@ class _ProfilePanelState extends State<ProfilePanel> {
                       )
                     ],
                   )),
+              if(state.currentProfile!.id!!=1)
               IconButton(
                   onPressed: () {
                     TextEditingController profileNameController=TextEditingController();
-                    arDialog(title: "Save Profile As", subject: '',
+                    arDialog(title: state.currentProfile!.id==2? "Save Profile As":"Rename Profile", subject: '',
                         optionalWidget: IntrinsicWidth(
                           child: TextField(
                             controller: profileNameController,
@@ -85,8 +86,9 @@ class _ProfilePanelState extends State<ProfilePanel> {
                           context.read<ProfilesBloc>().add(ProfilesSaveEvent(name: profileNameController.text));
                         });
                   },
-                  tooltip: "save profile",
-                  icon: const Icon(Icons.save)),
+                  tooltip:  '${state.currentProfile!.id==2?"save":"rename"} profile',
+                  icon: Icon( state.currentProfile!.id==2? Icons.save:Icons.drive_file_rename_outline)),
+              if(state.currentProfile!.id!>2)
               IconButton(
                   onPressed: () {
                     arAlert(
