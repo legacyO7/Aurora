@@ -33,6 +33,8 @@ class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
       await _homeRepo.writeToFile(
         path: Constants.kMainlineModuleModePath,
         content: "1 ${mainLineKeys[arMode.mode!]} ${arMode.color!.red} ${arMode.color!.green} ${arMode.color!.blue} ${arMode.speed}");
+
+      await _isarDelegate.setArMode(arMode: arMode);
     }else{
       await setMode(arMode: arMode);
       await setSpeed(arMode: arMode);
@@ -65,10 +67,8 @@ class KeyboardSettingsRepoImpl extends KeyboardSettingsRepo with GlobalMixin{
       await _homeRepo.writeToFile(path: Constants.kFaustusModuleBluePath, content: color.blue.toRadixString(16));
 
       ArColors.accentColor = color;
-      await setMode(arMode: ArMode(mode: 0));
-
+      await setMode(arMode: arMode);
     }
-    await _isarDelegate.setArMode(arMode: arMode);
   }
 
   @override

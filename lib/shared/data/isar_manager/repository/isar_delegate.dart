@@ -4,11 +4,11 @@ import 'package:aurora/shared/data/model/ar_state_model.dart';
 import 'package:flutter/material.dart';
 
 abstract class IsarDelegate{
-  String getVersion();
+  String getVersionFromDB();
   Future<ThemeMode> getTheme();
   bool getEnforceFaustus();
-  Future setVersion(String version);
-  Future setTheme(ThemeMode themeMode);
+  Future saveVersion(String version);
+  Future saveTheme(ThemeMode themeMode);
   Future setEnforceFaustus(bool enforced);
   Future<ArProfileModel> getArProfile({int? id});
 

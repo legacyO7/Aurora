@@ -40,9 +40,9 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
     await getVersion();
     await _setupRepo.initSetup();
 
-    if( _isarDelegate.getVersion() !=_globalConfig.arVersion && await _setupRepo.checkInternetAccess()){
+    if( _isarDelegate.getVersionFromDB() !=_globalConfig.arVersion && await _setupRepo.checkInternetAccess()){
       emit(SetupWhatsNewState(await _fetchChangelog()));
-      await _isarDelegate.setVersion(_globalConfig.arVersion!);
+      await _isarDelegate.saveVersion(_globalConfig.arVersion!);
     }else {
       await _checkForUpdates(emit);
     }

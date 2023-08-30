@@ -24,12 +24,12 @@ class ArMode extends Equatable {
       ArMode(
         mode: model.mode,
         speed: model.speed,
-        color: model.color??Color(model.colorRad!),
+        color: model.color,
         colorRad: model.colorRad?? model.color!.value
       );
 
   @override
   @ignore
-  List<Object?> get props => [mode, speed, color, colorRad];
+  List<Object?> get props => [mode, speed, colorRad];
 
 }

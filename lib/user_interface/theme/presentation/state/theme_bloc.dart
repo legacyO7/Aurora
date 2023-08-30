@@ -39,7 +39,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState>{
   }
 
   _saveTheme() async{
-    await _isarDelegate.setTheme(_arTheme);
+    await _isarDelegate.saveTheme(_arTheme);
   }
 
 }

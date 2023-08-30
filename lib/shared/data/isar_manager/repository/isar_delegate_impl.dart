@@ -6,11 +6,12 @@ import 'package:aurora/shared/data/isar_manager/repository/isar_manager.dart';
 import 'package:aurora/shared/data/model/ar_mode_model.dart';
 import 'package:aurora/shared/data/model/ar_state_model.dart';
 import 'package:aurora/user_interface/profiles/presentation/states/profiles_bloc.dart';
+import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';
 
 import 'isar_delegate.dart';
 
-class IsarDelegateImpl implements IsarDelegate{
+class IsarDelegateImpl with GlobalMixin implements IsarDelegate{
 
   IsarDelegateImpl(this._isarManager);
 
@@ -19,7 +20,7 @@ class IsarDelegateImpl implements IsarDelegate{
   late ArProfileModel _arProfileModel;
 
   @override
-  String getVersion(){
+  String getVersionFromDB(){
     return  (_isarManager.arSettingsModel.arVersion)??'0';
   }
 
@@ -49,13 +50,13 @@ class IsarDelegateImpl implements IsarDelegate{
   }
 
   @override
-  Future setVersion(String version) async{
+  Future saveVersion(String version) async{
     _isarManager.arSettingsModel.arVersion=version;
     await _isarManager.writeArSettingsIsar();
   }
 
   @override
-  Future setTheme(ThemeMode themeMode) async{
+  Future saveTheme(ThemeMode themeMode) async{
     _isarManager.arSettingsModel.arTheme=themeMode.name;
     await _isarManager.writeArSettingsIsar();
   }
@@ -102,6 +103,11 @@ class IsarDelegateImpl implements IsarDelegate{
   Future _writeProfile(Function updateModel) async{
     _arProfileModel=ArProfileModel.copyModel(_isarManager.arProfileModel);
     updateModel();
+
+    if(!super.isMainLine()){
+      _arProfileModel.arState=_isarManager.arProfileModel.arState;
+    }
+
     if(_arProfileModel!=_isarManager.arProfileModel){
       if(_arProfileModel.id!=2){
         _arProfileModel.id=2;
@@ -117,5 +123,7 @@ class IsarDelegateImpl implements IsarDelegate{
       stdout.writeln("avoiding unnecessary writes");
     }
   }
+
+
 
 }
