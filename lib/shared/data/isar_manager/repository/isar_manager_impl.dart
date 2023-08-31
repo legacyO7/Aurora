@@ -17,6 +17,8 @@ class IsarManagerImpl implements IsarManager {
   ArSettingsModel _arSettingsModel=ArSettingsModel();
   late ArProfileModel _arProfileModel;
 
+  late List<ArProfileModel> _allProfiles;
+
   @override
   Future initIsar() async{
 
@@ -90,6 +92,9 @@ class IsarManagerImpl implements IsarManager {
     arProfileModel??=_arProfileModel;
     await isar.writeTxn(() => isar.arProfileModels.put(arProfileModel!));
     _arSettingsModel.profileId=arProfileModel.id;
+    if(_allProfiles.where((element) => element.id==arProfileModel!.id).isEmpty){
+      _allProfiles.add(arProfileModel);
+    }
 
     await writeArSettingsIsar();
     await readArProfileIsar();
@@ -112,12 +117,14 @@ class IsarManagerImpl implements IsarManager {
 
   @override
   Future<List<ArProfileModel>> readAllArProfileIsar() async{
-    return isar.arProfileModels.where().findAll();
+    _allProfiles= await isar.arProfileModels.where().findAll();
+    return _allProfiles;
   }
 
   @override
   Future deleteArProfileIsar({int? id}) async{
     id??=_arSettingsModel.profileId;
+    _allProfiles.removeWhere((element) => element.id==id!);
     await isar.writeTxn(() async {
       await isar.arProfileModels.delete(id!);
     });
@@ -140,4 +147,6 @@ class IsarManagerImpl implements IsarManager {
   @override
   ArProfileModel get arProfileModel=> ArProfileModel.copyModel(_arProfileModel);
 
+  @override
+  List<ArProfileModel> get allProfiles => _allProfiles;
 }

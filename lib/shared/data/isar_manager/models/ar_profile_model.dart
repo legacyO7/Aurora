@@ -36,7 +36,19 @@ class ArProfileModel extends Equatable{
         arMode: model.arMode);
   }
 
+
+  bool matches(ArProfileModel other){
+    return
+      threshold==other.threshold &&
+      brightness==other.brightness &&
+      arState==other.arState &&
+      arMode==other.arMode;
+  }
+
   @override
   @ignore
   List<Object?> get props => [profileName, threshold, brightness, arState, arMode];
+
+  @ignore
+  List<Object?> get propsWithoutProfileName => [ threshold, brightness, arState, arMode];
 }

@@ -24,7 +24,6 @@ Aurora stable versions are also available in Fedora copr buildsystem for x86_64 
 ```
 sudo dnf copr enable legacy07/aurora
 sudo dnf install aurora
-
 ```
 
 ### Mainline Mode

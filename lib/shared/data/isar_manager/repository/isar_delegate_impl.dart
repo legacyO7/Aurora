@@ -109,14 +109,20 @@ class IsarDelegateImpl with GlobalMixin implements IsarDelegate{
     }
 
     if(_arProfileModel!=_isarManager.arProfileModel){
-      if(_arProfileModel.id!=2){
-        _arProfileModel.id=2;
-        _arProfileModel.profileName='FreeStyle';
+
+      List<ArProfileModel> profileMatchList=_isarManager.allProfiles.where((element) => element.matches(_arProfileModel)).toList();
+      if(profileMatchList.isEmpty){
+        if (_arProfileModel.id != 2) {
+          _arProfileModel.id = 2;
+          _arProfileModel.profileName = 'FreeStyle';
+        }
+
+        _isarManager.arProfileModel = _arProfileModel;
+        await _isarManager.writeArProfileIsar();
+      }else{
+       _arProfileModel= (await _isarManager.readArProfileIsar(id: profileMatchList.first.id))!;
       }
-
-      _isarManager.arProfileModel=_arProfileModel;
-      await _isarManager.writeArProfileIsar();
-
+      
       sl<ProfilesBloc>().add(ProfilesReloadEvent(_arProfileModel));
 
     }else{

@@ -15,6 +15,7 @@ abstract class IsarManager{
 
   ArSettingsModel get arSettingsModel;
   ArProfileModel get arProfileModel;
+  List<ArProfileModel> get allProfiles;
 
   set arProfileModel(ArProfileModel value);
 
