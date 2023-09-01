@@ -1,7 +1,7 @@
+import 'package:aurora/user_interface/profiles/presentation/screens/profile_confirmation.dart';
 import 'package:aurora/user_interface/profiles/presentation/states/profiles_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_alert.dart';
 import 'package:aurora/utility/ar_widgets/ar_button.dart';
-import 'package:aurora/utility/ar_widgets/ar_dialog.dart';
 import 'package:aurora/utility/ar_widgets/ar_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,23 +71,7 @@ class _ProfilePanelState extends State<ProfilePanel> {
                     ],
                   )),
               if(state.currentProfile!.id!!=1)
-              IconButton(
-                  onPressed: () {
-                    TextEditingController profileNameController=TextEditingController();
-                    arDialog(title: state.currentProfile!.id==2? "Save Profile As":"Rename Profile", subject: '',
-                        optionalWidget: IntrinsicWidth(
-                          child: TextField(
-                            controller: profileNameController,
-                            decoration: InputDecoration(hintText: state.currentProfile?.profileName??'-'),
-                          ),
-                        ),
-                        onConfirm: (){
-                          Navigator.pop(context);
-                          context.read<ProfilesBloc>().add(ProfilesSaveEvent(name: profileNameController.text));
-                        });
-                  },
-                  tooltip:  '${state.currentProfile!.id==2?"save":"rename"} profile',
-                  icon: Icon( state.currentProfile!.id==2? Icons.save:Icons.drive_file_rename_outline)),
+                ProfileConfirmation(currentProfile: state.currentProfile!),
               if(state.currentProfile!.id!>2)
               IconButton(
                   onPressed: () {
@@ -104,7 +88,7 @@ class _ProfilePanelState extends State<ProfilePanel> {
                     ]);
                   },
                   tooltip: "delete current profile",
-                  icon: const Icon(Icons.remove)),
+                  icon: Icon(Icons.remove, size: 15.sp,)),
             ],
           );
         },
