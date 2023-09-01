@@ -1,6 +1,7 @@
 
 import 'dart:ui';
 
+import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:isar/isar.dart';
@@ -27,6 +28,17 @@ class ArMode extends Equatable {
         color: model.color,
         colorRad: model.colorRad?? model.color!.value
       );
+
+  factory ArMode.fromJson(Map<String, dynamic> json){
+    int colorInt=int.tryParse(json['color'].replaceAll("Color(0x", "").replaceAll(")", ""), radix: 16)??ArColors.accentColor.value;
+
+    return ArMode(
+        colorRad: colorInt,
+        color: Color(colorInt),
+        mode: json['mode'],
+        speed: json['speed'],
+    );
+  }
 
   @override
   @ignore

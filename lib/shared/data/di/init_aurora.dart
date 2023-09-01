@@ -75,7 +75,7 @@ class InitAurora with GlobalMixin {
     sl.registerLazySingleton<IOManager>(() => IOManagerImpl());
     sl.registerLazySingleton<ServiceManager>(() => ServiceManagerImpl(sl(),sl()));
     sl.registerLazySingleton<FileManager>(() => FileManagerImpl(sl()));
-    sl.registerLazySingleton<IsarManager>(() => IsarManagerImpl());
+    sl.registerLazySingleton<IsarManager>(() => IsarManagerImpl(sl()));
     sl.registerLazySingleton<IsarDelegate>(() => IsarDelegateImpl(sl()));
     sl.registerLazySingleton<ProfileRepo>(() => ProfileRepoImpl(sl()));
     sl.registerLazySingleton<RemoteIOManager>(() => RemoteIOManagerImpl(sl()));

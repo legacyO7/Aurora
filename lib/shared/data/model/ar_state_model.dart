@@ -21,6 +21,13 @@ class ArState extends Equatable{
     );
   }
 
+  factory ArState.fromJson(Map<String, dynamic> json)=>
+      ArState(
+        awake: json['awake'],
+        boot: json['boot'],
+        sleep: json['sleep']
+      );
+
   @override
   @ignore
   List<Object?> get props => [awake, sleep, boot];

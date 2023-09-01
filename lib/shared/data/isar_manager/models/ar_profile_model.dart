@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:aurora/shared/data/model/ar_mode_model.dart';
 import 'package:aurora/shared/data/model/ar_state_model.dart';
 import 'package:equatable/equatable.dart';
@@ -37,18 +39,23 @@ class ArProfileModel extends Equatable{
   }
 
 
-  bool matches(ArProfileModel other){
-    return
-      threshold==other.threshold &&
-      brightness==other.brightness &&
-      arState==other.arState &&
-      arMode==other.arMode;
+  factory ArProfileModel.fromJson(Map<String, dynamic> json){
+
+    Map<String, dynamic> convertToJson(String string)=>
+        jsonDecode(string.replaceAll('\\', ''));
+
+    return ArProfileModel(
+        profileName: 'Default Profile',
+        threshold: json['flutter.ar_charge_threshold'],
+        brightness: json['flutter.ar_brightness'],
+        arState: ArState.fromJson(convertToJson(json['flutter.ar_state'])),
+        arMode: ArMode.fromJson(convertToJson(json['flutter.ar_mode']))
+    );
   }
+
 
   @override
   @ignore
-  List<Object?> get props => [profileName, threshold, brightness, arState, arMode];
+  List<Object?> get props => [ threshold, brightness, arState, arMode];
 
-  @ignore
-  List<Object?> get propsWithoutProfileName => [ threshold, brightness, arState, arMode];
 }

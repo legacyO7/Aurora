@@ -13,6 +13,14 @@ class ArSettingsModel {
   int? profileId;
 
   ArSettingsModel({this.arVersion, this.arTheme, this.enforceFaustus=false, this.profileId});
+
+  factory ArSettingsModel.fromJson(Map<String, dynamic> json){
+    return ArSettingsModel(
+      arTheme: json['flutter.system'],
+      arVersion: json['flutter.ar_version'],
+      enforceFaustus: json['flutter.enforce_faustus']
+    );
+  }
 }
 
 

@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:aurora/shared/data/io/local/io_manager/io_manager.dart';
 import 'package:aurora/shared/data/isar_manager/models/ar_profile_model.dart';
 import 'package:aurora/shared/data/isar_manager/models/ar_settings_model.dart';
 import 'package:aurora/shared/data/isar_manager/repository/isar_manager.dart';
@@ -12,20 +14,29 @@ import 'package:path_provider/path_provider.dart';
 
 class IsarManagerImpl implements IsarManager {
 
+
+  IsarManagerImpl(this._ioManager);
+
   late Isar isar;
+
+  final IOManager _ioManager;
 
   ArSettingsModel _arSettingsModel=ArSettingsModel();
   late ArProfileModel _arProfileModel;
 
-  late List<ArProfileModel> _allProfiles;
+  List<ArProfileModel> _allProfiles=[];
+
+  late  Directory _supportDir;
 
   @override
   Future initIsar() async{
 
+    _supportDir=await getApplicationSupportDirectory();
+
     isar = await Isar.open(
       name: 'arDB',
       [ArSettingsModelSchema,ArProfileModelSchema],
-      directory: (await getApplicationSupportDirectory()).path
+      directory: _supportDir.path
     );
 
    if(await _validateArSettingsIsar()){
@@ -43,22 +54,28 @@ class IsarManagerImpl implements IsarManager {
 
   Future _initArProfiles() async{
 
-    _arSettingsModel=ArSettingsModel(
-        arTheme: 'system',
-        arVersion: '0',
-        profileId: null);
+    String sharedPref=(await _ioManager.readFile(File('${_supportDir.path}/shared_preferences.json'))).join('');
 
-    _arProfileModel=ArProfileModel(
-        profileName: 'Default Profile',
-        threshold: 55,
-        brightness: 1,
-        arState: const ArState(),
-        arMode: ArMode(colorRad: ArColors.accentColor.value,mode: 1,speed: 0 ));
+    if(sharedPref.isNotEmpty){
+      _arSettingsModel=ArSettingsModel.fromJson(jsonDecode(sharedPref));
+      _arProfileModel=ArProfileModel.fromJson(jsonDecode(sharedPref));
+    }else {
+      _arSettingsModel = ArSettingsModel(
+          arTheme: 'system',
+          arVersion: '0',
+          profileId: null);
+
+      _arProfileModel = ArProfileModel(
+          profileName: 'Default Profile',
+          threshold: 55,
+          brightness: 1,
+          arState: const ArState(),
+          arMode: ArMode(colorRad: ArColors.accentColor.value, mode: 1, speed: 0));
+    }
     await writeArProfileIsar();
   }
   
   /// Ar Settings Isar
-
   @override
   Future writeArSettingsIsar() async{
     if(_arSettingsModel.profileId!=null) {
@@ -149,4 +166,5 @@ class IsarManagerImpl implements IsarManager {
 
   @override
   List<ArProfileModel> get allProfiles => _allProfiles;
+
 }

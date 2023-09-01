@@ -110,7 +110,7 @@ class IsarDelegateImpl with GlobalMixin implements IsarDelegate{
 
     if(_arProfileModel!=_isarManager.arProfileModel){
 
-      List<ArProfileModel> profileMatchList=_isarManager.allProfiles.where((element) => element.matches(_arProfileModel)).toList();
+      List<ArProfileModel> profileMatchList=_isarManager.allProfiles.where((element) => element==_arProfileModel).toList();
       if(profileMatchList.isEmpty){
         if (_arProfileModel.id != 2) {
           _arProfileModel.id = 2;
