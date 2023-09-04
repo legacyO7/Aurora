@@ -1,4 +1,4 @@
-import 'package:aurora/shared/data/di/init_aurora.dart';
+import 'package:aurora/shared/utility/init_aurora.dart';
 import 'package:aurora/user_interface/disable_services/disable_services.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/global_mixin.dart';

@@ -17,6 +17,7 @@ abstract class IsarDelegate{
   Future setArMode({ required ArMode arMode});
   Future setArState({ required ArState arState });
   Future setThreshold(int threshold);
+  Future<ArProfileModel?> readFromProfileName(String profileName);
 
   Future deleteDatabase();
 }

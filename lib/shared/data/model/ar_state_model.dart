@@ -12,7 +12,6 @@ class ArState extends Equatable{
 
   const ArState({this.boot=false, this.awake=true, this.sleep=false});
 
-
   ArState negateValue(){
     return ArState(
       awake: !awake!,
@@ -27,6 +26,11 @@ class ArState extends Equatable{
         boot: json['boot'],
         sleep: json['sleep']
       );
+
+  static String arStateToIntString(ArState arState){
+    int boolToString(bool? value)=>value==null?0:value?1:0;
+    return "${boolToString(arState.boot)} ${boolToString(arState.awake)} ${boolToString(arState.sleep)}";
+  }
 
   @override
   @ignore

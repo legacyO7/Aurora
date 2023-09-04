@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:aurora/shared/data/di/init_aurora.dart';
+import 'package:aurora/shared/utility/init_aurora.dart';
 import 'package:aurora/shared/data/isar_manager/models/ar_profile_model.dart';
 import 'package:aurora/shared/data/isar_manager/repository/isar_manager.dart';
 import 'package:aurora/shared/data/model/ar_mode_model.dart';
@@ -98,6 +98,19 @@ class IsarDelegateImpl with GlobalMixin implements IsarDelegate{
   @override
   Future deleteDatabase() async{
     await _isarManager.deleteDatabase();
+  }
+  
+  @override
+  Future<ArProfileModel?> readFromProfileName(String profileName) async{
+    await _isarManager.readAllArProfileIsar();
+     List<ArProfileModel> profiles= _isarManager.allProfiles.where((element){
+       return element.profileName.trim()==profileName.trim();}).toList();
+     if(profiles.isNotEmpty){
+      return await _isarManager.readArProfileIsar(id: profiles.first.id);
+     }else{
+       stdout.writeln("no such profiles found");
+     }
+     return null;
   }
 
   Future _writeProfile(Function updateModel) async{

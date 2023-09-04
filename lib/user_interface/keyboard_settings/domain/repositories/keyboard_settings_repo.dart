@@ -7,6 +7,6 @@ abstract class KeyboardSettingsRepo{
   Future setColor({required ArMode arMode});
   Future setSpeed({required ArMode arMode});
   Future setBrightness(int brightness);
-  Future setMainlineStateParams({required int boot, required int awake, required int sleep});
+  Future setMainlineStateParams({required ArState arState});
   Future setMainlineModeParams({required ArMode arMode});
 }

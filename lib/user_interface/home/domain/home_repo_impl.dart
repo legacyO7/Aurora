@@ -28,12 +28,6 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
 
 
   @override
-  Future writeToFile({required String path, required String content}) async{
-    await _ioManager.writeToFile(filePath: path, content: content);
-  }
-
-
-  @override
   void setAppHeight(){
     var window = WindowManager.instance;
     window..setMinimumSize(Size(1000,super.isMainLine()?680:600))

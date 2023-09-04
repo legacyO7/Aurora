@@ -39,7 +39,7 @@ class IOManagerImpl implements IOManager{
       if (content.isNotEmpty || allowEmptyContent) {
         return await File(_parseFilePath(filePath)).writeAsString(content, mode: fileMode);
       } else {
-        stderr.writeln("blocked empty content from writing");
+        stderr.writeln("blocked!. empty content");
       }
     }catch(e,stackTrace) {
       ArLogger.log(data: e,stackTrace: stackTrace);

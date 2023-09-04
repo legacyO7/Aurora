@@ -10,4 +10,4 @@ export './io/local/io_manager/io_manager.dart';
 export './io/local/io_manager/io_manager_impl.dart';
 export './io/remote/remote_io_manager/remote_io_manager_impl.dart';
 export './io/remote/remote_io_manager/remote_io_manager.dart';
-export './di/init_aurora.dart';
+export '../utility/init_aurora.dart';

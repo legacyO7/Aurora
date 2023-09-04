@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import 'shared/data/di/init_aurora.dart';
+import 'shared/utility/init_aurora.dart';
 import 'user_interface/disable_services/presentation/state/disable_bloc.dart';
 import 'user_interface/home/presentation/state/home_bloc.dart';
 

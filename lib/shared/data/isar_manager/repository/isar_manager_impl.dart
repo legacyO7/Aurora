@@ -8,6 +8,7 @@ import 'package:aurora/shared/data/isar_manager/repository/isar_manager.dart';
 import 'package:aurora/shared/data/model/ar_mode_model.dart';
 import 'package:aurora/shared/data/model/ar_state_model.dart';
 import 'package:aurora/utility/ar_widgets/ar_colors.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -54,12 +55,9 @@ class IsarManagerImpl implements IsarManager {
 
   Future _initArProfiles() async{
 
-    String sharedPref=(await _ioManager.readFile(File('${_supportDir.path}/shared_preferences.json'))).join('');
 
-    if(sharedPref.isNotEmpty){
-      _arSettingsModel=ArSettingsModel.fromJson(jsonDecode(sharedPref));
-      _arProfileModel=ArProfileModel.fromJson(jsonDecode(sharedPref));
-    }else {
+    setDefaultProfileAndSettings(){
+
       _arSettingsModel = ArSettingsModel(
           arTheme: 'system',
           arVersion: '0',
@@ -72,6 +70,24 @@ class IsarManagerImpl implements IsarManager {
           arState: const ArState(),
           arMode: ArMode(colorRad: ArColors.accentColor.value, mode: 1, speed: 0));
     }
+
+    try {
+
+      String sharedPref=(await _ioManager.readFile(File('${_supportDir.path}/shared_preferences.json'))).join('');
+
+      if(sharedPref.isNotEmpty){
+        _arSettingsModel=ArSettingsModel.fromJson(jsonDecode(sharedPref));
+        _arProfileModel=ArProfileModel.fromJson(jsonDecode(sharedPref));
+      }else {
+        setDefaultProfileAndSettings();
+      }
+
+    }catch(e){
+      setDefaultProfileAndSettings();
+      ArLogger.log(data: e.toString());
+    }
+
+
     await writeArProfileIsar();
   }
   
