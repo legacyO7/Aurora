@@ -31,6 +31,7 @@ dependencies:
   args: ^2.4.2
   isar: ^3.1.0+1
   isar_flutter_libs: ^3.1.0+1
+  dropdown_button2: ^2.3.9
 
 dev_dependencies:
   flutter_test:

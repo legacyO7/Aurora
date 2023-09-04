@@ -1,4 +1,5 @@
-import 'package:aurora/user_interface/profiles/presentation/screens/profile_confirmation.dart';
+import 'package:aurora/user_interface/profiles/presentation/screens/widgets/profile_confirmation.dart';
+import 'package:aurora/user_interface/profiles/presentation/screens/widgets/profile_dropdown.dart';
 import 'package:aurora/user_interface/profiles/presentation/states/profiles_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_alert.dart';
 import 'package:aurora/utility/ar_widgets/ar_button.dart';
@@ -52,24 +53,7 @@ class _ProfilePanelState extends State<ProfilePanel> {
                           color: context.selectedColorWithAlpha,
                           width: .1.w
                       ))),
-                  child: Row(
-                    children: [
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                            alignment: Alignment.center,
-                            value: state.currentProfile!.id,
-                            items: state.allProfiles.map<DropdownMenuItem<int>>((e) =>
-                            DropdownMenuItem<int>(
-                                value: e.id,
-                                child: SizedBox(
-                                    width: 12.w,
-                                    child: Text(e.profileName,overflow: TextOverflow.ellipsis,)))).toList(),
-                            onChanged: (value){
-                              context.read<ProfilesBloc>().add(ProfilesLoadEvent(id: value??state.currentProfile!.id!));
-                            }),
-                      )
-                    ],
-                  )),
+                  child: ProfileDropdown()),
               if(state.currentProfile!.id!!=1)
                 ProfileConfirmation(currentProfile: state.currentProfile!),
               if(state.currentProfile!.id!>2)
