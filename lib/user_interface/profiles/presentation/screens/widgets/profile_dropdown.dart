@@ -10,6 +10,11 @@ class ProfileDropdown extends StatelessWidget {
 
   final TextEditingController textEditingController = TextEditingController();
 
+  Widget titleWidget(String title)=>
+      SizedBox(
+          width: 12.w,
+          child: Text(title, overflow: TextOverflow.ellipsis,));
+
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +22,9 @@ class ProfileDropdown extends StatelessWidget {
       children: [
         BlocBuilder<ProfilesBloc, ProfilesState>(
           builder: (context, state) {
-            return DropdownButtonHideUnderline(
+            return
+              state.allProfiles.length>1?
+              DropdownButtonHideUnderline(
               child: DropdownButton2<int>(
                 isExpanded: true,
                 alignment: Alignment.center,
@@ -26,21 +33,21 @@ class ProfileDropdown extends StatelessWidget {
                     DropdownMenuItem<int>(
                         alignment: Alignment.center,
                         value: e.id,
-                        child: SizedBox(
-                            width: 12.w,
-                            child: Text(e.profileName, overflow: TextOverflow.ellipsis,)))).toList(),
+                        child: titleWidget(e.profileName))).toList(),
                 onChanged: (value) {
                   context.read<ProfilesBloc>().add(ProfilesLoadEvent(id: value ?? state.currentProfile!.id!));
                 },
                 buttonStyleData: ButtonStyleData(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
-                  width: 13.w,
+                  width: state.currentProfile!.id==1?18.w:13.w,
                 ),
                 dropdownStyleData:  DropdownStyleData(
                   width: 15.w,
                   maxHeight: 55.h,
                 ),
-                dropdownSearchData: DropdownSearchData(
+                dropdownSearchData:
+                state.allProfiles.length>5?
+                DropdownSearchData(
                   searchController: textEditingController,
                   searchInnerWidgetHeight: 8.h,
                   searchInnerWidget: Container(
@@ -69,13 +76,17 @@ class ProfileDropdown extends StatelessWidget {
                         element.id==item.value&&
                         element.profileName.toLowerCase().contains(searchValue.toLowerCase()));
                   },
-                ),
+                ):null,
                 onMenuStateChange: (isOpen) {
                   if (!isOpen) {
                     textEditingController.clear();
                   }
                 },
               ),
+            ):
+            SizedBox(
+              width: 17.w,
+              child: Center(child: titleWidget(state.currentProfile!.profileName)),
             );
           },
         ),
