@@ -15,6 +15,12 @@ class Constants {
   static const String kArSetup = 'ar_setup.sh';
   static const String kFaustusInstaller = 'install_faustus.sh';
 
+  //titles
+  static const List<String> brightnessTitle=['Off','Low','Medium','High'];
+  static const List<String> modeTitle=['Static','Breathing','Color Cycle','Strobing'];
+  static const List<String> speedTitle=['Slow','Medium','Fast'];
+  static const List<String> stateTitle=['Awake','Sleep','Boot'];
+
 
   //commands
   static const String kPolkit = 'pkexec --disable-internal-agent';

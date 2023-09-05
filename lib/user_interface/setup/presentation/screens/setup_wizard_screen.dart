@@ -1,5 +1,5 @@
 
-import 'package:aurora/shared/data/di/init_aurora.dart';
+import 'package:aurora/shared/utility/init_aurora.dart';
 import 'package:aurora/shared/presentation/shared_presentation.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/widgets/ar_kernel_compatible_dialog.dart';

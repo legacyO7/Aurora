@@ -1,5 +1,6 @@
 
-
+import 'package:aurora/shared/data/isar_manager/models/ar_profile_model.dart';
+import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/shared/data/shared_data.dart';
 import 'package:aurora/user_interface/keyboard_settings/domain/repositories/keyboard_settings_repo.dart';
 import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_event.dart';
@@ -10,37 +11,42 @@ import 'package:flutter/material.dart';
 import 'keyboard_settings_state.dart';
 
 class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,KeyboardSettingsState> {
-  KeyboardSettingsBloc(this._prefRepo,this._controlPanelRepo):super(const KeyboardSettingsState()){
+  KeyboardSettingsBloc(this._isarDelegate,this._controlPanelRepo):super(const KeyboardSettingsState()){
+    on<KeyboardSettingsEventInit>((event, emit) => _initPanel(emit));
    on<KeyboardSettingsEventSetBrightness>((event, emit)=> _setBrightness(event.brightness,emit));
    on<KeyboardSettingsEventSetSpeed>((event, emit)=> _setSpeed(speed: event.speed,emit));
    on<KeyboardSettingsEventSetMode>((event, emit)=> _setMode(mode: event.mode,emit));
    on<KeyboardSettingsEventSetColor>((event, emit)=> _setColor(color: event.color??ArColors.accentColor,mode: 0, emit));
-   on<KeyboardSettingsEventInit>((event, emit) => _initPanel(emit));
-   on<KeyboardSettingsEventSetState>((event, emit) => _setMainLineStateParams(emit,arState: ArState(boot: event.boot,sleep: event.sleep,awake: event.awake)));
+   on<KeyboardSettingsEventSetState>((event, emit) => _setStateParams(emit,arState: ArState(boot: event.boot,sleep: event.sleep,awake: event.awake)));
   }
 
-  final PrefRepo _prefRepo;
+  final IsarDelegate _isarDelegate;
   final KeyboardSettingsRepo _controlPanelRepo;
 
   bool _boot=false;
   bool _awake=false;
   bool _sleep=false;
 
-  ArMode arMode=ArMode(color: ArColors.accentColor,mode: 0,speed: 0);
+  late ArMode arMode;
+
+  late ArProfileModel arProfileModel;
 
   _initPanel(emit) async{
-      arMode= (await _prefRepo.getArMode())??arMode;
-      await _setBrightness(await _prefRepo.getBrightness(), emit);
-      await _setMainlineModeParams(arMode: arMode, emit);
+      arProfileModel=await _isarDelegate.getArProfile();
+      arMode= ArMode.copyModel(arProfileModel.arMode);
+      await _setBrightness(arProfileModel.brightness, emit);
+      await _setModeParams(arMode: arMode, emit);
       if(super.isMainLine()){
-        await _setMainLineStateParams(arState: (await _prefRepo.getArState()).negateValue(), emit );
+        await _setStateParams(arState: (arProfileModel.arState).negateValue(), emit );
       }
   }
 
   _setColor(emit,{required Color color,int? mode}) async {
     arMode.color= color;
+    arMode.colorRad=color.value;
     arMode.mode=mode??arMode.mode;
-    await _controlPanelRepo.setColor(arMode: arMode);
+
+    await _controlPanelRepo.setColor(arMode: ArMode.copyModel(arMode));
     _updateState(emit);
   }
 
@@ -62,7 +68,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
     _updateState(emit);
   }
   
-  _setMainlineModeParams(emit,{
+  _setModeParams(emit,{
     required ArMode arMode    
   }) async{
     this.arMode.color=arMode.color??this.arMode.color;
@@ -72,18 +78,16 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
     _updateState(emit);
   }
   
-  _setMainLineStateParams(emit,{
+  _setStateParams(emit,{
     required ArState arState
   }) async{
     _boot=arState.boot==null?_boot:!arState.boot!;
     _awake=arState.awake==null?_awake:!arState.awake!;
     _sleep=arState.sleep==null?_sleep:!arState.sleep!;
-    await _controlPanelRepo.setMainlineStateParams(sleep: _parseBool(_sleep),awake: _parseBool(_awake),boot: _parseBool(_boot));
+    await _controlPanelRepo.setMainlineStateParams(arState: ArState(awake: _awake,boot: _boot,sleep: _sleep));
     _updateState(emit);
   }
 
-  _parseBool(bool? value)=>(value??false)?1:0;
-  
   _updateState(emit){
     super.setSelectedColor(arMode.color!);
     emit(state.copyState(speed: arMode.speed,mode: arMode.mode,color: arMode.color,awake: _awake,sleep: _sleep,boot: _boot));

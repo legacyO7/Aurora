@@ -1,5 +1,7 @@
+import 'package:aurora/shared/data/isar_manager/repository/isar_manager.dart';
 import 'package:aurora/user_interface/battery_manager/presentation/state/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/profiles/presentation/states/profiles_bloc.dart';
 import 'package:aurora/user_interface/theme/presentation/state/theme_bloc.dart';
 import 'package:aurora/user_interface/theme/presentation/state/theme_event.dart';
 import 'package:aurora/user_interface/theme/presentation/state/theme_state.dart';
@@ -13,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import 'shared/data/di/init_aurora.dart';
+import 'shared/utility/init_aurora.dart';
 import 'user_interface/disable_services/presentation/state/disable_bloc.dart';
 import 'user_interface/home/presentation/state/home_bloc.dart';
 
@@ -25,6 +27,7 @@ void main(List<String> args) async{
   WidgetsFlutterBinding.ensureInitialized();
   await initAurora.setWindow();
   await initAurora.initLogger();
+  await sl<IsarManager>().initIsar();
   runApp(const Aurora());
 }
 
@@ -69,6 +72,7 @@ class Aurora extends StatelessWidget with GlobalMixin{
                                 BlocProvider.value(value: sl<BatteryManagerBloc>()),
                                 BlocProvider.value(value: sl<KeyboardSettingsBloc>()),
                                 BlocProvider.value(value: sl<DisableSettingsBloc>()),
+                                BlocProvider.value(value: sl<ProfilesBloc>()),
                               ],
                               child: const HomeScreen()
                             )

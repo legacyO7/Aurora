@@ -12,10 +12,12 @@ Future<dynamic> arDialog({
   required VoidCallback onConfirm,
   Widget? optionalWidget,
   BuildContext? context,
-  VoidCallback? onCancel
+  VoidCallback? onCancel,
+  Color? barrierColor=ArColors.dialogBarrierColor
 }) {
   return showDialog(
       barrierDismissible: false,
+      barrierColor: barrierColor,
       context: context?? Constants.kScaffoldKey.currentState!.context,
       builder: (_) => StatefulBuilder(
         builder: (_, __) {
@@ -82,8 +84,10 @@ class _ArDialogBodyState extends State<_ArDialogBody> {
                           } catch(e,stackTrace) {
                             ArLogger.log(data: e,stackTrace: stackTrace);
                           } finally {
-                            context.read<ArButtonCubit>().setUnLoad();
-                            Navigator.pop(context);
+                            if(context.mounted) {
+                              context.read<ArButtonCubit>().setUnLoad();
+                              Navigator.pop(context);
+                            }
                           }
                       },
                           icon: const Icon(Icons.close))

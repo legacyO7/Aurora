@@ -1,6 +1,7 @@
 import 'package:aurora/user_interface/battery_manager/battery_manager.dart';
 import 'package:aurora/user_interface/control_panel/presentation/screens/drawer/ar_drawer.dart';
 import 'package:aurora/user_interface/keyboard_settings/keyboard_settings.dart';
+import 'package:aurora/user_interface/profiles/presentation/screens/profile_panel.dart';
 import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
@@ -43,6 +44,7 @@ class _ControlPanelState extends State<ControlPanelScreen> with GlobalMixin{
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  const ProfilePanel(),
                   IconButton(
                       onPressed: ()=>_openEndDrawer(),
                       icon: const Icon(Icons.settings),
