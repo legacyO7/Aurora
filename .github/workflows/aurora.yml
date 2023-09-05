@@ -52,6 +52,9 @@ jobs:
       - name: Set Build Type
         run: sed -i "s/BuildType.debug/BuildType.appimage/g" lib/utility/constants.dart
 
+      - name: Run code generator
+        run: dart run build_runner build
+
       - name: Flutter build app
         run: flutter build linux
 

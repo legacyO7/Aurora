@@ -35,6 +35,7 @@ buildAurora(){
 echo building aurora
 flutter clean
 flutter pub get
+dart run build_runner build
 flutter build linux
 elf
 getversion
@@ -55,6 +56,7 @@ patchelf --set-rpath '$ORIGIN' libscreen_retriever_plugin.so
 patchelf --set-rpath '$ORIGIN' libwindow_manager_plugin.so
 patchelf --set-rpath '$ORIGIN' liburl_launcher_linux_plugin.so
 patchelf --set-rpath '$ORIGIN' libbitsdojo_window_linux_plugin.so
+patchelf --set-rpath '$ORIGIN' libisar_flutter_libs_plugin.so
 cd ../../../../../../
 
 }

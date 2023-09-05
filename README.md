@@ -73,6 +73,8 @@ Appimage builds doesnt support ``--with-root`` argument
   `libgtk-3-0 libblkid1 liblzma5`
 - Enable linux desktop
   `flutter config --enable-linux-desktop`
+- Run code generator
+  `dart run build_runner build`
 - Run the project
   `flutter run`
 - Build the project
