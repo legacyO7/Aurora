@@ -12,10 +12,12 @@ Future<dynamic> arDialog({
   required VoidCallback onConfirm,
   Widget? optionalWidget,
   BuildContext? context,
-  VoidCallback? onCancel
+  VoidCallback? onCancel,
+  Color? barrierColor=ArColors.dialogBarrierColor
 }) {
   return showDialog(
       barrierDismissible: false,
+      barrierColor: barrierColor,
       context: context?? Constants.kScaffoldKey.currentState!.context,
       builder: (_) => StatefulBuilder(
         builder: (_, __) {

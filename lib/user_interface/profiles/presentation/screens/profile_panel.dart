@@ -55,7 +55,10 @@ class _ProfilePanelState extends State<ProfilePanel> {
                       ))),
                   child: ProfileDropdown()),
               if(state.currentProfile!.id!!=1)
-                ProfileConfirmation(currentProfile: state.currentProfile!),
+                ProfileConfirmation(
+                    currentProfile: state.currentProfile!,
+                    allProfileNames: state.allProfiles.map((e) => e.profileName).toList(),
+                ),
               if(state.currentProfile!.id!>2)
               IconButton(
                   onPressed: () {
