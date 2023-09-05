@@ -29,6 +29,12 @@ class IsarManagerImpl implements IsarManager {
 
   late  Directory _supportDir;
 
+  Future _validateIsar() async{
+    if(!isar.isOpen){
+      await initIsar();
+    }
+  }
+
   @override
   Future initIsar() async{
 
@@ -55,7 +61,6 @@ class IsarManagerImpl implements IsarManager {
 
   Future _initArProfiles() async{
 
-
     setDefaultProfileAndSettings(){
 
       _arSettingsModel = ArSettingsModel(
@@ -64,6 +69,7 @@ class IsarManagerImpl implements IsarManager {
           profileId: null);
 
       _arProfileModel = ArProfileModel(
+          id: 1,
           profileName: 'Default Profile',
           threshold: 55,
           brightness: 1,
@@ -73,11 +79,13 @@ class IsarManagerImpl implements IsarManager {
 
     try {
 
-      String sharedPref=(await _ioManager.readFile(File('${_supportDir.path}/shared_preferences.json'))).join('');
+      File sharedPref=File('${_supportDir.path}/shared_preferences.json');
+      String sharedPrefData=(await _ioManager.readFile(sharedPref)).join('');
 
-      if(sharedPref.isNotEmpty){
-        _arSettingsModel=ArSettingsModel.fromJson(jsonDecode(sharedPref));
-        _arProfileModel=ArProfileModel.fromJson(jsonDecode(sharedPref));
+      if(sharedPrefData.isNotEmpty){
+        _arSettingsModel=ArSettingsModel.fromJson(jsonDecode(sharedPrefData));
+        _arProfileModel=ArProfileModel.fromJson(jsonDecode(sharedPrefData))..id=1;
+        await _ioManager.deleteFile(sharedPref);
       }else {
         setDefaultProfileAndSettings();
       }
@@ -94,6 +102,7 @@ class IsarManagerImpl implements IsarManager {
   /// Ar Settings Isar
   @override
   Future writeArSettingsIsar() async{
+    await _validateIsar();
     if(_arSettingsModel.profileId!=null) {
       if(_arSettingsModel.id!=null || (_arSettingsModel.id==null && await _validateArSettingsIsar())) {
         await isar.writeTxn(() => isar.arSettingsModels.put(_arSettingsModel));
@@ -106,6 +115,7 @@ class IsarManagerImpl implements IsarManager {
 
   @override
   Future<ArSettingsModel?> readArSettingsIsar() async{
+    await _validateIsar();
     var tempModel= await isar.arSettingsModels.where().findFirst();
     if(tempModel!=null) {
       _arSettingsModel=tempModel;
@@ -115,6 +125,7 @@ class IsarManagerImpl implements IsarManager {
 
   @override
   Future deleteArSettingsIsar(int id) async{
+    await _validateIsar();
     _arSettingsModel=ArSettingsModel();
     return await isar.arSettingsModels.delete(id);
   }
@@ -122,6 +133,8 @@ class IsarManagerImpl implements IsarManager {
   /// AR Profile ISAR
   @override
   Future writeArProfileIsar({ArProfileModel? arProfileModel}) async{
+    await _validateIsar();
+
     arProfileModel??=_arProfileModel;
     await isar.writeTxn(() => isar.arProfileModels.put(arProfileModel!));
     _arSettingsModel.profileId=arProfileModel.id;
@@ -135,6 +148,8 @@ class IsarManagerImpl implements IsarManager {
 
   @override
   Future<ArProfileModel?> readArProfileIsar({int? id}) async{
+    await _validateIsar();
+
     if(id==null) {
       id=_arSettingsModel.profileId;
     }else{
@@ -150,12 +165,16 @@ class IsarManagerImpl implements IsarManager {
 
   @override
   Future<List<ArProfileModel>> readAllArProfileIsar() async{
+    await _validateIsar();
+
     _allProfiles= await isar.arProfileModels.where().findAll();
     return _allProfiles;
   }
 
   @override
   Future deleteArProfileIsar({int? id}) async{
+    await _validateIsar();
+
     id??=_arSettingsModel.profileId;
     _allProfiles.removeWhere((element) => element.id==id!);
     await isar.writeTxn(() async {
@@ -165,7 +184,14 @@ class IsarManagerImpl implements IsarManager {
 
   @override
   Future deleteDatabase() async{
-    isar.close(deleteFromDisk: true);
+    try {
+      await _validateIsar();
+      await isar.writeTxn(() async => await isar.clear());
+      await isar.close(deleteFromDisk: true);
+      _allProfiles.clear();
+    }catch(e){
+      ArLogger.log(data: e.toString());
+    }
   }
 
 
