@@ -53,8 +53,8 @@ class _ProfileConfirmationState extends State<ProfileConfirmation> with GlobalMi
                 arSnackBar(text: '${profileNameController.text} already exists! Try a different name',isPositive: false);
               }else {
                 Navigator.pop(context);
-                profileNameController.text='';
                 context.read<ProfilesBloc>().add(ProfilesSaveEvent(name: profileNameController.text));
+                profileNameController.text='';
               }
             }else{
               Navigator.pop(context);
