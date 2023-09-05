@@ -28,11 +28,11 @@ sudo dnf install aurora
 
 ### Mainline Mode
 
-![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/metadata/snaps/arscreen_mainline_1.png)
+![App Screenshot](https://github.com/legacyO7/Aurora/blob/beta/metadata/snaps/arscreen_mainline_1.png)
 
 ### Faustus Mode
 
-![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/metadata/snaps/arsrceen_1.png)
+![App Screenshot](https://github.com/legacyO7/Aurora/blob/beta/metadata/snaps/arsrceen_1.png)
 
 #### Prerequisites
 
@@ -42,13 +42,13 @@ sudo dnf install aurora
 #### First Run
 Aurora will direct you to the installation screen if the prerequisites are not satisfied on your system.
 
-![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/metadata/snaps/arsrceen_2.png)
+![App Screenshot](https://github.com/legacyO7/Aurora/blob/beta/metadata/snaps/arsrceen_2.png)
 
 Aurora also provides an option to choose the faustus module repo. If the device is compatible with the module but isn't supported officially, you can create your own fork that adds support to your device
 (Read the [documentation](https://github.com/hackbnw/faustus) for more information on the process and any potential dangers.)
 By default, Aurora uses [this fork](https://github.com/legacyO7/faustus.git) that adds support for "FA706IH"
 
-![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/metadata/snaps/arsrceen_3.png)
+![App Screenshot](https://github.com/legacyO7/Aurora/blob/beta/metadata/snaps/arsrceen_3.png)
 
 Secureboot enabled devices need to enroll MOK
 
