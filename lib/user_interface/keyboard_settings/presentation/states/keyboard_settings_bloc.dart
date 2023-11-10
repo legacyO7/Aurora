@@ -2,17 +2,19 @@
 import 'package:aurora/shared/data/isar_manager/models/ar_profile_model.dart';
 import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/shared/data/shared_data.dart';
-import 'package:aurora/user_interface/keyboard_settings/domain/repositories/keyboard_settings_repo.dart';
-import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_event.dart';
 import 'package:aurora/shared/terminal/presentation/state/terminal_base_bloc.dart';
+import 'package:aurora/user_interface/keyboard_settings/domain/repositories/keyboard_settings_repo.dart';
+import 'package:aurora/user_interface/keyboard_settings/entity/keyboard_settings_entity.dart';
+import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_event.dart';
 import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:flutter/material.dart';
 
 import 'keyboard_settings_state.dart';
 
 class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,KeyboardSettingsState> {
-  KeyboardSettingsBloc(this._isarDelegate,this._controlPanelRepo):super(const KeyboardSettingsState()){
-    on<KeyboardSettingsEventInit>((event, emit) => _initPanel(emit));
+  KeyboardSettingsBloc(this._isarDelegate):super(const KeyboardSettingsState()){
+
+   on<KeyboardSettingsEventInit>((event, emit) => _initPanel(emit));
    on<KeyboardSettingsEventSetBrightness>((event, emit)=> _setBrightness(event.brightness,emit));
    on<KeyboardSettingsEventSetSpeed>((event, emit)=> _setSpeed(speed: event.speed,emit));
    on<KeyboardSettingsEventSetMode>((event, emit)=> _setMode(mode: event.mode,emit));
@@ -21,7 +23,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
   }
 
   final IsarDelegate _isarDelegate;
-  final KeyboardSettingsRepo _controlPanelRepo;
+  final KeyboardSettingsRepo _keyboardSettingsRepo=KeyboardSettingsEntity.getRepo();
 
   bool _boot=false;
   bool _awake=false;
@@ -46,25 +48,25 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
     arMode.colorRad=color.value;
     arMode.mode=mode??arMode.mode;
 
-    await _controlPanelRepo.setColor(arMode: ArMode.copyModel(arMode));
+    await _keyboardSettingsRepo.setColor(arMode: ArMode.copyModel(arMode));
     _updateState(emit);
   }
 
   _setBrightness(int brightness, emit) async {
-    await _controlPanelRepo.setBrightness(brightness);
+    await _keyboardSettingsRepo.setBrightness(brightness);
     emit(state.copyState(brightness: brightness));
   }
 
 
   _setMode(emit, {required int mode})async{
     arMode.mode=mode;
-    await _controlPanelRepo.setMode(arMode: arMode);
+    await _keyboardSettingsRepo.setMode(arMode: arMode);
     _updateState(emit);
   }
 
   _setSpeed(emit,{required int speed}) async{
     arMode.speed=speed;
-    await _controlPanelRepo.setSpeed(arMode: arMode);
+    await _keyboardSettingsRepo.setSpeed(arMode: arMode);
     _updateState(emit);
   }
   
@@ -74,7 +76,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
     this.arMode.color=arMode.color??this.arMode.color;
     this.arMode.mode=arMode.mode??this.arMode.mode;
     this.arMode.speed=arMode.speed??this.arMode.speed;
-    await _controlPanelRepo.setMainlineModeParams(arMode: arMode);
+    await _keyboardSettingsRepo.setModeParams(arMode: arMode);
     _updateState(emit);
   }
   
@@ -84,7 +86,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
     _boot=arState.boot==null?_boot:!arState.boot!;
     _awake=arState.awake==null?_awake:!arState.awake!;
     _sleep=arState.sleep==null?_sleep:!arState.sleep!;
-    await _controlPanelRepo.setMainlineStateParams(arState: ArState(awake: _awake,boot: _boot,sleep: _sleep));
+    await _keyboardSettingsRepo.setMainlineStateParams(arState: ArState(awake: _awake,boot: _boot,sleep: _sleep));
     _updateState(emit);
   }
 

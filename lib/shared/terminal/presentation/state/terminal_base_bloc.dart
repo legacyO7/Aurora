@@ -1,5 +1,4 @@
 
-import 'package:aurora/shared/data/isar_manager/repository/isar_manager.dart';
 import 'package:aurora/shared/data/shared_data.dart';
 import 'package:aurora/shared/terminal/shared_terminal.dart';
 import 'package:aurora/user_interface/battery_manager/presentation/state/batter_manager_bloc.dart';
@@ -55,7 +54,8 @@ abstract class TerminalBaseBloc<Event,State> extends Bloc<Event,State> with Glob
   void restartApp(){
     sl<SetupBloc>().add(SetupEventRebirth());
     restartBloc<HomeBloc>();
-    resetInstance<IsarManager>();
+    restartBloc<KeyboardSettingsBloc>();
+    restartBloc<BatteryManagerBloc>();
   }
 
   void clearCache(){
