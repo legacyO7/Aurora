@@ -67,15 +67,15 @@ class _SetupScreenState extends State<SetupScreen> {
 
             List<StepperData> stepperData = [
               stepperListData(
-                  text: 'Acknowledge',
+                  text: state.stepValue==0?"I'm Here": 'I Came',
                   stepValue: state.stepValue,
                   index: 0),
               stepperListData(
-                  text: 'Install Packages',
+                  text: state.stepValue>0?'I Saw':"I might see something",
                   stepValue: state.stepValue,
                   index: 1),
               stepperListData(
-                  text: 'Install Module',
+                  text: state.stepValue==2? 'I Conquered':'I think I can conquer',
                   stepValue: state.stepValue,
                   index: 2)
 

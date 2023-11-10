@@ -54,6 +54,8 @@ abstract class TerminalBaseBloc<Event,State> extends Bloc<Event,State> with Glob
   void restartApp(){
     sl<SetupBloc>().add(SetupEventRebirth());
     restartBloc<HomeBloc>();
+    restartBloc<KeyboardSettingsBloc>();
+    restartBloc<BatteryManagerBloc>();
   }
 
   void clearCache(){
