@@ -3,6 +3,7 @@ import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyb
 import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_event.dart';
 import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_state.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
+import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -12,12 +13,6 @@ Widget speedController({
   required BuildContext context,
   required String title,
   bool isVisible=true}) {
-
-  List<ButtonAttribute<int>> speedList=[
-      ButtonAttribute(title: "Slow",value: 0),
-      ButtonAttribute(title: "Medium",value: 1),
-      ButtonAttribute(title: "Fast",value: 2),
-  ];
 
  return AnimatedContainer(
    duration: const Duration(milliseconds: 300),
@@ -30,12 +25,12 @@ Widget speedController({
            children: [
              Text(title,style: Theme.of(context).textTheme.headlineSmall,),
              Row(
-                 children: speedList.map((e) =>
+                 children: Constants.speedTitle.map((e) =>
                      ArButton(
-                         title: e.title,
-                         isSelected: state.speed==e.value,
+                         title: e,
+                         isSelected: state.speed==Constants.speedTitle.indexOf(e),
                          action: () {
-                           context.read<KeyboardSettingsBloc>().add(KeyboardSettingsEventSetSpeed(speed: e.value??0));
+                           context.read<KeyboardSettingsBloc>().add(KeyboardSettingsEventSetSpeed(speed: Constants.speedTitle.indexOf(e)));
                          } )).toList()
              ),
            ],

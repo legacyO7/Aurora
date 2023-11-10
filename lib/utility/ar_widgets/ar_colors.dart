@@ -16,5 +16,6 @@ class ArColors {
   static const Color cyan = Colors.cyan;
   static Color? greyDisabled = Colors.grey[600];
   static const Color green = Colors.green;
+  static const Color dialogBarrierColor = Colors.black54;
   static const Color transparent = Colors.transparent;
 }

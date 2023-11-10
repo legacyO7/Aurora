@@ -1,6 +1,7 @@
 import 'dart:io';
 
 
+import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/shared/data/shared_data.dart';
 import 'package:aurora/shared/disable_settings/shared_disable_services.dart';
 import 'package:aurora/shared/terminal/shared_terminal.dart';
@@ -16,20 +17,14 @@ import 'home_repo.dart';
 
 class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
 
-  HomeRepoImpl(this._terminalRepo, this._permissionManager, this._ioManager, this._fileManager, this._prefRepo, this._disableSettingsRepo);
+  HomeRepoImpl(this._terminalRepo, this._permissionManager, this._ioManager, this._fileManager, this._isarDelegate, this._disableSettingsRepo);
 
   final TerminalRepo _terminalRepo;
   final PermissionManager _permissionManager;
   final IOManager _ioManager;
   final FileManager _fileManager;
-  final PrefRepo _prefRepo;
+  final IsarDelegate _isarDelegate;
   final DisableSettingsRepo _disableSettingsRepo;
-
-
-  @override
-  Future writeToFile({required String path, required String content}) async{
-    await _ioManager.writeToFile(filePath: path, content: content);
-  }
 
 
   @override
@@ -86,7 +81,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
 
     if(isSuccess) {
       bool isFaustusEnforced=enforce==Enforcement.faustus;
-      await _prefRepo.setFaustusEnforcement(isFaustusEnforced);
+      await _isarDelegate.setEnforceFaustus(isFaustusEnforced);
     }
 
     return isSuccess;

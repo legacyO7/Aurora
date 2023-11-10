@@ -39,7 +39,7 @@ class IOManagerImpl implements IOManager{
       if (content.isNotEmpty || allowEmptyContent) {
         return await File(_parseFilePath(filePath)).writeAsString(content, mode: fileMode);
       } else {
-        stderr.writeln("blocked empty content from writing");
+        stderr.writeln("blocked!. empty content");
       }
     }catch(e,stackTrace) {
       ArLogger.log(data: e,stackTrace: stackTrace);
@@ -63,6 +63,11 @@ class IOManagerImpl implements IOManager{
   @override
   Future<String> getFileStat(String filePath) async{
     return (await File(filePath).stat()).modeString();
+  }
+
+  @override
+  Future deleteFile(File file) async{
+    await file.delete();
   }
 
   String _parseFilePath(dynamic filePath){

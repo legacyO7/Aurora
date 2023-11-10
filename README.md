@@ -3,8 +3,8 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
 
-Aurora is an alternate to Aura Sync for linux to control the keyboard backlight and charging threshold settings.This utility allows you to set battery charging threshold and control keyboard backlight color, brightness and modes.
-
+Aurora serves as an alternative to Aura Sync for GNU/Linux, offering control over keyboard backlight and charging threshold settings. This utility facilitates configuring battery thresholds and adjusting keyboard backlight color, brightness, and modes.
+Aurora only targets the ASUS TUF audience, if it worked on any other device, it is just a happy coincidence!.
 
 Aurora provides two modes
 
@@ -17,10 +17,10 @@ The modes will be auto-selected depending on the kernel version
 
 ## Installation
 
-Aurora comes with an AppImage and debian build release.
+Aurora stable/beta comes with an AppImage and a debian release.
 Find the latest release from [here](https://github.com/legacyO7/Aurora/releases).
 
-Aurora stable versions are also available in Fedora copr buildsystem
+Aurora stable versions are also available in Fedora copr buildsystem for x86_64 devices
 ```
 sudo dnf copr enable legacy07/aurora
 sudo dnf install aurora
@@ -28,31 +28,29 @@ sudo dnf install aurora
 
 ### Mainline Mode
 
-![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arscreen_mainline_1.png)
-This doesn't require any further configurations
+![App Screenshot](https://github.com/legacyO7/Aurora/blob/beta/metadata/snaps/arscreen_mainline_1.png)
 
 ### Faustus Mode
 
-![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arsrceen_1.png)
+![App Screenshot](https://github.com/legacyO7/Aurora/blob/beta/metadata/snaps/arsrceen_1.png)
 
 #### Prerequisites
 
 - [faustus module](https://github.com/hackbnw/faustus)
-- If the module is not installed, `dkms openssl mokutil git make cmake` are required for installing the module
+- If the module is not installed, `dkms openssl mokutil git make cmake` are required for the module installation
 
 #### First Run
 Aurora will direct you to the installation screen if the prerequisites are not satisfied on your system.
 
-![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arsrceen_2.png)
+![App Screenshot](https://github.com/legacyO7/Aurora/blob/beta/metadata/snaps/arsrceen_2.png)
 
 Aurora also provides an option to choose the faustus module repo. If the device is compatible with the module but isn't supported officially, you can create your own fork that adds support to your device
 (Read the [documentation](https://github.com/hackbnw/faustus) for more information on the process and any potential dangers.)
 By default, Aurora uses [this fork](https://github.com/legacyO7/faustus.git) that adds support for "FA706IH"
 
-![App Screenshot](https://github.com/legacyO7/Aurora/blob/stable/assets/images/snaps/arsrceen_3.png)
+![App Screenshot](https://github.com/legacyO7/Aurora/blob/beta/metadata/snaps/arsrceen_3.png)
 
-* Note that the installation of Faustus using aurora is not fully error-proof. If you encounter an installation failure, refer to the error log and install Faustus manually.
-* Secureboot enabled devices need to enroll MOK
+Secureboot enabled devices need to enroll MOK
 
 
 ## Command-Line Arguments
@@ -75,6 +73,8 @@ Appimage builds doesnt support ``--with-root`` argument
   `libgtk-3-0 libblkid1 liblzma5`
 - Enable linux desktop
   `flutter config --enable-linux-desktop`
+- Run code generator
+  `dart run build_runner build`
 - Run the project
   `flutter run`
 - Build the project

@@ -1,13 +1,12 @@
 
-import 'package:aurora/shared/data/shared_data.dart';
+import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/shared/disable_settings/shared_disable_services.dart';
 import 'package:aurora/shared/presentation/url_launcher.dart';
-
+import 'package:aurora/shared/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/user_interface/setup/domain/repository/setup_repo.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/state/setup_event.dart';
 import 'package:aurora/user_interface/terminal/presentation/screens/terminal_widgets.dart';
-import 'package:aurora/shared/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
@@ -16,7 +15,7 @@ import 'package:aurora/utility/global_mixin.dart';
 import 'setup_state.dart';
 
 class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixin{
-  SetupBloc(this._prefRepo, this._setupRepo, this._disablerRepo) : super(SetupInitState()){
+  SetupBloc(this._setupRepo, this._disablerRepo, this._isarDelegate) : super(SetupInitState()){
     on<EventSWInit>((_, emit) => _initSetup(emit));
     on<SetupEventConfigure>((event, emit) => _allowConfigure(event.allow, emit));
     on<SetupEventOnCancel>((event, emit) => _onCancel(stepValue: event.stepValue,emit));
@@ -30,9 +29,9 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
     on<SetupEventLaunch>((event, _) => _launchUrl(event.url));
   }
 
-  final PrefRepo _prefRepo;
   final SetupRepo _setupRepo;
   final DisableSettingsRepo _disablerRepo;
+  final IsarDelegate _isarDelegate;
 
   final GlobalConfig _globalConfig=Constants.globalConfig;
 
@@ -41,9 +40,9 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
     await getVersion();
     await _setupRepo.initSetup();
 
-    if(await _prefRepo.getVersion() !=_globalConfig.arVersion && await _setupRepo.checkInternetAccess()){
+    if( _isarDelegate.getVersionFromDB() !=_globalConfig.arVersion && await _setupRepo.checkInternetAccess()){
       emit(SetupWhatsNewState(await _fetchChangelog()));
-      await _prefRepo.setVersion(_globalConfig.arVersion!);
+      await _isarDelegate.saveVersion(_globalConfig.arVersion!);
     }else {
       await _checkForUpdates(emit);
     }
@@ -234,7 +233,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
   }
 
   Future _clearCache(emit) async{
-    await _prefRepo.nukePref();
+    await _isarDelegate.deleteDatabase();
   }
 
    void _restart(emit) {

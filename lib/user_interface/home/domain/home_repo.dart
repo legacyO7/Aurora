@@ -6,7 +6,6 @@ abstract class HomeRepo{
   Future<bool> requestAccess();
   Future<bool> canElevate();
   Future selfElevate();
-  Future writeToFile({required String path, required String content});
   Future initLog();
   Future<bool> enforcement(Enforcement enforce);
 }

@@ -1,4 +1,5 @@
 
+import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/shared/data/shared_data.dart';
 import 'package:aurora/shared/disable_settings/shared_disable_services.dart';
 import 'package:aurora/shared/terminal/shared_terminal.dart';
@@ -9,9 +10,9 @@ import 'package:aurora/utility/constants.dart';
 
 class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin {
 
-  DisableSettingsRepoImpl(this._prefRepo,this._serviceManager,this._permissionManager,this._ioManager);
+  DisableSettingsRepoImpl(this._isarDelegate,this._serviceManager,this._permissionManager,this._ioManager);
 
-  final PrefRepo _prefRepo;
+  final IsarDelegate _isarDelegate;
 
   final IOManager _ioManager;
   final PermissionManager _permissionManager;
@@ -79,12 +80,12 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin {
       if(!await super.arServiceEnabled()) {
         if (disable == DisableEnum.all || disable == DisableEnum.threshold) {
           await _disableBatteryManager();
-          await _prefRepo.setThreshold(100);
+          await _isarDelegate.setThreshold(100);
         }
       }
 
         if (disable == DisableEnum.uninstall) {
-          await _prefRepo.nukePref();
+          await _isarDelegate.deleteDatabase();
         }
 
         if(!isSuccess) {
