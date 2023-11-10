@@ -85,7 +85,7 @@ class IsarManagerImpl implements IsarManager {
       if(sharedPrefData.isNotEmpty){
         _arSettingsModel=ArSettingsModel.fromJson(jsonDecode(sharedPrefData));
         _arProfileModel=ArProfileModel.fromJson(jsonDecode(sharedPrefData))..id=1;
-        // await _ioManager.deleteFile(sharedPref);
+         await _ioManager.deleteFile(sharedPref);
       }else {
         setDefaultProfileAndSettings();
       }
