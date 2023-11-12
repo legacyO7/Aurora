@@ -5,9 +5,9 @@ import 'package:aurora/user_interface/keyboard_settings/domain/repositories/keyb
 import 'package:aurora/utility/constants.dart';
 
 
-class KeyboardSettingsMainlineImpl extends KeyboardSettingsRepo{
+class KeyboardSettingsMainlineRepoImpl extends KeyboardSettingsRepo{
 
-  KeyboardSettingsMainlineImpl(this._ioManager);
+  KeyboardSettingsMainlineRepoImpl(this._ioManager);
 
   final IOManager _ioManager;
   final List<int> mainLineKeys=[0,1,2,9];
