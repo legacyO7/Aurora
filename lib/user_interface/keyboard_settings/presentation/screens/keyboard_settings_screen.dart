@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class KeyboardSettingsScreen extends StatefulWidget {
-  const KeyboardSettingsScreen({Key? key}) : super(key: key);
+  const KeyboardSettingsScreen({super.key});
 
   @override
   State<KeyboardSettingsScreen> createState() => _KeyboardSettingsScreenState();

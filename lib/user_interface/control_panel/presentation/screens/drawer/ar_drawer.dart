@@ -1,10 +1,11 @@
 import 'package:aurora/shared/presentation/shared_presentation.dart';
+import 'package:aurora/shared/presentation/widgets/edit_preference_button.dart';
 import 'package:aurora/user_interface/home/presentation/screens/widgets/privileged_run_button.dart';
 import 'package:flutter/material.dart';
 
 
 class ArDrawer extends StatelessWidget {
-  const ArDrawer({Key? key}) : super(key: key);
+  const ArDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,8 @@ class ArDrawer extends StatelessWidget {
             PrivilegedRunButton(),
             EnforceWidget(),
             LoggerButton(),
-            ClearCacheWidget()
+            ClearCacheWidget(),
+            EditPreferencesButton()
           ],
         ),
       ),

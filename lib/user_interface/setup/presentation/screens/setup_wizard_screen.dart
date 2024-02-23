@@ -1,6 +1,7 @@
 
 import 'package:aurora/shared/utility/init_aurora.dart';
 import 'package:aurora/shared/presentation/shared_presentation.dart';
+import 'package:aurora/user_interface/preferences/presentation/screens/preferences.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/setup_widgets.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/widgets/ar_kernel_compatible_dialog.dart';
 import 'package:aurora/user_interface/setup/presentation/screens/widgets/revoke_faustus.dart';
@@ -16,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SetupWizardScreen extends StatefulWidget with GlobalMixin {
-  const SetupWizardScreen({Key? key}) : super(key: key);
+  const SetupWizardScreen({super.key});
 
   @override
   State<SetupWizardScreen> createState() => _SetupWizardScreenState();
@@ -74,6 +75,10 @@ class _SetupWizardScreenState extends State<SetupWizardScreen> {
 
                         if(state is SetupConnectedState ) {
                           return const Text("checking for updates...");
+                        }
+
+                        if(state is SetupPreferenceIncompleteState){
+                          return const Preferences();
                         }
 
                         if(state is SetupAskNetworkAccessState ) {

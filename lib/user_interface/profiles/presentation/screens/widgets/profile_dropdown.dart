@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ProfileDropdown extends StatelessWidget {
-  ProfileDropdown({Key? key}) : super(key: key);
+  ProfileDropdown({super.key});
 
   final TextEditingController textEditingController = TextEditingController();
 

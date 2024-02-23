@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class TerminalScreen extends StatefulWidget {
-  const TerminalScreen({Key? key}) : super(key: key);
+  const TerminalScreen({super.key});
 
   @override
   State<TerminalScreen> createState() => _TerminalScreenState();

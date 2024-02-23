@@ -6,6 +6,10 @@ class SetupInitState extends SetupState{
   SetupInitState();
 }
 
+class SetupPreferenceIncompleteState extends SetupState{
+  SetupPreferenceIncompleteState();
+}
+
 class SetupConnectedState extends SetupState{
   SetupConnectedState();
 }

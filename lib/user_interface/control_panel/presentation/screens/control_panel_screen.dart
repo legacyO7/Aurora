@@ -5,12 +5,13 @@ import 'package:aurora/user_interface/profiles/presentation/screens/profile_pane
 import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_configuration.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';
 
 
 class ControlPanelScreen extends StatefulWidget {
-  const ControlPanelScreen({Key? key}) : super(key: key);
+  const ControlPanelScreen({super.key});
 
   @override
   State<ControlPanelScreen> createState() => _ControlPanelState();
@@ -19,6 +20,7 @@ class ControlPanelScreen extends StatefulWidget {
 class _ControlPanelState extends State<ControlPanelScreen> with GlobalMixin{
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalConfig _globalConfig=Constants.globalConfig;
 
   void _openEndDrawer() {
     _scaffoldKey.currentState?.openEndDrawer();
@@ -55,11 +57,11 @@ class _ControlPanelState extends State<ControlPanelScreen> with GlobalMixin{
                 ],
               ),
 
-              if(Constants.globalConfig.arMode!=ArModeEnum.mainlineWithoutBatteryManager)
+              if(_globalConfig.arMode!=ArModeEnum.mainlineWithoutBatteryManager && _globalConfig.isBatteryManagerEnabled )
                const Expanded(
                 child:BatteryManagerScreen()
               ),
-              if(Constants.globalConfig.arMode!=ArModeEnum.batteryManager)
+              if(_globalConfig.arMode!=ArModeEnum.batteryManager && _globalConfig.isBacklightControllerEnabled)
                Expanded(
                   flex: super.isMainLine()?3:2,
                   child: const KeyboardSettingsScreen())

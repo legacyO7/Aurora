@@ -36,15 +36,23 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
   final GlobalConfig _globalConfig=Constants.globalConfig;
 
   _initSetup(emit) async {
-    _globalConfig.setInstance(isFaustusEnforced: await _setupRepo.isFaustusEnforced());
+    _globalConfig.setInstance(
+      isFaustusEnforced: await _setupRepo.isFaustusEnforced(),
+      isBatteryManagerEnabled: _isarDelegate.getBatteryManagerAvailability(),
+      isBacklightControllerEnabled: _isarDelegate.getBacklightControllerAvailability()
+    );
     await getVersion();
     await _setupRepo.initSetup();
 
-    if( _isarDelegate.getVersionFromDB() !=_globalConfig.arVersion && await _setupRepo.checkInternetAccess()){
-      emit(SetupWhatsNewState(await _fetchChangelog()));
-      await _isarDelegate.saveVersion(_globalConfig.arVersion!);
+    if(!_globalConfig.isBacklightControllerEnabled&&!_globalConfig.isBatteryManagerEnabled){
+      emit(SetupPreferenceIncompleteState());
     }else {
-      await _checkForUpdates(emit);
+      if (_isarDelegate.getVersionFromDB() != _globalConfig.arVersion && await _setupRepo.checkInternetAccess()) {
+        emit(SetupWhatsNewState(await _fetchChangelog()));
+        await _isarDelegate.saveVersion(_globalConfig.arVersion!);
+      } else {
+        await _checkForUpdates(emit);
+      }
     }
   }
 

@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ProfilePanel extends StatefulWidget {
-  const ProfilePanel({Key? key}) : super(key: key);
+  const ProfilePanel({super.key});
 
   @override
   State<ProfilePanel> createState() => _ProfilePanelState();

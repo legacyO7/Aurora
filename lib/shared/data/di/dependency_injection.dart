@@ -16,6 +16,7 @@ class DependencyInjection{
     sl.registerLazySingleton(() => ProfilesBloc(sl()));
     sl.registerLazySingleton(() => ArButtonCubit());
     sl.registerLazySingleton(() => ArColorCubit());
+    sl.registerLazySingleton(() => PreferencesBloc(sl(), sl()));
 
     sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
     sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl(),sl(), sl(),sl()));

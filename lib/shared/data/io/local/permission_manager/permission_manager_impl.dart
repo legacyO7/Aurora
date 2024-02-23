@@ -19,6 +19,9 @@ class PermissionManagerImpl implements PermissionManager{
 
   final List<String> _checkInstalledPackages=['dkms', 'openssl','mokutil','git','make','cmake'];
 
+  final GlobalConfig _globalConfig=Constants.globalConfig;
+
+
   List<String> _deniedList=[];
   List<String> missingPackages=[];
 
@@ -34,12 +37,14 @@ class PermissionManagerImpl implements PermissionManager{
       commands.add("chmod -R o+rwx ${_deniedList.join(' ')}");
     }
 
-    if(await _ioManager.checkIfExists(filePath: Constants.kServicePath+Constants.kServiceName, fileType: FileSystemEntityType.file)){
-      commands.add("systemctl disable ${Constants.kServiceName}");
-    }else{
-      await _serviceManager.createService();
+    if(_globalConfig.isBatteryManagerEnabled) {
+      if (await _ioManager.checkIfExists(filePath: Constants.kServicePath + Constants.kServiceName, fileType: FileSystemEntityType.file)) {
+        commands.add("systemctl disable ${Constants.kServiceName}");
+      } else {
+        await _serviceManager.createService();
+      }
+      commands.add("systemctl enable ${Constants.kServiceName}");
     }
-    commands.add("systemctl enable ${Constants.kServiceName}");
 
     var statusCode= await runWithPrivileges(commands);
 
@@ -74,37 +79,37 @@ class PermissionManagerImpl implements PermissionManager{
   @override
   Future<bool> validatePaths() async{
 
-    GlobalConfig globalConfig=Constants.globalConfig;
-
     List<String> pathList=[];
 
     if(_checkIfOldServiceExists()){
       pathList.add(Constants.kOldServicePath+Constants.kServiceName);
     }
 
-    if(globalConfig.arMode.name.contains(ArModeEnum.mainline.name)){
-      pathList.addAll([
-        Constants.kMainlineModuleStatePath,
-        Constants.kMainlineModuleModePath,
-        Constants.kMainlineBrightnessPath
-      ]);
+    if(_globalConfig.kThresholdPath!=null && _globalConfig.isBatteryManagerEnabled){
+      pathList.add(_globalConfig.kThresholdPath!);
     }
 
-    if(globalConfig.kThresholdPath!=null){
-      pathList.add(globalConfig.kThresholdPath!);
-    }
-    
-    if (globalConfig.arMode==ArModeEnum.faustus) {
-      pathList.addAll([
-        Constants.kFaustusModuleBrightnessPath,
-        Constants.kFaustusModuleRedPath,
-        Constants.kFaustusModuleGreenPath,
-        Constants.kFaustusModuleBluePath,
-        Constants.kFaustusModuleSpeedPath,
-        Constants.kFaustusModuleModePath,
-        Constants.kFaustusModuleFlagsPath,
-        Constants.kFaustusModuleSetPath
-      ]);
+    if(_globalConfig.isBacklightControllerEnabled) {
+      if (_globalConfig.arMode.name.contains(ArModeEnum.mainline.name)) {
+        pathList.addAll([
+          Constants.kMainlineModuleStatePath,
+          Constants.kMainlineModuleModePath,
+          Constants.kMainlineBrightnessPath
+        ]);
+      }
+
+      if (_globalConfig.arMode == ArModeEnum.faustus) {
+        pathList.addAll([
+          Constants.kFaustusModuleBrightnessPath,
+          Constants.kFaustusModuleRedPath,
+          Constants.kFaustusModuleGreenPath,
+          Constants.kFaustusModuleBluePath,
+          Constants.kFaustusModuleSpeedPath,
+          Constants.kFaustusModuleModePath,
+          Constants.kFaustusModuleFlagsPath,
+          Constants.kFaustusModuleSetPath
+        ]);
+      }
     }
 
     if(await File("${Constants.globalConfig.kTmpPath}/ar.log").exists()){
