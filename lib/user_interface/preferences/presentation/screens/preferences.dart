@@ -1,4 +1,5 @@
 import 'package:aurora/user_interface/preferences/presentation/state/preferences_bloc.dart';
+import 'package:aurora/user_interface/terminal/presentation/screens/terminal_screen.dart';
 import 'package:aurora/utility/ar_widgets/ar_button.dart';
 import 'package:aurora/utility/ar_widgets/ar_checkbox.dart';
 import 'package:flutter/material.dart';
@@ -46,12 +47,14 @@ class _PreferencesState extends State<Preferences> {
                 ],
               ),
 
-              ArButton(
-                  title: "Save Preference",
-                  animate: false,
-                  action: () {
-                context.read<PreferencesBloc>().add(PreferencesSaveEvent());
-              })
+              state.isLoading?
+                  const Expanded(child: TerminalScreen()):
+                  ArButton(
+                      title: "Save Preference",
+                      animate: false,
+                      action: () {
+                    context.read<PreferencesBloc>().add(PreferencesSaveEvent());
+                  })
 
             ],
           ),
