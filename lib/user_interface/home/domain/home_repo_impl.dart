@@ -55,7 +55,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
   }
 
   Future<bool> _checkAccess() async{
-    return await _permissionManager.validatePaths() && await super.arServiceEnabled();
+    return await _permissionManager.validatePaths() &&( await super.arServiceEnabled() || !Constants.globalConfig.isBatteryManagerEnabled);
   }
 
   @override

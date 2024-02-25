@@ -16,11 +16,13 @@ class DependencyInjection{
     sl.registerLazySingleton(() => ProfilesBloc(sl()));
     sl.registerLazySingleton(() => ArButtonCubit());
     sl.registerLazySingleton(() => ArColorCubit());
+    sl.registerLazySingleton(() => PreferencesBloc(sl(), sl()));
 
     sl.registerLazySingleton<TerminalRepo>(() => TerminalRepoImpl(sl()));
     sl.registerLazySingleton<HomeRepo>(() => HomeRepoImpl(sl(), sl(), sl(),sl(), sl(),sl()));
     sl.registerLazySingleton<SetupRepo>(() => SetupRepoImpl(sl(), sl(), sl(),sl(), sl()));
-    sl.registerLazySingleton<KeyboardSettingsRepo>(() => KeyboardSettingsFaustusRepoImpl(sl()));
+    sl.registerLazySingleton<KeyboardSettingsFaustusRepoImpl>(() => KeyboardSettingsFaustusRepoImpl(sl()));
+    sl.registerLazySingleton<KeyboardSettingsMainlineRepoImpl>(() => KeyboardSettingsMainlineRepoImpl(sl()));
     sl.registerLazySingleton<BatteryManagerRepo>(() => BatteryManagerRepoImpl(sl(), sl(),sl(),sl()));
     sl.registerLazySingleton<DisableSettingsRepo>(() => DisableSettingsRepoImpl(sl(), sl(),sl(),sl()));
     sl.registerLazySingleton<SetupSource>(() => SetupSourceImpl(sl()));

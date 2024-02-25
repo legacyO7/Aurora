@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BatteryManagerScreen extends StatefulWidget {
-  const BatteryManagerScreen({Key? key}) : super(key: key);
+  const BatteryManagerScreen({super.key});
 
   @override
   State<BatteryManagerScreen> createState() => _BatteryManagerScreenState();

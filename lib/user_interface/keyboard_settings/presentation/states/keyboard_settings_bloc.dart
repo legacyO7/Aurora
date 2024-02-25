@@ -7,6 +7,7 @@ import 'package:aurora/user_interface/keyboard_settings/domain/repositories/keyb
 import 'package:aurora/user_interface/keyboard_settings/entity/keyboard_settings_entity.dart';
 import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_event.dart';
 import 'package:aurora/utility/ar_widgets/ar_colors.dart';
+import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'keyboard_settings_state.dart';
@@ -36,10 +37,12 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
   _initPanel(emit) async{
       arProfileModel=await _isarDelegate.getArProfile();
       arMode= ArMode.copyModel(arProfileModel.arMode);
-      await _setBrightness(arProfileModel.brightness, emit);
-      await _setModeParams(arMode: arMode, emit);
-      if(super.isMainLine()){
-        await _setStateParams(arState: (arProfileModel.arState).negateValue(), emit );
+      if(Constants.globalConfig.isBacklightControllerEnabled) {
+        await _setBrightness(arProfileModel.brightness, emit);
+        await _setModeParams(arMode: arMode, emit);
+        if (super.isMainLine()) {
+          await _setStateParams(arState: (arProfileModel.arState).negateValue(), emit);
+        }
       }
   }
 

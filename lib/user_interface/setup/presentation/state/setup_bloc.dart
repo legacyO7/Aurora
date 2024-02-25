@@ -36,15 +36,23 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
   final GlobalConfig _globalConfig=Constants.globalConfig;
 
   _initSetup(emit) async {
-    _globalConfig.setInstance(isFaustusEnforced: await _setupRepo.isFaustusEnforced());
+    _globalConfig.setInstance(
+      isFaustusEnforced: await _setupRepo.isFaustusEnforced(),
+      isBatteryManagerEnabled: _isarDelegate.getBatteryManagerAvailability(),
+      isBacklightControllerEnabled: _isarDelegate.getBacklightControllerAvailability()
+    );
     await getVersion();
     await _setupRepo.initSetup();
 
-    if( _isarDelegate.getVersionFromDB() !=_globalConfig.arVersion && await _setupRepo.checkInternetAccess()){
-      emit(SetupWhatsNewState(await _fetchChangelog()));
-      await _isarDelegate.saveVersion(_globalConfig.arVersion!);
+    if(!_globalConfig.isBacklightControllerEnabled&&!_globalConfig.isBatteryManagerEnabled){
+      emit(SetupPreferenceIncompleteState());
     }else {
-      await _checkForUpdates(emit);
+      if (_isarDelegate.getVersionFromDB() != _globalConfig.arVersion && await _setupRepo.checkInternetAccess()) {
+        emit(SetupWhatsNewState(await _fetchChangelog()));
+        await _isarDelegate.saveVersion(_globalConfig.arVersion!);
+      } else {
+        await _checkForUpdates(emit);
+      }
     }
   }
 
@@ -86,7 +94,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
 
         default:
           if(isConnected) {
-            emit(SetupPermissionState());
+            _emitCompatibility(emit);
           } else {
             emit(SetupAskNetworkAccessState());
           }
@@ -125,7 +133,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
       if(await _setupRepo.checkFaustusFolder()) {
         emit(SetupCompatibleState());
       }else{
-        emit(SetupPermissionState());
+        _emitCompatibility(emit);
       }
     }
   }
@@ -163,7 +171,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
         _emitInstallFaustus(emit);
       }
     } else {
-      emit(SetupPermissionState());
+      _emitCompatibility(emit);
     }
   }
 
@@ -190,6 +198,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
             _emitInstallFaustusTerminal(emit, stepValue: 0);
           }
           await _setupRepo.installPackages();
+          isSuccess=await _setupRepo.compatibilityChecker()!=1;
         }
       } else {
           _emitInstallFaustusTerminal(emit,stepValue: 2);
@@ -211,7 +220,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
 
   _processOutput(emit,{required SetupState state, required bool isSuccess}) async {
     if (state is SetupIncompatibleState) {
-      if (isSuccess && state.stepValue == 0 && await _setupRepo.compatibilityChecker()!=1) {
+      if (isSuccess && state.stepValue == 0) {
        _emitInstallFaustus(emit);
       } else if (isSuccess && state.stepValue == 2) {
         emit(SetupCompatibleState());
@@ -242,6 +251,14 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
 
   void _launchUrl(String? url){
     UrlLauncher.launchArUrl(subPath: url);
+  }
+
+  void _emitCompatibility(emit){
+    if(_globalConfig.isBacklightControllerEnabled) {
+      emit(SetupPermissionState());
+    }else{
+      emit(SetupCompatibleState());
+    }
   }
 
   _emitInstallPackage(emit)  => emit(SetupIncompatibleState(stepValue: 0, child: packageInstaller(packagesToInstall:  _setupRepo.missingPackagesList), isValid: true));

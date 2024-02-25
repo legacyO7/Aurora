@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoggerButton extends StatelessWidget {
-  const LoggerButton({Key? key}) : super(key: key);
+  const LoggerButton({super.key});
 
   @override
   Widget build(BuildContext context) {

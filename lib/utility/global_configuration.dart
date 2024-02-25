@@ -1,6 +1,4 @@
 
-
-
 import 'ar_widgets/ar_enums.dart';
 
 class GlobalConfig {
@@ -28,6 +26,8 @@ class GlobalConfig {
    //flags
    bool isLoggingEnabled;
    bool isFaustusEnforced;
+   bool isBatteryManagerEnabled;
+   bool isBacklightControllerEnabled;
 
 
    GlobalConfig({
@@ -43,7 +43,9 @@ class GlobalConfig {
     this.deviceName='',
     this.kThresholdPath,
     this.isLoggingEnabled=false,
-    this.isFaustusEnforced =false
+    this.isFaustusEnforced =false,
+    this.isBatteryManagerEnabled=false,
+    this.isBacklightControllerEnabled=false
   });
 
   setInstance({
@@ -61,7 +63,9 @@ class GlobalConfig {
     deviceName,
     kThresholdPath,
     isLoggingEnabled,
-    isFaustusEnforced
+    isFaustusEnforced,
+    isBatteryManagerEnabled,
+    isBacklightControllerEnabled
   }){
 
     this.arChannel= arChannel??this.arChannel;
@@ -77,6 +81,8 @@ class GlobalConfig {
     this.kThresholdPath=kThresholdPath??this.kThresholdPath;
     this.isLoggingEnabled=isLoggingEnabled??this.isLoggingEnabled;
     this.isFaustusEnforced=isFaustusEnforced??this.isFaustusEnforced;
+    this.isBatteryManagerEnabled=isBatteryManagerEnabled??this.isBatteryManagerEnabled;
+    this.isBacklightControllerEnabled=isBacklightControllerEnabled??this.isBacklightControllerEnabled;
   }
 
   

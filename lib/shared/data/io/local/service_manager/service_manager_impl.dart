@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/shared/data/shared_data.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/constants.dart';
 
 
@@ -54,7 +55,13 @@ WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target s
 
   @override
   Future deleteService() async{
-   await serviceFile.delete();
+    if(await serviceFile.exists()) {
+      try {
+        await serviceFile.delete();
+      }catch(e){
+        ArLogger.log(data: e);
+      }
+    }
   }
 
 }

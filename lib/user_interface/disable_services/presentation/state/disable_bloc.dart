@@ -9,9 +9,6 @@ import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'disable_state.dart';
 import 'disabler_event.dart';
 
-
-
-
 class DisableSettingsBloc extends TerminalBaseBloc<DisableEvent,DisableSettingsState> {
   DisableSettingsBloc(this._disablerRepo) : super(const DisableSettingsState.init()){
     on<DisableEventInit>((_, emit) => emit(const DisableSettingsState.init()));

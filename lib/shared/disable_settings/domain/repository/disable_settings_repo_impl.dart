@@ -45,6 +45,12 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin {
       'sudo rm -rf /usr/local/lib/Aurora',
       'sudo rm -f /usr/share/applications/aurora.desktop'
     ];
+    
+    List<String> disableThreshold=[
+      "systemctl disable ${Constants.kServiceName}",
+      "sudo rm -f ${Constants.kServicePath}/${Constants.kServiceName}"
+      "sudo echo 100 > ${Constants.globalConfig.kThresholdPath}"
+    ];
 
 
       switch(disable) {
@@ -59,12 +65,12 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin {
         case DisableEnum.all:
             disableCommands.addAll([
               ...disableFaustusCommandList,
-              "systemctl disable ${Constants.kServiceName}"
+              ...disableThreshold
             ]);
             break;
 
         case DisableEnum.threshold:
-            disableCommands.add("systemctl disable ${Constants.kServiceName}");
+            disableCommands.addAll(disableThreshold);
             break;
 
         case DisableEnum.uninstall:
