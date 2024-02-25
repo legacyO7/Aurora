@@ -198,6 +198,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
             _emitInstallFaustusTerminal(emit, stepValue: 0);
           }
           await _setupRepo.installPackages();
+          isSuccess=await _setupRepo.compatibilityChecker()!=1;
         }
       } else {
           _emitInstallFaustusTerminal(emit,stepValue: 2);
@@ -219,7 +220,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
 
   _processOutput(emit,{required SetupState state, required bool isSuccess}) async {
     if (state is SetupIncompatibleState) {
-      if (isSuccess && state.stepValue == 0 && await _setupRepo.compatibilityChecker()!=1) {
+      if (isSuccess && state.stepValue == 0) {
        _emitInstallFaustus(emit);
       } else if (isSuccess && state.stepValue == 2) {
         emit(SetupCompatibleState());

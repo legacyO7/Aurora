@@ -125,6 +125,7 @@ class PermissionManagerImpl implements PermissionManager{
 
   @override
   Future<List<String>> listPackagesToInstall() async{
+    missingPackages=[];
     for(var package in _checkInstalledPackages) {
       if((await _terminalDelegate.getOutput("command -v $package")).isEmpty){
         missingPackages.add(package);
