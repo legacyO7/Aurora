@@ -1,6 +1,6 @@
 Changelogs:
 
-- Introducing Profiles! Aurora now has the option to set and choose between profiles
-- Set different profiles with charging threshold, backlight brightness, color, state and modes
-- Migrated to Isar database for profile handling
-- Minor bugfixes and UI improvements
+- Introducing Preferences! Users now have the flexibility to utilize the application for both setting battery thresholds and controlling backlight, or opt for either functionality independently. Able to change preference from Settings >  Edit Preferences
+- Removed the necessity of running service daemon when the application is solely used for backlight control.
+- Updated dependencies
+- Bugfixes and improvements
