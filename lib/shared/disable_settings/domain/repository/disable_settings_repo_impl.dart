@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/shared/data/shared_data.dart';
 import 'package:aurora/shared/disable_settings/shared_disable_services.dart';
@@ -47,8 +49,12 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin {
     ];
     
     List<String> disableThreshold=[
+     if(await _ioManager.checkIfExists(filePath: "${Constants.kServicePath}/${Constants.kServiceName}", fileType: FileSystemEntityType.file))
+       ...[
       "systemctl disable ${Constants.kServiceName}",
       "sudo rm -f ${Constants.kServicePath}/${Constants.kServiceName}"
+       ],
+      if(Constants.globalConfig.kThresholdPath?.isNotEmpty==true)
       "sudo echo 100 > ${Constants.globalConfig.kThresholdPath}"
     ];
 
@@ -107,10 +113,12 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin {
   
 
   Future _disableBatteryManager() async{
-    await _ioManager.writeToFile(
-        filePath: Constants.globalConfig.kThresholdPath!,
-        content: '100'
-    );
+    if(await _permissionManager.hasPermission(Constants.globalConfig.kThresholdPath!)) {
+      await _ioManager.writeToFile(
+          filePath: Constants.globalConfig.kThresholdPath!,
+          content: '100'
+      );
+    }
     await _serviceManager.deleteService();
   }
 

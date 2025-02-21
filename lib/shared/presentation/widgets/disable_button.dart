@@ -1,6 +1,7 @@
 import 'package:aurora/shared/utility/init_aurora.dart';
 import 'package:aurora/user_interface/disable_services/disable_services.dart';
 import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
+import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,30 +28,34 @@ class _DisableButtonState extends State<DisableButton> {
     return BlocProvider.value(value: sl<DisableSettingsBloc>(),
       child: BlocBuilder<DisableSettingsBloc, DisableSettingsState>(
           builder: (BuildContext context, state) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-
+            List<Widget> disableSettingsItems=[
+              if(Constants.globalConfig.isBatteryManagerEnabled)
                 ArCheckbox(
                     text: "Disable charging threshold",
                     isSelected: state.disableThreshold,
                     onChange: (_) => _bloc.add(DisableEventCheckDisableServices(disableThreshold: !state.disableThreshold))
                 ),
 
-                if(!widget.isMainLine() && !widget.isFallbackedWorkingDirectory())
-                  ArCheckbox(
-                      text: "Disable faustus module",
-                      isSelected: state.disableFaustusModule,
-                      onChange: (_) =>
-                          _bloc.add(DisableEventCheckDisableServices(disableFaustusModule: !state.disableFaustusModule))
-                  ),
-                if(widget.isInstalledPackage() && !widget.isFallbackedWorkingDirectory())
-                  ArCheckbox(
-                      text: "Uninstall Aurora",
-                      isSelected: state.uninstallAurora,
-                      onChange: (_) =>
-                          _bloc.add(DisableEventCheckDisableServices(uninstallAurora: !state.uninstallAurora))
-                  ),
+              if(!widget.isMainLine() && !widget.isFallbackedWorkingDirectory())
+                ArCheckbox(
+                    text: "Disable faustus module",
+                    isSelected: state.disableFaustusModule,
+                    onChange: (_) =>
+                        _bloc.add(DisableEventCheckDisableServices(disableFaustusModule: !state.disableFaustusModule))
+                ),
+              if(widget.isInstalledPackage() && !widget.isFallbackedWorkingDirectory())
+                ArCheckbox(
+                    text: "Uninstall Aurora",
+                    isSelected: state.uninstallAurora,
+                    onChange: (_) =>
+                        _bloc.add(DisableEventCheckDisableServices(uninstallAurora: !state.uninstallAurora))
+                )
+            ];
+
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: disableSettingsItems.isNotEmpty?disableSettingsItems:[
+                Text("Nothing to disable!")
               ],
             );
           }),
@@ -65,8 +70,10 @@ class _DisableButtonState extends State<DisableButton> {
             title: "Disable Services",
             subject: "Select the services to be disabled",
             optionalWidget: _selectorWindow(),
+            context: context,
             onConfirm: () {
               _bloc.add(DisableEventSubmitDisableServices());
+              Navigator.pop(context);
             },
             onCancel: () {
               Navigator.pop(context);

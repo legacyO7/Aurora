@@ -16,9 +16,10 @@ class ServiceManagerImpl implements ServiceManager {
   final IOManager _ioManager;
 
   @override
-  Future createService() async {
-    await serviceFile.create();
-    await _ioManager.writeToFile(filePath: serviceFile, content: """
+  Future createService({String? serviceFilePath}) async {
+    File servFile=serviceFilePath==null?serviceFile:File(serviceFilePath);
+    await servFile.create();
+    await _ioManager.writeToFile(filePath: servFile, content: """
 [Unit]
 Description=To set charging threshold
 After=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target

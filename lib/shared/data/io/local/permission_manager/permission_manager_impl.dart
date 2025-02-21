@@ -41,7 +41,13 @@ class PermissionManagerImpl implements PermissionManager{
       if (await _ioManager.checkIfExists(filePath: Constants.kServicePath + Constants.kServiceName, fileType: FileSystemEntityType.file)) {
         commands.add("systemctl disable ${Constants.kServiceName}");
       } else {
-        await _serviceManager.createService();
+        if(await hasPermission(Constants.kServicePath)) {
+          await _serviceManager.createService();
+        }else{
+          await _serviceManager.createService(serviceFilePath: '${Constants.globalConfig.kWorkingDirectory!}/${Constants.kServiceName}');
+          commands.add("mv ${'${Constants.globalConfig.kWorkingDirectory!}/${Constants.kServiceName}'} ${Constants.kServicePath + Constants.kServiceName}");
+          commands.add("command -v restorecon &>/dev/null && restorecon -v ${Constants.kServicePath + Constants.kServiceName}");
+        }
       }
       commands.add("systemctl enable ${Constants.kServiceName}");
     }
@@ -61,11 +67,21 @@ class PermissionManagerImpl implements PermissionManager{
     }
   }
 
+  @override
+  Future<bool> hasPermission(String path) async{
+    return (await getPermission(path)).endsWith('rwx');
+  }
+  
+  @override
+  Future<String> getPermission(String path) async{
+    return (await _ioManager.getFileStat(path));
+  }
+
   Future<bool> checkPermissions({List<String> paths=const []}) async {
     _deniedList=[];
     if(paths.isNotEmpty) {
       for (var file in paths) {
-        if (!(await _ioManager.getFileStat(file)).endsWith('rwx')) {
+        if (!await hasPermission(file)) {
           _deniedList.add(file);
         }
       }
@@ -86,6 +102,7 @@ class PermissionManagerImpl implements PermissionManager{
     }
 
     if(_globalConfig.kThresholdPath!=null && _globalConfig.isBatteryManagerEnabled){
+      pathList.add(Constants.kServicePath+Constants.kServiceName);
       pathList.add(_globalConfig.kThresholdPath!);
     }
 
