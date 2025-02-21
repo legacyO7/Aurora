@@ -1,6 +1,7 @@
 Changelogs:
 
-- Introducing Preferences! Users now have the flexibility to utilize the application for both setting battery thresholds and controlling backlight, or opt for either functionality independently. Able to change preference from Settings >  Edit Preferences
-- Removed the necessity of running service daemon when the application is solely used for backlight control.
-- Updated dependencies
-- Bugfixes and improvements
+- dusted off the code, and have been cranking away at some long-overdue improvements
+- cleaned up redundant permissions and services
+- decoupled keyboard settings from battery management. aurora will no longer enforce the use battery manager and can now operate independently as a dedicated keyboard manager
+- bugfixes and improvements
+- updated dependencies
