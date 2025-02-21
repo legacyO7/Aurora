@@ -66,8 +66,6 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
     UrlLauncher.launchArUrl(subPath: subPath);
   }
 
-  void setAppHeight()=>_homeRepo.setAppHeight();
-
   List<String> get deniedList=>_permissionManager.deniedList;
 
 }

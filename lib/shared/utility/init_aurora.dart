@@ -52,7 +52,7 @@ class InitAurora with GlobalMixin {
 
   Future setWindow() async{
 
-    Size initialSize = const Size(1000,600);
+    Size initialSize = const Size(1000,700);
     await windowManager.ensureInitialized();
 
     WindowOptions windowOptions = WindowOptions(

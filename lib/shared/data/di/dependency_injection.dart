@@ -7,7 +7,7 @@ class DependencyInjection{
     sl.allowReassignment = true;
 
     sl.registerLazySingleton(() => HomeBloc(sl(), sl()));
-    sl.registerLazySingleton(() => DisableSettingsBloc(sl()));
+    sl.registerLazySingleton(() => DisableSettingsBloc(sl(), sl()));
     sl.registerLazySingleton(() => TerminalBloc());
     sl.registerLazySingleton(() => KeyboardSettingsBloc(sl()));
     sl.registerLazySingleton(() => BatteryManagerBloc(sl()));
