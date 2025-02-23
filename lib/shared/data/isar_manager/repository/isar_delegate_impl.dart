@@ -44,6 +44,17 @@ class IsarDelegateImpl with GlobalMixin implements IsarDelegate{
     return  _isarManager.arSettingsModel.enforceFaustus;
   }
 
+
+  @override
+  bool getBatteryManagerAvailability(){
+    return _isarManager.arSettingsModel.isBatteryManagerEnabled;
+  }
+
+  @override
+  bool getBacklightControllerAvailability(){
+    return _isarManager.arSettingsModel.isBacklightControllerAvailableEnabled;
+  }
+
   @override
   int getThreshold(){
     return _isarManager.arProfileModel.threshold;
@@ -58,6 +69,18 @@ class IsarDelegateImpl with GlobalMixin implements IsarDelegate{
   @override
   Future saveTheme(ThemeMode themeMode) async{
     _isarManager.arSettingsModel.arTheme=themeMode.name;
+    await _isarManager.writeArSettingsIsar();
+  }
+
+  @override
+  Future saveBatteryAvailability(bool value) async{
+    _isarManager.arSettingsModel.isBatteryManagerEnabled=value;
+    await _isarManager.writeArSettingsIsar();
+  }
+
+  @override
+  Future saveBacklightAvailability(bool value) async{
+    _isarManager.arSettingsModel.isBacklightControllerAvailableEnabled=value;
     await _isarManager.writeArSettingsIsar();
   }
 
@@ -79,7 +102,7 @@ class IsarDelegateImpl with GlobalMixin implements IsarDelegate{
 
   @override
   Future setArMode({ required ArMode arMode}) async {
-      await _writeProfile(() {
+    await _writeProfile(() {
       _arProfileModel.arMode=ArMode.copyModel(arMode);
     });
   }
@@ -99,18 +122,18 @@ class IsarDelegateImpl with GlobalMixin implements IsarDelegate{
   Future deleteDatabase() async{
     await _isarManager.deleteDatabase();
   }
-  
+
   @override
   Future<ArProfileModel?> readFromProfileName(String profileName) async{
     await _isarManager.readAllArProfileIsar();
-     List<ArProfileModel> profiles= _isarManager.allProfiles.where((element){
-       return element.profileName.trim()==profileName.trim();}).toList();
-     if(profiles.isNotEmpty){
+    List<ArProfileModel> profiles= _isarManager.allProfiles.where((element){
+      return element.profileName.trim()==profileName.trim();}).toList();
+    if(profiles.isNotEmpty){
       return await _isarManager.readArProfileIsar(id: profiles.first.id);
-     }else{
-       stdout.writeln("no such profiles found");
-     }
-     return null;
+    }else{
+      stdout.writeln("no such profiles found");
+    }
+    return null;
   }
 
   Future _writeProfile(Function updateModel) async{
@@ -133,16 +156,13 @@ class IsarDelegateImpl with GlobalMixin implements IsarDelegate{
         _isarManager.arProfileModel = _arProfileModel;
         await _isarManager.writeArProfileIsar();
       }else{
-       _arProfileModel= (await _isarManager.readArProfileIsar(id: profileMatchList.first.id))!;
+        _arProfileModel= (await _isarManager.readArProfileIsar(id: profileMatchList.first.id))!;
       }
-      
+
       sl<ProfilesBloc>().add(ProfilesReloadEvent(_arProfileModel));
 
     }else{
       stdout.writeln("avoiding unnecessary writes");
     }
   }
-
-
-
 }

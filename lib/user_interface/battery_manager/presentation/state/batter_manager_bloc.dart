@@ -19,8 +19,10 @@ class BatteryManagerBloc extends TerminalBaseBloc<BatteryManagerEvent,BatteryMan
   int _batteryLevel=Constants.kMinimumChargeLevel;
 
   Future _initThreshold(emit) async {
-    await _batteryManagerRepo.initBatteryManager();
-    await _getThreshold(emit);
+    if(Constants.globalConfig.isBatteryManagerEnabled) {
+      await _batteryManagerRepo.initBatteryManager();
+      await _getThreshold(emit);
+    }
   }
   
   Future _getThreshold(emit) async {

@@ -15,7 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class TerminalBaseBloc<Event,State> extends Bloc<Event,State> with GlobalMixin{
 
-  TerminalBaseBloc(State initialState) : super(initialState);
+  TerminalBaseBloc(super.initialState);
 
   final TerminalRepo _terminalRepo = sl<TerminalRepo>();
   final ArButtonCubit _arButtonCubit = sl<ArButtonCubit>();

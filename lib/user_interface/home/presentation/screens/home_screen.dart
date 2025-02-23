@@ -11,7 +11,7 @@ import '../state/home_bloc.dart';
 import '../state/home_state.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _MyHomePageState();
@@ -21,9 +21,7 @@ class _MyHomePageState extends State<HomeScreen> {
 
   @override
   void initState() {
-    context.read<HomeBloc>()
-      ..add(HomeEventInit())
-      ..setAppHeight();
+    context.read<HomeBloc>().add(HomeEventInit());
     super.initState();
   }
 

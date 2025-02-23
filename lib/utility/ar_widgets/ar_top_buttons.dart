@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 class ArWindowButtons extends StatelessWidget {
   const ArWindowButtons({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

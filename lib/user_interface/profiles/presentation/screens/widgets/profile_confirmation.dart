@@ -4,16 +4,17 @@ import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:aurora/utility/ar_widgets/ar_dialog.dart';
 import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
+import 'package:aurora/utility/global_configuration.dart';
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ProfileConfirmation extends StatefulWidget {
-  const ProfileConfirmation({Key? key,
+  const ProfileConfirmation({super.key,
     required this.currentProfile,
     required this.allProfileNames
-  }) : super(key: key);
+  });
 
   final ArProfileModel currentProfile;
   final List<String> allProfileNames;
@@ -24,6 +25,8 @@ class ProfileConfirmation extends StatefulWidget {
 
 class _ProfileConfirmationState extends State<ProfileConfirmation> with GlobalMixin{
   late TextEditingController profileNameController;
+  final GlobalConfig _globalConfig=Constants.globalConfig;
+
 
   @override
   void initState() {
@@ -121,12 +124,17 @@ class _ProfileConfirmationState extends State<ProfileConfirmation> with GlobalMi
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              if(_globalConfig.isBatteryManagerEnabled)
               listItem(title: 'Threshold', text: '${widget.currentProfile.threshold}'),
-              listItem(title: 'Brightness', text: Constants.brightnessTitle[widget.currentProfile.brightness]),
-              listItem(title: 'Mode', text: Constants.modeTitle[widget.currentProfile.arMode.mode!]),
-              listItem(title: 'Speed', text: Constants.speedTitle[widget.currentProfile.arMode.speed!]),
-              if(super.isMainLine())
-              listItem(title: 'State', text: getStateValues()),
+              if(_globalConfig.isBacklightControllerEnabled)
+                Column(children: [
+                  listItem(title: 'Brightness', text: Constants.brightnessTitle[widget.currentProfile.brightness]),
+                  listItem(title: 'Mode', text: Constants.modeTitle[widget.currentProfile.arMode.mode!]),
+                  listItem(title: 'Speed', text: Constants.speedTitle[widget.currentProfile.arMode.speed!]),
+                  if(super.isMainLine())
+                    listItem(title: 'State', text: getStateValues()),
+                ],),
+              const SizedBox.shrink()
             ],
           ),
         ),

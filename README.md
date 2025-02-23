@@ -74,7 +74,7 @@ Appimage builds doesnt support ``--with-root`` argument
 - Enable linux desktop
   `flutter config --enable-linux-desktop`
 - Run code generator
-  `dart run build_runner build`
+  `dart run build_runner build --delete-conflicting-outputs  `
 - Run the project
   `flutter run`
 - Build the project

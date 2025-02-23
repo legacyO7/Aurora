@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/shared/data/shared_data.dart';
+import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/constants.dart';
 
 
@@ -15,9 +16,10 @@ class ServiceManagerImpl implements ServiceManager {
   final IOManager _ioManager;
 
   @override
-  Future createService() async {
-    await serviceFile.create();
-    await _ioManager.writeToFile(filePath: serviceFile, content: """
+  Future createService({String? serviceFilePath}) async {
+    File servFile=serviceFilePath==null?serviceFile:File(serviceFilePath);
+    await servFile.create();
+    await _ioManager.writeToFile(filePath: servFile, content: """
 [Unit]
 Description=To set charging threshold
 After=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
@@ -54,7 +56,13 @@ WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target s
 
   @override
   Future deleteService() async{
-   await serviceFile.delete();
+    if(await serviceFile.exists()) {
+      try {
+        await serviceFile.delete();
+      }catch(e){
+        ArLogger.log(data: e);
+      }
+    }
   }
 
 }

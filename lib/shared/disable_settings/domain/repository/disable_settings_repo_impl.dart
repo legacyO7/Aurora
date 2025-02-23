@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/shared/data/shared_data.dart';
 import 'package:aurora/shared/disable_settings/shared_disable_services.dart';
@@ -45,6 +47,16 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin {
       'sudo rm -rf /usr/local/lib/Aurora',
       'sudo rm -f /usr/share/applications/aurora.desktop'
     ];
+    
+    List<String> disableThreshold=[
+     if(await _ioManager.checkIfExists(filePath: "${Constants.kServicePath}/${Constants.kServiceName}", fileType: FileSystemEntityType.file))
+       ...[
+      "systemctl disable ${Constants.kServiceName}",
+      "sudo rm -f ${Constants.kServicePath}/${Constants.kServiceName}"
+       ],
+      if(Constants.globalConfig.kThresholdPath?.isNotEmpty==true)
+      "sudo echo 100 > ${Constants.globalConfig.kThresholdPath}"
+    ];
 
 
       switch(disable) {
@@ -59,12 +71,12 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin {
         case DisableEnum.all:
             disableCommands.addAll([
               ...disableFaustusCommandList,
-              "systemctl disable ${Constants.kServiceName}"
+              ...disableThreshold
             ]);
             break;
 
         case DisableEnum.threshold:
-            disableCommands.add("systemctl disable ${Constants.kServiceName}");
+            disableCommands.addAll(disableThreshold);
             break;
 
         case DisableEnum.uninstall:
@@ -101,10 +113,12 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin {
   
 
   Future _disableBatteryManager() async{
-    await _ioManager.writeToFile(
-        filePath: Constants.globalConfig.kThresholdPath!,
-        content: '100'
-    );
+    if(await _permissionManager.hasPermission(Constants.globalConfig.kThresholdPath!)) {
+      await _ioManager.writeToFile(
+          filePath: Constants.globalConfig.kThresholdPath!,
+          content: '100'
+      );
+    }
     await _serviceManager.deleteService();
   }
 

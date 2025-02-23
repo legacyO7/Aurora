@@ -1,6 +1,7 @@
 import 'package:aurora/shared/data/isar_manager/repository/isar_manager.dart';
 import 'package:aurora/user_interface/battery_manager/presentation/state/batter_manager_bloc.dart';
 import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_bloc.dart';
+import 'package:aurora/user_interface/preferences/presentation/state/preferences_bloc.dart';
 import 'package:aurora/user_interface/profiles/presentation/states/profiles_bloc.dart';
 import 'package:aurora/user_interface/theme/presentation/state/theme_bloc.dart';
 import 'package:aurora/user_interface/theme/presentation/state/theme_event.dart';
@@ -32,7 +33,7 @@ void main(List<String> args) async{
 }
 
 class Aurora extends StatelessWidget with GlobalMixin{
-  const Aurora({Key? key}) : super(key: key);
+  const Aurora({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +43,7 @@ class Aurora extends StatelessWidget with GlobalMixin{
         BlocProvider.value(value: sl<ArColorCubit>()),
         BlocProvider.value(value: sl<TerminalBloc>()),
         BlocProvider.value(value: sl<ThemeBloc>()..add(ThemeEventInit())),
+        BlocProvider.value(value: sl<PreferencesBloc>()),
       ],
       child: BlocBuilder<ThemeBloc,ThemeState>(
         builder: (_, state)=>

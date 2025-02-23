@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SetupScreen extends StatefulWidget {
-  const SetupScreen({Key? key}) : super(key: key);
+  const SetupScreen({super.key});
 
   @override
   State<SetupScreen> createState() => _SetupScreenState();

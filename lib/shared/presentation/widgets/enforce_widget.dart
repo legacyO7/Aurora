@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EnforceWidget extends StatelessWidget with GlobalMixin {
-  const EnforceWidget({Key? key}) : super(key: key);
+  const EnforceWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

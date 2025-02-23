@@ -1,6 +1,7 @@
 Changelogs:
 
-- Introducing Profiles! Aurora now has the option to set and choose between profiles
-- Set different profiles with charging threshold, backlight brightness, color, state and modes
-- Migrated to Isar database for profile handling
-- Minor bugfixes and UI improvements
+- dusted off the code, and have been cranking away at some long-overdue improvements
+- cleaned up redundant permissions and services
+- decoupled keyboard settings from battery management. aurora will no longer enforce the use battery manager and can now operate independently as a dedicated keyboard manager
+- bugfixes and improvements
+- updated dependencies

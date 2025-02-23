@@ -16,7 +16,7 @@ class ProfilesBloc extends TerminalBaseBloc<ProfilesEvent, ProfilesState> {
   }
 
   late ArProfileModel _currentProfile;
-  late List<ProfileModel> _allProfiles;
+  List<ProfileModel> _allProfiles=[];
 
   final ProfileRepo _profileRepo;
 
@@ -37,6 +37,9 @@ class ProfilesBloc extends TerminalBaseBloc<ProfilesEvent, ProfilesState> {
   }
 
   Future _reloadProfile(emit,ArProfileModel profile) async{
+    if(_allProfiles.isEmpty){
+      await _onInit(emit);
+    }
     if(_allProfiles.where((element) => element.id==profile.id).isEmpty){
       emit(state.setState(allProfiles: await _getAllProfiles()));
     }

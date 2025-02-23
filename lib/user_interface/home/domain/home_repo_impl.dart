@@ -27,14 +27,6 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
   final DisableSettingsRepo _disableSettingsRepo;
 
 
-  @override
-  void setAppHeight(){
-    var window = WindowManager.instance;
-    window..setMinimumSize(Size(1000,super.isMainLine()?680:600))
-    ..show()
-    ..focus();
-  }
-
   Future _getAccess() async{
      await _permissionManager.setPermissions();
   }
@@ -55,7 +47,7 @@ class HomeRepoImpl extends HomeRepo with GlobalMixin, TerminalMixin{
   }
 
   Future<bool> _checkAccess() async{
-    return await _permissionManager.validatePaths() && await super.arServiceEnabled();
+    return await _permissionManager.validatePaths() &&( await super.arServiceEnabled() || !Constants.globalConfig.isBatteryManagerEnabled);
   }
 
   @override
