@@ -52,12 +52,12 @@ fi
 elf(){
 
 cd build/linux/x64/release/bundle/lib
-patchelf --set-rpath '$ORIGIN' libscreen_retriever_plugin.so
+patchelf --set-rpath '$ORIGIN' libscreen_retriever_linux_plugin.so
 patchelf --set-rpath '$ORIGIN' libwindow_manager_plugin.so
 patchelf --set-rpath '$ORIGIN' liburl_launcher_linux_plugin.so
 patchelf --set-rpath '$ORIGIN' libbitsdojo_window_linux_plugin.so
 patchelf --set-rpath '$ORIGIN' libisar_flutter_libs_plugin.so
-cd ../../../../../../
+cd -
 
 }
 
@@ -87,10 +87,13 @@ dpkg-deb --build --root-owner-group debian
 buildrpm(){
 
 echo BUILDING RPM...
-mkdir -p rpmbuild/SOURCES
-cp -rf build/linux/x64/release/bundle rpmbuild/SOURCES/
-cp metadata/* rpmbuild/SOURCES/bundle
-cd rpmbuild/SOURCES
+rm -rf ~/rpmbuild
+mkdir -p ~/rpmbuild/SOURCES
+cp -rf rpmbuild/* ~/rpmbuild
+cp -rf build/linux/x64/release/bundle ~/rpmbuild/SOURCES/
+cp metadata/exec ~/rpmbuild/SOURCES/bundle
+cp metadata/aurora.desktop ~/rpmbuild/SOURCES/bundle
+cd ~/rpmbuild/SOURCES
 mv  bundle aurora-$arversion
 tar --create --file aurora-"$arversion".tar.gz aurora-$arversion
 
@@ -98,12 +101,9 @@ cd ..
 sed -i "s/aurora_ver/$arversion/g" SPECS/aurora.spec
 cd ..
 
-rm -rf build
-mv rpmbuild build
-cp -rf build ~/
-rpmbuild -bs build/SPECS/aurora.spec
+rpmbuild -bs ~/rpmbuild/SPECS/aurora.spec
 
-cp -r $HOME/build/SRPMS/* $arg
+cp -r $HOME/rpmbuild/SRPMS/* $arg
 
 }
 
