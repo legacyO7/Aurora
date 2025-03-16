@@ -44,9 +44,11 @@ class PermissionManagerImpl implements PermissionManager{
         if(await hasPermission(Constants.kServicePath)) {
           await _serviceManager.createService();
         }else{
-          await _serviceManager.createService(serviceFilePath: '${Constants.globalConfig.kWorkingDirectory!}/${Constants.kServiceName}');
-          commands.add("mv ${'${Constants.globalConfig.kWorkingDirectory!}/${Constants.kServiceName}'} ${Constants.kServicePath + Constants.kServiceName}");
-          commands.add("command -v restorecon &>/dev/null && restorecon -v ${Constants.kServicePath + Constants.kServiceName}");
+          await _serviceManager.createService(serviceFilePath: '${Constants.globalConfig.kTmpPath!}/${Constants.kServiceName}');
+          commands.insertAll(0, [
+            "mv ${'${Constants.globalConfig.kTmpPath!}/${Constants.kServiceName}'} ${Constants.kServicePath + Constants.kServiceName}",
+            "command -v restorecon &>/dev/null && restorecon -v ${Constants.kServicePath + Constants.kServiceName}"
+          ]);
         }
       }
       commands.add("systemctl enable ${Constants.kServiceName}");
