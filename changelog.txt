@@ -1,7 +1,3 @@
 Changelogs:
 
-- dusted off the code, and have been cranking away at some long-overdue improvements
-- cleaned up redundant permissions and services
-- decoupled keyboard settings from battery management. aurora will no longer enforce the use battery manager and can now operate independently as a dedicated keyboard manager
-- bugfixes and improvements
-- updated dependencies
+- appimage bugfixes
