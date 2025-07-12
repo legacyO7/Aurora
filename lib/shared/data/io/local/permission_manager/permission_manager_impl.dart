@@ -27,7 +27,7 @@ class PermissionManagerImpl implements PermissionManager{
 
   @override
   Future<int> runWithPrivileges(List<String> commands) async{
-    return await _terminalDelegate.getStatusCode("${Constants.kPolkit} sh -c '${commands.join('; ')}'");
+    return await _terminalDelegate.getStatusCode("${Constants.kPolkit} sh -c \"${commands.join(';\n')}\"".replaceAll("EOF;", 'EOF'));
   }
 
   @override
@@ -44,10 +44,8 @@ class PermissionManagerImpl implements PermissionManager{
         if(await hasPermission(Constants.kServicePath)) {
           await _serviceManager.createService();
         }else{
-          await _serviceManager.createService(serviceFilePath: '${Constants.globalConfig.kTmpPath!}/${Constants.kServiceName}');
           commands.insertAll(0, [
-            "mv ${'${Constants.globalConfig.kTmpPath!}/${Constants.kServiceName}'} ${Constants.kServicePath + Constants.kServiceName}",
-            "command -v restorecon &>/dev/null && restorecon -v ${Constants.kServicePath + Constants.kServiceName}"
+            _serviceManager.createServiceContentByShell
           ]);
         }
       }
