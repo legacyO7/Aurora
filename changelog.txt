@@ -1,3 +1,6 @@
 Changelogs:
 
-- appimage bugfixes
+- grant access button fixes
+- updated dependencies
+
+this update targets only the latest OS versions
