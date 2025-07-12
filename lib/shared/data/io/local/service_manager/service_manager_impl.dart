@@ -19,7 +19,20 @@ class ServiceManagerImpl implements ServiceManager {
   Future createService({String? serviceFilePath}) async {
     File servFile=serviceFilePath==null?serviceFile:File(serviceFilePath);
     await servFile.create();
-    await _ioManager.writeToFile(filePath: servFile, content: """
+    await _ioManager.writeToFile(filePath: servFile, content: _getServiceFileContent
+    );
+  }
+
+
+
+
+@override
+String get createServiceContentByShell =>
+   "tee $serviceFile > /dev/null << 'EOF'\n${_getServiceFileContent}EOF";
+
+
+  String get _getServiceFileContent =>
+     """
 [Unit]
 Description=To set charging threshold
 After=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
@@ -33,9 +46,7 @@ ExecStart= /bin/bash -c 'echo ${ _isarDelegate.getThreshold()} > ${Constants.glo
 
 [Install]
 WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
-"""
-    );
-  }
+""";
 
 
   @override
