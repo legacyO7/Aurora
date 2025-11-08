@@ -16,6 +16,8 @@ Widget colorController(BuildContext context) {
           wheelHasBorder: true,
           color: context.selectedColor,
           wheelSquareBorderRadius: 20,
+          colorCodeHasColor: true,
+          showColorCode: true,
           pickersEnabled: const <ColorPickerType, bool>{
             ColorPickerType.both: false,
             ColorPickerType.primary: false,
