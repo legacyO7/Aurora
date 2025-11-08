@@ -1,6 +1,6 @@
 Changelogs:
 
-- grant access button fixes
-- updated dependencies
+- maintain AR-settings while switching between OS #18
+- added an option in edit preference settings to enable systemd service to retain AR settings
 
-this update targets only the latest OS versions
+
