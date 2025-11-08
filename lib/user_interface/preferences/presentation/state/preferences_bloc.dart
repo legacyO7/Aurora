@@ -18,16 +18,22 @@ class PreferencesBloc extends TerminalBaseBloc<PreferencesEvent, PreferencesStat
     on<PreferencesSaveEvent>((event, emit) => _savePreferences(emit));
   }
 
-  _initPreferences(emit) {
+  void _initPreferences(emit) {
     emit(state.setState(isLoading: false));
-    _setPreferences(emit, event: PreferencesSetEvent(isBatteryManagerEnabled: _isarDelegate.getBatteryManagerAvailability(),
-        isBacklightControllerEnabled: _isarDelegate.getBacklightControllerAvailability()));
+    _setPreferences(emit, event: PreferencesSetEvent(
+        isBatteryManagerEnabled: _isarDelegate.getBatteryManagerAvailability(),
+        isBacklightControllerEnabled: _isarDelegate.getBacklightControllerAvailability(),
+        isBacklightControllerServiceEnabled: _isarDelegate.getBacklightControllerServiceAvailability()
+    ));
   }
 
-  _setPreferences(emit, {required PreferencesSetEvent event}) {
+  void _setPreferences(emit, {required PreferencesSetEvent event}) {
 
     emit(state.setState(
-        isBatteryManagerEnabled: event.isBatteryManagerEnabled, isBacklightControllerEnabled: event.isBacklightControllerEnabled));
+        isBatteryManagerEnabled: event.isBatteryManagerEnabled,
+        isBacklightControllerEnabled: event.isBacklightControllerEnabled,
+        isBacklightControllerServiceEnabled: event.isBacklightControllerServiceEnabled
+    ));
 
     if (!(state.isBacklightControllerEnabled) && !(state.isBatteryManagerEnabled)) {
       if(event.isBacklightControllerEnabled==null||event.isBatteryManagerEnabled==null) {
@@ -39,7 +45,7 @@ class PreferencesBloc extends TerminalBaseBloc<PreferencesEvent, PreferencesStat
     }
   }
 
-  _savePreferences(emit) async {
+  Future<void> _savePreferences(emit) async {
     emit(state.setState(isLoading: true));
       if(await _disableSettingsRepo.disableServices(
           disable: !state.isBatteryManagerEnabled ? DisableEnum.threshold : !state.isBacklightControllerEnabled ? super.isMainLine()
@@ -48,6 +54,7 @@ class PreferencesBloc extends TerminalBaseBloc<PreferencesEvent, PreferencesStat
               : DisableEnum.none)) {
       await _isarDelegate.saveBatteryAvailability(state.isBatteryManagerEnabled);
       await _isarDelegate.saveBacklightAvailability(state.isBacklightControllerEnabled);
+      await _isarDelegate.saveBacklightServiceAvailability(state.isBacklightControllerEnabled && state.isBacklightControllerServiceEnabled);
       super.restartApp();
     }else{
         emit(state.setState(isLoading: false));

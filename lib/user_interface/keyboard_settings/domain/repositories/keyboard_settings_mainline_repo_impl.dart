@@ -7,10 +7,13 @@ import 'package:aurora/utility/constants.dart';
 
 class KeyboardSettingsMainlineRepoImpl extends KeyboardSettingsRepo{
 
-  KeyboardSettingsMainlineRepoImpl(this._ioManager);
+  KeyboardSettingsMainlineRepoImpl(this._ioManager, this._serviceManager);
 
   final IOManager _ioManager;
-  final List<int> mainLineKeys=[0,1,2,9];
+  final ServiceManager _serviceManager;
+
+  @override
+  List<int> get keys=>[0,1,2,9];
 
   @override
   Future setBrightness(int brightness) async {
@@ -42,7 +45,10 @@ class KeyboardSettingsMainlineRepoImpl extends KeyboardSettingsRepo{
 
     await _ioManager.writeToFile(
         filePath: Constants.kMainlineModuleModePath,
-        content: "1 ${mainLineKeys[arMode.mode!]} ${arMode.color!.red} ${arMode.color!.green} ${arMode.color!.blue} ${arMode.speed}");
+        content: "1 ${keys[arMode.mode!]} ${arMode.color!.red} ${arMode.color!.green} ${arMode.color!.blue} ${arMode.speed}");
+
+    await _serviceManager.updateService();
+
     super.setModeParams(arMode: arMode);
   }
 

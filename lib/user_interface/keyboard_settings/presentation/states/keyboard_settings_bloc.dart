@@ -34,7 +34,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
 
   late ArProfileModel arProfileModel;
 
-  _initPanel(emit) async{
+  Future<void> _initPanel(emit) async{
       arProfileModel=await _isarDelegate.getArProfile();
       arMode= ArMode.copyModel(arProfileModel.arMode);
       if(Constants.globalConfig.isBacklightControllerEnabled) {
@@ -46,7 +46,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
       }
   }
 
-  _setColor(emit,{required Color color,int? mode}) async {
+  Future<void> _setColor(emit,{required Color color,int? mode}) async {
     arMode.color= color;
     arMode.colorRad=color.value;
     arMode.mode=mode??arMode.mode;
@@ -55,25 +55,25 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
     _updateState(emit);
   }
 
-  _setBrightness(int brightness, emit) async {
+  Future<void> _setBrightness(int brightness, emit) async {
     await _keyboardSettingsRepo.setBrightness(brightness);
     emit(state.copyState(brightness: brightness));
   }
 
 
-  _setMode(emit, {required int mode})async{
+  Future<void> _setMode(emit, {required int mode})async{
     arMode.mode=mode;
     await _keyboardSettingsRepo.setMode(arMode: arMode);
     _updateState(emit);
   }
 
-  _setSpeed(emit,{required int speed}) async{
+  Future<void> _setSpeed(emit,{required int speed}) async{
     arMode.speed=speed;
     await _keyboardSettingsRepo.setSpeed(arMode: arMode);
     _updateState(emit);
   }
   
-  _setModeParams(emit,{
+  Future<void> _setModeParams(emit,{
     required ArMode arMode    
   }) async{
     this.arMode.color=arMode.color??this.arMode.color;
@@ -83,7 +83,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
     _updateState(emit);
   }
   
-  _setStateParams(emit,{
+  Future<void> _setStateParams(emit,{
     required ArState arState
   }) async{
     _boot=arState.boot==null?_boot:!arState.boot!;
@@ -93,7 +93,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
     _updateState(emit);
   }
 
-  _updateState(emit){
+  void _updateState(emit){
     super.setSelectedColor(arMode.color!);
     emit(state.copyState(speed: arMode.speed,mode: arMode.mode,color: arMode.color,awake: _awake,sleep: _sleep,boot: _boot));
   }

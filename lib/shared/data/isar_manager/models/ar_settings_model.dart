@@ -12,6 +12,7 @@ class ArSettingsModel {
   int? profileId;
   bool isBatteryManagerEnabled;
   bool isBacklightControllerAvailableEnabled;
+  bool isBacklightControllerServiceEnabled;
 
   ArSettingsModel({
     this.arVersion,
@@ -19,7 +20,8 @@ class ArSettingsModel {
     this.enforceFaustus = false,
     this.profileId,
     this.isBatteryManagerEnabled=false,
-    this.isBacklightControllerAvailableEnabled=false
+    this.isBacklightControllerAvailableEnabled=false,
+    this.isBacklightControllerServiceEnabled=false
   });
 
   factory ArSettingsModel.fromJson(Map<String, dynamic> json) {

@@ -3,7 +3,7 @@ import 'package:aurora/user_interface/keyboard_settings/domain/repositories/keyb
 import 'package:aurora/utility/global_mixin.dart';
 
 import '../../../shared/utility/init_aurora.dart';
-import '../domain/repositories/keyboard_settings_repo_impl.dart';
+import '../domain/repositories/keyboard_settings_faustus_repo_impl.dart';
 
 class KeyboardSettingsEntity with GlobalMixin{
   static KeyboardSettingsRepo getRepo(){

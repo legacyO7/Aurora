@@ -7,6 +7,8 @@ abstract class KeyboardSettingsRepo{
 
   final IsarDelegate _isarDelegate=sl<IsarDelegate>();
 
+  List<int> get keys;
+
   Future setMode({required ArMode arMode}) async =>
       await _setArMode(arMode);
 

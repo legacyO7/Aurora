@@ -8,11 +8,13 @@ import 'keyboard_settings_repo.dart';
 
 class KeyboardSettingsFaustusRepoImpl extends KeyboardSettingsRepo {
 
-  KeyboardSettingsFaustusRepoImpl(this._ioManager);
+  KeyboardSettingsFaustusRepoImpl(this._ioManager, this._serviceManager);
 
   final IOManager _ioManager;
+  final ServiceManager _serviceManager;
 
-  final List<int> faustusKeys=[0,1,2,3];
+  @override
+  List<int> get keys=>[0,1,2,3];
 
   @override
   Future setModeParams({required ArMode arMode}) async{
@@ -28,7 +30,7 @@ class KeyboardSettingsFaustusRepoImpl extends KeyboardSettingsRepo {
 
       await _ioManager.writeToFile(
           filePath: Constants.kFaustusModuleModePath,
-          content: "${faustusKeys[arMode.mode!]}"
+          content: "${keys[arMode.mode!]}"
       );
       await saveFaustusSettings();
 
@@ -39,9 +41,9 @@ class KeyboardSettingsFaustusRepoImpl extends KeyboardSettingsRepo {
   Future setColor({required ArMode arMode}) async {
 
       Color color=arMode.color!;
-      await _ioManager.writeToFile(filePath: Constants.kFaustusModuleRedPath, content: color.red.toRadixString(16));
-      await _ioManager.writeToFile(filePath: Constants.kFaustusModuleGreenPath, content: color.green.toRadixString(16));
-      await _ioManager.writeToFile(filePath: Constants.kFaustusModuleBluePath, content: color.blue.toRadixString(16));
+      await _ioManager.writeToFile(filePath: Constants.kFaustusModuleRedPath, content: (color.r * 255).round().toRadixString(16));
+      await _ioManager.writeToFile(filePath: Constants.kFaustusModuleGreenPath, content: (color.g * 255).round().toRadixString(16));
+      await _ioManager.writeToFile(filePath: Constants.kFaustusModuleBluePath, content: (color.b * 255).round().toRadixString(16));
 
       ArColors.accentColor = color;
       await setMode(arMode: arMode);
@@ -68,6 +70,7 @@ class KeyboardSettingsFaustusRepoImpl extends KeyboardSettingsRepo {
   Future saveFaustusSettings() async{
     await _ioManager.writeToFile(filePath: Constants.kFaustusModuleFlagsPath, content: '2a');
     await _ioManager.writeToFile(filePath: Constants.kFaustusModuleSetPath, content: '1');
+    await _serviceManager.updateService();
   }
 
   @override

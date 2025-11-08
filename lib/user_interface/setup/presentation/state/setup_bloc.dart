@@ -11,6 +11,7 @@ import 'package:aurora/utility/ar_widgets/ar_widgets.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
 import 'package:aurora/utility/global_mixin.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'setup_state.dart';
 
@@ -35,11 +36,12 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
 
   final GlobalConfig _globalConfig=Constants.globalConfig;
 
-  _initSetup(emit) async {
+  Future<void> _initSetup(Emitter emit) async {
     _globalConfig.setInstance(
       isFaustusEnforced: await _setupRepo.isFaustusEnforced(),
       isBatteryManagerEnabled: _isarDelegate.getBatteryManagerAvailability(),
-      isBacklightControllerEnabled: _isarDelegate.getBacklightControllerAvailability()
+      isBacklightControllerEnabled: _isarDelegate.getBacklightControllerAvailability(),
+      isBacklightControllerServiceEnabled: _isarDelegate.getBacklightControllerServiceAvailability()
     );
     await getVersion();
     await _setupRepo.initSetup();
@@ -56,11 +58,11 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
     }
   }
 
-  Future _onUpdate(emit,{bool ignoreUpdate=false})async{
+  Future _onUpdate(Emitter emit,{bool ignoreUpdate=false})async{
     await _checkForUpdates(emit,ignoreUpdate: ignoreUpdate);
   }
 
-  Future _checkForUpdates(emit,{bool ignoreUpdate=false}) async {
+  Future _checkForUpdates(Emitter emit,{bool ignoreUpdate=false}) async {
 
     bool isConnected=await _setupRepo.checkInternetAccess();
 
@@ -87,7 +89,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
         case 6:
           emit(SetupMissingPkexec());
           break;
-          
+
         case 7:
           emit(SetupInCompatibleDevice());
           break;
@@ -119,7 +121,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
     }
   }
 
-  Future _switchToMainline(emit,{required bool removeFaustus}) async{
+  Future _switchToMainline(Emitter emit,{required bool removeFaustus}) async{
     if(removeFaustus){
       var previousState= state;
       emit(SetupDisableFaustusState());
@@ -138,7 +140,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
     }
   }
 
-  void _enterBatteryManagerMode(emit){
+  void _enterBatteryManagerMode(Emitter emit){
     _globalConfig.setInstance(arMode: ArModeEnum.batteryManager);
 
     emit(SetupCompatibleState());
@@ -162,7 +164,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
     return await _setupRepo.getChangelog();
   }
 
-  _allowConfigure(bool allow,emit) async{
+  Future<void> _allowConfigure(bool allow,Emitter emit) async{
     if(allow) {
       await _setupRepo.loadSetupFiles();
       if((await _setupRepo.compatibilityChecker())==1) {
@@ -175,7 +177,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
     }
   }
 
-  void _onCancel(emit,{required int stepValue}){
+  void _onCancel(Emitter emit,{required int stepValue}){
     if(stepValue==0) {
       _allowConfigure(false,emit);
     } else if(stepValue==1){
@@ -185,7 +187,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
     }
   }
 
-  void _onInstall(emit,{required int stepValue}) async {
+  void _onInstall(Emitter emit,{required int stepValue}) async {
       var isSuccess=false;
       super.setLoad();
 
@@ -215,10 +217,10 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
 
       super.setUnLoad();
       await _processOutput(emit,state: state,isSuccess: isSuccess);
-    
+
   }
 
-  _processOutput(emit,{required SetupState state, required bool isSuccess}) async {
+  Future<void> _processOutput(Emitter emit,{required SetupState state, required bool isSuccess}) async {
     if (state is SetupIncompatibleState) {
       if (isSuccess && state.stepValue == 0) {
        _emitInstallFaustus(emit);
@@ -231,7 +233,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
     }
   }
 
-  void _validateRepo(emit,{required String value}) {
+  void _validateRepo(Emitter emit,{required String value}) {
     bool isValid = value.isNotEmpty && value.startsWith('http') && value.endsWith('.git');
     if (isValid) {
       _globalConfig.setInstance(
@@ -241,11 +243,11 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
     _emitInstallFaustus(emit,isValid: isValid);
   }
 
-  Future _clearCache(emit) async{
+  Future _clearCache(Emitter emit) async{
     await _isarDelegate.deleteDatabase();
   }
 
-   void _restart(emit) {
+   void _restart(Emitter emit) {
     emit(SetupRebirth());
   }
 
@@ -253,7 +255,7 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
     UrlLauncher.launchArUrl(subPath: url);
   }
 
-  void _emitCompatibility(emit){
+  void _emitCompatibility(Emitter emit){
     if(_globalConfig.isBacklightControllerEnabled) {
       emit(SetupPermissionState());
     }else{
@@ -261,10 +263,10 @@ class SetupBloc extends TerminalBaseBloc<SetupEvent, SetupState> with GlobalMixi
     }
   }
 
-  _emitInstallPackage(emit)  => emit(SetupIncompatibleState(stepValue: 0, child: packageInstaller(packagesToInstall:  _setupRepo.missingPackagesList), isValid: true));
+  void _emitInstallPackage(Emitter emit)  => emit(SetupIncompatibleState(stepValue: 0, child: packageInstaller(packagesToInstall:  _setupRepo.missingPackagesList), isValid: true));
 
-  _emitInstallFaustus(emit,{bool? isValid})=>  emit(SetupIncompatibleState(stepValue: 1, child: const FaustusInstaller(),isValid: isValid??true));
+  dynamic _emitInstallFaustus(Emitter emit,{bool? isValid})=>  emit(SetupIncompatibleState(stepValue: 1, child: const FaustusInstaller(),isValid: isValid??true));
 
-  _emitInstallFaustusTerminal(emit,{required int stepValue})=> emit(SetupIncompatibleState(stepValue: stepValue, child: const TerminalScreen(), isValid: true));
+  dynamic _emitInstallFaustusTerminal(Emitter emit,{required int stepValue})=> emit(SetupIncompatibleState(stepValue: stepValue, child: const TerminalScreen(), isValid: true));
 
 }

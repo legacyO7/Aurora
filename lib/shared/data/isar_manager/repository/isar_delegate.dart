@@ -9,11 +9,13 @@ abstract class IsarDelegate{
   bool getEnforceFaustus();
   bool getBatteryManagerAvailability();
   bool getBacklightControllerAvailability();
+  bool getBacklightControllerServiceAvailability();
   Future saveVersion(String version);
   Future saveTheme(ThemeMode themeMode);
   Future setEnforceFaustus(bool enforced);
   Future saveBatteryAvailability(bool value);
   Future saveBacklightAvailability(bool value);
+  Future saveBacklightServiceAvailability(bool value);
   Future<ArProfileModel> getArProfile({int? id});
 
   int getThreshold();

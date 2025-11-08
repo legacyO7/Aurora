@@ -14,7 +14,7 @@ import 'package:aurora/user_interface/home/domain/home_repo.dart';
 import 'package:aurora/user_interface/home/domain/home_repo_impl.dart';
 import 'package:aurora/user_interface/home/presentation/state/home_bloc.dart';
 import 'package:aurora/user_interface/keyboard_settings/domain/repositories/keyboard_settings_mainline_repo_impl.dart';
-import 'package:aurora/user_interface/keyboard_settings/domain/repositories/keyboard_settings_repo_impl.dart';
+import 'package:aurora/user_interface/keyboard_settings/domain/repositories/keyboard_settings_faustus_repo_impl.dart';
 import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyboard_settings_bloc.dart';
 import 'package:aurora/user_interface/preferences/presentation/state/preferences_bloc.dart';
 import 'package:aurora/user_interface/profiles/domain/repositories/profile_repo.dart';

@@ -28,6 +28,7 @@ class GlobalConfig {
    bool isFaustusEnforced;
    bool isBatteryManagerEnabled;
    bool isBacklightControllerEnabled;
+   bool isBacklightControllerServiceEnabled;
 
 
    GlobalConfig({
@@ -45,27 +46,29 @@ class GlobalConfig {
     this.isLoggingEnabled=false,
     this.isFaustusEnforced =false,
     this.isBatteryManagerEnabled=false,
-    this.isBacklightControllerEnabled=false
+    this.isBacklightControllerEnabled=false,
+    this.isBacklightControllerServiceEnabled=false
   });
 
-  setInstance({
-    arVersion,
-    arChannel,
-    kExecFaustusPath,
-    kExecBatteryManagerPath,
-    kWorkingDirectory,
-    kAuroraGitRawYaml,
-    kAuroraGitRawChangelog,
-    kSecureBootEnabled,
-    kFaustusGitUrl,
-    arMode,
-    kTmpPath,
-    deviceName,
-    kThresholdPath,
-    isLoggingEnabled,
-    isFaustusEnforced,
-    isBatteryManagerEnabled,
-    isBacklightControllerEnabled
+  void setInstance({
+    String? arVersion,
+    String? arChannel,
+    String? kExecFaustusPath,
+    String? kExecBatteryManagerPath,
+    String? kWorkingDirectory,
+    String? kAuroraGitRawYaml,
+    String? kAuroraGitRawChangelog,
+    bool? kSecureBootEnabled,
+    String? kFaustusGitUrl,
+    ArModeEnum? arMode,
+    String? kTmpPath,
+    String? deviceName,
+    String? kThresholdPath,
+    bool? isLoggingEnabled,
+    bool? isFaustusEnforced,
+    bool? isBatteryManagerEnabled,
+    bool? isBacklightControllerEnabled,
+    bool? isBacklightControllerServiceEnabled
   }){
 
     this.arChannel= arChannel??this.arChannel;
@@ -83,6 +86,7 @@ class GlobalConfig {
     this.isFaustusEnforced=isFaustusEnforced??this.isFaustusEnforced;
     this.isBatteryManagerEnabled=isBatteryManagerEnabled??this.isBatteryManagerEnabled;
     this.isBacklightControllerEnabled=isBacklightControllerEnabled??this.isBacklightControllerEnabled;
+    this.isBacklightControllerServiceEnabled=isBacklightControllerServiceEnabled??this.isBacklightControllerServiceEnabled;
   }
 
   

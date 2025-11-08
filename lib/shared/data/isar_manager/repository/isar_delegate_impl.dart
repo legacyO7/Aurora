@@ -9,6 +9,7 @@ import 'package:aurora/user_interface/profiles/presentation/states/profiles_bloc
 import 'package:aurora/utility/global_mixin.dart';
 import 'package:flutter/material.dart';
 
+import '../../io/local/service_manager/service_manager.dart';
 import 'isar_delegate.dart';
 
 class IsarDelegateImpl with GlobalMixin implements IsarDelegate{
@@ -56,6 +57,11 @@ class IsarDelegateImpl with GlobalMixin implements IsarDelegate{
   }
 
   @override
+  bool getBacklightControllerServiceAvailability(){
+    return _isarManager.arSettingsModel.isBacklightControllerServiceEnabled;
+  }
+
+  @override
   int getThreshold(){
     return _isarManager.arProfileModel.threshold;
   }
@@ -81,6 +87,12 @@ class IsarDelegateImpl with GlobalMixin implements IsarDelegate{
   @override
   Future saveBacklightAvailability(bool value) async{
     _isarManager.arSettingsModel.isBacklightControllerAvailableEnabled=value;
+    await _isarManager.writeArSettingsIsar();
+  }
+
+  @override
+  Future saveBacklightServiceAvailability(bool value) async{
+    _isarManager.arSettingsModel.isBacklightControllerServiceEnabled=value;
     await _isarManager.writeArSettingsIsar();
   }
 
@@ -160,6 +172,7 @@ class IsarDelegateImpl with GlobalMixin implements IsarDelegate{
       }
 
       sl<ProfilesBloc>().add(ProfilesReloadEvent(_arProfileModel));
+      await sl<ServiceManager>().updateService();
 
     }else{
       stdout.writeln("avoiding unnecessary writes");

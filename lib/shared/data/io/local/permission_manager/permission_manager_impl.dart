@@ -37,7 +37,7 @@ class PermissionManagerImpl implements PermissionManager{
       commands.add("chmod -R o+rwx ${_deniedList.join(' ')}");
     }
 
-    if(_globalConfig.isBatteryManagerEnabled) {
+    if(_globalConfig.isBatteryManagerEnabled || _globalConfig.isBacklightControllerServiceEnabled) {
       if (await _ioManager.checkIfExists(filePath: Constants.kServicePath + Constants.kServiceName, fileType: FileSystemEntityType.file)) {
         commands.add("systemctl disable ${Constants.kServiceName}");
       } else {
@@ -45,7 +45,7 @@ class PermissionManagerImpl implements PermissionManager{
           await _serviceManager.createService();
         }else{
           commands.insertAll(0, [
-            _serviceManager.createServiceContentByShell
+           await _serviceManager.createServiceContentByShell
           ]);
         }
       }
@@ -104,6 +104,10 @@ class PermissionManagerImpl implements PermissionManager{
     if(_globalConfig.kThresholdPath!=null && _globalConfig.isBatteryManagerEnabled){
       pathList.add(Constants.kServicePath+Constants.kServiceName);
       pathList.add(_globalConfig.kThresholdPath!);
+    }
+
+    if(_globalConfig.isBacklightControllerServiceEnabled){
+      pathList.add(Constants.kServicePath+Constants.kServiceName);
     }
 
     if(_globalConfig.isBacklightControllerEnabled) {
