@@ -10,8 +10,6 @@ import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:window_manager/window_manager.dart';
 
 import 'home_repo.dart';
 

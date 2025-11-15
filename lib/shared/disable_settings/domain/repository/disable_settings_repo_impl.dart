@@ -48,12 +48,15 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin {
       'sudo rm -f /usr/share/applications/aurora.desktop'
     ];
     
-    List<String> disableThreshold=[
+    List<String> disableService=[
      if(await _ioManager.checkIfExists(filePath: "${Constants.kServicePath}/${Constants.kServiceName}", fileType: FileSystemEntityType.file))
        ...[
       "systemctl disable ${Constants.kServiceName}",
       "sudo rm -f ${Constants.kServicePath}/${Constants.kServiceName}"
-       ],
+       ]
+    ];
+
+    List<String> disableThreshold=[
       if(Constants.globalConfig.kThresholdPath?.isNotEmpty==true)
       "sudo echo 100 > ${Constants.globalConfig.kThresholdPath}"
     ];
@@ -71,7 +74,8 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin {
         case DisableEnum.all:
             disableCommands.addAll([
               ...disableFaustusCommandList,
-              ...disableThreshold
+              ...disableThreshold,
+              ...disableService
             ]);
             break;
 
@@ -80,11 +84,23 @@ class DisableSettingsRepoImpl extends DisableSettingsRepo with TerminalMixin {
             break;
 
         case DisableEnum.uninstall:
-            disableCommands.addAll([...disableFaustusCommandList,...uninstallAuroraCommandList]);
+            disableCommands.addAll([
+              ...disableFaustusCommandList,
+              ...uninstallAuroraCommandList
+            ]);
             break;
+
+        case DisableEnum.service:
+            disableCommands.addAll([
+              ...disableThreshold,
+              ...disableService
+            ]);
+            break;
+
         case DisableEnum.none:
-          // TODO: Handle this case.
+        // TODO: Handle this case.
           break;
+
       }
 
       bool isSuccess= await _runDisableCommand(disableCommands);

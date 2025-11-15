@@ -26,11 +26,11 @@ class ArMode extends Equatable {
         mode: model.mode,
         speed: model.speed,
         color: model.color,
-        colorRad: model.colorRad?? model.color!.value
+        colorRad: model.colorRad?? model.color!.toARGB32()
       );
 
   factory ArMode.fromJson(Map<String, dynamic> json){
-    int colorInt=int.tryParse(json['color'].replaceAll("Color(0x", "").replaceAll(")", ""), radix: 16)??ArColors.accentColor.value;
+    int colorInt=int.tryParse(json['color'].replaceAll("Color(0x", "").replaceAll(")", ""), radix: 16)??ArColors.accentColor.toARGB32();
 
     return ArMode(
         colorRad: colorInt,

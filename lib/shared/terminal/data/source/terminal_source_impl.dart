@@ -71,19 +71,19 @@ class TerminalSourceImpl extends TerminalSource{
     }
   }
 
-  getStdout() async{
+  Future<void> getStdout() async{
     process.stdout.transform(utf8.decoder).listen((data) {
       _convertToList(lines: data ,commandStatus: CommandStatus.stdout);
     });
   }
 
-  getStdErr() async{
+  Future<void> getStdErr() async{
     await for (var line in process.stderr) {
       _convertToList(lines: utf8.decode(line),commandStatus: CommandStatus.stderr);
     }
   }
 
-  _convertToList({required String lines, required CommandStatus commandStatus}){
+  void _convertToList({required String lines, required CommandStatus commandStatus}){
 
     for ( var line in  _lineSplitter.convert(lines)){
       _perCommandOutput.add(line);
@@ -100,7 +100,7 @@ class TerminalSourceImpl extends TerminalSource{
 
 
   @override
-  killProcess(){
+  void killProcess(){
     try {
       if(_inProgress) {
         process.kill();

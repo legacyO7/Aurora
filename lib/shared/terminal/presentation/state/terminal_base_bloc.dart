@@ -42,11 +42,11 @@ abstract class TerminalBaseBloc<Event,State> extends Bloc<Event,State> with Glob
   Color get selectedColorWithAlpha =>_arColorCubit.selectedColorWithAlpha;
   Color get invertedColor =>_arColorCubit.invertedColor;
 
-  resetInstance<T extends Object>(){
+  void resetInstance<T extends Object>(){
     sl.resetLazySingleton<T>();
   }
 
-  restartBloc<T extends Bloc>(){
+  void restartBloc<T extends Bloc>(){
     sl<T>().close();
     resetInstance<T>();
   }

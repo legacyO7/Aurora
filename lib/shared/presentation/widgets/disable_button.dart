@@ -29,7 +29,7 @@ class _DisableButtonState extends State<DisableButton> {
       child: BlocBuilder<DisableSettingsBloc, DisableSettingsState>(
           builder: (BuildContext context, state) {
             List<Widget> disableSettingsItems=[
-              if(Constants.globalConfig.isBatteryManagerEnabled)
+              if(Constants.globalConfig.isBatteryManagerEnabled && !Constants.globalConfig.isBacklightControllerServiceEnabled)
                 ArCheckbox(
                     text: "Disable charging threshold",
                     isSelected: state.disableThreshold,

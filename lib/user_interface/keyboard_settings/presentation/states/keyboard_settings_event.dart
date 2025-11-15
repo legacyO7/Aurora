@@ -6,6 +6,10 @@ class KeyboardSettingsEventInit extends KeyboardSettingsEvent{
   KeyboardSettingsEventInit();
 }
 
+class KeyboardSettingsEventShowColorCode extends KeyboardSettingsEvent{
+  KeyboardSettingsEventShowColorCode();
+}
+
 class KeyboardSettingsEventSetColor extends KeyboardSettingsEvent{
   final Color? color;
   KeyboardSettingsEventSetColor({this.color});

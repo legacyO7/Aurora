@@ -14,8 +14,8 @@ class ArCheckbox extends StatelessWidget{
   final bool isSelected;
   final Function onChange;
 
-   MaterialStateProperty<Color> getMaterialColor(Color color)=>
-      MaterialStateProperty.all<Color>(color);
+   WidgetStateProperty<Color> getMaterialColor(Color color)=>
+      WidgetStateProperty.all<Color>(color);
 
   @override
   Widget build(BuildContext context) {
