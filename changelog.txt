@@ -1,6 +1,7 @@
 Changelogs:
 
-- maintain AR-settings while switching between OS #18
-- added an option in edit preference settings to enable systemd service to retain AR settings
+- Cleaned up preferences
+- Added an option to view/edit color code. Long press the Color Picker Title to enable this feature
+- Cleared lint warnings
 
 
