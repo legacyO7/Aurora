@@ -4,14 +4,11 @@ import 'dart:ui';
 import 'package:aurora/shared/data/isar_manager/models/ar_profile_model.dart';
 import 'package:aurora/shared/data/isar_manager/repository/isar_delegate.dart';
 import 'package:aurora/shared/data/shared_data.dart';
-import 'package:aurora/user_interface/keyboard_settings/domain/repositories/keyboard_settings_repo.dart';
 import 'package:aurora/user_interface/keyboard_settings/entity/keyboard_settings_entity.dart';
+import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:aurora/utility/ar_widgets/ar_logger.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_mixin.dart';
-
-import '../../../../../utility/ar_widgets/ar_colors.dart';
-
 
 class ServiceManagerImpl with GlobalMixin implements ServiceManager {
 
@@ -69,7 +66,7 @@ Future<String> get getExecutionContent async{
     if(isMainLine()) {
       execString.addAll([
         'echo  ${arProfileModel.brightness} > ${Constants.kMainlineBrightnessPath}',
-        'echo 1 ${KeyboardSettingsEntity.getRepo().keys[arProfileModel.arMode.mode!]} ${color.red} ${color.green} ${color.blue} ${arProfileModel.arMode.speed} > ${Constants.kMainlineModuleModePath}',
+        'echo 1 ${KeyboardSettingsEntity.getRepo().keys[arProfileModel.arMode.mode!]} ${color.toRed} ${color.toGreen} ${color.toBlue} ${arProfileModel.arMode.speed} > ${Constants.kMainlineModuleModePath}',
         'echo 1 ${ArState.arStateToIntString(arProfileModel.arState)} 0 > ${Constants.kMainlineModuleStatePath}',
     ]);
     }else{

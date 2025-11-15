@@ -11,6 +11,7 @@ class KeyboardSettingsState extends Equatable{
   final bool boot;
   final bool awake;
   final bool sleep;
+  final bool showColorCode;
 
   const KeyboardSettingsState({
     this.brightness=0,
@@ -19,7 +20,8 @@ class KeyboardSettingsState extends Equatable{
     this.color=ArColors.green,
     this.sleep=false,
     this.awake=false,
-    this.boot=false
+    this.boot=false,
+    this.showColorCode=false
   });
 
   KeyboardSettingsState copyState({
@@ -29,7 +31,8 @@ class KeyboardSettingsState extends Equatable{
     Color? color,
     bool? boot,
     bool? awake,
-    bool? sleep
+    bool? sleep,
+    bool? showColorCode
   }){
     return KeyboardSettingsState(
       color: color??this.color,
@@ -38,11 +41,12 @@ class KeyboardSettingsState extends Equatable{
       speed: speed?? this.speed,
       boot: boot?? this.boot,
       awake: awake?? this.awake,
-      sleep: sleep??this.sleep
+      sleep: sleep??this.sleep,
+      showColorCode: showColorCode??this.showColorCode
     );
   }
 
   @override
-  List<Object?> get props => [brightness,speed,color,mode,boot,awake,sleep];
+  List<Object?> get props => [brightness,speed,color,mode,boot,awake,sleep,showColorCode];
 
 }

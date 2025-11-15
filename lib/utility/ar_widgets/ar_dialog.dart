@@ -20,7 +20,7 @@ Future<dynamic> arDialog({
       barrierColor: barrierColor,
       context: context?? Constants.kScaffoldKey.currentState!.context,
       builder: (_) => StatefulBuilder(
-        builder: (_, __) {
+        builder: (_, _) {
           return  _ArDialogBody(
             title: title,
             subject: subject,

@@ -9,6 +9,7 @@ import 'package:aurora/user_interface/keyboard_settings/presentation/states/keyb
 import 'package:aurora/utility/ar_widgets/ar_colors.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'keyboard_settings_state.dart';
 
@@ -21,6 +22,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
    on<KeyboardSettingsEventSetMode>((event, emit)=> _setMode(mode: event.mode,emit));
    on<KeyboardSettingsEventSetColor>((event, emit)=> _setColor(color: event.color??ArColors.accentColor,mode: 0, emit));
    on<KeyboardSettingsEventSetState>((event, emit) => _setStateParams(emit,arState: ArState(boot: event.boot,sleep: event.sleep,awake: event.awake)));
+   on<KeyboardSettingsEventShowColorCode>((event, emit) => _showColorCode(emit));
   }
 
   final IsarDelegate _isarDelegate;
@@ -34,7 +36,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
 
   late ArProfileModel arProfileModel;
 
-  Future<void> _initPanel(emit) async{
+  Future<void> _initPanel(Emitter emit) async{
       arProfileModel=await _isarDelegate.getArProfile();
       arMode= ArMode.copyModel(arProfileModel.arMode);
       if(Constants.globalConfig.isBacklightControllerEnabled) {
@@ -46,9 +48,9 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
       }
   }
 
-  Future<void> _setColor(emit,{required Color color,int? mode}) async {
+  Future<void> _setColor(Emitter emit,{required Color color,int? mode}) async {
     arMode.color= color;
-    arMode.colorRad=color.value;
+    arMode.colorRad=color.toARGB32();
     arMode.mode=mode??arMode.mode;
 
     await _keyboardSettingsRepo.setColor(arMode: ArMode.copyModel(arMode));
@@ -61,19 +63,19 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
   }
 
 
-  Future<void> _setMode(emit, {required int mode})async{
+  Future<void> _setMode(Emitter emit, {required int mode})async{
     arMode.mode=mode;
     await _keyboardSettingsRepo.setMode(arMode: arMode);
     _updateState(emit);
   }
 
-  Future<void> _setSpeed(emit,{required int speed}) async{
+  Future<void> _setSpeed(Emitter emit,{required int speed}) async{
     arMode.speed=speed;
     await _keyboardSettingsRepo.setSpeed(arMode: arMode);
     _updateState(emit);
   }
   
-  Future<void> _setModeParams(emit,{
+  Future<void> _setModeParams(Emitter emit,{
     required ArMode arMode    
   }) async{
     this.arMode.color=arMode.color??this.arMode.color;
@@ -83,7 +85,7 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
     _updateState(emit);
   }
   
-  Future<void> _setStateParams(emit,{
+  Future<void> _setStateParams(Emitter emit,{
     required ArState arState
   }) async{
     _boot=arState.boot==null?_boot:!arState.boot!;
@@ -93,7 +95,11 @@ class KeyboardSettingsBloc extends TerminalBaseBloc<KeyboardSettingsEvent,Keyboa
     _updateState(emit);
   }
 
-  void _updateState(emit){
+  void _showColorCode(Emitter emit){
+    emit(state.copyState(showColorCode: true));
+  }
+
+  void _updateState(Emitter emit){
     super.setSelectedColor(arMode.color!);
     emit(state.copyState(speed: arMode.speed,mode: arMode.mode,color: arMode.color,awake: _awake,sleep: _sleep,boot: _boot));
   }

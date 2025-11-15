@@ -38,7 +38,7 @@ class _ArButtonState extends State<ArButton> {
     super.initState();
   }
 
-  _setBounds(){
+  void _setBounds(){
     height = widget.isSelected ? 7.h : 6.h;
     width = widget.isSelected ? 11.w : 10.w;
   }
