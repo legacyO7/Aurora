@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+SERVICE="/usr/lib/systemd/system/aurora-controller.service"
+
+if [ -f "$SERVICE" ]; then
+    systemctl stop aurora-controller.service || true
+    systemctl disable aurora-controller.service || true
+    rm -f "$SERVICE"
+    systemctl daemon-reload || true
+fi

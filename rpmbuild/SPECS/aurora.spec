@@ -34,6 +34,17 @@ cp -R data $RPM_BUILD_ROOT/opt/%{name}
 %post
 chmod +x %{_bindir}/%{name}
 
+%postun
+SERVICE="/usr/lib/systemd/system/aurora-controller.service"
+
+if [ -f "$SERVICE" ]; then
+    systemctl stop aurora-controller.service >/dev/null 2>&1 || true
+    systemctl disable aurora-controller.service >/dev/null 2>&1 || true
+    rm -f "$SERVICE"
+    systemctl daemon-reload >/dev/null 2>&1 || true
+fi
+
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
