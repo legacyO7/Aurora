@@ -95,7 +95,7 @@ class PermissionManagerImpl implements PermissionManager{
   @override
   Future<bool> validatePaths() async{
 
-    List<String> pathList=[];
+    Set<String> pathList={};
 
     if(_checkIfOldServiceExists()){
       pathList.add(Constants.kOldServicePath+Constants.kServiceName);
@@ -141,7 +141,7 @@ class PermissionManagerImpl implements PermissionManager{
       pathList.add("${Constants.globalConfig.kWorkingDirectory}");
     }
 
-    return await checkPermissions(paths: pathList);
+    return await checkPermissions(paths: pathList.toList());
   }
 
   @override
