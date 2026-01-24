@@ -52,3 +52,6 @@ app.*.map.json
 /legacy07-latest-x86_64.AppImage.zsync
 /debian/opt/
 /debian/usr/
+
+# FVM Version Cache
+.fvm/

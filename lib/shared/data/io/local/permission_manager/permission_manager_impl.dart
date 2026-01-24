@@ -27,7 +27,7 @@ class PermissionManagerImpl implements PermissionManager{
 
   @override
   Future<int> runWithPrivileges(List<String> commands) async{
-    return await _terminalDelegate.getStatusCode("${Constants.kPolkit} sh -c '${commands.join('; ')}'");
+    return await _terminalDelegate.getStatusCode("${Constants.kPolkit} sh -c \"${commands.join(';\n')}\"".replaceAll("EOF;", 'EOF'));
   }
 
   @override
@@ -37,16 +37,16 @@ class PermissionManagerImpl implements PermissionManager{
       commands.add("chmod -R o+rwx ${_deniedList.join(' ')}");
     }
 
-    if(_globalConfig.isBatteryManagerEnabled) {
+    if(_globalConfig.isBatteryManagerEnabled || _globalConfig.isBacklightControllerServiceEnabled) {
       if (await _ioManager.checkIfExists(filePath: Constants.kServicePath + Constants.kServiceName, fileType: FileSystemEntityType.file)) {
         commands.add("systemctl disable ${Constants.kServiceName}");
       } else {
         if(await hasPermission(Constants.kServicePath)) {
           await _serviceManager.createService();
         }else{
-          await _serviceManager.createService(serviceFilePath: '${Constants.globalConfig.kWorkingDirectory!}/${Constants.kServiceName}');
-          commands.add("mv ${'${Constants.globalConfig.kWorkingDirectory!}/${Constants.kServiceName}'} ${Constants.kServicePath + Constants.kServiceName}");
-          commands.add("command -v restorecon &>/dev/null && restorecon -v ${Constants.kServicePath + Constants.kServiceName}");
+          commands.insertAll(0, [
+           await _serviceManager.createServiceContentByShell
+          ]);
         }
       }
       commands.add("systemctl enable ${Constants.kServiceName}");
@@ -95,7 +95,7 @@ class PermissionManagerImpl implements PermissionManager{
   @override
   Future<bool> validatePaths() async{
 
-    List<String> pathList=[];
+    Set<String> pathList={};
 
     if(_checkIfOldServiceExists()){
       pathList.add(Constants.kOldServicePath+Constants.kServiceName);
@@ -104,6 +104,10 @@ class PermissionManagerImpl implements PermissionManager{
     if(_globalConfig.kThresholdPath!=null && _globalConfig.isBatteryManagerEnabled){
       pathList.add(Constants.kServicePath+Constants.kServiceName);
       pathList.add(_globalConfig.kThresholdPath!);
+    }
+
+    if(_globalConfig.isBacklightControllerServiceEnabled){
+      pathList.add(Constants.kServicePath+Constants.kServiceName);
     }
 
     if(_globalConfig.isBacklightControllerEnabled) {
@@ -137,7 +141,7 @@ class PermissionManagerImpl implements PermissionManager{
       pathList.add("${Constants.globalConfig.kWorkingDirectory}");
     }
 
-    return await checkPermissions(paths: pathList);
+    return await checkPermissions(paths: pathList.toList());
   }
 
   @override

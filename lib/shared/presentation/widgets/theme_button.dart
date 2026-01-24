@@ -22,7 +22,7 @@ class _ThemeButtonState extends State<ThemeButton>{
     context.read<ThemeBloc>().add(ThemeEventInit());
   }
 
-  setIcon(ThemeMode arTheme){
+  void setIcon(ThemeMode arTheme){
     switch(arTheme) {
       case ThemeMode.system:
         icon=const Icon(Icons.light);

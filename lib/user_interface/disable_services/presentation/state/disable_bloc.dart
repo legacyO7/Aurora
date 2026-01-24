@@ -6,6 +6,7 @@ import 'package:aurora/shared/disable_settings/shared_disable_services.dart';
 import 'package:aurora/shared/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/ar_widgets/ar_snackbar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'disable_state.dart';
 import 'disabler_event.dart';
@@ -29,7 +30,7 @@ class DisableSettingsBloc extends TerminalBaseBloc<DisableEvent,DisableSettingsS
       ));
   }
 
-  Future _disableServices(emit) async{
+  Future _disableServices(Emitter emit) async{
 
     super.setLoad();
       DisableEnum disable=DisableEnum.none;
@@ -40,7 +41,7 @@ class DisableSettingsBloc extends TerminalBaseBloc<DisableEvent,DisableSettingsS
       }else if(state.disableFaustusModule){
         disable=DisableEnum.faustus;
       }else if(state.disableThreshold){
-        disable=DisableEnum.threshold;
+        disable=DisableEnum.service;
       }else{
         return;
       }

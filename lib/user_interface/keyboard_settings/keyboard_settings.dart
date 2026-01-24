@@ -7,5 +7,5 @@ export './presentation/widgets/speed_panel.dart';
 export './presentation/widgets/color_panel.dart';
 export './presentation/widgets/state_panel.dart';
 export './presentation/screens/keyboard_settings_screen.dart';
-export './domain/repositories/keyboard_settings_repo_impl.dart';
+export './domain/repositories/keyboard_settings_faustus_repo_impl.dart';
 export './domain/repositories/keyboard_settings_repo.dart';

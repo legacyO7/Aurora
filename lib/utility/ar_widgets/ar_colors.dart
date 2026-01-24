@@ -19,3 +19,11 @@ class ArColors {
   static const Color dialogBarrierColor = Colors.black54;
   static const Color transparent = Colors.transparent;
 }
+
+extension ArColorExt on Color {
+  int get toRed => (r * 255.0).round();
+  int get toGreen => (g * 255.0).round();
+  int get toBlue => (b * 255.0).round();
+  int get toAlpha => (a * 255.0).round();
+
+}

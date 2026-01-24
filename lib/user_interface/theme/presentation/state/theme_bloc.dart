@@ -16,12 +16,12 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState>{
 
   ThemeMode _arTheme=ThemeMode.system;
 
-  Future _getSavedTheme(emit) async{
+  Future _getSavedTheme(Emitter emit) async{
     _arTheme= await _isarDelegate.getTheme();
     emit(ThemeStateSet(_arTheme));
   }
 
-  Future _switchTheme(emit) async{
+  Future _switchTheme(Emitter emit) async{
 
     switch (_arTheme) {
       case ThemeMode.system:
@@ -38,7 +38,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState>{
     await _saveTheme();
   }
 
-  _saveTheme() async{
+  Future<void> _saveTheme() async{
     await _isarDelegate.saveTheme(_arTheme);
   }
 

@@ -4,6 +4,7 @@ import 'package:aurora/shared/terminal/presentation/state/terminal_base_bloc.dar
 import 'package:aurora/utility/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'batter_manager_state.dart';
 
@@ -18,24 +19,24 @@ class BatteryManagerBloc extends TerminalBaseBloc<BatteryManagerEvent,BatteryMan
 
   int _batteryLevel=Constants.kMinimumChargeLevel;
 
-  Future _initThreshold(emit) async {
+  Future _initThreshold(Emitter emit) async {
     if(Constants.globalConfig.isBatteryManagerEnabled) {
       await _batteryManagerRepo.initBatteryManager();
       await _getThreshold(emit);
     }
   }
   
-  Future _getThreshold(emit) async {
+  Future _getThreshold(Emitter emit) async {
     _batteryLevel= await _batteryManagerRepo.getBatteryCharge();
     emit(BatteryManagerInit(batteryLevel: _batteryLevel));
   }
 
-  _setBatteryLevel(int level,emit){
+  void _setBatteryLevel(int level,emit){
     _batteryLevel=level;
     emit(BatteryManagerInit(batteryLevel: _batteryLevel));
   }
 
-  _finalizeBatteryLevel(int level,emit) async{
+  Future<void> _finalizeBatteryLevel(int level,emit) async{
     _batteryLevel=level;
     await _batteryManagerRepo.setBatteryChargeLimit(limit: level);
     emit(BatteryManagerInit(batteryLevel: _batteryLevel));

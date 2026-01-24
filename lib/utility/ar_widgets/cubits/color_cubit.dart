@@ -8,7 +8,7 @@ class ArColorCubit extends Cubit<Color> {
 
   Color _selectedColor=ArColors.accentColor;
   
-  setSelectedColor({
+  void setSelectedColor({
     required Color selectedColor,
   }){
      _selectedColor=selectedColor;
@@ -18,9 +18,9 @@ class ArColorCubit extends Cubit<Color> {
   Color get selectedColor=>_selectedColor;
   Color get selectedColorWithAlpha=>_selectedColor.withAlpha(50);
   Color get invertedColor=> Color.fromARGB(
-      (selectedColor.opacity * 255).round(),
-      255-selectedColor.red,
-      255-selectedColor.green,
-      255-selectedColor.blue);   
+      (selectedColor.a * 255).round(),
+      255-selectedColor.toRed,
+      255-selectedColor.toGreen,
+      255-selectedColor.toBlue);
   
 }

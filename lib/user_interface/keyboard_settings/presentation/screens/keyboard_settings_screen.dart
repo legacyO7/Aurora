@@ -42,8 +42,7 @@ class _KeyboardSettingsScreenState extends State<KeyboardSettingsScreen> with Gl
                    ],
                  )
                ),
-               Flexible(
-                   child: colorController(context)),
+               Flexible(child: colorController(context, state.showColorCode)),
              ],
            );
          }

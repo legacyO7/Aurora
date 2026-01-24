@@ -2,6 +2,7 @@ import 'package:aurora/shared/data/isar_manager/models/ar_profile_model.dart';
 import 'package:aurora/shared/terminal/presentation/state/terminal_base_bloc.dart';
 import 'package:aurora/user_interface/profiles/domain/models/profile_model.dart';
 import 'package:aurora/user_interface/profiles/domain/repositories/profile_repo.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'profiles_event.dart';
 part 'profiles_state.dart';
@@ -21,7 +22,7 @@ class ProfilesBloc extends TerminalBaseBloc<ProfilesEvent, ProfilesState> {
   final ProfileRepo _profileRepo;
 
 
-  Future _onInit(emit) async{
+  Future _onInit(Emitter emit) async{
     await _getCurrentProfile();
     await _getAllProfiles();
 
@@ -36,7 +37,7 @@ class ProfilesBloc extends TerminalBaseBloc<ProfilesEvent, ProfilesState> {
     return _currentProfile;
   }
 
-  Future _reloadProfile(emit,ArProfileModel profile) async{
+  Future _reloadProfile(Emitter emit,ArProfileModel profile) async{
     if(_allProfiles.isEmpty){
       await _onInit(emit);
     }
@@ -52,7 +53,7 @@ class ProfilesBloc extends TerminalBaseBloc<ProfilesEvent, ProfilesState> {
     return _allProfiles;
   }
 
-  Future _saveProfile(emit, {required String name}) async{
+  Future _saveProfile(Emitter emit, {required String name}) async{
     await _wrapLoader(emit, fn: () async{
       _currentProfile.profileName=name;
       if(_currentProfile.id==2) {
@@ -65,14 +66,14 @@ class ProfilesBloc extends TerminalBaseBloc<ProfilesEvent, ProfilesState> {
     });
   }
 
-  Future _loadProfile(emit,int id) async{
+  Future _loadProfile(Emitter emit,int id) async{
     await _wrapLoader(emit, fn: ()async{
       _currentProfile= await _profileRepo.loadProfile(id);
       super.reloadSettings();
     });
   }
 
-  Future _deleteProfile(emit,{required int id}) async{
+  Future _deleteProfile(Emitter emit,{required int id}) async{
     await _wrapLoader(emit, fn: ()async{
       await _profileRepo.deleteProfile(id: id);
       await _getCurrentProfile();
@@ -83,7 +84,7 @@ class ProfilesBloc extends TerminalBaseBloc<ProfilesEvent, ProfilesState> {
   }
 
 
-  _wrapLoader(emit,{required Function fn}) async{
+  Future<void> _wrapLoader(Emitter emit,{required Function fn}) async{
     emit(state.setState(isLoading: true));
     await fn();
     emit(state.setState(

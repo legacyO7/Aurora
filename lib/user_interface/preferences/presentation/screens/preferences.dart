@@ -44,6 +44,11 @@ class _PreferencesState extends State<Preferences> {
                     context.read<PreferencesBloc>().add(PreferencesSetEvent(isBacklightControllerEnabled: !state.isBacklightControllerEnabled));
                   }),
 
+                  if(state.isBacklightControllerEnabled)
+                  ArCheckbox(text: "Enable Keyboard Backlight Controller Service", isSelected: state.isBacklightControllerServiceEnabled, onChange: (_) {
+                    context.read<PreferencesBloc>().add(PreferencesSetEvent(isBacklightControllerServiceEnabled: !state.isBacklightControllerServiceEnabled));
+                  }),
+
                 ],
               ),
 

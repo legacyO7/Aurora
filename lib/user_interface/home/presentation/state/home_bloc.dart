@@ -8,6 +8,7 @@ import 'package:aurora/utility/ar_widgets/ar_enums.dart';
 import 'package:aurora/utility/constants.dart';
 import 'package:aurora/utility/global_configuration.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'home_state.dart';
 
@@ -20,13 +21,13 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
   HomeBloc(this._homeRepo, this._permissionManager) : super(const HomeState.init()){
     on<HomeEventInit>((_, emit) => _initHome(emit));
     on<HomeEventRequestAccess>((_, emit) => _requestAccess(emit));
-    on<HomeEventRunAsRoot>((_, __) => _selfElevate());
-    on<HomeEventLaunch>((event, __) => _launchUrl(subPath: event.url));
+    on<HomeEventRunAsRoot>((_, _) => _selfElevate());
+    on<HomeEventLaunch>((event, _) => _launchUrl(subPath: event.url));
     on<HomeEventEnableLogging>((_, emit) => _enableLogging(emit));
     on<HomeEventEnforcement>((event, emit) => _enforcement(emit,enforcement: event.enforcement));
   }
 
-  Future _initHome(emit) async{
+  Future _initHome(Emitter emit) async{
     emit(const HomeState.init());
     await _permissionManager.validatePaths();
     emit(state.setState(deniedList: _permissionManager.deniedList));
@@ -37,7 +38,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
     await _homeRepo.selfElevate();
   }
 
-  Future _requestAccess(emit) async {
+  Future _requestAccess(Emitter emit) async {
     bool hasAccess =await _homeRepo.requestAccess();
     if((!hasAccess && await _homeRepo.canElevate()) || hasAccess) {
       emit(HomeState.accessGranted(hasAccess: hasAccess));
@@ -46,7 +47,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
     }
   }
 
-  Future _enforcement(emit,{required Enforcement enforcement}) async{
+  Future _enforcement(Emitter emit,{required Enforcement enforcement}) async{
     super.setLoad();
     if(await _homeRepo.enforcement(enforcement)){
       super.setUnLoad();
@@ -54,7 +55,7 @@ class HomeBloc extends TerminalBaseBloc<HomeEvent,HomeState> {
     }
   }
 
-  void _enableLogging(emit){
+  void _enableLogging(Emitter emit){
     _globalConfig.isLoggingEnabled=!_globalConfig.isLoggingEnabled;
     if(!kDebugMode) {
       InitAurora().initLogger();

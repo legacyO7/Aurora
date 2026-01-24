@@ -6,16 +6,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-Widget colorController(BuildContext context) {
+Widget colorController(BuildContext context, bool showColorCode) {
   return  Column(
     children: [
-      Text("Color Picker",style: Theme.of(context).textTheme.headlineSmall,),
+      InkWell(
+          onLongPress: (){
+            context.read<KeyboardSettingsBloc>().add(KeyboardSettingsEventShowColorCode());
+          },
+          child: Text("Color Picker",style: Theme.of(context).textTheme.headlineSmall,)),
       ColorPicker(
           wheelDiameter: 31.h<100?100:31.h,
           wheelWidth: 15,
           wheelHasBorder: true,
           color: context.selectedColor,
           wheelSquareBorderRadius: 20,
+          colorCodeHasColor: showColorCode,
+          showColorCode: showColorCode,
           pickersEnabled: const <ColorPickerType, bool>{
             ColorPickerType.both: false,
             ColorPickerType.primary: false,

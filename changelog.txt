@@ -1,7 +1,9 @@
 Changelogs:
 
- - Introducing Preferences! Users now have the flexibility to utilize the application for both setting battery thresholds and controlling backlight, or opt for either functionality independently. Able to change preference from Settings > Edit Preferences
- - Removed the necessity of running service daemon when the application is solely used for backlight control.
- - Fixed systemd directory permissions
- - bugfixes and improvements
+ - maintain AR-settings while switching between OS #18
+ - added an option in edit preference settings to enable systemd service to retain AR settings
+ - cleaned up preferences
+ - added an option to view/edit color code. Long press the Color Picker Title to enable this feature
+ - grant access button fixes #16
+ - appimage bugfixes #15
  - updated dependencies

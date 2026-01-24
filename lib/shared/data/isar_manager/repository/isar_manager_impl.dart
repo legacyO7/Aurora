@@ -74,7 +74,7 @@ class IsarManagerImpl implements IsarManager {
           threshold: 55,
           brightness: 1,
           arState: const ArState(),
-          arMode: ArMode(colorRad: ArColors.accentColor.value, mode: 1, speed: 0));
+          arMode: ArMode(colorRad: ArColors.accentColor.toARGB32(), mode: 1, speed: 0));
     }
 
     try {
