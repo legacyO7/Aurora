@@ -1,6 +1,9 @@
 Changelogs:
 
-- grant access button fixes
-- updated dependencies
-
-this update targets only the latest OS versions
+ - maintain AR-settings while switching between OS #18
+ - added an option in edit preference settings to enable systemd service to retain AR settings
+ - cleaned up preferences
+ - added an option to view/edit color code. Long press the Color Picker Title to enable this feature
+ - grant access button fixes #16
+ - appimage bugfixes #15
+ - updated dependencies

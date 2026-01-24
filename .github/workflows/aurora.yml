@@ -73,14 +73,57 @@ jobs:
       - name: Build debian package
         run: |
           sed -i "s/BuildType.appimage/BuildType.deb/g" lib/utility/constants.dart      
-          ./aurora_builder deb    
+          ./aurora_builder deb 
+
+      - name: Build rpm package
+        if: github.ref == 'refs/heads/stable'
+        run: |
+          sed -i "s/BuildType.deb/BuildType.rpm/g" lib/utility/constants.dart      
+          ./aurora_builder "$PWD"    
 
       - name: Combine binaries
         run: |
           mkdir output
+          if [ -f "/home/runner/rpmbuild/SRPMS/aurora-3.10.13-1.src.rpm" ]; then
+            echo "SRPM exists"
+          else
+            echo "SRPM MISSING"
+          fi
+  
           mv aurora-linux-${{ steps.version_id.outputs.version }}.AppImage output/
           mv debian.deb output/aurora_${{ steps.version_id.outputs.version }}_amd64.deb
-          ls
+
+      - name: Trigger Copr Build
+        if: github.ref == 'refs/heads/stable'
+        continue-on-error: true
+        env:
+          COPR_LOGIN: ${{ secrets.COPR_LOGIN }}
+          COPR_USERNAME: ${{ secrets.COPR_USERNAME }}
+          COPR_TOKEN: ${{ secrets.COPR_TOKEN }}
+          COPR_PROJECT_NAME: ${{ secrets.COPR_PROJECT_NAME }}
+        run: |
+          if ls output/*.src.rpm 1> /dev/null 2>&1; then
+            echo "SRPM found. Installing Copr CLI..."
+            sudo apt-get update && sudo apt-get install -y python3-pip libkrb5-dev
+            pip3 install copr-cli
+            
+            echo "Configuring Copr..."
+            mkdir -p ~/.config
+            printf "[copr-cli]\nlogin = $COPR_LOGIN\nusername = $COPR_USERNAME\ntoken = $COPR_TOKEN\ncopr_url = https://copr.fedorainfracloud.org\n" > ~/.config/copr
+            
+            if [ -z "$COPR_PROJECT_NAME" ]; then
+              echo "Error: COPR_PROJECT_NAME environment variable is not set."
+              exit 1
+            fi
+
+            SRPM_FILE=$(ls output/*.src.rpm | head -n 1)
+            echo "Found SRPM: $SRPM_FILE"
+
+            echo "Triggering Copr build for project $COPR_PROJECT_NAME..."
+            copr-cli build "$COPR_PROJECT_NAME" "$SRPM_FILE"
+          else
+            echo "No SRPM found, skipping Copr build."
+          fi
 
       - name: Upload files to a GitHub release
         uses: svenstaro/upload-release-action@2.9.0
