@@ -81,6 +81,7 @@ cp metadata/exec debian/usr/bin/aurora
 cp metadata/aurora.desktop  debian/usr/share/applications/
 mv debian/opt/bundle debian/opt/aurora
 sed -i "s/aurora_ver/$arversion/g" debian/DEBIAN/control
+chmod 755 debian/DEBIAN/prerm
 dpkg-deb --build --root-owner-group debian
 }
 
