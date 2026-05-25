@@ -3,6 +3,6 @@ Version: aurora_ver
 Architecture: amd64
 Essential: no
 Priority: optional
-Depends: bash, policykit-1
+Depends: bash
 Maintainer: legacyO7
 Description:  An Alternate to Aura Sync for linux
